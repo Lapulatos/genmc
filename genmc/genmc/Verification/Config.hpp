@@ -19,10 +19,15 @@
 
 #include <cstdint>
 #include <filesystem>
+#include <memory>
 #include <optional>
 #include <string>
 #include <variant>
 #include <vector>
+
+namespace cat {
+class ModelIR;
+} /* namespace cat */
 
 enum class ExplorationMode : std::uint8_t { verify, random, estimate };
 enum class SchedulePolicy : std::uint8_t { LTR, WF, WFR, Arbitrary };
@@ -37,6 +42,8 @@ struct Config {
 	ModelType model{};
 	/** Canonical CAT model path, when the user selected `--model-file`. */
 	std::optional<std::filesystem::path> modelFile;
+	/** Immutable typed CAT model shared by verification workers after validation. */
+	std::shared_ptr<const cat::ModelIR> catModel;
 	/** Whether the user also explicitly selected one of GenMC's built-in models. */
 	bool modelExplicit{};
 	/** Number of `--model-file` occurrences, retained for stable duplicate diagnostics. */

@@ -1,0 +1,52 @@
+model PSO
+node 0 rel builtin rf
+node 1 rel builtin ext
+node 2 rel intersection rfe (0,1)
+node 3 rel builtin fr
+node 4 rel union (2,3)
+node 5 rel builtin co
+node 6 rel union (4,5)
+node 7 set builtin W
+node 8 rel identity (7)
+node 9 rel builtin po
+node 10 rel composition (8,9)
+node 11 rel identity (7)
+node 12 rel composition (10,11)
+node 13 rel builtin loc
+node 14 rel intersection (12,13)
+node 15 set builtin R
+node 16 rel identity (15)
+node 17 rel composition (16,9)
+node 18 rel union (17,14)
+node 19 set builtin F
+node 20 rel identity (19)
+node 21 rel composition (9,20)
+node 22 rel composition (21,9)
+node 23 rel union (18,22)
+node 24 set builtin SC
+node 25 set intersection (7,24)
+node 26 rel identity (25)
+node 27 rel composition (26,9)
+node 28 rel identity (24)
+node 29 rel composition (27,28)
+node 30 rel union (23,29)
+node 31 rel builtin rmw
+node 32 rel intersection fre (3,1)
+node 33 rel intersection coe (5,1)
+node 34 rel composition (32,33)
+node 35 rel intersection (31,34)
+node 36 rel intersection (9,13)
+node 37 rel union (36,0)
+node 38 rel union (37,3)
+node 39 rel union (38,5)
+node 40 rel builtin tc
+node 41 rel union (30,40)
+node 42 rel builtin tj
+node 43 rel union (41,42)
+node 44 rel union (43,6)
+let com = 6
+let ww_loc = 14
+let ppo = 30
+check empty atomicity = 35
+check acyclic coherence = 39
+check acyclic pso = 44

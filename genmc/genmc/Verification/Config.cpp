@@ -14,6 +14,7 @@
 #include "genmc/config.h"
 
 #include "genmc/CAT/Frontend.hpp"
+#include "genmc/CAT/Model.hpp"
 #include "genmc/Support/Error.hpp"
 #include "genmc/Verification/Config.hpp"
 
@@ -102,18 +103,26 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 			}
 		}
 
-		/* Phase 1.2 stops here deliberately. This prevents a parsed CAT model
-		 * from silently falling back to the default RC11 checker. Phase 1.2
-		 * parses the complete model before LLVM execution; typed lowering and
-		 * the CAT-backed checker remain later substages. */
+		/* Phase 1.3 stops here deliberately. Parsing, resolution, and typing all
+		 * complete before LLVM execution, and the immutable model is retained in
+		 * Config for later read-only worker sharing. */
 		if (usable) {
 			auto parseResult = cat::Frontend().parseFile(*modelFile);
 			for (const auto &diagnostic : parseResult.diagnostics)
 				errors.push_back(diagnostic.format());
-			if (parseResult.ok())
-				errors.emplace_back(
-					"CAT model parsed, but typed model execution is not "
-					"available until the next Phase 1 substages.");
+			if (parseResult.ok()) {
+				auto compileResult = cat::Compiler().compile(*parseResult.model);
+				for (const auto &diagnostic : compileResult.diagnostics)
+					errors.push_back(diagnostic.format());
+				for (const auto &note : compileResult.notes)
+					warnings.push_back(note.format());
+				if (compileResult.ok()) {
+					catModel = std::move(compileResult.model);
+					errors.emplace_back(
+						"CAT model typed, but CAT-backed execution is not "
+						"available until the next Phase 1 substages.");
+				}
+			}
 		}
 	}
 	if (LAPOR) {

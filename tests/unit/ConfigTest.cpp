@@ -67,8 +67,9 @@ TEST(ConfigModelFileTest, CanonicalizesReadableFile)
 
 	auto status = config.validate(warnings);
 
-	EXPECT_TRUE(hasError(status, "CAT model parsed"));
+	EXPECT_TRUE(hasError(status, "CAT model typed"));
 	ASSERT_TRUE(config.modelFile.has_value());
+	EXPECT_NE(config.catModel, nullptr);
 	EXPECT_EQ(*config.modelFile, std::filesystem::canonical(path));
 	std::filesystem::remove(path);
 }
@@ -85,7 +86,7 @@ TEST(ConfigModelFileTest, RejectsExplicitBuiltInModel)
 	auto status = config.validate(warnings);
 
 	EXPECT_TRUE(hasError(status, "cannot be combined with an explicit built-in"));
-	EXPECT_FALSE(hasError(status, "CAT model parsed"));
+	EXPECT_FALSE(hasError(status, "CAT model typed"));
 	std::filesystem::remove(path);
 }
 
@@ -101,7 +102,7 @@ TEST(ConfigModelFileTest, RejectsDuplicateOption)
 	auto status = config.validate(warnings);
 
 	EXPECT_TRUE(hasError(status, "--model-file may only be specified once"));
-	EXPECT_FALSE(hasError(status, "CAT model parsed"));
+	EXPECT_FALSE(hasError(status, "CAT model typed"));
 	std::filesystem::remove(path);
 }
 
@@ -117,7 +118,7 @@ TEST(ConfigModelFileTest, RejectsMissingFile)
 	auto status = config.validate(warnings);
 
 	EXPECT_TRUE(hasError(status, "CAT model file does not exist"));
-	EXPECT_FALSE(hasError(status, "CAT model parsed"));
+	EXPECT_FALSE(hasError(status, "CAT model typed"));
 }
 
 /* Directories are not accepted as model inputs even when they are readable. */
@@ -130,7 +131,7 @@ TEST(ConfigModelFileTest, RejectsDirectory)
 	auto status = config.validate(warnings);
 
 	EXPECT_TRUE(hasError(status, "CAT model file is not a regular file"));
-	EXPECT_FALSE(hasError(status, "CAT model parsed"));
+	EXPECT_FALSE(hasError(status, "CAT model typed"));
 }
 
 /* Syntax errors from the CAT frontend retain their file/line/column through Config. */
@@ -147,7 +148,45 @@ TEST(ConfigModelFileTest, ReportsParserDiagnosticBeforeExecution)
 	auto status = config.validate(warnings);
 
 	EXPECT_TRUE(hasError(status, path.string() + ":3:1: parse:"));
-	EXPECT_FALSE(hasError(status, "CAT model parsed"));
+	EXPECT_FALSE(hasError(status, "CAT model typed"));
+	std::filesystem::remove(path);
+}
+
+/* Name/type compilation errors also stop before publishing a worker-shared model. */
+TEST(ConfigModelFileTest, ReportsTypeDiagnosticBeforeExecution)
+{
+	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-invalid-type.cat";
+	std::ofstream output(path);
+	output << "BrokenType\nacyclic R\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+
+	auto status = config.validate(warnings);
+
+	EXPECT_TRUE(hasError(status, path.string() + ":2:1: type:"));
+	EXPECT_EQ(config.catModel, nullptr);
+	std::filesystem::remove(path);
+}
+
+/* Accepted portability notes use Config's warning channel without blocking typed lowering. */
+TEST(ConfigModelFileTest, SurfacesDeprecatedMoNote)
+{
+	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-mo-note.cat";
+	std::ofstream output(path);
+	output << "Portability\nacyclic mo as portable\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+
+	auto status = config.validate(warnings);
+
+	EXPECT_TRUE(hasError(status, "CAT model typed"));
+	ASSERT_EQ(warnings.size(), 1U);
+	EXPECT_NE(warnings[0].find(":2:9: note:"), std::string::npos);
+	EXPECT_NE(config.catModel, nullptr);
 	std::filesystem::remove(path);
 }
 

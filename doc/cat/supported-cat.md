@@ -214,6 +214,7 @@ message, and the relevant source line when available.
 | `type` | composing sets, Cartesian product of relations, invalid check type |
 | `unsupported` | valid full-CAT construct outside this contract |
 | `model` | primitive unavailable for a GenMC graph/profile |
+| `note` | accepted portability spelling such as deprecated `mo` |
 
 The frontend reports multiple independent diagnostics from one file when
 recovery is unambiguous, but never starts program exploration after any error.

@@ -69,8 +69,14 @@ static auto categoryName(DiagnosticKind kind) -> std::string_view
 		return "parse";
 	case DiagnosticKind::Include:
 		return "include";
+	case DiagnosticKind::Name:
+		return "name";
+	case DiagnosticKind::Type:
+		return "type";
 	case DiagnosticKind::Unsupported:
 		return "unsupported";
+	case DiagnosticKind::Note:
+		return "note";
 	}
 	return "parse";
 }

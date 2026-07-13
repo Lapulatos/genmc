@@ -1,0 +1,49 @@
+model TSO
+node 0 rel builtin rf
+node 1 rel builtin ext
+node 2 rel intersection rfe (0,1)
+node 3 rel builtin fr
+node 4 rel union (2,3)
+node 5 rel builtin co
+node 6 rel union (4,5)
+node 7 set builtin R
+node 8 rel identity (7)
+node 9 rel builtin po
+node 10 rel composition (8,9)
+node 11 set builtin W
+node 12 rel identity (11)
+node 13 rel composition (9,12)
+node 14 rel union (10,13)
+node 15 set builtin F
+node 16 rel identity (15)
+node 17 rel composition (9,16)
+node 18 rel composition (17,9)
+node 19 rel union (14,18)
+node 20 set builtin SC
+node 21 set intersection (11,20)
+node 22 rel identity (21)
+node 23 rel composition (22,9)
+node 24 set intersection (7,20)
+node 25 rel identity (24)
+node 26 rel composition (23,25)
+node 27 rel union (19,26)
+node 28 rel builtin rmw
+node 29 rel intersection fre (3,1)
+node 30 rel intersection coe (5,1)
+node 31 rel composition (29,30)
+node 32 rel intersection (28,31)
+node 33 rel builtin loc
+node 34 rel intersection (9,33)
+node 35 rel union (34,0)
+node 36 rel union (35,3)
+node 37 rel union (36,5)
+node 38 rel builtin tc
+node 39 rel union (27,38)
+node 40 rel builtin tj
+node 41 rel union (39,40)
+node 42 rel union (41,6)
+let com = 6
+let ppo = 27
+check empty atomicity = 32
+check acyclic coherence = 37
+check acyclic tso = 42

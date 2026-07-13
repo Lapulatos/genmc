@@ -37,6 +37,7 @@
 - Phase 1.1 的 `clang-tidy` 使用生成的 compilation database 运行后，被本机工具链无法解析 libc++ C++23 `<format>` 阻塞；正常 CMake 编译、46/46 单元测试、CLI 1/1 和 fast-driver 1/1 均通过。
 - Phase 1.2 首次 include/location 测试暴露了 `Parser` 构造参数中先 move source 还是先 lex 的求值顺序风险；现在明确先完成 tokenization，再移动 source，避免 `Lexer` 的 `string_view` 观察 moved-from 字符串。
 - Phase 1.2 负例审查发现缺失左操作数可能让 binary fold 解引用空 AST；增加 early return 和专门回归测试。前端当前 focused 24/24、完整 unit 64/64、CLI 1/1、fast-driver 1/1。
+- Phase 1.3 直接从 Phase 1.2 AST lower，不重新读取模型；`Config` 现在保存 `shared_ptr<const ModelIR>`。SC/TSO/PSO 分别形成 17/43/45 节点的精确 golden DAG，完整 unit 75/75、CLI 1/1、fast-driver 1/1。
 
 ## Status
-**Phase 1.2 ready for Git delivery** - lexer/parser/include/source-span/diagnostics、性能记录和回归已完成；提交并 push 后进入 Phase 1.3 typed IR。
+**Phase 1.3 ready for Git delivery** - 名称解析、完整类型检查、immutable typed IR、golden summaries 与回归已完成；提交并 push 后进入 Phase 1.4 pure evaluator。

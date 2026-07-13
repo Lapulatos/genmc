@@ -42,10 +42,10 @@ struct SourceSpan {
 };
 
 /** Stable frontend diagnostic category used by CLI and focused tests. */
-enum class DiagnosticKind { Io, Lex, Parse, Include, Unsupported };
+enum class DiagnosticKind { Io, Lex, Parse, Include, Name, Type, Unsupported, Note };
 
 /**
- * One CAT frontend error with exact source provenance.
+ * One CAT frontend diagnostic with exact source provenance.
  *
  * Diagnostics own their strings and are independent of frontend lifetime.
  * The structure is immutable by convention after publication and safe to

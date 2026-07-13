@@ -144,6 +144,7 @@ the substage commit is pushed.
 - Push command/result: `git push origin genmc-caat`; verified after commit
 
 
+
 ### Phase 1.1: CLI and configuration plumbing
 
 - Date: 2026-07-14
@@ -333,5 +334,98 @@ the substage commit is pushed.
 #### Git delivery
 
 - Commit message: `feat(cat): parse the phase-one CAT language subset`
+- Commit SHA: resolved by the Git commit carrying this entry
+- Push command/result: `git push origin genmc-caat`; verified after commit
+
+### Phase 1.3: Name resolution, typing, and immutable relational IR
+
+- Date: 2026-07-14
+- Starting commit: `d073b3c163b97386fc1cb19fec97ff2e6ff9c6c3`
+- Ending commit: recorded by the atomic commit named below
+- Remote ref pushed: `origin/genmc-caat` (to be verified after this atomic commit)
+- Constraint/plan pre-read: `doc/cat/PROJECT_CONSTRAINTS.md` and
+  `doc/cat/phase-1-plan.md` read before implementation edits
+- GenMC development rules pre-read: `doc/development.md` read before edits
+- Initial dirty files: none
+
+#### Contract
+
+- Inputs: an error-free Phase 1 syntax model with includes already expanded.
+- Outputs: a topologically ordered, typed, immutable `ModelIR` with stable
+  node IDs, bindings, checks, source spans, and a platform-independent summary.
+- Unsupported cases: relation values, graph primitives, consistency
+  evaluation, and checker integration remain Phase 1.4+ work.
+- Expected changed files: CAT IR/compiler, Config ownership, focused/golden
+  tests, CMake, CLI boundary/manual, project records, and this log.
+- Expected untouched files: graph/checker/exploration code, LLVM passes,
+  existing litmus tests, and bundled CAT model text.
+
+#### Reuse survey
+
+| Candidate | Version/source | License | Reused part | Decision/rationale |
+|---|---|---|---|---|
+| Phase 1 syntax AST/spans | Phase 1.2 | Apache-2.0/MIT | owned syntax, expanded source order, diagnostics | lower directly; do not reparse |
+| `Config` shared ownership pattern | current GenMC | Apache-2.0/MIT | immutable configuration shared by workers | store `shared_ptr<const ModelIR>` |
+| CAT type rules | frozen contract/2016 semantics paper | publication/project | set/rel operator constraints | encode explicitly in local compiler |
+| GenMC RapidCheck/GoogleTest | existing unit target | compatible existing dependency | DAG/source invariants and examples | reuse without new dependency |
+
+#### Implementation
+
+- Changed files: `genmc/genmc/CAT/Model.hpp`,
+  `genmc/genmc/CAT/Model.cpp`, `genmc/genmc/CAT/Frontend.hpp/.cpp`,
+  `genmc/genmc/Verification/Config.hpp/.cpp`, `genmc/CMakeLists.txt`,
+  `tests/unit/CatModelTest.cpp`, `tests/unit/cat-golden/{sc,tso,pso}.ir`,
+  `tests/unit/ConfigTest.cpp`, `tests/unit/CMakeLists.txt`,
+  `tests/cli/model-file.sh`, `doc/manual/cli.md`, `task_plan.md`, `notes.md`,
+  `doc/cat/supported-cat.md`, and this progress log.
+- Untouched files: all consistency checkers, graph/driver/exploration code,
+  LLVM transformations, litmus fixtures, and bundled CAT model definitions.
+- Key decisions and invariants: operands always reference lower node IDs;
+  identifiers disappear during lowering; bindings are sequential/nonrecursive;
+  primitive nodes and derived aliases are cached; `M` and conventional aliases
+  lower to generic operations; `mo` resolves to `co` with a deprecation note;
+  no model is published after any name/type error; Config owns one immutable
+  compiled model for read-only worker sharing.
+- Comment/documentation audit: public IR types document ownership,
+  immutability, topology, thread safety, and stable IDs; every compiler block
+  explains its resolution/type invariant; tests state each protected rule.
+- GenMC convention audit: new source/header carry dual licenses, use block and
+  Doxygen comments, follow class/member ordering, and pass repository format.
+
+#### Verification
+
+| Command | Result | Counts/timing/output |
+|---|---|---|
+| CMake build | pass | all targets; no new-source compiler warnings in normal build |
+| focused Config/model tests | pass | 18/18 plus CLI 1/1 |
+| complete `unit_tests` | pass | 75/75 from 10 suites; 0 failed; 53 ms final run |
+| `ctest ... -R '^fast-driver$'` | pass | 1/1; 0 failed; 76.80s |
+| SC/TSO/PSO golden summaries | pass | exact 17/43/45-node DAGs; no paths or pointers |
+| RapidCheck typed-IR property | pass | random supported expressions; resolved spans and backward-only operands |
+| clang-format dry-run and `git diff --check` | pass | all changed C++ files; no whitespace errors |
+| `clang-tidy Model.cpp -p RelWithDebInfo` | environment-blocked | local tidy again cannot resolve standard `<cstddef>`; actionable initialization/style findings were fixed manually |
+
+#### Plan-to-implementation gap
+
+| Planned item | Delivered evidence | Gap class | Next action |
+|---|---|---|---|
+| built-ins/includes/nonrecursive binding resolution | compiler symbol/prelude maps and name tests | none | evaluator supplies primitive values in 1.4/1.5 |
+| complete set/relation typing | example matrix, check tests, RapidCheck | none | use node `ValueType` for evaluator dispatch |
+| immutable stable IR and source provenance | `ModelIR`, DAG property, exact goldens | none | retain as Phase 2/3 semantic frontend |
+| duplicates/undefined/forward/reserved diagnostics | focused name tests and Config pre-execution type test | none | preserve error categories |
+| `mo` portability note | compiler notes and alias test | none | surface note through CLI warnings |
+| graph consistency execution | typed execution boundary | deferred scope | implement pure relation storage/evaluator in 1.4 |
+
+#### Risks and next target
+
+- Known risks: lazy built-in node IDs depend on first source use (but remain
+  deterministic for identical input); no common-subexpression elimination is
+  attempted; `clang-tidy` remains environment-blocked.
+- Next substage target: Phase 1.4 word-packed `EventSet`/`Relation`, all pure
+  relational operations, memoized typed DAG evaluation, checks, and witnesses.
+
+#### Git delivery
+
+- Commit message: `feat(cat): add typed relational model IR`
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verified after commit
