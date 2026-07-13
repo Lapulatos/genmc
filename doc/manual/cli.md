@@ -17,8 +17,10 @@ A full list of the available command-line options can by viewed by issuing `genm
   `(* @genmc host-profile tso *)` explicitly selects TSO causal views; `sc` and
   the backward-compatible SC default are also supported. This metadata does
   not replace CAT axioms and is ignored as a comment by herd. The bundled SC
-  and TSO models are differentially checked against GenMC's built-in checkers;
-  PSO receives its external-oracle guarantee in the next Phase 1 substage.
+  and TSO models are differentially checked against GenMC's built-in checkers.
+  The bundled PSO model reuses the TSO host profile but relaxes cross-location
+  write order through CAT equations; the model-only SC/TSO/PSO distinction is
+  checked against an assembly-aligned herd oracle.
 - **`-nthreads=<N>`**: Perform verification concurrently (using `N` threads)
 - **`-cache-instructions`**: Caches instructions to help execution time (sacrifices memory)
 - **`-disable-bam`**: Disables Barrier-Aware Model-checking (BAM)

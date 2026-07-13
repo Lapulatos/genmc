@@ -11,7 +11,7 @@ added, but coverage must not be removed silently.
 |---|---|---|---|
 | SC | `models/cat/sc.cat` | built-in `--sc`, then herd litmus outcomes | SB has 3 complete executions |
 | TSO | `models/cat/tso.cat` | built-in `--tso`, then herd litmus outcomes | SB has 4 complete executions |
-| PSO | `models/cat/pso.cat` | herd/Nidhugg litmus outcomes | W→W on different locations may relax |
+| PSO | `models/cat/pso.cat` | herd official PSO ppo plus model-only GenMC test | W→W on different locations may relax |
 
 Model provenance and semantic limits are recorded in
 `doc/cat/supported-cat.md`. The models are clean-room project inputs, not
@@ -81,6 +81,7 @@ GenMC test tree:
 | SB | `tests/correct/litmus/SB/variants/sb0.c` | 3 | 4 | TSO W→R relaxation |
 | LB+ctrl | `tests/correct/litmus/LB+ctrl/variants/lb+ctrl0.c` | 3 | 3 | preserved R-originating order |
 | WWR+2WR | `tests/correct/litmus/WWR+2WR/variants/wwr+2wr0.c` | 0 complete, 8 blocked under driver | same | assume/blocking behavior |
+| WW+RR | `tests/cat/programs/WW+RR.c` | 3, safe | 3, safe | PSO alone reaches Ry=1/Rx=0 and violates the assertion |
 
 Phase 1.6-1.8 expand this to litmus classes for `po`, `rf`, `co`, `fr`, RMW
 atomicity, fences, same-location order, cross-location W→W, SC accesses, and

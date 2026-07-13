@@ -94,3 +94,8 @@
 - herdtools7 7.56+03 was installed into the existing opam 4.14 switch after a dry-run showed no dependency upgrades/removals. Official `x86tso.cat` reports X86 SB `Sometimes 1 3` over four states and the MP anomaly `Never 0 3` over three states.
 - The herd oracle is intentionally assembly-aligned. GenMC's seven-case differential uses transformed C/LLVM events, so equal raw state counts between those C tests and herd assembly tests are not asserted.
 - Ten warmed SB invocations measured 0.48 s for both built-in TSO and CAT TSO; peak RSS was 52,625,408 versus 52,641,792 bytes. Process/compiler startup dominates this smoke measurement.
+- Phase 1.8 adds no production C++ and no PSO checker/profile enum. `pso.cat` declares the already justified TSO host and relaxes only the generic CAT preserved-program-order equation for cross-location W→W.
+- The model-only `WW+RR.c` proof holds program/flags constant: SC and TSO are safe with three complete executions; PSO reaches `Ry=1, Rx=0`, reports a safety violation, and stops after two complete executions. Two PSO workers reproduce the violation/count.
+- PSO retains TSO results for explicit same-location order (`po-loc`=3), RMW atomicity (`RMWFix`=4), and SC fences (`SB+scfs`=3).
+- herd 7.56 official `x86tso.cat` classifies MP as `Never 0 3`; official `mips.cat`, whose source explicitly selects a PSO ppo, classifies the same plain-R/W event structure as `Sometimes 1 3` when architecture checking alone is disabled.
+- Ten warmed WW+RR runs measured TSO CAT at 0.50 s/52,576,256-byte peak RSS and PSO CAT at 0.48 s/52,609,024 bytes. The measurement does not show a material model-load/evaluation penalty.

@@ -306,3 +306,16 @@ events, while GenMC first transforms C/LLVM events. A separate assembly-aligned
 oracle under `tests/cat/herd/` runs herd 7.56 with official `x86tso.cat`: SB's
 weak outcome is `Sometimes` (1/4 states), while the MP anomaly is `Never` (0/3
 states). `tests/cat/herd-tso-oracle.sh` makes that comparison reproducible.
+
+Phase 1.8 adds no PSO-specific C++ path. `pso.cat` explicitly reuses the TSO
+host profile and changes only its preserved-program-order equation. On the
+same `WW+RR.c` input, changing only the model path gives SC/TSO three safe
+complete executions, while PSO reaches the cross-location write-reordering
+outcome and reports a safety violation after two complete executions.
+
+The external plain-R/W oracle uses herd's official `x86tso.cat` and
+`mips.cat`; the latter explicitly declares a PSO preserved-program-order
+choice. With architecture checking disabled only to feed the same X86 event
+syntax to both generic CAT models, the MP anomaly is `Never` under TSO and
+`Sometimes` under PSO. No architecture-specific fence event participates.
+`tests/cat/herd-pso-oracle.sh` reproduces the comparison.

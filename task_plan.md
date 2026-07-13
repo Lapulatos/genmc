@@ -42,6 +42,7 @@
 - Phase 1.5 新增只读 `ExecutionGraph` 快照适配器；稳定 dense ID 覆盖真实标签及按地址展开的虚拟初始写，并构造 `R/W/F/IW/SC`、`po/rf/co/fr/rmw/loc/int/ext/tc/tj`。虚拟初始写映回 `InitLabel + 地址`，避免跨地址伪造 `fr`。
 - Phase 1.6 新增 `CATChecker` 纵向执行路径；通用 evaluator 判定候选图，SC host profile 只复用视图/错误基础设施，`rf/co/revisit` 使用保守枚举。SC smoke/error 集与内置 checker 的状态、执行数和错误类别一致。
 - Phase 1.7 增加 herd-compatible 的显式 `@genmc host-profile` 元数据；TSO 模型选择生成式 TSO 宿主视图但仍由通用 evaluator 判定一致性。七个 GenMC 差分案例和两个 herd X86 oracle 均通过。
+- Phase 1.8 让 PSO 显式复用 TSO host profile，只通过 CAT `ppo` 方程放松跨地址 W→W；同一 WW+RR 程序仅替换模型文件即可区分 SC/TSO 与 PSO，并由 herd 官方 TSO/PSO 方程交叉确认。
 
 ## Status
-**Phase 1.7 ready for Git delivery** - TSO 的显式宿主 profile、内置 checker 差分、herd oracle、完整单元与 fast-driver 已完成；提交并 push 后进入 Phase 1.8 PSO new-model proof。
+**Phase 1.8 ready for Git delivery** - PSO new-model proof、保序回归、herd oracle、完整单元与 fast-driver 已完成；提交并 push 后进入 Phase 1.9 closure/audit。

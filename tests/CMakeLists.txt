@@ -46,6 +46,15 @@ add_test(
             ${CMAKE_SOURCE_DIR}/tests
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
+add_test(
+    NAME cat-pso-model-proof
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/pso-model-proof.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/WW+RR.c
+            ${CMAKE_CURRENT_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
 
 # Unit tests
 add_subdirectory(unit)

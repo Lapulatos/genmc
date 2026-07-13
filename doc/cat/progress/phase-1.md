@@ -823,3 +823,96 @@ the substage commit is pushed.
 - Commit message: `feat(cat): evaluate typed CAT relations and checks`
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verified after commit
+
+### Phase 1.8: PSO model and new-model proof
+
+- Date: 2026-07-14
+- Starting commit: `b4e08c32bb1713378e2d3e887b6124df9c37538f`
+- Ending commit: recorded by the atomic commit named below
+- Remote ref pushed: `origin/genmc-caat` (to be verified after this atomic commit)
+- Constraint/plan pre-read: `doc/cat/PROJECT_CONSTRAINTS.md` and
+  `doc/cat/phase-1-plan.md` read before implementation edits
+- GenMC development rules pre-read: `doc/development.md` read before edits
+- Initial dirty files: none
+
+#### Contract
+
+- Input: the existing bundled PSO CAT equations and a distinguishing
+  cross-location `WW+RR` C program.
+- Output: PSO verification through the same generic evaluator/checker used by
+  SC/TSO, with only the selected model file changing the observed outcome.
+- Host boundary: PSO explicitly reuses the TSO causal-view host justified in
+  1.7; no PSO profile enum, generated checker, or C++ consistency path exists.
+- Oracle boundary: compare plain R/W ordering with herd's official x86 TSO
+  model and official MIPS model whose CAT source explicitly selects PSO ppo.
+
+#### Reuse survey
+
+| Candidate | Version/source | License | Reused part | Decision/rationale |
+|---|---|---|---|---|
+| bundled clean-room `pso.cat` | Phase 1.0/current branch | Apache-2.0/MIT project input | selected PSO equations | add only explicit existing TSO host metadata |
+| `CATTSOChecker` | Phase 1.7 | Apache-2.0/MIT | sound causal/prefix host | reuse unchanged; consistency remains generic |
+| evaluator/adapter | Phase 1.4/1.5 | Apache-2.0/MIT | all PSO set/relation operations | no new primitive or production implementation needed |
+| GenMC litmus corpus | current branch | Apache-2.0/MIT | po-loc, RMW, SC-fence regression cases | prove PSO preserves its declared ppo edges |
+| herd `x86tso.cat`/`mips.cat` | herdtools7 7.56+03 | CeCILL-B | independent ordering oracle | execute official installed models; copy no source |
+
+#### Implementation
+
+- Changed files: `models/cat/pso.cat`, its IR golden, PSO model/herd scripts,
+  the new `tests/cat/programs/WW+RR.c`, `tests/CMakeLists.txt`, manual and CAT
+  compatibility/fixture docs, `task_plan.md`, `notes.md`, and this progress log.
+- Untouched files: all production C++, generated checkers, CAT frontend/IR/
+  evaluator/adapter semantics, graph/driver/LLVM code, SC/TSO models, and
+  existing test programs.
+- `pso.cat` now declares `host-profile tso`. Its equations remain unchanged:
+  cross-location W→W is absent from `ppo`, while read-originating order,
+  same-location W→W, fence order, and SC access pairs remain.
+- `cat-pso-model-proof` keeps the program and flags fixed. It changes only
+  `sc.cat`/`tso.cat`/`pso.cat`, checks distinct status/verdict/counts, then
+  checks po-loc/RMW/SC-fence cases common to TSO and PSO.
+- `herd-pso-oracle.sh` runs the same X86 MP event structure through official
+  TSO and PSO ppo equations. Architecture checking is disabled for the latter;
+  no architecture-specific instruction or fence participates.
+
+#### Verification
+
+| Command | Result | Counts/timing/output |
+|---|---|---|
+| CMake configure/build | pass | no new production target; existing LLVM warnings only |
+| complete unit/property set | pass | 96/96; 0 failed; 0.62s |
+| SC/TSO/PSO/CLI integration | pass | 4/4; 0 failed; 1.91s |
+| model-only WW+RR distinction | pass | SC safe/3, TSO safe/3, PSO safety error/2; PSO exit 42 |
+| PSO preserved-order regressions | pass | po-loc 3, RMWFix 4, SB+scfs 3 under both TSO/PSO |
+| two-worker PSO | pass | same safety violation, 2 complete executions, exit 42 |
+| herd 7.56 external oracle | pass | TSO MP `Never 0 3`; PSO ppo MP `Sometimes 1 3` |
+| `ctest ... -R '^fast-driver$'` | pass | 1/1; 0 failed; 76.70s |
+| warmed 10-run WW+RR benchmark | pass | TSO 0.50s/52,576,256 B; PSO 0.48s/52,609,024 B |
+| shell syntax, repository search, `git diff --check` | pass | production PSO/name/path-dispatch matches: 0 |
+| clang-tidy | not applicable | no production C++ changed in this substage |
+
+#### Plan-to-implementation gap
+
+| Planned item | Delivered evidence | Gap class | Next action |
+|---|---|---|---|
+| provenance-recorded PSO model | clean-room model retained; metadata only change | none | include in final compatibility matrix |
+| generic capabilities only | no C++ change; TSO host plus generic IR/evaluator | none | preserve zero-PSO-code invariant |
+| SC/TSO/PSO distinction | one fixed WW+RR program; only model path changes | none | retain as final acceptance test |
+| PSO external outcome | official herd TSO versus official PSO ppo | none for plain R/W ordering | document architecture/fence boundary |
+| PSO preserved constraints | po-loc, RMW, SC-fence cases | none | include counts in closure report |
+| absence of hidden dispatch | zero production matches for PSO/name/path patterns | none | repeat repository audit in 1.9 |
+| broader SPARC/MIPS instruction compatibility | not a GenMC C/LLVM contract | deferred compatibility | do not expand Phase 1 into architecture frontend support |
+
+#### Risks and next target
+
+- Known risks: the PSO host is conservative TSO infrastructure rather than a
+  generated PSO specialization; external oracle equivalence is restricted to
+  plain R/W ordering; generic evaluation remains correctness-first.
+- No P0 correctness, regression, or documentation gap remains for Phase 1.8.
+- Next substage target: Phase 1.9 complete matrix, code/comment/convention
+  audit, final performance/compatibility report, and Phase 2 input list.
+
+#### Git delivery
+
+- Commit message: `feat(cat): add model-driven PSO verification`
+- Commit SHA: resolved by the Git commit carrying this entry
+- Push command/result: `git push origin genmc-caat`; verify after commit

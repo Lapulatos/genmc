@@ -4,6 +4,7 @@
  * PSO additionally relaxes write-to-write order across locations. Reads,
  * same-location writes, full fences, and SC access pairs remain ordered.
  *)
+(* @genmc host-profile tso *)
 PSO
 
 let com = rfe | fr | co
