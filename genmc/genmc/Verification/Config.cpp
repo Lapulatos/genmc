@@ -17,6 +17,7 @@
 #include "genmc/Verification/Config.hpp"
 
 #include <filesystem>
+#include <fstream>
 #include <random>
 
 static auto doesPolicySupportSeed(const SchedulePolicy policy) -> bool
@@ -37,6 +38,78 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 	ConfigErrorList errors;
 
 	/* Check exploration options */
+	if (modelFile.has_value()) {
+		bool usable = !modelExplicit && modelFileOccurrences <= 1;
+		if (modelExplicit) {
+			errors.emplace_back(
+				"--model-file cannot be combined with an explicit built-in memory "
+				"model option.");
+		}
+		if (modelFileOccurrences > 1) {
+			errors.emplace_back("--model-file may only be specified once.");
+		}
+
+		/* Validate and canonicalize the path before compilation. Keeping the
+		 * canonical path in Config makes later parser caches independent of the
+		 * process working directory and symlink spelling. */
+		std::error_code ec;
+		if (usable) {
+			const auto exists = std::filesystem::exists(*modelFile, ec);
+			if (ec) {
+				errors.emplace_back("Cannot inspect CAT model file '" +
+						    modelFile->string() + "': " + ec.message() +
+						    ".");
+				usable = false;
+			} else if (!exists) {
+				errors.emplace_back("CAT model file does not exist: '" +
+						    modelFile->string() + "'.");
+				usable = false;
+			}
+		}
+
+		ec.clear();
+		if (usable) {
+			const auto isRegular = std::filesystem::is_regular_file(*modelFile, ec);
+			if (ec) {
+				errors.emplace_back("Cannot inspect CAT model file '" +
+						    modelFile->string() + "': " + ec.message() +
+						    ".");
+				usable = false;
+			} else if (!isRegular) {
+				errors.emplace_back("CAT model file is not a regular file: '" +
+						    modelFile->string() + "'.");
+				usable = false;
+			}
+		}
+
+		if (usable) {
+			auto canonicalPath = std::filesystem::canonical(*modelFile, ec);
+			if (ec) {
+				errors.emplace_back("Cannot resolve CAT model file '" +
+						    modelFile->string() + "': " + ec.message() +
+						    ".");
+				usable = false;
+			} else {
+				std::ifstream input(canonicalPath);
+				if (!input.good()) {
+					errors.emplace_back("CAT model file is not readable: '" +
+							    canonicalPath.string() + "'.");
+					usable = false;
+				} else {
+					modelFile = std::move(canonicalPath);
+				}
+			}
+		}
+
+		/* Phase 1.1 stops here deliberately. This prevents a validated CAT path
+		 * from silently falling back to the default RC11 checker before the
+		 * parser and CAT-backed checker exist. */
+		if (usable) {
+			errors.emplace_back("CAT model file validated, but CAT model execution is "
+					    "not available "
+					    "until the next Phase 1 substages.");
+		}
+	}
 	if (LAPOR) {
 		errors.emplace_back("LAPOR is temporarily disabled.");
 	}

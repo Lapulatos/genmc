@@ -72,6 +72,10 @@ static llvm::cl::opt<ModelType> clModelType(
 	llvm::cl::cat(clGeneral), llvm::cl::init(ModelType::RC11),
 	llvm::cl::desc("Choose model type:"));
 
+static llvm::cl::opt<std::string>
+	clModelFile("model-file", llvm::cl::value_desc("model.cat"), llvm::cl::cat(clGeneral),
+		    llvm::cl::desc("Load the memory model from a CAT file"));
+
 static llvm::cl::opt<bool> clDisableEstimation(
 	"disable-estimation", llvm::cl::cat(clGeneral),
 	llvm::cl::desc("Do not estimate the state-space size before verifying the program"));
@@ -382,7 +386,9 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	lliConfig.codeCondenser = !clDisableCodeCondenser;
 	lliConfig.loadAnnot = !clDisableLoadAnnot;
 	lliConfig.assumePropagation = !clDisableAssumePropagation;
-	lliConfig.mmDetector = !clDisableMMDetector;
+	/* A user-supplied CAT file is authoritative. The detector only knows how to
+	 * strengthen built-in models and must not replace the requested file. */
+	lliConfig.mmDetector = !clDisableMMDetector && clModelFile.empty();
 	lliConfig.helper = !clDisableHelper;
 	lliConfig.confirmation = clConfirmation; /* could be two options: pass + annot */
 	lliConfig.finalWrite = !clDisableFinalWrite;
@@ -401,12 +407,16 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 				  extraLang == InputLanguage::cargo;
 	}
 	lliConfig.programEntryFun = std::move(clProgramEntryFunction);
-	lliConfig.isDepTrackingModel = (clModelType == ModelType::IMM);
+	lliConfig.isDepTrackingModel = clModelFile.empty() && (clModelType == ModelType::IMM);
 
 	/* Exploration */
 	conf.mode = clExplorationMode;
 	conf.dotFile = std::move(clDotGraphFile);
 	conf.model = clModelType;
+	if (!clModelFile.empty())
+		conf.modelFile = fs::path(clModelFile.getValue());
+	conf.modelExplicit = clModelType.getNumOccurrences() > 0;
+	conf.modelFileOccurrences = clModelFile.getNumOccurrences();
 	conf.estimate = !clDisableEstimation;
 	conf.estimationMax = clEstimationMax;
 	conf.estimationMin = clEstimationMin;
@@ -465,7 +475,8 @@ static void adjustConfig(const ModuleInfo &modInfo, Config &conf)
 	}
 
 	/* Perhaps override the MM under which verification will take place */
-	if (modInfo.determinedMM.has_value() && isStrongerThan(*modInfo.determinedMM, conf.model)) {
+	if (!conf.modelFile.has_value() && modInfo.determinedMM.has_value() &&
+	    isStrongerThan(*modInfo.determinedMM, conf.model)) {
 		conf.model = *modInfo.determinedMM;
 		conf.isDepTrackingModel = (conf.model == ModelType::IMM);
 		LOG(VerbosityLevel::Tip,

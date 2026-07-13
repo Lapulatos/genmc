@@ -18,6 +18,7 @@
 #include "genmc/config.h"
 
 #include <cstdint>
+#include <filesystem>
 #include <optional>
 #include <string>
 #include <variant>
@@ -34,6 +35,12 @@ struct Config {
 	/*** Exploration options ***/
 	ExplorationMode mode{};
 	ModelType model{};
+	/** Canonical CAT model path, when the user selected `--model-file`. */
+	std::optional<std::filesystem::path> modelFile;
+	/** Whether the user also explicitly selected one of GenMC's built-in models. */
+	bool modelExplicit{};
+	/** Number of `--model-file` occurrences, retained for stable duplicate diagnostics. */
+	unsigned int modelFileOccurrences{};
 	bool estimate{};
 	bool isDepTrackingModel{};
 	std::optional<unsigned int> bound;

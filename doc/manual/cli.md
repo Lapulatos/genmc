@@ -7,6 +7,11 @@ A full list of the available command-line options can by viewed by issuing `genm
 - **`-ra`**: Perform the exploration under the RA memory model
 - **`-rc11`**: Perform the exploration under the RC11 memory model (default)
 - **`-imm`**: Perform the exploration under the IMM memory model
+- **`--model-file=<model.cat>`**: Validate and select a CAT memory-model file.
+  This option cannot be combined with `-sc`, `-tso`, `-ra`, or `-rc11`, and
+  disables automatic memory-model detection. At the current Phase 1.1
+  boundary, GenMC validates and canonicalizes the path, then reports that CAT
+  parsing and execution are not available yet.
 - **`-nthreads=<N>`**: Perform verification concurrently (using `N` threads)
 - **`-cache-instructions`**: Caches instructions to help execution time (sacrifices memory)
 - **`-disable-bam`**: Disables Barrier-Aware Model-checking (BAM)

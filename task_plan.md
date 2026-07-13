@@ -33,6 +33,8 @@
 - `git clone --depth 1 https://github.com/herd/herdtools7.git` 遇到 LibreSSL TLS 连接失败；改用官方 GitHub 页面和本地 CAT 论文核查，未下载仓库。
 - Phase 1.0 首次链接失败：CMake 找到 hwloc 后以 `-lhwloc` 链接，但 Homebrew 路径不在 linker search path；使用 `-DCMAKE_EXE_LINKER_FLAGS=-L/opt/homebrew/opt/hwloc/lib` 建立基线，未修改仓库源码。
 - `BUILD_TESTS=ON` 在 RapidCheck 的未使用 Catch submodule clone 长时间无进展；改用 `FETCHCONTENT_SOURCE_DIR_RAPIDCHECK` 指向已完整克隆的 RapidCheck 主源码。随后 unit tests 40/40 和 CTest fast-driver 1/1 均通过，无仓库源码改动。
+- Phase 1.1 首次 CLI 测试发现 LLVM `cl::opt<std::string>` 对重复参数采用最后一个值而不报错；现在保存 occurrence count，并由 `Config::validate` 给出稳定的重复参数诊断，单元与 CLI 测试覆盖该回归。
+- Phase 1.1 的 `clang-tidy` 使用生成的 compilation database 运行后，被本机工具链无法解析 libc++ C++23 `<format>` 阻塞；正常 CMake 编译、46/46 单元测试、CLI 1/1 和 fast-driver 1/1 均通过。
 
 ## Status
-**Phase 1.0 complete pending Git delivery** - 构建、40 个 unit/property tests、CTest driver、SC/TSO smoke 与 CAT 子集/fixture/model 审计均通过；提交并 push 后进入 Phase 1.1 CLI/config。
+**Phase 1.1 ready for Git delivery** - CLI/config 实现、文档、差距分析与回归验证均已完成；提交并 push 后进入 Phase 1.2 lexer/parser。

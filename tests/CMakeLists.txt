@@ -22,5 +22,14 @@ add_test(NAME run-relinche-spec
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
 
+add_test(
+    NAME cli-model-file
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cli/model-file.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/sc.cat
+            ${CMAKE_SOURCE_DIR}/tests/correct/litmus/SB/variants/sb0.c
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+
 # Unit tests
 add_subdirectory(unit)
