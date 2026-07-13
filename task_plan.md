@@ -39,6 +39,7 @@
 - Phase 1.2 负例审查发现缺失左操作数可能让 binary fold 解引用空 AST；增加 early return 和专门回归测试。前端当前 focused 24/24、完整 unit 64/64、CLI 1/1、fast-driver 1/1。
 - Phase 1.3 直接从 Phase 1.2 AST lower，不重新读取模型；`Config` 现在保存 `shared_ptr<const ModelIR>`。SC/TSO/PSO 分别形成 17/43/45 节点的精确 golden DAG，完整 unit 75/75、CLI 1/1、fast-driver 1/1。
 - Phase 1.4 新增 word-packed set/relation 与独立 pure evaluator；RapidCheck 对照 `std::set`，SC 方程无需模型名分派即可解释。完整 unit 85/85、CLI 1/1、fast-driver 1/1，64→512 事件基准约 2.09 ms。
+- Phase 1.5 新增只读 `ExecutionGraph` 快照适配器；稳定 dense ID 覆盖真实标签及按地址展开的虚拟初始写，并构造 `R/W/F/IW/SC`、`po/rf/co/fr/rmw/loc/int/ext/tc/tj`。虚拟初始写映回 `InitLabel + 地址`，避免跨地址伪造 `fr`。
 
 ## Status
-**Phase 1.4 ready for Git delivery** - packed relation algebra、memoized evaluator、structured witnesses、property oracle 与基准已完成；提交并 push 后进入 Phase 1.5 graph adapter。
+**Phase 1.5 ready for Git delivery** - graph snapshot adapter、初始化/RMW/线程生命周期语义、debug invariants、focused/full regression 与构造基准已完成；提交并 push 后进入 Phase 1.6 SC vertical slice。

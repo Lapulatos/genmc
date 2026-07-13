@@ -132,6 +132,15 @@ Phase 1 graph adapter. The exact inclusion policy is tested in the adapter
 substage; internal bookkeeping objects that are not `EventLabel`s are never
 events.
 
+The adapter assigns dense IDs to real labels in `ExecutionGraph::labels()`
+insertion order, then appends virtual initial writes in sorted-address order.
+Every concrete label except the address-polymorphic `InitLabel`, including
+thread lifecycle, block, allocation, and other model-neutral labels, belongs
+to `_`; internal `EmptyLabel` placeholders do not. Labels not classified
+below remain usable through `_`, `po`, `int`, and `ext` instead of causing
+model-specific rejection. Emitted non-atomic `ReadLabel`/`WriteLabel` objects
+are ordinary members of `R`/`W`.
+
 | Name | Type | Phase 1 meaning |
 |---|---|---|
 | `_` | `set` | all exposed events |
@@ -143,6 +152,17 @@ events.
 | `SC` | `set` | events whose GenMC ordering is sequentially consistent |
 
 An RMW event can belong to both `R` and `W`. `IW` is a subset of `W`.
+
+GenMC represents a successful RMW with adjacent read-side and write-side
+labels, so the two labels respectively belong to `R` and `W`, with an `rmw`
+edge between them. GenMC uses one `InitLabel` to represent every address, but
+CAT relation composition must retain the address. The adapter therefore
+expands it into one virtual `IW`/`W` event per tracked location. Each virtual
+event maps back to `InitLabel` plus its address, reads-from only reads at that
+address, precedes only same-address writes in `co`, and is `loc`-related only
+to same-address memory events. Virtual initial writes share a synthetic
+initialization thread: they are `int` with each other, `ext` with real events,
+and are outside `po`.
 
 ## Built-in relations and aliases
 
@@ -178,6 +198,12 @@ let po-loc = po & loc
 `mo` is accepted as a deprecated spelling of `co` for model portability. A
 diagnostic note identifies the canonical spelling; model semantics do not
 change.
+
+An adapter is valid for one immutable graph snapshot. Any graph change,
+including an `rf` or `co` update that does not add/remove a label, requires a
+new adapter. The debug structural check detects changed label identity/order,
+but GenMC currently has no generation counter that could detect edge-only
+mutation.
 
 ## Include resolution
 

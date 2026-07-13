@@ -143,7 +143,111 @@ the substage commit is pushed.
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verified after commit
 
+### Phase 1.5: GenMC execution-graph adapter
 
+- Date: 2026-07-14
+- Starting commit: `dbccb7699d38690e6947df7472398201ca1c2929`
+- Ending commit: recorded by the atomic commit named below
+- Remote ref pushed: `origin/genmc-caat` (to be verified after this atomic commit)
+- Constraint/plan pre-read: `doc/cat/PROJECT_CONSTRAINTS.md` and
+  `doc/cat/phase-1-plan.md` read before implementation edits
+- GenMC development rules pre-read: `doc/development.md` read before edits
+- Initial dirty files: none
+
+#### Contract
+
+- Input: one read-only `ExecutionGraph` snapshot whose labels outlive the
+  adapter.
+- Output: stable insertion-order real-label IDs followed by sorted per-address
+  virtual initial writes, reverse event/location lookup, and every Phase 1
+  primitive required by `Evaluator`.
+- Snapshot boundary: every graph mutation invalidates the adapter. The graph
+  has no relation-generation counter, so structural checking cannot prove
+  stability after an edge-only `rf/co` update.
+- Event policy: expose real labels except internal `EmptyLabel` and expand the
+  address-polymorphic `InitLabel` into virtual per-location events.
+  Unsupported/model-neutral kinds remain in `_`, `po`, `int`, and `ext`
+  rather than failing construction.
+- Expected untouched files: graph/label implementation, Config, evaluator,
+  checkers, driver/exploration, LLVM passes, models, and litmus fixtures.
+
+#### Reuse survey
+
+| Candidate | Version/source | License | Reused part | Decision/rationale |
+|---|---|---|---|---|
+| `ExecutionGraph` traversal/query APIs | current branch | Apache-2.0/MIT | insertion order, po, rf pointers, co lists, lifecycle links | reuse read-only; do not duplicate graph ownership |
+| `EventLabel` RTTI and accessors | current branch | Apache-2.0/MIT | read/write/fence/init/RMW/lifecycle classification | reuse GenMC's canonical label semantics |
+| Phase 1.4 packed values | current branch | Apache-2.0/MIT | fixed-universe sets/relations and composition | materialize evaluator-ready primitives directly |
+| herdtools7 event representation | upstream semantic oracle | CeCILL-B | per-location initial-write semantics only | no source copied; GenMC Init is expanded by address at the adapter boundary |
+
+#### Implementation
+
+- Changed files: `genmc/genmc/CAT/GraphAdapter.hpp/.cpp`,
+  `genmc/CMakeLists.txt`, `tests/unit/CatGraphAdapterTest.cpp`,
+  `tests/unit/CMakeLists.txt`, `doc/cat/supported-cat.md`, `task_plan.md`,
+  `notes.md`, and this progress log.
+- Untouched files: `ExecutionGraph`/`EventLabel`, Config/frontend/IR/evaluator,
+  every consistency checker, driver/exploration code, LLVM transformations,
+  bundled CAT models, and existing litmus fixtures.
+- Real-label IDs follow `ExecutionGraph::labels()` insertion order and
+  round-trip through `Event`; virtual IW IDs use sorted addresses and map to
+  `InitLabel + SAddr` for witness reporting.
+- Event sets classify emitted NA accesses normally, split RMW read/write
+  labels normally, and append one virtual `IW`/`W` per tracked address.
+- `po/int/ext/loc` are constructed over the complete exposed universe;
+  `rf/rmw/tc/tj` follow direct label links; `co` expands stored per-location
+  lists into strict order and adds conceptual init-to-store edges.
+- `fr` is built as `rf^-1 ; co` and checked again during validation. Validation
+  also checks dense round trips, primitive universe sizes, functional `rf`,
+  strict `co`, and cross-location `co` endpoints.
+- Comment/documentation audit: ownership, lifetime, invalidation, complexity,
+  initializer encoding, RMW pairing, relation construction, and validation
+  limits are documented in source and the supported-profile contract.
+- GenMC convention audit: new production/test files carry the dual license,
+  use block/Doxygen comments, pass repository format, and introduce no new
+  dependency.
+
+#### Verification
+
+| Command | Result | Counts/timing/output |
+|---|---|---|
+| CMake focused build | pass | `unit_tests` rebuilt with new adapter source |
+| focused adapter tests | pass | 5/5: index, predicates, memory/order, lifecycle, benchmark |
+| complete unit set | pass | 90/90; 0 failed; 0.58s final run |
+| `ctest ... -R '^cli-model-file$'` | pass | 1/1; 0 failed; 0.19s final run |
+| `ctest ... -R '^fast-driver$'` | pass | 1/1; 0 failed; 77.04s final run |
+| 64/128/256/512 graph benchmark | pass | 4,925 us; 522,960 packed bytes (~511 KiB); ~7.47 MiB process peak RSS |
+| debug invariant validation | pass | dense/endpoints, functional rf, co location/strictness, exact fr equation |
+| clang-format dry-run and `git diff --check` | pass | all changed C++ files; no whitespace errors |
+| clang-tidy GraphAdapter with compile DB | environment-blocked | local tidy cannot find standard `<cstddef>`; helper decomposition and explicit initialization were reviewed manually |
+
+#### Plan-to-implementation gap
+
+| Planned item | Delivered evidence | Gap class | Next action |
+|---|---|---|---|
+| stable dense graph index | round-trip and post-mutation structural test | none | map evaluator witnesses back through labels in 1.6 |
+| `R/W/F/IW/SC` | exact predicate test including NA/init/RMW | none | use directly in CAT checker |
+| all primitive relations | exact synthetic graph assertions and direct graph links | none | differential-check real SC graphs |
+| initializer/lifecycle/unsupported policy | source contract and supported-profile documentation | none | preserve per-address virtual Init mapping in checker |
+| snapshot invalidation | explicit lifetime contract plus structural detector | accepted limitation | rebuild per full-graph check; Phase 3 adds generations/deltas |
+| debug invariants | `validate()` plus focused graph fixture | none | invoke in debug CAT checker construction |
+| construction benchmark | increasing graph/property record | measurement: RSS includes GoogleTest | add end-to-end CAT/built-in comparison in 1.6 |
+| CAT checker execution | deliberately not connected in adapter substage | deferred scope | implement SC vertical slice in 1.6 |
+
+#### Risks and next target
+
+- Known risks: each generic relation remains O(events²) bits; virtual initial
+  writes increase the universe by the number of tracked locations; freshness
+  cannot detect edge-only graph mutation; from-scratch construction is
+  correctness-first and will be replaced/supplemented by Phase 3 deltas.
+- Next substage target: Phase 1.6 CAT-backed full-graph checker integration and
+  SC differential equivalence without filename/model-name dispatch.
+
+#### Git delivery
+
+- Commit message: `feat(cat): expose GenMC graphs as CAT base relations`
+- Commit SHA: resolved by the Git commit carrying this entry
+- Push command/result: `git push origin genmc-caat`; verify local/remote SHA
 
 ### Phase 1.1: CLI and configuration plumbing
 
