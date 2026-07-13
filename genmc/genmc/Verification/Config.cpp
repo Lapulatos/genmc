@@ -13,6 +13,7 @@
 
 #include "genmc/config.h"
 
+#include "genmc/CAT/Frontend.hpp"
 #include "genmc/Support/Error.hpp"
 #include "genmc/Verification/Config.hpp"
 
@@ -101,13 +102,18 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 			}
 		}
 
-		/* Phase 1.1 stops here deliberately. This prevents a validated CAT path
-		 * from silently falling back to the default RC11 checker before the
-		 * parser and CAT-backed checker exist. */
+		/* Phase 1.2 stops here deliberately. This prevents a parsed CAT model
+		 * from silently falling back to the default RC11 checker. Phase 1.2
+		 * parses the complete model before LLVM execution; typed lowering and
+		 * the CAT-backed checker remain later substages. */
 		if (usable) {
-			errors.emplace_back("CAT model file validated, but CAT model execution is "
-					    "not available "
-					    "until the next Phase 1 substages.");
+			auto parseResult = cat::Frontend().parseFile(*modelFile);
+			for (const auto &diagnostic : parseResult.diagnostics)
+				errors.push_back(diagnostic.format());
+			if (parseResult.ok())
+				errors.emplace_back(
+					"CAT model parsed, but typed model execution is not "
+					"available until the next Phase 1 substages.");
 		}
 	}
 	if (LAPOR) {

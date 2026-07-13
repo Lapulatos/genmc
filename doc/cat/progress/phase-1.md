@@ -143,6 +143,7 @@ the substage commit is pushed.
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verified after commit
 
+
 ### Phase 1.1: CLI and configuration plumbing
 
 - Date: 2026-07-14
@@ -234,5 +235,103 @@ the substage commit is pushed.
 #### Git delivery
 
 - Commit message: `feat(cli): add validated CAT model file option`
+- Commit SHA: resolved by the Git commit carrying this entry
+- Push command/result: `git push origin genmc-caat`; verified after commit
+
+### Phase 1.2: Lexer, parser, source spans, and diagnostics
+
+- Date: 2026-07-14
+- Starting commit: `0ba98bc91cec7a73a3f603630f9e20a26e168acb`
+- Ending commit: recorded by the atomic commit named below
+- Remote ref pushed: `origin/genmc-caat` (to be verified after this atomic commit)
+- Constraint/plan pre-read: `doc/cat/PROJECT_CONSTRAINTS.md` and
+  `doc/cat/phase-1-plan.md` read before implementation edits
+- GenMC development rules pre-read: `doc/development.md` read before edits
+- Initial dirty files: none
+
+#### Contract
+
+- Inputs: one canonical UTF-8 root model, its relative/absolute includes, and
+  the exact syntax frozen in `doc/cat/supported-cat.md`.
+- Outputs: an owned syntax-only model with source spans and includes expanded
+  in place, or categorized diagnostics with path/line/column before LLVM
+  execution.
+- Unsupported cases: name resolution, type checking, immutable relational IR,
+  graph evaluation, and consistency checking remain Phase 1.3+ work.
+- Expected changed files: a new C++ CAT frontend, library/test CMake entries,
+  parser/config tests, CLI boundary text, manual, project records, and this log.
+- Expected untouched files: consistency checkers, execution graph, exploration
+  algorithms, LLVM transformations, and bundled model semantics.
+
+#### Reuse survey
+
+| Candidate | Version/source | License | Reused part | Decision/rationale |
+|---|---|---|---|---|
+| frozen Phase 1 grammar | `doc/cat/supported-cat.md` | project documentation | tokens, precedence, AST surface, include rules | implemented exactly as local contract |
+| GenMC CMake/GoogleTest | current branch | Apache-2.0/MIT | library source placement and discovered unit tests | extended existing targets; no new dependency |
+| herdtools7 frontend | official OCaml lexer/parser surveyed in 1.0 | CeCILL-B | behavioral syntax reference only | no source copied; local recursive-descent parser avoids runtime/license cost |
+| C++ standard library | C++23 toolchain | implementation license | filesystem, streams, ownership, containers | sufficient for linear dependency-free frontend |
+
+#### Implementation
+
+- Changed files: `genmc/genmc/CAT/Frontend.hpp`,
+  `genmc/genmc/CAT/Frontend.cpp`, `genmc/CMakeLists.txt`,
+  `genmc/genmc/Verification/Config.cpp`, `tests/unit/CatFrontendTest.cpp`,
+  `tests/unit/ConfigTest.cpp`, `tests/unit/CMakeLists.txt`,
+  `tests/cli/model-file.sh`, `doc/manual/cli.md`, `task_plan.md`, `notes.md`,
+  and this progress log.
+- Untouched files: built-in/generated consistency checkers, execution graph,
+  driver exploration, LLVM passes, existing litmus fixtures, bundled CAT
+  models, and the frozen grammar/type contract.
+- Key decisions and invariants: the lexer validates UTF-8 before tokenization;
+  AST ownership uses `unique_ptr`; every node retains a half-open canonical
+  file span; included files are statement fragments resolved beside their
+  parent; the active include stack records paths and include sites; binary
+  operators fold left at the frozen precedence; top-level recovery restarts
+  only at unambiguous statement keywords. Config parses before LLVM execution
+  and retains an explicit typed-execution boundary.
+- Comment/documentation audit: public types and methods document ownership,
+  lifetime, thread safety, errors, and semantics; private lexer/parser/loader
+  blocks document their invariants; tests name the protected behavior.
+- GenMC convention audit: both new C++ files carry the dual license, use include
+  guards and block/Doxygen comments, follow class declaration order and naming,
+  and are formatted with the repository configuration.
+
+#### Verification
+
+| Command | Result | Counts/timing/output |
+|---|---|---|
+| CMake build | pass | all targets; only pre-existing LLVM/libc++ deprecation warnings |
+| focused CAT/config tests | pass | 24/24 after final include/negative-surface additions |
+| complete `unit_tests` | pass | 64/64 from 8 suites; 0 failed; 33 ms |
+| `ctest ... -R '^cli-model-file$'` | pass | 1/1; 0 failed; 1.09s |
+| `ctest ... -R '^fast-driver$'` | pass | 1/1; 0 failed; 77.61s final run |
+| parser benchmark on bundled PSO model | pass | 300 parses; 20,631 files/s; 6.75 MiB process peak RSS |
+| repository clang-format dry-run and `git diff --check` | pass | all changed C++ files; no whitespace errors |
+| `clang-tidy Frontend.cpp -p RelWithDebInfo` | environment-blocked | command ran and exposed style suggestions; analysis terminated because local tidy cannot find standard header `<cstddef>` |
+
+#### Plan-to-implementation gap
+
+| Planned item | Delivered evidence | Gap class | Next action |
+|---|---|---|---|
+| tokens/comments/UTF-8/strings/spans | lexer plus lexical-detail and negative tests | none | preserve spans during lowering |
+| frozen operators and precedence | syntax AST, complete-surface and precedence tests | none | assign types/node IDs in 1.3 |
+| deterministic includes/cycles | canonical relative/absolute and cycle-site tests | none | retain source provenance during lowering |
+| diagnostics/recovery | stable categories, exact-location and two-error recovery tests | none | add name/type categories in 1.3 |
+| SC/TSO/PSO parse | bundled-model test | none | lower all three to stable summaries |
+| parser performance record | XML property and `/usr/bin/time -l` | measurement: process RSS includes GoogleTest | add allocation-level benchmark only if parser cost becomes material |
+| CAT execution | explicit typed-model boundary | deferred scope | implement resolver/type checker/immutable IR in 1.3 |
+
+#### Risks and next target
+
+- Known risks: `clang-tidy` remains toolchain-blocked; the parser intentionally
+  accepts only the frozen subset; syntax trees are currently parsed during
+  validation and discarded until Config owns the typed model in 1.3.
+- Next substage target: Phase 1.3 name resolution, complete operator typing,
+  immutable typed IR with stable IDs, and golden summaries for SC/TSO/PSO.
+
+#### Git delivery
+
+- Commit message: `feat(cat): parse the phase-one CAT language subset`
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verified after commit

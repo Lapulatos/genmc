@@ -35,6 +35,8 @@
 - `BUILD_TESTS=ON` 在 RapidCheck 的未使用 Catch submodule clone 长时间无进展；改用 `FETCHCONTENT_SOURCE_DIR_RAPIDCHECK` 指向已完整克隆的 RapidCheck 主源码。随后 unit tests 40/40 和 CTest fast-driver 1/1 均通过，无仓库源码改动。
 - Phase 1.1 首次 CLI 测试发现 LLVM `cl::opt<std::string>` 对重复参数采用最后一个值而不报错；现在保存 occurrence count，并由 `Config::validate` 给出稳定的重复参数诊断，单元与 CLI 测试覆盖该回归。
 - Phase 1.1 的 `clang-tidy` 使用生成的 compilation database 运行后，被本机工具链无法解析 libc++ C++23 `<format>` 阻塞；正常 CMake 编译、46/46 单元测试、CLI 1/1 和 fast-driver 1/1 均通过。
+- Phase 1.2 首次 include/location 测试暴露了 `Parser` 构造参数中先 move source 还是先 lex 的求值顺序风险；现在明确先完成 tokenization，再移动 source，避免 `Lexer` 的 `string_view` 观察 moved-from 字符串。
+- Phase 1.2 负例审查发现缺失左操作数可能让 binary fold 解引用空 AST；增加 early return 和专门回归测试。前端当前 focused 24/24、完整 unit 64/64、CLI 1/1、fast-driver 1/1。
 
 ## Status
-**Phase 1.1 ready for Git delivery** - CLI/config 实现、文档、差距分析与回归验证均已完成；提交并 push 后进入 Phase 1.2 lexer/parser。
+**Phase 1.2 ready for Git delivery** - lexer/parser/include/source-span/diagnostics、性能记录和回归已完成；提交并 push 后进入 Phase 1.3 typed IR。

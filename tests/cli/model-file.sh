@@ -54,7 +54,7 @@ expect_failure "--model-file may only be specified once" \
 	"${genmc}" --model-file="${model}" --model-file="${model}" "${program}"
 
 # A valid file reaches the deliberate boundary without compiling the program.
-expect_failure "CAT model file validated" \
+expect_failure "CAT model parsed" \
 	"${genmc}" --model-file="${model}" --nthreads=2 "${program}"
 
 # The legacy built-in path remains executable and retains its prior meaning.

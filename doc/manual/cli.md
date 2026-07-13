@@ -9,9 +9,10 @@ A full list of the available command-line options can by viewed by issuing `genm
 - **`-imm`**: Perform the exploration under the IMM memory model
 - **`--model-file=<model.cat>`**: Validate and select a CAT memory-model file.
   This option cannot be combined with `-sc`, `-tso`, `-ra`, or `-rc11`, and
-  disables automatic memory-model detection. At the current Phase 1.1
-  boundary, GenMC validates and canonicalizes the path, then reports that CAT
-  parsing and execution are not available yet.
+  disables automatic memory-model detection. The current Phase 1.2 frontend
+  parses the documented CAT subset and resolves includes before LLVM
+  execution; it then reports that typed lowering and CAT-backed verification
+  are not available yet.
 - **`-nthreads=<N>`**: Perform verification concurrently (using `N` threads)
 - **`-cache-instructions`**: Caches instructions to help execution time (sacrifices memory)
 - **`-disable-bam`**: Disables Barrier-Aware Model-checking (BAM)

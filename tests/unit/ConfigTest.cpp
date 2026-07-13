@@ -67,7 +67,7 @@ TEST(ConfigModelFileTest, CanonicalizesReadableFile)
 
 	auto status = config.validate(warnings);
 
-	EXPECT_TRUE(hasError(status, "CAT model file validated"));
+	EXPECT_TRUE(hasError(status, "CAT model parsed"));
 	ASSERT_TRUE(config.modelFile.has_value());
 	EXPECT_EQ(*config.modelFile, std::filesystem::canonical(path));
 	std::filesystem::remove(path);
@@ -85,7 +85,7 @@ TEST(ConfigModelFileTest, RejectsExplicitBuiltInModel)
 	auto status = config.validate(warnings);
 
 	EXPECT_TRUE(hasError(status, "cannot be combined with an explicit built-in"));
-	EXPECT_FALSE(hasError(status, "CAT model file validated"));
+	EXPECT_FALSE(hasError(status, "CAT model parsed"));
 	std::filesystem::remove(path);
 }
 
@@ -101,7 +101,7 @@ TEST(ConfigModelFileTest, RejectsDuplicateOption)
 	auto status = config.validate(warnings);
 
 	EXPECT_TRUE(hasError(status, "--model-file may only be specified once"));
-	EXPECT_FALSE(hasError(status, "CAT model file validated"));
+	EXPECT_FALSE(hasError(status, "CAT model parsed"));
 	std::filesystem::remove(path);
 }
 
@@ -117,7 +117,7 @@ TEST(ConfigModelFileTest, RejectsMissingFile)
 	auto status = config.validate(warnings);
 
 	EXPECT_TRUE(hasError(status, "CAT model file does not exist"));
-	EXPECT_FALSE(hasError(status, "CAT model file validated"));
+	EXPECT_FALSE(hasError(status, "CAT model parsed"));
 }
 
 /* Directories are not accepted as model inputs even when they are readable. */
@@ -130,7 +130,25 @@ TEST(ConfigModelFileTest, RejectsDirectory)
 	auto status = config.validate(warnings);
 
 	EXPECT_TRUE(hasError(status, "CAT model file is not a regular file"));
-	EXPECT_FALSE(hasError(status, "CAT model file validated"));
+	EXPECT_FALSE(hasError(status, "CAT model parsed"));
+}
+
+/* Syntax errors from the CAT frontend retain their file/line/column through Config. */
+TEST(ConfigModelFileTest, ReportsParserDiagnosticBeforeExecution)
+{
+	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-invalid.cat";
+	std::ofstream output(path);
+	output << "Broken\nacyclic po |\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+
+	auto status = config.validate(warnings);
+
+	EXPECT_TRUE(hasError(status, path.string() + ":3:1: parse:"));
+	EXPECT_FALSE(hasError(status, "CAT model parsed"));
+	std::filesystem::remove(path);
 }
 
 /* Existing invocations without a CAT file retain the legacy validation path. */

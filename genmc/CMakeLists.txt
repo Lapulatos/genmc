@@ -4,6 +4,7 @@ set(LIB_SOURCES
   genmc/ADT/SmallVector.cpp
   genmc/ADT/VectorClock.cpp
   genmc/ADT/View.cpp
+  genmc/CAT/Frontend.cpp
   genmc/Execution/DepExecutionGraph.cpp
   genmc/Execution/EventLabel.cpp
   genmc/Execution/ExecutionGraph.cpp
