@@ -1,0 +1,16 @@
+(*
+ * Clean-room Phase 1 PSO model for GenMC.
+ *
+ * PSO additionally relaxes write-to-write order across locations. Reads,
+ * same-location writes, full fences, and SC access pairs remain ordered.
+ *)
+PSO
+
+let com = rfe | fr | co
+let ww_loc = ([W] ; po ; [W]) & loc
+let ppo = ([R] ; po) | ww_loc | (po ; [F] ; po) |
+          ([W & SC] ; po ; [SC])
+
+empty rmw & (fre ; coe) as atomicity
+acyclic (po & loc) | rf | fr | co as coherence
+acyclic ppo | tc | tj | com as pso

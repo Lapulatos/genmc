@@ -1,0 +1,15 @@
+(*
+ * Clean-room Phase 1 SC model for GenMC.
+ *
+ * This model is derived from the standard axiomatic characterization of
+ * sequential consistency. It is not copied from herdtools7.
+ *)
+SC
+
+let com = rf | fr | co
+
+(* An RMW may not read from a write that is not immediately before its write. *)
+empty rmw & (fre ; coe) as atomicity
+
+(* All program-order, lifecycle, and communication edges share one order. *)
+acyclic po | tc | tj | com as sc

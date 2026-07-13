@@ -1,0 +1,15 @@
+(*
+ * Clean-room Phase 1 TSO model for GenMC.
+ *
+ * Ordinary write-to-read program order may relax. Reads, writes as targets,
+ * full fences, and pairs of SC accesses retain their required order.
+ *)
+TSO
+
+let com = rfe | fr | co
+let ppo = ([R] ; po) | (po ; [W]) | (po ; [F] ; po) |
+          ([W & SC] ; po ; [R & SC])
+
+empty rmw & (fre ; coe) as atomicity
+acyclic (po & loc) | rf | fr | co as coherence
+acyclic ppo | tc | tj | com as tso

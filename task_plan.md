@@ -31,6 +31,8 @@
 ## Errors Encountered
 - 初次关键词检索被大量测试参数噪声淹没；后续按源码目录和核心类型定向检索。
 - `git clone --depth 1 https://github.com/herd/herdtools7.git` 遇到 LibreSSL TLS 连接失败；改用官方 GitHub 页面和本地 CAT 论文核查，未下载仓库。
+- Phase 1.0 首次链接失败：CMake 找到 hwloc 后以 `-lhwloc` 链接，但 Homebrew 路径不在 linker search path；使用 `-DCMAKE_EXE_LINKER_FLAGS=-L/opt/homebrew/opt/hwloc/lib` 建立基线，未修改仓库源码。
+- `BUILD_TESTS=ON` 在 RapidCheck 的未使用 Catch submodule clone 长时间无进展；改用 `FETCHCONTENT_SOURCE_DIR_RAPIDCHECK` 指向已完整克隆的 RapidCheck 主源码。随后 unit tests 40/40 和 CTest fast-driver 1/1 均通过，无仓库源码改动。
 
 ## Status
-**Phase 1 planned; implementation not started** - 详细计划位于 `doc/cat/phase-1-plan.md`；下一目标为 Phase 1.0 baseline/specification freeze。
+**Phase 1.0 complete pending Git delivery** - 构建、40 个 unit/property tests、CTest driver、SC/TSO smoke 与 CAT 子集/fixture/model 审计均通过；提交并 push 后进入 Phase 1.1 CLI/config。
