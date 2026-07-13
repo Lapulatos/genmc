@@ -20,7 +20,10 @@ A full list of the available command-line options can by viewed by issuing `genm
   and TSO models are differentially checked against GenMC's built-in checkers.
   The bundled PSO model reuses the TSO host profile but relaxes cross-location
   write order through CAT equations; the model-only SC/TSO/PSO distinction is
-  checked against an assembly-aligned herd oracle.
+  checked against an assembly-aligned herd oracle. Checks that depend on CAT
+  difference are rejected by the Phase 1 online-admissibility gate, although
+  difference remains supported by the frontend and offline evaluator.
+  Relinche collection/checking options cannot yet be combined with a CAT file.
 - **`-nthreads=<N>`**: Perform verification concurrently (using `N` threads)
 - **`-cache-instructions`**: Caches instructions to help execution time (sacrifices memory)
 - **`-disable-bam`**: Disables Barrier-Aware Model-checking (BAM)

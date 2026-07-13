@@ -7,7 +7,7 @@
 - [x] Feasibility 1: 确认分支、工作区与材料位置
 - [x] Feasibility 2: 分析 GenMC、CAT、CAAT、Kater 与 herdtools7
 - [x] Feasibility 3: 形成风险边界和三阶段路线
-- [ ] Implementation 1: CAT file support（SC/TSO/PSO full-graph consistency；详细计划已完成）
+- [x] Implementation 1: CAT file support（SC/TSO/PSO full-graph consistency；实现、验证与报告已完成）
 - [ ] Implementation 2: Offline CAAT backend（normalization/fixed point/explanations）
 - [ ] Implementation 3: Incremental/online CAAT（push/pop/backtrack/early pruning）
 
@@ -18,7 +18,8 @@
 4. 最小可交付版本应覆盖哪些语法与内存模型？
 
 ## Decisions Made
-- 本轮只分析，不修改 GenMC 实现代码。
+- 可行性子阶段只分析、不修改代码；后续实现严格按已评审的 Phase 1
+  子阶段计划执行。
 - 以本地论文、当前分支源码和 herdtools7 官方仓库为主要证据。
 - 用户明确首期不要求任意 CAT；MVP 以 SC、TSO、PSO 为目标，并保留后续扩展能力。
 - 实施顺序固定为 CAT file support → offline CAAT → incremental/online CAAT。
@@ -45,4 +46,4 @@
 - Phase 1.8 让 PSO 显式复用 TSO host profile，只通过 CAT `ppo` 方程放松跨地址 W→W；同一 WW+RR 程序仅替换模型文件即可区分 SC/TSO 与 PSO，并由 herd 官方 TSO/PSO 方程交叉确认。
 
 ## Status
-**Phase 1.8 ready for Git delivery** - PSO new-model proof、保序回归、herd oracle、完整单元与 fast-driver 已完成；提交并 push 后进入 Phase 1.9 closure/audit。
+**Phase 1 complete** - 干净构建、100/100 单元/性质测试、4/4 CAT 集成测试、herd oracle 和 fast-driver 均通过；兼容性、性能与 Phase 2 输入已记录在 `doc/cat/phase-1-report.md`。下一目标是先评审 Phase 2 详细计划，不直接扩张实现范围。

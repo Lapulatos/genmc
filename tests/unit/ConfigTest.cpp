@@ -100,6 +100,40 @@ TEST(ConfigModelFileTest, SelectsExplicitTSOHostProfile)
 	std::filesystem::remove(path);
 }
 
+/* Non-monotone checks remain evaluable offline but cannot prune graph prefixes safely. */
+TEST(ConfigModelFileTest, RejectsOnlineInadmissibleDifference)
+{
+	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-difference.cat";
+	std::ofstream output(path);
+	output << "Difference\nacyclic po \\ rf\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+
+	auto status = config.validate(warnings);
+
+	EXPECT_TRUE(hasError(status, "difference affecting a check is not online-admissible"));
+	EXPECT_EQ(config.catModel, nullptr);
+	std::filesystem::remove(path);
+}
+
+/* Relinche cannot silently use a generated host model's refinement coherence. */
+TEST(ConfigModelFileTest, RejectsRelincheOptions)
+{
+	auto path = createModelFile("genmc-config-relinche.cat");
+	Config config;
+	config.modelFile = path;
+	config.collectLinSpec = "unused-output-path";
+	std::vector<std::string> warnings;
+
+	auto status = config.validate(warnings);
+
+	EXPECT_TRUE(hasError(status, "cannot be combined with Relinche"));
+	EXPECT_EQ(config.catModel, nullptr);
+	std::filesystem::remove(path);
+}
+
 /* A CAT file and an explicitly selected built-in model are unambiguously conflicting. */
 TEST(ConfigModelFileTest, RejectsExplicitBuiltInModel)
 {

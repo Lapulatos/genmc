@@ -20,8 +20,8 @@ A model passes four distinct gates:
 2. **Well-typed:** every operator and check has the required operand type.
 3. **Phase-1 supported:** the model uses no construct explicitly deferred
    below.
-4. **GenMC executable:** every primitive requested by the model can be built
-   for the selected execution graph.
+4. **GenMC executable:** every primitive can be built and every check passes
+   the conservative online-admissibility gate described below.
 
 Diagnostics identify the failed gate. A syntactically valid full-CAT program
 can therefore still receive an `unsupported` diagnostic.
@@ -144,6 +144,28 @@ source location. Named checks must have unique names after includes expand.
 Bindings are non-recursive and are visible only after their definition.
 Bindings cannot shadow another binding, a built-in, or a check name. Phase 1
 does not infer or iterate recursive definitions.
+
+### Online-admissibility gate
+
+The parser, typed IR, and from-scratch evaluator support set/relation
+difference. GenMC's Phase 1 exploration path does not accept a difference node
+that can reach a consistency check. Difference is antitone in its right
+operand: as a graph prefix gains events or edges, `A \ B` can shrink, so a
+violation observed at a prefix may disappear later. Pruning that prefix would
+therefore be unsound without the polarity/fixed-point analysis planned for
+offline CAAT.
+
+The immutable IR computes reachability backward from checks and reports the
+first reachable difference before LLVM execution. An unused binding may still
+contain difference for offline evaluator use. The bundled SC, TSO, and PSO
+models contain no reachable difference and pass this gate. This restriction
+changes online admissibility, not CAT parsing, typing, or from-scratch value
+semantics.
+
+Phase 1 also rejects `--model-file` with Relinche collection/checking options.
+Relinche asks the checker for a refinement-specific coherence predicate; the
+available implementation belongs to the generated SC/TSO host rather than the
+arbitrary CAT model. Failing early avoids silently applying the wrong model.
 
 ## Built-in event sets
 

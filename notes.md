@@ -4,7 +4,8 @@
 - Repository: `/Users/sujie/Documents/Codes/C++/GenMC/genmc`
 - Branch: `genmc-caat`
 - Initial worktree: clean（`git status --short` 无输出）
-- Scope: feasibility analysis only; no implementation changes.
+- Initial scope: feasibility analysis only; implementation began only after the
+  three-phase sequence and detailed Phase 1 plan were reviewed.
 
 ## Sources
 
@@ -99,3 +100,7 @@
 - PSO retains TSO results for explicit same-location order (`po-loc`=3), RMW atomicity (`RMWFix`=4), and SC fences (`SB+scfs`=3).
 - herd 7.56 official `x86tso.cat` classifies MP as `Never 0 3`; official `mips.cat`, whose source explicitly selects a PSO ppo, classifies the same plain-R/W event structure as `Sometimes 1 3` when architecture checking alone is disabled.
 - Ten warmed WW+RR runs measured TSO CAT at 0.50 s/52,576,256-byte peak RSS and PSO CAT at 0.48 s/52,609,024 bytes. The measurement does not show a material model-load/evaluation penalty.
+- Phase 1.9's soundness audit identified a non-monotonicity boundary: a CAT relation difference reachable from a check can shrink as an execution prefix grows. Config now rejects that online use while preserving difference in the parser, typed IR, and from-scratch evaluator.
+- The same audit identified that Relinche requests a refinement-specific coherence predicate supplied by generated host checkers. `--model-file` now rejects Relinche collection/checking rather than silently applying SC/TSO host-model semantics to an arbitrary CAT model.
+- A clean Phase1Audit build passed 100/100 unit/property tests, 4/4 focused CAT integrations, both herd oracles, and fast-driver in 76.90 seconds. `clang-tidy` remains environment-blocked because its Apple toolchain invocation cannot resolve the standard C++ header `cstddef`; normal LLVM 20.1.7 compilation succeeds.
+- The final Phase 1 report freezes the supported subset and carries forward three principal inputs: Phase 2 recursive/fixed-point normalization and explanations, a future arbitrary-CAT Relinche contract, and Phase 3 incremental graph/evaluator state with proof-backed pruning.

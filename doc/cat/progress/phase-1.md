@@ -916,3 +916,73 @@ the substage commit is pushed.
 - Commit message: `feat(cat): add model-driven PSO verification`
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verify after commit
+
+### Phase 1.9: closure, safety-boundary audit, and final report
+
+- Starting commit: `c951418d420bb06defff538b0f93014c5305f197`
+- Pre-check: re-read `doc/development.md`, `PROJECT_CONSTRAINTS.md`, and the
+  Phase 1 plan; branch was `genmc-caat` and the worktree was clean.
+- Contract: run the complete closure matrix, fix any P0 issue, publish exact
+  compatibility/performance limits, and turn only non-blocking gaps into Phase
+  2/3 inputs.
+
+#### Reuse survey
+
+| Candidate | Reused part | Decision |
+|---|---|---|
+| immutable typed DAG | operand graph and stable source spans | add a linear reverse reachability audit; do not add a second model representation |
+| `Config::validate` diagnostics | pre-execution validation and canonical model ownership | enforce online/Relinche boundaries before publishing the model |
+| generated SC/TSO hosts | views and language-error infrastructure | continue to exclude their model-specific Relinche coherence from arbitrary CAT |
+| existing unit/integration/herd tests | semantic, graph, CLI, differential, and external-oracle layers | rerun in one clean build rather than create overlapping closure tests |
+
+#### Audit findings and implementation
+
+- P0 fixed: relation difference is non-monotone in its right operand. The IR
+  now reports the first difference reachable from any check; Config rejects it
+  before exploration while unused/offline difference remains evaluable.
+- P0 fixed: CAT plus Relinche could ask the generated host for a coherence
+  predicate belonging to the wrong model. Config now rejects both Relinche
+  collection and checking combinations in Phase 1.
+- Added four regression tests covering reachable/unused difference, bundled
+  model admissibility, and Relinche rejection.
+- Published `doc/cat/phase-1-report.md` with the runtime path, compatibility
+  matrix, differential/herd evidence, performance baselines, reproducible
+  commands, and prioritized Phase 2/3 inputs.
+- Changed production files: `CAT/Model.hpp`, `CAT/Model.cpp`, and
+  `Verification/Config.cpp`. Changed tests/docs: `CatModelTest.cpp`,
+  `ConfigTest.cpp`, CAT compatibility/manual/report, cross-phase plan/notes,
+  and this append-only progress entry.
+- Untouched: CAT parsing/value/evaluator/graph-adapter semantics, generated
+  checkers, graph mutation/exploration algorithms, bundled model equations,
+  LLVM transforms, and all existing program fixtures.
+
+#### Verification
+
+| Command/layer | Result |
+|---|---|
+| clean CMake configure and `cmake --build Phase1Audit -j4` | pass; existing LLVM/generated-checker warnings only |
+| unit/property selection | 100/100 pass; 0.65s |
+| CLI + SC/TSO/PSO integrations | 4/4 pass; 1.94s |
+| herd TSO and PSO oracle scripts | both pass with herdtools7 7.56+03 |
+| `ctest -R '^fast-driver$'` | 1/1 pass; 76.90s |
+| `bash -n`, `git diff --check`, changed-line `clang-format` | pass |
+| license/comment/name/path-dispatch repository audit | pass; no new `//` comments or hard model-file dispatch |
+| `clang-tidy -p Phase1Audit` | environment-blocked: Apple standard header `cstddef` not found; normal build passes |
+
+#### Plan-to-implementation gap
+
+| Planned item | Delivered evidence | Gap/next action |
+|---|---|---|
+| complete verification matrix | clean build, 100 unit/property, 4 integration, fast-driver, herd | none |
+| compatibility/performance publication | final report with exact subset, commands, and measurements | none |
+| comment/convention audit | formatting, banners, comments, naming/order/manual review | clang-tidy environment issue recorded, not a source P0 |
+| compare every Phase 1 requirement | report and this table cover CLI through PSO | none for declared scope |
+| fix P0 findings | online difference and Relinche fail early | none |
+| carry remaining gaps forward | normalized recursion/explanations to Phase 2; deltas/backtracking/pruning to Phase 3 | deferred by fixed project sequence |
+
+#### Git delivery
+
+- Commit message: `fix(cat): close phase one verification boundaries`
+- Commit SHA: resolved by the Git commit carrying this entry
+- Push command/result: `git push origin genmc-caat`; verify local and remote
+  refs after commit

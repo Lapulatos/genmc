@@ -50,6 +50,12 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 		if (modelFileOccurrences > 1) {
 			errors.emplace_back("--model-file may only be specified once.");
 		}
+		if (collectLinSpec.has_value() || checkLinSpec.has_value()) {
+			errors.emplace_back(
+				"--model-file cannot be combined with Relinche collection or "
+				"checking options in Phase 1.");
+			usable = false;
+		}
 
 		/* Validate and canonicalize the path before compilation. Keeping the
 		 * canonical path in Config makes later parser caches independent of the
@@ -116,16 +122,30 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 				for (const auto &note : compileResult.notes)
 					warnings.push_back(note.format());
 				if (compileResult.ok()) {
-					catModel = std::move(compileResult.model);
-					/* The declaration selects transformations/views only;
-					 * consistency remains entirely model-driven. */
-					switch (catModel->hostProfile()) {
-					case cat::HostProfile::SC:
-						model = ModelType::SC;
-						break;
-					case cat::HostProfile::TSO:
-						model = ModelType::TSO;
-						break;
+					const auto inadmissible =
+						compileResult.model->firstOnlineInadmissibleNode();
+					if (inadmissible) {
+						const auto &node = compileResult.model->nodes().at(
+							*inadmissible);
+						errors.push_back(cat::Diagnostic{
+							cat::DiagnosticKind::Unsupported,
+							node.span,
+							"CAT difference affecting a check is not "
+							"online-admissible in Phase 1",
+							{}}.format());
+					} else {
+						catModel = std::move(compileResult.model);
+						/* The declaration selects transformations/views
+						 * only; consistency remains entirely model-driven.
+						 */
+						switch (catModel->hostProfile()) {
+						case cat::HostProfile::SC:
+							model = ModelType::SC;
+							break;
+						case cat::HostProfile::TSO:
+							model = ModelType::TSO;
+							break;
+						}
 					}
 				}
 			}

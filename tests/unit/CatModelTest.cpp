@@ -210,3 +210,31 @@ TEST(CatModelTest, ProducesStableNodeIds)
 	ASSERT_TRUE(second.ok());
 	EXPECT_EQ(first.model->summary(), second.model->summary());
 }
+
+/* Online pruning rejects only non-monotone difference nodes reachable from checks. */
+TEST(CatModelTest, ClassifiesOnlineAdmissibility)
+{
+	auto reachable =
+		compileText("Reachable\nlet nonmonotone = po \\ rf\nacyclic nonmonotone\n");
+	auto unused = compileText("Unused\nlet offlineOnly = po \\ rf\nacyclic po\n");
+
+	ASSERT_TRUE(reachable.ok());
+	ASSERT_TRUE(unused.ok());
+	const auto node = reachable.model->firstOnlineInadmissibleNode();
+	ASSERT_TRUE(node.has_value());
+	EXPECT_EQ(reachable.model->nodes()[*node].kind, cat::Node::Kind::Difference);
+	EXPECT_FALSE(unused.model->firstOnlineInadmissibleNode().has_value());
+}
+
+/* All three Phase 1 acceptance models satisfy the conservative online gate. */
+TEST(CatModelTest, AcceptsBundledModelsForOnlineChecking)
+{
+	for (const auto *name : {"sc", "tso", "pso"}) {
+		auto parsed = cat::Frontend().parseFile(repositoryRoot() / "models/cat" /
+							(std::string(name) + ".cat"));
+		ASSERT_TRUE(parsed.ok()) << name;
+		auto result = cat::Compiler().compile(*parsed.model);
+		ASSERT_TRUE(result.ok()) << name;
+		EXPECT_FALSE(result.model->firstOnlineInadmissibleNode().has_value()) << name;
+	}
+}

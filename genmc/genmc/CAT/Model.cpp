@@ -390,6 +390,36 @@ auto ModelIR::summary() const -> std::string
 	return output.str();
 }
 
+auto ModelIR::firstOnlineInadmissibleNode() const -> std::optional<NodeId>
+{
+	/* Only operations that can influence a check affect online pruning. Unused
+	 * bindings remain legal for offline evaluation and future Phase 2 tooling. */
+	std::vector<bool> reachable(nodes_.size());
+	std::vector<NodeId> worklist;
+	worklist.reserve(checks_.size());
+	for (const auto &check : checks_)
+		worklist.push_back(check.value);
+
+	while (!worklist.empty()) {
+		const auto id = worklist.back();
+		worklist.pop_back();
+		if (reachable.at(id))
+			continue;
+		reachable[id] = true;
+		for (const auto operand : nodes_[id].operands)
+			worklist.push_back(operand);
+	}
+
+	/* Difference can shrink when its right operand gains an edge/event. Without
+	 * a Phase 2 polarity/admissibility proof, rejecting such a prefix may lose a
+	 * later consistent execution. */
+	for (NodeId id = 0; id < nodes_.size(); ++id) {
+		if (reachable[id] && nodes_[id].kind == Node::Kind::Difference)
+			return id;
+	}
+	return std::nullopt;
+}
+
 auto Compiler::compile(const Model &syntax) const -> CompileResult
 {
 	return Builder{}.build(syntax);

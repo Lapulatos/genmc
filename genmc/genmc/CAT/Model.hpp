@@ -18,6 +18,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <utility>
@@ -119,6 +120,18 @@ public:
 	[[nodiscard]] auto bindings() const -> const std::vector<Binding> & { return bindings_; }
 	/** Return consistency checks in expanded source order. */
 	[[nodiscard]] auto checks() const -> const std::vector<Check> & { return checks_; }
+	/**
+	 * Find a reachable operation that prevents sound prefix-time rejection.
+	 *
+	 * Phase 1's online checker requires each check value to grow monotonically as
+	 * a graph prefix grows. Difference is non-monotone in its right operand, so a
+	 * reachable difference is conservatively rejected at the CLI boundary while
+	 * remaining available to the parser and from-scratch evaluator.
+	 *
+	 * @return First reachable inadmissible node in stable ID order, or no value.
+	 * @complexity Linear in the reachable typed DAG.
+	 */
+	[[nodiscard]] auto firstOnlineInadmissibleNode() const -> std::optional<NodeId>;
 	/** Return a platform-independent textual summary for golden tests/review. */
 	[[nodiscard]] auto summary() const -> std::string;
 
