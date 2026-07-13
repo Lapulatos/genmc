@@ -18,7 +18,8 @@ set(RC_ENABLE_GTEST ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(rapidcheck)
 
 add_executable(unit_tests IntervalMapTest.cpp ViewTest.cpp ErrorTest.cpp CastTest.cpp
-                          ConfigTest.cpp CatFrontendTest.cpp CatModelTest.cpp)
+                          ConfigTest.cpp CatFrontendTest.cpp CatModelTest.cpp
+                          CatEvaluatorTest.cpp)
 target_link_libraries(unit_tests PRIVATE GTest::gtest_main rapidcheck_gtest genmc_config_includes genmc_lib)
 target_include_directories(unit_tests PRIVATE ${CMAKE_SOURCE_DIR}/genmc)
 target_compile_definitions(unit_tests PRIVATE ENABLE_GENMC_DEBUG) # to access validate()

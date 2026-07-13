@@ -429,3 +429,98 @@ the substage commit is pushed.
 - Commit message: `feat(cat): add typed relational model IR`
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verified after commit
+
+### Phase 1.4: Relation storage and pure evaluator
+
+- Date: 2026-07-14
+- Starting commit: `4dad6fb8374e5d6a5cd156ccef2ba1de008900e2`
+- Ending commit: recorded by the atomic commit named below
+- Remote ref pushed: `origin/genmc-caat` (to be verified after this atomic commit)
+- Constraint/plan pre-read: `doc/cat/PROJECT_CONSTRAINTS.md` and
+  `doc/cat/phase-1-plan.md` read before implementation edits
+- GenMC development rules pre-read: `doc/development.md` read before edits
+- Initial dirty files: none
+
+#### Contract
+
+- Inputs: an immutable typed `ModelIR`, one dense event count, and synthetic
+  primitive set/relation values with the same universe.
+- Outputs: pure word-packed values, memoized binding/check evaluation,
+  structured errors, and named violations with source spans and witnesses.
+- Unsupported cases: no `ExecutionGraph` dependency or checker integration;
+  graph primitive construction remains Phase 1.5/1.6.
+- Expected changed files: CAT values/evaluator, library/test CMake, focused
+  property/benchmark tests, CLI phase-boundary documentation, records/log.
+- Expected untouched files: Config semantics, typed IR, checkers, execution
+  graph, driver/exploration, LLVM passes, models, and litmus fixtures.
+
+#### Reuse survey
+
+| Candidate | Version/source | License | Reused part | Decision/rationale |
+|---|---|---|---|---|
+| Phase 1.3 `ModelIR` | current branch | Apache-2.0/MIT | typed DAG, node IDs, checks/spans | interpret directly without syntax/model dispatch |
+| GenMC `VSet`/`View` | current branch | Apache-2.0/MIT | representation ideas | not reused: vector clocks cannot represent arbitrary binary relations |
+| C++ bit operations | C++23 standard library | implementation license | `popcount`, `countr_zero`, packed row algebra | reuse; no dependency added |
+| RapidCheck/GoogleTest | existing unit target | compatible existing dependency | algebra/oracle properties and examples | extend existing target |
+
+#### Implementation
+
+- Changed files: `genmc/genmc/CAT/Value.hpp/.cpp`,
+  `genmc/genmc/CAT/Evaluator.hpp/.cpp`, `genmc/CMakeLists.txt`,
+  `tests/unit/CatEvaluatorTest.cpp`, `tests/unit/CMakeLists.txt`,
+  `doc/manual/cli.md`, `task_plan.md`, `notes.md`, and this progress log.
+- Untouched files: Config/frontend/typed IR semantics, all checkers,
+  `ExecutionGraph`, driver/exploration code, LLVM passes, CAT models, and
+  existing litmus fixtures.
+- Key decisions and invariants: sets use one packed bit vector; relations use
+  contiguous packed rows; all values have one fixed dense universe and zero
+  tail bits; composition unions rhs rows for lhs edges; closure uses in-place
+  bitset Warshall; evaluator state is per call and memoizes both success and
+  failed primitive attempts; compiler types justify variant access; all
+  bindings and checks are evaluated; witnesses use event, pair, diagonal, or
+  closed DFS-cycle forms.
+- Comment/documentation audit: value layouts, complexity, ownership,
+  thread-safety, evaluator lifetime, memoization, closure/composition
+  algorithms, parameters/errors, and witness formats are documented.
+- GenMC convention audit: four new production files carry dual licenses,
+  block/Doxygen comments, class ordering/naming, and repository formatting.
+
+#### Verification
+
+| Command | Result | Counts/timing/output |
+|---|---|---|
+| CMake build | pass | all targets; existing external/generated warnings only |
+| focused value/evaluator tests | pass | 10/10 example/property/evaluator/benchmark tests |
+| complete `unit_tests` | pass | 85/85 from 13 suites; 0 failed; 65 ms final run |
+| `ctest ... -R '^cli-model-file$'` | pass | 1/1; 0 failed; 0.77s |
+| `ctest ... -R '^fast-driver$'` | pass | 1/1; 0 failed; 76.61s |
+| RapidCheck vs `std::set` oracle | pass | set Boolean algebra; relation Boolean/composition/closure; algebraic identities |
+| 64/128/256/512 sparse+dense benchmark | pass | 2,093 us; 85 KiB packed inputs; 6.67 MiB process peak RSS |
+| clang-format dry-run and `git diff --check` | pass | all changed C++ files; no whitespace errors |
+| clang-tidy Value/Evaluator with compile DB | environment-blocked | local tidy cannot find standard `<cstddef>`; actionable nodiscard/initialization findings applied manually |
+
+#### Plan-to-implementation gap
+
+| Planned item | Delivered evidence | Gap class | Next action |
+|---|---|---|---|
+| word-packed set/relation storage | `Value` classes and cross-word tests | none | feed adapter values in 1.5 |
+| all frozen pure operations | examples plus RapidCheck reference comparison | none | keep evaluator as from-scratch oracle |
+| memoized typed DAG evaluation | `Evaluator` and per-node count test | none | cache only per graph snapshot |
+| named checks and witnesses | set/pair/diagonal/cycle violation test | none | map dense IDs back to graph events in adapter/checker |
+| generic bundled-SC interpretation | synthetic primitive SC test | none | compare real graph executions in 1.6 |
+| performance/memory record | increasing sparse/dense benchmark | measurement: RSS includes GoogleTest | add adapter/end-to-end measurements later |
+| GenMC graph execution | deliberately absent dependency | deferred scope | implement read-only graph adapter in 1.5 |
+
+#### Risks and next target
+
+- Known risks: dense relations require O(events²) bits; inverse remains a
+  scalar O(events²) transpose; evaluator recomputes from scratch by design;
+  `clang-tidy` remains environment-blocked.
+- Next substage target: Phase 1.5 stable graph indexing and exact construction
+  of event predicates plus `po/rf/co/fr/rmw/loc/int/ext/tc/tj` primitives.
+
+#### Git delivery
+
+- Commit message: `feat(cat): evaluate typed CAT relations and checks`
+- Commit SHA: resolved by the Git commit carrying this entry
+- Push command/result: `git push origin genmc-caat`; verified after commit

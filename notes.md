@@ -75,3 +75,7 @@
 - The compiler uses sequential definition visibility, rejects forward/undefined/duplicate/reserved names, types every set/relation operator and check, and publishes no partial model after errors. `empty` accepts either type; `acyclic` and `irreflexive` require relations.
 - `M` lowers to `R | W`; internal/external aliases lower to generic intersections; `mo` shares the `co` node and emits a deprecation note. This prevents evaluator-side filename/model switches.
 - Exact platform-independent summaries are checked in for SC (17 nodes), TSO (43), and PSO (45). RapidCheck additionally verifies source provenance and topological operand IDs for randomly selected valid expressions.
+- Phase 1.4 represents an `N`-event set in `ceil(N/64)` words and a relation in `N * ceil(N/64)` contiguous row words. Composition unions complete rhs rows; transitive closure uses bitset Warshall.
+- The pure evaluator owns one memo table per call, evaluates bindings and checks, and caches failed primitive attempts as well as values. It returns errors separately from violations, with event/pair/diagonal/closed-cycle witnesses carrying original check spans.
+- RapidCheck compares set/relation Boolean algebra, composition, and closure against direct membership/`std::set` oracles. A generic synthetic-primitive test evaluates the SC model without checking its filename or model header.
+- Sparse/dense relation work over 64, 128, 256, and 512 events took about 2.09 ms for the recorded unit benchmark; packed input storage was 85 KiB and full test-process peak RSS was about 6.67 MiB.

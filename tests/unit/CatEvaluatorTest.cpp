@@ -1,0 +1,343 @@
+/*
+ * GenMC -- Generic Model Checking.
+ *
+ * This project is dual-licensed under the Apache License 2.0 and the MIT License.
+ * You may choose to use, distribute, or modify this software under either license.
+ *
+ * Apache License 2.0:
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * MIT License:
+ *     https://opensource.org/licenses/MIT
+ */
+
+#include "genmc/CAT/Evaluator.hpp"
+#include "genmc/CAT/Frontend.hpp"
+#include "genmc/CAT/Model.hpp"
+#include "genmc/CAT/Value.hpp"
+
+#include <gtest/gtest.h>
+#include <rapidcheck.h>
+#include <rapidcheck/gtest.h>
+
+#include <algorithm>
+#include <atomic>
+#include <chrono>
+#include <cstdint>
+#include <filesystem>
+#include <fstream>
+#include <iterator>
+#include <memory>
+#include <set>
+#include <string_view>
+#include <utility>
+#include <vector>
+
+namespace {
+
+/** Compile one isolated valid model for evaluator-only tests. */
+static auto compileModel(std::string_view source) -> std::shared_ptr<const cat::ModelIR>
+{
+	static std::atomic<std::uint64_t> nextFixture{};
+	auto path = std::filesystem::path(testing::TempDir()) /
+		    ("genmc-cat-evaluator-" +
+		     std::to_string(nextFixture.fetch_add(1, std::memory_order_relaxed)) + ".cat");
+	std::ofstream output(path);
+	output << source;
+	output.close();
+	auto parsed = cat::Frontend().parseFile(path);
+	EXPECT_TRUE(parsed.ok());
+	if (!parsed.ok())
+		return nullptr;
+	auto compiled = cat::Compiler().compile(*parsed.model);
+	std::filesystem::remove(path);
+	EXPECT_TRUE(compiled.ok());
+	return compiled.model;
+}
+
+/** Build a packed set from explicit event IDs. */
+static auto makeSet(std::size_t size, std::initializer_list<std::size_t> events) -> cat::EventSet
+{
+	cat::EventSet result(size);
+	for (const auto event : events)
+		result.insert(event);
+	return result;
+}
+
+/** Build a packed relation from explicit ordered pairs. */
+static auto makeRelation(std::size_t size,
+			 std::initializer_list<std::pair<std::size_t, std::size_t>> pairs)
+	-> cat::Relation
+{
+	cat::Relation result(size);
+	for (const auto [from, to] : pairs)
+		result.insert(from, to);
+	return result;
+}
+
+/** Convert a packed relation to the deliberately simple property-test oracle. */
+static auto toReference(const cat::Relation &relation)
+	-> std::set<std::pair<std::size_t, std::size_t>>
+{
+	std::set<std::pair<std::size_t, std::size_t>> result;
+	for (std::size_t from = 0; from < relation.size(); ++from) {
+		for (std::size_t to = 0; to < relation.size(); ++to) {
+			if (relation.contains(from, to))
+				result.emplace(from, to);
+		}
+	}
+	return result;
+}
+
+} /* namespace */
+
+/* Packed sets retain bits across word boundaries and implement all three Boolean operations. */
+TEST(CatValueTest, EvaluatesSetAlgebraAcrossWords)
+{
+	auto lhs = makeSet(130, {0, 63, 64, 129});
+	auto rhs = makeSet(130, {1, 63, 65, 129});
+
+	EXPECT_EQ(lhs.count(), 4U);
+	EXPECT_EQ(setUnion(lhs, rhs).count(), 6U);
+	EXPECT_EQ(setIntersection(lhs, rhs), makeSet(130, {63, 129}));
+	EXPECT_EQ(setDifference(lhs, rhs), makeSet(130, {0, 64}));
+	EXPECT_EQ(lhs.first(), 0U);
+}
+
+/* Relation Boolean algebra, product, identity, and inverse preserve exact pairs. */
+TEST(CatValueTest, EvaluatesBasicRelationAlgebra)
+{
+	auto lhs = makeRelation(4, {{0, 1}, {1, 2}, {2, 3}});
+	auto rhs = makeRelation(4, {{0, 1}, {2, 0}});
+	auto wide = makeRelation(130, {{0, 129}, {64, 63}, {129, 64}});
+
+	EXPECT_EQ(wide.count(), 3U);
+	EXPECT_TRUE(wide.contains(0, 129));
+	EXPECT_TRUE(wide.successors(129).contains(64));
+	EXPECT_EQ(relationIntersection(lhs, rhs), makeRelation(4, {{0, 1}}));
+	EXPECT_EQ(relationDifference(lhs, rhs), makeRelation(4, {{1, 2}, {2, 3}}));
+	EXPECT_EQ(relationUnion(lhs, rhs).count(), 4U);
+	EXPECT_EQ(inverse(lhs), makeRelation(4, {{1, 0}, {2, 1}, {3, 2}}));
+	EXPECT_EQ(product(makeSet(4, {0, 2}), makeSet(4, {1, 3})),
+		  makeRelation(4, {{0, 1}, {0, 3}, {2, 1}, {2, 3}}));
+	EXPECT_EQ(identity(makeSet(4, {1, 3})), makeRelation(4, {{1, 1}, {3, 3}}));
+}
+
+/* Composition and closures cover empty, chain, cycle, singleton, and disconnected cases. */
+TEST(CatValueTest, EvaluatesCompositionAndClosures)
+{
+	auto chain = makeRelation(5, {{0, 1}, {1, 2}, {3, 4}});
+	auto step = makeRelation(5, {{1, 3}, {2, 4}});
+
+	EXPECT_EQ(compose(chain, step), makeRelation(5, {{0, 3}, {1, 4}}));
+	EXPECT_EQ(transitiveClosure(chain), makeRelation(5, {{0, 1}, {0, 2}, {1, 2}, {3, 4}}));
+	EXPECT_EQ(transitiveClosure(cat::Relation(1)), cat::Relation(1));
+	EXPECT_EQ(reflexiveTransitiveClosure(cat::Relation(1)), makeRelation(1, {{0, 0}}));
+	auto cycle = makeRelation(3, {{0, 1}, {1, 2}, {2, 0}});
+	EXPECT_EQ(transitiveClosure(cycle).count(), 9U);
+	EXPECT_EQ(optional(makeRelation(3, {{0, 1}})),
+		  makeRelation(3, {{0, 0}, {0, 1}, {1, 1}, {2, 2}}));
+}
+
+/* Random set Boolean operations satisfy identities and a direct membership oracle. */
+RC_GTEST_PROP(CatValuePropertyTest, MatchesReferenceSetAlgebra,
+	      (const std::vector<std::uint8_t> &lhsBytes,
+	       const std::vector<std::uint8_t> &rhsBytes))
+{
+	constexpr std::size_t size = 19;
+	cat::EventSet lhs(size);
+	cat::EventSet rhs(size);
+	for (std::size_t event = 0; event < size; ++event) {
+		if (!lhsBytes.empty() && (lhsBytes[event % lhsBytes.size()] & 1U) != 0)
+			lhs.insert(event);
+		if (!rhsBytes.empty() && (rhsBytes[event % rhsBytes.size()] & 1U) != 0)
+			rhs.insert(event);
+	}
+	const auto joined = setUnion(lhs, rhs);
+	const auto common = setIntersection(lhs, rhs);
+	const auto removed = setDifference(lhs, rhs);
+	for (std::size_t event = 0; event < size; ++event) {
+		RC_ASSERT(joined.contains(event) == (lhs.contains(event) || rhs.contains(event)));
+		RC_ASSERT(common.contains(event) == (lhs.contains(event) && rhs.contains(event)));
+		RC_ASSERT(removed.contains(event) == (lhs.contains(event) && !rhs.contains(event)));
+	}
+	RC_ASSERT(setUnion(lhs, lhs) == lhs);
+	RC_ASSERT(setIntersection(lhs, lhs) == lhs);
+	RC_ASSERT(setDifference(lhs, lhs).empty());
+}
+
+/* Random packed operations agree with a std::set relation oracle. */
+RC_GTEST_PROP(CatValuePropertyTest, MatchesReferenceRelationAlgebra,
+	      (const std::vector<std::uint8_t> &lhsBytes,
+	       const std::vector<std::uint8_t> &rhsBytes))
+{
+	constexpr std::size_t size = 6;
+	cat::Relation lhs(size);
+	cat::Relation rhs(size);
+	for (std::size_t pair = 0; pair < size * size; ++pair) {
+		if (!lhsBytes.empty() && (lhsBytes[pair % lhsBytes.size()] & 1U) != 0)
+			lhs.insert(pair / size, pair % size);
+		if (!rhsBytes.empty() && (rhsBytes[pair % rhsBytes.size()] & 1U) != 0)
+			rhs.insert(pair / size, pair % size);
+	}
+	const auto lhsRef = toReference(lhs);
+	const auto rhsRef = toReference(rhs);
+	std::set<std::pair<std::size_t, std::size_t>> unionRef = lhsRef;
+	unionRef.insert(rhsRef.begin(), rhsRef.end());
+	std::set<std::pair<std::size_t, std::size_t>> intersectionRef;
+	std::set_intersection(lhsRef.begin(), lhsRef.end(), rhsRef.begin(), rhsRef.end(),
+			      std::inserter(intersectionRef, intersectionRef.end()));
+	std::set<std::pair<std::size_t, std::size_t>> differenceRef;
+	std::set_difference(lhsRef.begin(), lhsRef.end(), rhsRef.begin(), rhsRef.end(),
+			    std::inserter(differenceRef, differenceRef.end()));
+	std::set<std::pair<std::size_t, std::size_t>> compositionRef;
+	for (const auto [from, middle] : lhsRef) {
+		for (const auto [candidate, to] : rhsRef) {
+			if (middle == candidate)
+				compositionRef.emplace(from, to);
+		}
+	}
+	bool reachable[size][size]{};
+	for (const auto [from, to] : lhsRef)
+		reachable[from][to] = true;
+	for (std::size_t pivot = 0; pivot < size; ++pivot) {
+		for (std::size_t from = 0; from < size; ++from) {
+			for (std::size_t to = 0; to < size; ++to)
+				reachable[from][to] |= reachable[from][pivot] &&
+						       reachable[pivot][to];
+		}
+	}
+	std::set<std::pair<std::size_t, std::size_t>> closureRef;
+	for (std::size_t from = 0; from < size; ++from) {
+		for (std::size_t to = 0; to < size; ++to) {
+			if (reachable[from][to])
+				closureRef.emplace(from, to);
+		}
+	}
+
+	RC_ASSERT(toReference(relationUnion(lhs, rhs)) == unionRef);
+	RC_ASSERT(toReference(relationIntersection(lhs, rhs)) == intersectionRef);
+	RC_ASSERT(toReference(relationDifference(lhs, rhs)) == differenceRef);
+	RC_ASSERT(toReference(compose(lhs, rhs)) == compositionRef);
+	RC_ASSERT(toReference(transitiveClosure(lhs)) == closureRef);
+	RC_ASSERT(inverse(inverse(lhs)) == lhs);
+}
+
+/* Named checks produce set, pair, diagonal, and closed-cycle witnesses with source spans. */
+TEST(CatEvaluatorTest, ReportsStructuredViolations)
+{
+	auto model = compileModel(R"CAT(Witnesses
+let communication = po | rf
+empty R as reads-empty
+empty communication as relation-empty
+irreflexive communication as diagonal
+acyclic communication as cycle
+)CAT");
+	cat::BaseValues base;
+	base.emplace("R", makeSet(3, {2}));
+	base.emplace("po", makeRelation(3, {{0, 1}, {1, 0}}));
+	base.emplace("rf", makeRelation(3, {{2, 2}}));
+
+	auto result = cat::Evaluator().evaluate(*model, 3, base);
+
+	ASSERT_TRUE(result.errors.empty());
+	ASSERT_EQ(result.violations.size(), 4U);
+	EXPECT_EQ(result.violations[0].witness, std::vector<std::size_t>({2}));
+	EXPECT_EQ(result.violations[1].witness.size(), 2U);
+	EXPECT_EQ(result.violations[2].witness, std::vector<std::size_t>({2}));
+	EXPECT_EQ(result.violations[3].witness.front(), result.violations[3].witness.back());
+	EXPECT_EQ(result.violations[3].checkName, "cycle");
+	EXPECT_EQ(result.violations[3].span.begin.line, 6U);
+}
+
+/* Acyclic graphs satisfy checks, and shared DAG nodes are evaluated exactly once. */
+TEST(CatEvaluatorTest, MemoizesSharedNodesOnConsistentModel)
+{
+	auto model = compileModel(R"CAT(Memo
+let shared = po | rf
+let reused = shared ; shared
+acyclic shared as first
+irreflexive reused as second
+)CAT");
+	cat::BaseValues base;
+	base.emplace("po", makeRelation(4, {{0, 1}, {1, 2}}));
+	base.emplace("rf", makeRelation(4, {{2, 3}}));
+
+	auto result = cat::Evaluator().evaluate(*model, 4, base);
+
+	EXPECT_TRUE(result.consistent());
+	ASSERT_EQ(result.evaluationCounts.size(), model->nodes().size());
+	for (const auto count : result.evaluationCounts)
+		EXPECT_LE(count, 1U);
+	EXPECT_EQ(result.evaluationCounts[model->bindings()[0].value], 1U);
+}
+
+/* The bundled SC equation is interpreted generically from primitive values. */
+TEST(CatEvaluatorTest, EvaluatesScModelWithoutSpecialDispatch)
+{
+	auto model = compileModel(R"CAT(SC
+let com = rf | fr | co
+empty rmw & (fre ; coe) as atomicity
+acyclic po | tc | tj | com as sc
+)CAT");
+	cat::BaseValues base;
+	base.emplace("rf", cat::Relation(2));
+	base.emplace("fr", cat::Relation(2));
+	base.emplace("co", cat::Relation(2));
+	base.emplace("rmw", cat::Relation(2));
+	base.emplace("ext", cat::Relation(2));
+	base.emplace("po", makeRelation(2, {{0, 1}}));
+	base.emplace("tc", cat::Relation(2));
+	base.emplace("tj", cat::Relation(2));
+
+	auto consistent = cat::Evaluator().evaluate(*model, 2, base);
+	EXPECT_TRUE(consistent.consistent());
+	base["rf"] = makeRelation(2, {{1, 0}});
+	auto cyclic = cat::Evaluator().evaluate(*model, 2, base);
+	ASSERT_EQ(cyclic.violations.size(), 1U);
+	EXPECT_EQ(cyclic.violations[0].checkName, "sc");
+}
+
+/* Missing or wrong-shaped primitives fail once and never fabricate a consistency result. */
+TEST(CatEvaluatorTest, RejectsInvalidBaseValues)
+{
+	auto model = compileModel("Errors\nlet shared = po | po\nacyclic shared as check\n");
+	auto missing = cat::Evaluator().evaluate(*model, 3, {});
+	cat::BaseValues wrong{{"po", makeSet(3, {0})}};
+	auto mismatchedType = cat::Evaluator().evaluate(*model, 3, wrong);
+	cat::BaseValues wrongSize{{"po", makeRelation(2, {{0, 1}})}};
+	auto mismatchedSize = cat::Evaluator().evaluate(*model, 3, wrongSize);
+
+	ASSERT_EQ(missing.errors.size(), 1U);
+	EXPECT_EQ(missing.evaluationCounts[model->bindings()[0].value], 1U);
+	EXPECT_EQ(mismatchedType.errors.size(), 1U);
+	EXPECT_EQ(mismatchedSize.errors.size(), 1U);
+	EXPECT_FALSE(missing.consistent());
+}
+
+/* Sparse/dense composition and closure measurements cover increasing universes. */
+TEST(CatValueTest, BenchmarkIncreasingRelationSizes)
+{
+	std::size_t packedBytes{};
+	const auto start = std::chrono::steady_clock::now();
+	for (const auto size : {64U, 128U, 256U, 512U}) {
+		cat::Relation sparse(size);
+		cat::Relation dense(size);
+		for (std::size_t from = 0; from < size; ++from) {
+			if (from + 1 < size)
+				sparse.insert(from, from + 1);
+			for (std::size_t to = 0; to < size; ++to) {
+				if ((from + to) % 3 == 0)
+					dense.insert(from, to);
+			}
+		}
+		packedBytes += sparse.storageBytes() + dense.storageBytes();
+		EXPECT_FALSE(compose(sparse, dense).empty());
+		EXPECT_FALSE(transitiveClosure(sparse).empty());
+		EXPECT_FALSE(transitiveClosure(dense).empty());
+	}
+	const auto elapsed = std::chrono::steady_clock::now() - start;
+	RecordProperty("elapsed_microseconds",
+		       std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count());
+	RecordProperty("packed_bytes", packedBytes);
+}
