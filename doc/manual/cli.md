@@ -9,10 +9,14 @@ A full list of the available command-line options can by viewed by issuing `genm
 - **`-imm`**: Perform the exploration under the IMM memory model
 - **`--model-file=<model.cat>`**: Validate and select a CAT memory-model file.
   This option cannot be combined with `-sc`, `-tso`, `-ra`, or `-rc11`, and
-  disables automatic memory-model detection. The current Phase 1.4 frontend
-  parses includes, resolves names, type-checks every expression, and retains an
-  immutable typed model before LLVM execution. Its pure relation evaluator is
-  implemented, but GenMC graph primitives are not connected until Phase 1.5.
+  disables automatic memory-model detection. GenMC parses includes, resolves
+  names, type-checks every expression, and retains an immutable model before
+  LLVM execution. During exploration, a generic checker constructs graph
+  primitives and evaluates that model for each candidate; it does not dispatch
+  based on the file or model name. Phase 1.6 guarantees the bundled SC model
+  against GenMC's built-in SC checker. TSO/PSO compatibility is evaluated by
+  the same path but receives its full differential guarantee in later Phase 1
+  substages.
 - **`-nthreads=<N>`**: Perform verification concurrently (using `N` threads)
 - **`-cache-instructions`**: Caches instructions to help execution time (sacrifices memory)
 - **`-disable-bam`**: Disables Barrier-Aware Model-checking (BAM)

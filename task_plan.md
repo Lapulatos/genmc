@@ -40,6 +40,7 @@
 - Phase 1.3 直接从 Phase 1.2 AST lower，不重新读取模型；`Config` 现在保存 `shared_ptr<const ModelIR>`。SC/TSO/PSO 分别形成 17/43/45 节点的精确 golden DAG，完整 unit 75/75、CLI 1/1、fast-driver 1/1。
 - Phase 1.4 新增 word-packed set/relation 与独立 pure evaluator；RapidCheck 对照 `std::set`，SC 方程无需模型名分派即可解释。完整 unit 85/85、CLI 1/1、fast-driver 1/1，64→512 事件基准约 2.09 ms。
 - Phase 1.5 新增只读 `ExecutionGraph` 快照适配器；稳定 dense ID 覆盖真实标签及按地址展开的虚拟初始写，并构造 `R/W/F/IW/SC`、`po/rf/co/fr/rmw/loc/int/ext/tc/tj`。虚拟初始写映回 `InitLabel + 地址`，避免跨地址伪造 `fr`。
+- Phase 1.6 新增 `CATChecker` 纵向执行路径；通用 evaluator 判定候选图，SC host profile 只复用视图/错误基础设施，`rf/co/revisit` 使用保守枚举。SC smoke/error 集与内置 checker 的状态、执行数和错误类别一致。
 
 ## Status
-**Phase 1.5 ready for Git delivery** - graph snapshot adapter、初始化/RMW/线程生命周期语义、debug invariants、focused/full regression 与构造基准已完成；提交并 push 后进入 Phase 1.6 SC vertical slice。
+**Phase 1.6 ready for Git delivery** - `--model-file` 已进入通用 full-graph checker，SC 差分、双 worker、错误/阻塞/正常终止和端到端基准已完成；提交并 push 后进入 Phase 1.7 TSO compatibility。

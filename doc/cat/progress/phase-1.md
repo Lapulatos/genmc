@@ -143,6 +143,106 @@ the substage commit is pushed.
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verified after commit
 
+### Phase 1.6: Full-graph checker and SC vertical slice
+
+- Date: 2026-07-14
+- Starting commit: `74e8dd449ce22f30c44cf14938ab9fc943b7ba79`
+- Ending commit: recorded by the atomic commit named below
+- Remote ref pushed: `origin/genmc-caat` (to be verified after this atomic commit)
+- Constraint/plan pre-read: `doc/cat/PROJECT_CONSTRAINTS.md` and
+  `doc/cat/phase-1-plan.md` read before implementation edits
+- GenMC development rules pre-read: `doc/development.md` read before edits
+- Initial dirty files: none
+
+#### Contract
+
+- Input: Config containing a validated immutable `ModelIR` selected through
+  `--model-file` and worker-local execution graphs.
+- Output: actual program exploration whose candidate graphs are accepted only
+  when the generic evaluator satisfies every CAT check.
+- Host profile: reuse SC's established view/prefix/error infrastructure, but
+  conservatively enumerate current same-location `rf/co` choices and retain
+  revisits instead of applying generated SC consistency pruning.
+- Dispatch invariant: checker selection observes only the presence of a typed
+  model; it never inspects the path, filename, model header, or check names.
+- Acceptance boundary: SC equivalence is required here. TSO/PSO use the same
+  evaluator but receive their complete compatibility proof in 1.7/1.8.
+
+#### Reuse survey
+
+| Candidate | Version/source | License | Reused part | Decision/rationale |
+|---|---|---|---|---|
+| `ConsistencyChecker` factory/API | current branch | Apache-2.0/MIT | worker ownership and driver integration points | add one ordinary checker selected by typed model presence |
+| generated `SCChecker` | current branch/Kater output | Apache-2.0/MIT in GenMC | views, prefix, race/error/warning handling | inherit host infrastructure; do not call its consistency predicate |
+| `ExecutionGraph` co/rf APIs | current branch | Apache-2.0/MIT | all current same-location stores/positions | enumerate conservatively; retain RMW adjacency only |
+| Phase 1.4/1.5 evaluator/adapter | current branch | Apache-2.0/MIT | generic checks and graph primitives | rebuild from scratch for every candidate as correctness oracle |
+| built-in SC checker | current branch | Apache-2.0/MIT | execution/error differential oracle | run side-by-side on fixed programs |
+
+#### Implementation
+
+- Changed files: `genmc/genmc/Execution/Consistency/CATChecker.hpp/.cpp`,
+  `ConsistencyChecker.cpp`, `Config.cpp`, `genmc/CMakeLists.txt`,
+  `tests/cat/sc-differential.sh`, `tests/CMakeLists.txt`,
+  `tests/cli/model-file.sh`, `tests/unit/ConfigTest.cpp`,
+  `doc/manual/cli.md`, `task_plan.md`, `notes.md`, and this progress log.
+- Untouched files: generated checker sources, graph/label representation,
+  frontend/IR/evaluator/adapter semantics, LLVM passes, CAT model equations,
+  and existing program/litmus fixtures.
+- `Config::validate` now publishes a typed model without the former phase
+  boundary error and selects the SC host profile used by transformations and
+  views. The factory creates `CATChecker` based only on `catModel` presence.
+- Both consistency entry points construct a fresh `GraphAdapter`, evaluate the
+  immutable DAG, treat violations as inconsistency, and treat evaluator shape
+  errors as internal invariant failures.
+- Generic rf candidates contain Init plus every current same-location write;
+  ordinary co candidates contain Init plus every current co predecessor;
+  RMW writes remain immediately after their rf source; revisit filtering is a
+  documented no-op.
+- CLI coverage now runs a valid model through two workers and compares its SC
+  execution count to built-in SC instead of expecting a phase-boundary error.
+- Differential coverage compares successful, blocked/warning, and safety-error
+  executions using existing fixtures without modifying their source.
+
+#### Verification
+
+| Command | Result | Counts/timing/output |
+|---|---|---|
+| CMake build | pass | `genmc` and `unit_tests`; new-source compile succeeds |
+| Config/factory and CLI focus | pass | 10/10 Config+CLI checks; CAT factory selected; two-worker SB=3 |
+| SC differential CTest | pass | 1/1; four fixtures; status/count/verdict markers identical |
+| complete unit set | pass | 90/90; 0 failed; 0.59s final run |
+| `ctest ... -R '^fast-driver$'` | pass | 1/1; 0 failed; 77.30s final run |
+| end-to-end SB benchmark | pass | 10 runs: built-in 0.48s/50.2 MiB, CAT 0.48s/50.2 MiB |
+| clang-format, shell syntax, and `git diff --check` | pass | all changed C++/shell and whitespace checks pass |
+| clang-tidy CATChecker with compile DB | pass with reviewed notes | only false-positive static suggestions for required virtual overrides and a required direct Config definition include |
+
+#### Plan-to-implementation gap
+
+| Planned item | Delivered evidence | Gap class | Next action |
+|---|---|---|---|
+| CAT-backed checker selection | Config/factory test and successful CLI execution | none | retain one generic path |
+| full-graph CAT consistency | adapter/evaluator call at both checker entry points | none | keep as later oracle |
+| conservative candidate handling | all current rf/co positions; no revisit filtering | none | specialize only with proof/differential evidence |
+| SC model vertical slice | four differential fixtures plus two workers | none | broaden SC corpus during final phase audit |
+| built-in SC unchanged | built-in side of differential and fast-driver | none | retain as oracle |
+| detailed CAT violation reporting | evaluator witnesses exist but checker returns boolean | deferred compatibility | map witnesses into diagnostics in 1.9 unless needed earlier |
+| TSO/PSO host-profile proof | execution path exists but not fully validated | deferred scope | Phase 1.7/1.8 |
+
+#### Risks and next target
+
+- Known risks: full reconstruction/evaluation occurs at every candidate;
+  conservative enumeration may increase work; host views still come from the
+  SC generated checker; evaluator violations currently prune without printing
+  their named witness during ordinary successful verification.
+- Next substage target: Phase 1.7 TSO differential compatibility, explicit
+  generic host-profile justification, and TSO performance comparison.
+
+#### Git delivery
+
+- Commit message: `feat(cat): verify programs with an SC CAT model`
+- Commit SHA: resolved by the Git commit carrying this entry
+- Push command/result: `git push origin genmc-caat`; verify local/remote SHA
+
 ### Phase 1.5: GenMC execution-graph adapter
 
 - Date: 2026-07-14

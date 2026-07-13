@@ -53,9 +53,15 @@ expect_failure "cannot be combined with an explicit built-in" \
 expect_failure "--model-file may only be specified once" \
 	"${genmc}" --model-file="${model}" --model-file="${model}" "${program}"
 
-# A valid file reaches the deliberate boundary without compiling the program.
-expect_failure "CAT model typed" \
-	"${genmc}" --model-file="${model}" --nthreads=2 "${program}"
-
-# The legacy built-in path remains executable and retains its prior meaning.
-"${genmc}" --sc --disable-estimation --disable-mm-detector --v0 "${program}"
+# A valid SC file executes through the generic checker and matches built-in SC.
+cat_output="$("${genmc}" --model-file="${model}" --disable-estimation --nthreads=2 \
+	"${program}" 2>&1)"
+builtin_output="$("${genmc}" --sc --disable-estimation --disable-mm-detector "${program}" 2>&1)"
+grep -Fq -- "No errors were detected." <<<"${cat_output}"
+grep -Fq -- "No errors were detected." <<<"${builtin_output}"
+cat_count="$(sed -n 's/^Number of complete executions explored: //p' <<<"${cat_output}")"
+builtin_count="$(sed -n 's/^Number of complete executions explored: //p' <<<"${builtin_output}")"
+if [[ -z "${cat_count}" || "${cat_count}" != "${builtin_count}" || "${cat_count}" != 3 ]]; then
+	echo "SC differential mismatch: CAT=${cat_count}, built-in=${builtin_count}" >&2
+	exit 1
+fi

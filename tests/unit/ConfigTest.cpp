@@ -12,6 +12,8 @@
  */
 
 #include "genmc/Verification/Config.hpp"
+#include "genmc/Execution/Consistency/CATChecker.hpp"
+#include "genmc/Execution/Consistency/ConsistencyChecker.hpp"
 
 #include <gtest/gtest.h>
 
@@ -57,7 +59,7 @@ static auto createModelFile(std::string_view filename) -> std::filesystem::path
 
 } /* namespace */
 
-/* A readable path is canonicalized before the deliberate Phase-1.1 boundary. */
+/* A readable model is canonicalized, typed, and selects the generic checker. */
 TEST(ConfigModelFileTest, CanonicalizesReadableFile)
 {
 	auto path = createModelFile("genmc-config-readable.cat");
@@ -67,9 +69,12 @@ TEST(ConfigModelFileTest, CanonicalizesReadableFile)
 
 	auto status = config.validate(warnings);
 
-	EXPECT_TRUE(hasError(status, "CAT model typed"));
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(status));
 	ASSERT_TRUE(config.modelFile.has_value());
 	EXPECT_NE(config.catModel, nullptr);
+	EXPECT_EQ(config.model, ModelType::SC);
+	auto checker = ConsistencyChecker::create(&config);
+	EXPECT_NE(dynamic_cast<CATChecker *>(checker.get()), nullptr);
 	EXPECT_EQ(*config.modelFile, std::filesystem::canonical(path));
 	std::filesystem::remove(path);
 }
@@ -183,7 +188,7 @@ TEST(ConfigModelFileTest, SurfacesDeprecatedMoNote)
 
 	auto status = config.validate(warnings);
 
-	EXPECT_TRUE(hasError(status, "CAT model typed"));
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(status));
 	ASSERT_EQ(warnings.size(), 1U);
 	EXPECT_NE(warnings[0].find(":2:9: note:"), std::string::npos);
 	EXPECT_NE(config.catModel, nullptr);

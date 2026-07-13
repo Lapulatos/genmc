@@ -103,9 +103,8 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 			}
 		}
 
-		/* Phase 1.3 stops here deliberately. Parsing, resolution, and typing all
-		 * complete before LLVM execution, and the immutable model is retained in
-		 * Config for later read-only worker sharing. */
+		/* Parse, resolve, and type before LLVM execution. The immutable model is
+		 * retained in Config for read-only sharing by worker-local CAT checkers. */
 		if (usable) {
 			auto parseResult = cat::Frontend().parseFile(*modelFile);
 			for (const auto &diagnostic : parseResult.diagnostics)
@@ -118,9 +117,10 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 					warnings.push_back(note.format());
 				if (compileResult.ok()) {
 					catModel = std::move(compileResult.model);
-					errors.emplace_back(
-						"CAT model typed, but CAT-backed execution is not "
-						"available until the next Phase 1 substages.");
+					/* Phase 1.6 uses the conservative SC host profile for
+					 * transformations/views; consistency remains model-driven.
+					 */
+					model = ModelType::SC;
 				}
 			}
 		}

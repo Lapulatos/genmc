@@ -12,6 +12,7 @@
  */
 
 #include "genmc/Execution/Consistency/ConsistencyChecker.hpp"
+#include "genmc/Execution/Consistency/CATChecker.hpp"
 #include "genmc/Execution/Consistency/IMMChecker.hpp"
 #include "genmc/Execution/Consistency/RAChecker.hpp"
 #include "genmc/Execution/Consistency/RC11Checker.hpp"
@@ -21,6 +22,10 @@
 
 auto ConsistencyChecker::create(const Config *conf) -> std::unique_ptr<ConsistencyChecker>
 {
+	/* A model file always selects the generic evaluator, independently of its name/path. */
+	if (conf->catModel)
+		return std::make_unique<CATChecker>(conf);
+
 #define CREATE_CHECKER(_model)                                                                     \
 	case ModelType::_model:                                                                    \
 		return std::make_unique<_model##Checker>(conf);
