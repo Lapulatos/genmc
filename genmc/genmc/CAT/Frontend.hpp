@@ -15,6 +15,7 @@
 #define GENMC_CAT_FRONTEND_HPP
 
 #include <cstddef>
+#include <cstdint>
 #include <filesystem>
 #include <memory>
 #include <optional>
@@ -43,6 +44,15 @@ struct SourceSpan {
 
 /** Stable frontend diagnostic category used by CLI and focused tests. */
 enum class DiagnosticKind { Io, Lex, Parse, Include, Name, Type, Unsupported, Note };
+
+/**
+ * GenMC exploration profile used to maintain causal views around CAT evaluation.
+ *
+ * This is explicit execution metadata, not a CAT consistency axiom. The generic
+ * evaluator still decides consistency exclusively from the model's relational
+ * checks. SC is the compatibility default for files without a declaration.
+ */
+enum class HostProfile : std::uint8_t { SC, TSO };
 
 /**
  * One CAT frontend diagnostic with exact source provenance.
@@ -110,6 +120,8 @@ struct Statement {
 struct Model {
 	std::string name;
 	SourceSpan nameSpan;
+	HostProfile hostProfile{HostProfile::SC};
+	std::optional<SourceSpan> hostProfileSpan;
 	std::vector<Statement> statements;
 };
 

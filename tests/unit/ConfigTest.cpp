@@ -79,6 +79,27 @@ TEST(ConfigModelFileTest, CanonicalizesReadableFile)
 	std::filesystem::remove(path);
 }
 
+/* Explicit metadata selects TSO views while retaining the generic CAT evaluator. */
+TEST(ConfigModelFileTest, SelectsExplicitTSOHostProfile)
+{
+	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-tso-profile.cat";
+	std::ofstream output(path);
+	output << "(* @genmc host-profile tso *)\nUnrelatedName\nacyclic po | rf | fr | co\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+
+	auto status = config.validate(warnings);
+
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(status));
+	EXPECT_EQ(config.model, ModelType::TSO);
+	auto checker = ConsistencyChecker::create(&config);
+	EXPECT_NE(dynamic_cast<CATTSOChecker *>(checker.get()), nullptr);
+	EXPECT_EQ(dynamic_cast<CATSCChecker *>(checker.get()), nullptr);
+	std::filesystem::remove(path);
+}
+
 /* A CAT file and an explicitly selected built-in model are unambiguously conflicting. */
 TEST(ConfigModelFileTest, RejectsExplicitBuiltInModel)
 {

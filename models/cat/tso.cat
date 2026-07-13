@@ -4,6 +4,7 @@
  * Ordinary write-to-read program order may relax. Reads, writes as targets,
  * full fences, and pairs of SC accesses retain their required order.
  *)
+(* @genmc host-profile tso *)
 TSO
 
 let com = rfe | fr | co

@@ -40,6 +40,26 @@ can therefore still receive an `unsupported` diagnostic.
 - Identifiers match `[A-Za-z_][A-Za-z0-9_.-]*` with an optional trailing
   apostrophe. Reserved keywords and built-in names cannot be rebound.
 
+### GenMC host-profile metadata
+
+An optional leading block comment declares which existing GenMC causal-view
+profile supports exploration around the generic full-graph evaluator:
+
+```cat
+(* @genmc host-profile sc *)
+(* @genmc host-profile tso *)
+```
+
+The declaration must appear before the root model header, may occur once, and
+is forbidden in included fragments. A file without it defaults to `sc` for
+compatibility with Phase 1.6. Unknown profiles fail before LLVM execution.
+
+This is explicit GenMC execution metadata, not a consistency axiom: the CAT
+checks still decide whether a candidate graph is consistent. It is encoded as
+a CAT block comment so herdtools7 ignores it and can read the same model. The
+checker factory dispatches on the typed metadata enum only; model paths,
+filenames, headers, binding names, and check names are never inspected.
+
 ## Grammar
 
 The following EBNF describes the accepted Phase 1 grammar. `IDENT`, `STRING`,
@@ -276,3 +296,13 @@ for this project; they are not copied from herdtools7.
 architecture-specific `x86tso.cat` accepted by herd will parse. `pso.cat`
 models the classic hardware PSO ordering profile; C/C++ memory-order tags other
 than `SC` do not add language-level RC11 semantics.
+
+The Phase 1.7 TSO differential suite uses existing GenMC C/LLVM fixtures for
+SB, LB+ctrl, MP, same-location order, RMW atomicity, unordered-write warnings,
+and safety errors. CAT TSO matches built-in TSO status, complete-execution
+counts, and verdict categories for all seven. Direct herd execution is not
+claimed for those C fixtures: herd's official TSO model consumes X86 litmus
+events, while GenMC first transforms C/LLVM events. A separate assembly-aligned
+oracle under `tests/cat/herd/` runs herd 7.56 with official `x86tso.cat`: SB's
+weak outcome is `Sometimes` (1/4 states), while the MP anomaly is `Never` (0/3
+states). `tests/cat/herd-tso-oracle.sh` makes that comparison reproducible.

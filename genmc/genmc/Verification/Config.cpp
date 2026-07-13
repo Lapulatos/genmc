@@ -117,10 +117,16 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 					warnings.push_back(note.format());
 				if (compileResult.ok()) {
 					catModel = std::move(compileResult.model);
-					/* Phase 1.6 uses the conservative SC host profile for
-					 * transformations/views; consistency remains model-driven.
-					 */
-					model = ModelType::SC;
+					/* The declaration selects transformations/views only;
+					 * consistency remains entirely model-driven. */
+					switch (catModel->hostProfile()) {
+					case cat::HostProfile::SC:
+						model = ModelType::SC;
+						break;
+					case cat::HostProfile::TSO:
+						model = ModelType::TSO;
+						break;
+					}
 				}
 			}
 		}

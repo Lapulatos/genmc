@@ -1,4 +1,5 @@
 model SC
+host-profile sc
 node 0 rel builtin rf
 node 1 rel builtin fr
 node 2 rel union (0,1)

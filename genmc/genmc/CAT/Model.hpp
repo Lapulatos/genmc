@@ -88,11 +88,19 @@ class Compiler;
  */
 class ModelIR {
 public:
-	/** Construct storage after Compiler has validated topological/type invariants. */
-	ModelIR(std::string name, std::vector<Node> nodes, std::vector<Binding> bindings,
-		std::vector<Check> checks)
-		: name_(std::move(name)), nodes_(std::move(nodes)), bindings_(std::move(bindings)),
-		  checks_(std::move(checks))
+	/**
+	 * Construct storage after Compiler has validated topological/type invariants.
+	 *
+	 * @param name Root CAT model header retained for display only.
+	 * @param hostProfile Explicit/default causal-view profile for exploration.
+	 * @param nodes Topologically ordered typed expression DAG.
+	 * @param bindings Source-ordered resolved user bindings.
+	 * @param checks Source-ordered typed consistency checks.
+	 */
+	ModelIR(std::string name, HostProfile hostProfile, std::vector<Node> nodes,
+		std::vector<Binding> bindings, std::vector<Check> checks)
+		: name_(std::move(name)), hostProfile_(hostProfile), nodes_(std::move(nodes)),
+		  bindings_(std::move(bindings)), checks_(std::move(checks))
 	{}
 
 	ModelIR(const ModelIR &) = delete;
@@ -103,6 +111,8 @@ public:
 
 	/** Return the root model header exactly as decoded by the frontend. */
 	[[nodiscard]] auto name() const -> std::string_view { return name_; }
+	/** Return the explicit/default GenMC profile used for exploration views. */
+	[[nodiscard]] auto hostProfile() const -> HostProfile { return hostProfile_; }
 	/** Return the complete topologically ordered typed node array. */
 	[[nodiscard]] auto nodes() const -> const std::vector<Node> & { return nodes_; }
 	/** Return user bindings in expanded source order. */
@@ -114,6 +124,7 @@ public:
 
 private:
 	std::string name_;
+	HostProfile hostProfile_{HostProfile::SC};
 	std::vector<Node> nodes_;
 	std::vector<Binding> bindings_;
 	std::vector<Check> checks_;

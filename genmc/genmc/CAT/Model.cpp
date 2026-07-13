@@ -86,7 +86,8 @@ public:
 		if (!diagnostics_.empty())
 			return {nullptr, std::move(diagnostics_), std::move(notes_)};
 		std::shared_ptr<const ModelIR> model = std::make_shared<ModelIR>(
-			syntax.name, std::move(nodes_), std::move(bindings_), std::move(checks_));
+			syntax.name, syntax.hostProfile, std::move(nodes_), std::move(bindings_),
+			std::move(checks_));
 		return {std::move(model), {}, std::move(notes_)};
 	}
 
@@ -364,6 +365,7 @@ auto ModelIR::summary() const -> std::string
 {
 	std::ostringstream output;
 	output << "model " << name_ << "\n";
+	output << "host-profile " << (hostProfile_ == HostProfile::SC ? "sc" : "tso") << "\n";
 	for (const auto &node : nodes_) {
 		output << "node " << node.id << " " << typeName(node.type) << " "
 		       << nodeKindName(node.kind);

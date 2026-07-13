@@ -4,6 +4,7 @@
  * This model is derived from the standard axiomatic characterization of
  * sequential consistency. It is not copied from herdtools7.
  *)
+(* @genmc host-profile sc *)
 SC
 
 let com = rf | fr | co

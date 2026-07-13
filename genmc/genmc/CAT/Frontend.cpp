@@ -58,6 +58,12 @@ struct Token {
 	std::string text{};
 };
 
+/** Root-only host-profile declaration extracted from a herd-compatible comment. */
+struct HostProfileDeclaration {
+	HostProfile profile{HostProfile::SC};
+	SourceSpan span;
+};
+
 static auto categoryName(DiagnosticKind kind) -> std::string_view
 {
 	switch (kind) {
@@ -150,8 +156,9 @@ static auto locationAt(const std::filesystem::path &path, std::string_view sourc
 class Lexer {
 public:
 	Lexer(const std::filesystem::path &path, std::string_view source,
-	      std::vector<Diagnostic> &diagnostics)
-		: path_(path), source_(source), diagnostics_(diagnostics)
+	      std::vector<Diagnostic> &diagnostics,
+	      std::optional<HostProfileDeclaration> *hostProfile = nullptr)
+		: path_(path), source_(source), diagnostics_(diagnostics), hostProfile_(hostProfile)
 	{}
 
 	/** Tokenize the complete source, returning an explicit end token. */
@@ -173,6 +180,7 @@ public:
 			} else {
 				tokens.push_back(lexOperator(begin));
 			}
+			hasTokens_ = true;
 		}
 		const auto end = location();
 		tokens.push_back({TokenKind::End, {end, end}, {}});
@@ -227,6 +235,62 @@ private:
 					sourceLineAt(source_, begin.offset)});
 	}
 
+	/**
+	 * Decode an exact `@genmc host-profile NAME` block-comment payload.
+	 *
+	 * The declaration must be a leading root-file comment. Herd ignores it as
+	 * ordinary CAT trivia, while GenMC obtains an explicit, filename-independent
+	 * exploration profile. Other comments remain semantically inert.
+	 */
+	void parseHostProfile(std::size_t contentBegin, std::size_t contentEnd,
+			      const SourceLocation &begin)
+	{
+		auto payload = source_.substr(contentBegin, contentEnd - contentBegin);
+		const auto first = payload.find_first_not_of(" \t\r\n");
+		if (first == std::string_view::npos || !payload.substr(first).starts_with("@genmc"))
+			return;
+		const auto last = payload.find_last_not_of(" \t\r\n");
+		std::istringstream words(std::string(payload.substr(first, last - first + 1)));
+		std::string marker;
+		std::string key;
+		std::string value;
+		std::string extra;
+		words >> marker >> key >> value >> extra;
+		if (!hostProfile_) {
+			diagnose(
+				DiagnosticKind::Unsupported, begin,
+				"GenMC host-profile metadata is only allowed in the root CAT file");
+			return;
+		}
+		if (hasTokens_) {
+			diagnose(DiagnosticKind::Parse, begin,
+				 "GenMC host-profile metadata must precede the model header");
+			return;
+		}
+		if (marker != "@genmc" || key != "host-profile" || value.empty() ||
+		    !extra.empty()) {
+			diagnose(DiagnosticKind::Unsupported, begin,
+				 "expected '@genmc host-profile sc' or '@genmc host-profile tso'");
+			return;
+		}
+		HostProfile profile{HostProfile::SC};
+		if (value == "sc")
+			profile = HostProfile::SC;
+		else if (value == "tso")
+			profile = HostProfile::TSO;
+		else {
+			diagnose(DiagnosticKind::Unsupported, begin,
+				 "unsupported GenMC host profile '" + value + "'");
+			return;
+		}
+		if (hostProfile_->has_value()) {
+			diagnose(DiagnosticKind::Parse, begin,
+				 "GenMC host-profile metadata may only be declared once");
+			return;
+		}
+		*hostProfile_ = HostProfileDeclaration{profile, {begin, location()}};
+	}
+
 	/** Consume whitespace and the three comment forms, including nested block comments. */
 	auto skipTrivia() -> bool
 	{
@@ -245,13 +309,17 @@ private:
 			const auto begin = location();
 			advance();
 			advance();
+			const auto contentBegin = offset_;
 			std::size_t depth = 1;
+			std::size_t contentEnd = contentBegin;
 			while (!atEnd() && depth != 0) {
 				if (peek() == '(' && peek(1) == '*') {
 					advance();
 					advance();
 					++depth;
 				} else if (peek() == '*' && peek(1) == ')') {
+					if (depth == 1)
+						contentEnd = offset_;
 					advance();
 					advance();
 					--depth;
@@ -263,6 +331,7 @@ private:
 				diagnose(DiagnosticKind::Lex, begin, "unterminated block comment");
 				return false;
 			}
+			parseHostProfile(contentBegin, contentEnd, begin);
 		}
 	}
 
@@ -434,9 +503,11 @@ private:
 	std::filesystem::path path_;
 	std::string_view source_;
 	std::vector<Diagnostic> &diagnostics_;
+	std::optional<HostProfileDeclaration> *hostProfile_{};
 	std::size_t offset_{};
 	std::size_t line_{1};
 	std::size_t column_{1};
+	bool hasTokens_{};
 };
 
 class Loader;
@@ -619,13 +690,18 @@ private:
 		if (!source)
 			return std::nullopt;
 		active_.push_back({path, std::nullopt});
-		Lexer lexer(path, *source, diagnostics_);
+		std::optional<HostProfileDeclaration> hostProfile;
+		Lexer lexer(path, *source, diagnostics_, &hostProfile);
 		/* Tokenize before moving the backing string into Parser. Lexer holds a
 		 * string_view, and function-argument evaluation order must not decide
 		 * whether that view observes a moved-from string. */
 		auto tokens = lexer.lex();
 		Parser parser(*this, path, std::move(*source), std::move(tokens), diagnostics_);
 		auto model = parser.parseRoot();
+		if (model && hostProfile) {
+			model->hostProfile = hostProfile->profile;
+			model->hostProfileSpan = hostProfile->span;
+		}
 		active_.pop_back();
 		return model;
 	}
@@ -657,7 +733,9 @@ auto Parser::parseRoot() -> std::optional<Model>
 			 "expected model name as the first non-comment token");
 		return std::nullopt;
 	}
-	Model model{current().text, current().span, {}};
+	Model model;
+	model.name = current().text;
+	model.nameSpan = current().span;
 	++position_;
 	parseStatements(model.statements);
 	return model;

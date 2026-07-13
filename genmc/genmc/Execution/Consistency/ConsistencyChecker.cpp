@@ -12,19 +12,29 @@
  */
 
 #include "genmc/Execution/Consistency/ConsistencyChecker.hpp"
+#include "genmc/CAT/Model.hpp"
 #include "genmc/Execution/Consistency/CATChecker.hpp"
 #include "genmc/Execution/Consistency/IMMChecker.hpp"
 #include "genmc/Execution/Consistency/RAChecker.hpp"
 #include "genmc/Execution/Consistency/RC11Checker.hpp"
 #include "genmc/Execution/Consistency/SCChecker.hpp"
 #include "genmc/Execution/Consistency/TSOChecker.hpp"
+#include "genmc/Support/Error.hpp"
 #include "genmc/Verification/Config.hpp"
 
 auto ConsistencyChecker::create(const Config *conf) -> std::unique_ptr<ConsistencyChecker>
 {
-	/* A model file always selects the generic evaluator, independently of its name/path. */
-	if (conf->catModel)
-		return std::make_unique<CATChecker>(conf);
+	/* Explicit IR metadata selects only the causal-view host. Consistency remains
+	 * generic and is never inferred from a model name or filesystem path. */
+	if (conf->catModel) {
+		switch (conf->catModel->hostProfile()) {
+		case cat::HostProfile::SC:
+			return std::make_unique<CATSCChecker>(conf);
+		case cat::HostProfile::TSO:
+			return std::make_unique<CATTSOChecker>(conf);
+		}
+		UNREACHABLE();
+	}
 
 #define CREATE_CHECKER(_model)                                                                     \
 	case ModelType::_model:                                                                    \

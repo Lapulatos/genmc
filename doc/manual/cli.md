@@ -13,10 +13,12 @@ A full list of the available command-line options can by viewed by issuing `genm
   names, type-checks every expression, and retains an immutable model before
   LLVM execution. During exploration, a generic checker constructs graph
   primitives and evaluates that model for each candidate; it does not dispatch
-  based on the file or model name. Phase 1.6 guarantees the bundled SC model
-  against GenMC's built-in SC checker. TSO/PSO compatibility is evaluated by
-  the same path but receives its full differential guarantee in later Phase 1
-  substages.
+  based on the file or model name. A leading comment of the form
+  `(* @genmc host-profile tso *)` explicitly selects TSO causal views; `sc` and
+  the backward-compatible SC default are also supported. This metadata does
+  not replace CAT axioms and is ignored as a comment by herd. The bundled SC
+  and TSO models are differentially checked against GenMC's built-in checkers;
+  PSO receives its external-oracle guarantee in the next Phase 1 substage.
 - **`-nthreads=<N>`**: Perform verification concurrently (using `N` threads)
 - **`-cache-instructions`**: Caches instructions to help execution time (sacrifices memory)
 - **`-disable-bam`**: Disables Barrier-Aware Model-checking (BAM)

@@ -1,4 +1,5 @@
 model PSO
+host-profile sc
 node 0 rel builtin rf
 node 1 rel builtin ext
 node 2 rel intersection rfe (0,1)

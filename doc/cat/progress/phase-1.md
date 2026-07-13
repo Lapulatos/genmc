@@ -143,6 +143,101 @@ the substage commit is pushed.
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verified after commit
 
+### Phase 1.7: TSO compatibility and differential validation
+
+- Date: 2026-07-14
+- Starting commit: `c8c208e5de760da74392f3df0a9e2dffa37c5112`
+- Ending commit: recorded by the atomic commit named below
+- Remote ref pushed: `origin/genmc-caat` (to be verified after this atomic commit)
+- Constraint/plan pre-read: `doc/cat/PROJECT_CONSTRAINTS.md` and
+  `doc/cat/phase-1-plan.md` read before implementation edits
+- GenMC development rules pre-read: `doc/development.md` read before edits
+- Initial dirty files: none
+
+#### Contract
+
+- Input: any supported CAT file, optionally declaring a leading
+  `(* @genmc host-profile sc|tso *)` comment, plus a GenMC execution graph.
+- Output: filename-independent selection of an SC/TSO causal-view host and
+  consistency decisions made exclusively by the generic relational evaluator.
+- Compatibility default: files without metadata retain the Phase 1.6 SC host.
+- Acceptance boundary: bundled TSO must match built-in TSO on aligned C/LLVM
+  fixtures and official herd x86tso outcomes on separate X86 fixtures.
+- Unsupported: unknown/duplicate/late metadata and metadata in include
+  fragments fail before program execution; arbitrary host profiles remain out
+  of Phase 1.
+
+#### Reuse survey
+
+| Candidate | Version/source | License | Reused part | Decision/rationale |
+|---|---|---|---|---|
+| generated `SCChecker`/`TSOChecker` | current GenMC/Kater output | Apache-2.0/MIT in GenMC | causal/prefix views and language diagnostics | template the existing CAT wrapper; never call generated consistency predicates |
+| Phase 1 CAT frontend/IR | current branch | Apache-2.0/MIT | source spans, immutable worker-shared model | retain typed host metadata through the existing pipeline |
+| CAT block comments | CAT syntax/herd parser behavior | specification behavior only | herd-compatible metadata carrier | exact root-only directive avoids a private non-CAT token |
+| built-in `TSOChecker` | current branch | Apache-2.0/MIT | C/LLVM differential oracle | compare status, counts, warnings, and errors on seven fixtures |
+| herdtools7 `x86tso.cat` | herdtools7 7.56+03 | CeCILL-B | independent X86 semantic oracle | execute installed tool; copy no herd source or model into GenMC |
+
+#### Implementation
+
+- Changed files: CAT `Frontend` and `Model` headers/sources; CAT checker and
+  factory/config sources; bundled SC/TSO models; IR goldens; config/frontend
+  unit tests; CMake and CAT differential/herd fixtures/scripts; CLI/supported
+  language docs; `task_plan.md`, `notes.md`, and this progress log.
+- Untouched files: generated SC/TSO checker sources, evaluator/value/graph
+  adapter semantics, execution-graph ownership, LLVM transformations, existing
+  program fixtures, PSO equations/profile, and all Phase 2/3 code.
+- `HostProfile` is a typed enum in syntax and immutable IR. SC is the default;
+  exact leading metadata selects TSO, preserves its source span, and appears in
+  deterministic IR summaries.
+- `BasicCATChecker<HostChecker>` has explicit SC and TSO instantiations. The
+  factory switches only on `ModelIR::hostProfile()`; an arbitrary model header
+  and filename select TSO in unit coverage.
+- The TSO differential script covers SB, dependency order, message passing,
+  same-location order, RMW atomicity, unordered-write warnings, and safety
+  errors. A separate herd script checks standard X86 SB and MP observations.
+
+#### Verification
+
+| Command | Result | Counts/timing/output |
+|---|---|---|
+| CMake configure/build | pass | `genmc` and `unit_tests`; only pre-existing generated/LLVM warnings |
+| focused CAT/config/integration set | pass | 43/43; includes SC/TSO differential and CLI |
+| complete unit/property set | pass | 96/96; 0 failed; 0.63s |
+| TSO GenMC differential | pass | 7 fixtures; status/count/verdict category identical |
+| herd 7.56 official x86tso oracle | pass | SB `Sometimes 1 3`; MP condition `Never 0 3` |
+| `ctest ... -R '^fast-driver$'` | pass | 1/1; 0 failed; 76.67s |
+| warmed 10-run SB benchmark | pass | built-in/CAT both 0.48s; 52,625,408/52,641,792-byte peak RSS |
+| clang-format, shell syntax, `git diff --check` | pass | all changed C++/shell and whitespace checks |
+| clang-tidy changed production TUs | environment-blocked | local tidy cannot locate libc++ `<algorithm>`/`<cstddef>`; new uninitialized-enum finding fixed; remaining output is prior/style noise |
+
+#### Plan-to-implementation gap
+
+| Planned item | Delivered evidence | Gap class | Next action |
+|---|---|---|---|
+| all selected TSO constructs | bundled model parse/type/evaluate and golden | none | preserve surface in 1.9 matrix |
+| sound TSO-family host profile | explicit typed metadata and TSO base instantiation | none | PSO may reuse declared TSO host only with oracle evidence |
+| no filename/model-name dispatch | arbitrary-name config test and enum-only factory switch | none | repository-search again in 1.8/1.9 |
+| built-in TSO comparison | seven-case CTest differential | none | broaden only when a mismatch-risk feature is identified |
+| herd comparison | two standard X86 outcomes with official x86tso.cat | semantic boundary | do not equate X86 assembly state counts with transformed C/LLVM counts |
+| generic violation details | checker still consumes evaluator result as boolean | deferred compatibility | audit whether Phase 1 CLI needs witness display in 1.9 |
+| generic host-profile derivation | explicit metadata required beyond SC default | intentional compatibility | Phase 2 admissibility analysis may infer/prove profiles later |
+
+#### Risks and next target
+
+- Known risks: full evaluation and conservative candidate enumeration remain
+  correctness-first; generated host views are available only for declared
+  SC/TSO families; herd and GenMC input event semantics differ outside the
+  assembly-aligned oracle; clang-tidy remains locally misconfigured.
+- No P0 correctness, regression, or documentation gap remains for Phase 1.7.
+- Next substage target: Phase 1.8 PSO model-driven proof, including a
+  SC/TSO/PSO-distinguishing write-to-write litmus and external oracle.
+
+#### Git delivery
+
+- Commit message: `feat(cat): support TSO CAT verification`
+- Commit SHA: resolved by the Git commit carrying this entry
+- Push command/result: `git push origin genmc-caat`; verify after commit
+
 ### Phase 1.6: Full-graph checker and SC vertical slice
 
 - Date: 2026-07-14

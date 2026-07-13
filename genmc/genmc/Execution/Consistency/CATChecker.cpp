@@ -23,15 +23,17 @@
 
 #include <ranges>
 
-auto CATChecker::isConsistent(const EventLabel *lab) const -> bool
+template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::isConsistent(const EventLabel *lab) const -> bool
 {
 	VERIFY(lab && lab->getParent(), "CAT consistency requires a graph-owned label");
 	return isConsistent(*lab->getParent());
 }
 
-auto CATChecker::isConsistent(const ExecutionGraph &graph) const -> bool
+template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) const -> bool
 {
-	const auto &model = getConf()->catModel;
+	const auto &model = this->getConf()->catModel;
 	VERIFY(model, "CATChecker requires a validated CAT model");
 	const cat::GraphAdapter adapter(graph);
 #ifdef ENABLE_GENMC_DEBUG
@@ -44,7 +46,8 @@ auto CATChecker::isConsistent(const ExecutionGraph &graph) const -> bool
 	return result.violations.empty();
 }
 
-auto CATChecker::getCoherentStores(ReadLabel *read) -> std::vector<EventLabel *>
+template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::getCoherentStores(ReadLabel *read) -> std::vector<EventLabel *>
 {
 	VERIFY(read && read->getParent(), "rf enumeration requires a graph-owned read");
 	auto &graph = *read->getParent();
@@ -54,13 +57,16 @@ auto CATChecker::getCoherentStores(ReadLabel *read) -> std::vector<EventLabel *>
 	return result;
 }
 
-void CATChecker::filterCoherentRevisits(WriteLabel * /*write*/,
-					std::vector<ReadLabel *> & /*reads*/)
+template <typename HostChecker>
+void BasicCATChecker<HostChecker>::filterCoherentRevisits(WriteLabel * /*write*/,
+							  std::vector<ReadLabel *> & /*reads*/)
 {
 	/* No generic CAT theorem currently justifies removing a revisit. */
 }
 
-auto CATChecker::getCoherentPlacings(WriteLabel *write) -> std::vector<EventLabel *>
+template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::getCoherentPlacings(WriteLabel *write)
+	-> std::vector<EventLabel *>
 {
 	VERIFY(write && write->getParent(), "co enumeration requires a graph-owned write");
 	auto &graph = *write->getParent();
@@ -78,3 +84,6 @@ auto CATChecker::getCoherentPlacings(WriteLabel *write) -> std::vector<EventLabe
 		result.push_back(&predecessor);
 	return result;
 }
+
+template class BasicCATChecker<SCChecker>;
+template class BasicCATChecker<TSOChecker>;

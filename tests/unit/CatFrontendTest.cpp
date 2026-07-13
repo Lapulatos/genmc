@@ -75,6 +75,91 @@ TEST(CatFrontendTest, ParsesBundledModels)
 	}
 }
 
+/* Herd-compatible metadata selects a host profile without changing CAT axioms. */
+TEST(CatFrontendTest, ParsesExplicitHostProfile)
+{
+	auto directory = createFixtureDirectory("host-profile");
+	auto path = writeFixture(directory, "profile.cat",
+				 "(* @genmc host-profile tso *)\nArbitraryName\nacyclic po\n");
+
+	auto result = cat::Frontend().parseFile(path);
+
+	ASSERT_TRUE(result.ok());
+	EXPECT_EQ(result.model->hostProfile, cat::HostProfile::TSO);
+	ASSERT_TRUE(result.model->hostProfileSpan.has_value());
+	EXPECT_EQ(result.model->hostProfileSpan->begin.line, 1U);
+	std::filesystem::remove_all(directory);
+}
+
+/* Files predating profile metadata preserve the Phase 1.6 SC host behavior. */
+TEST(CatFrontendTest, DefaultsHostProfileToSC)
+{
+	auto directory = createFixtureDirectory("default-host-profile");
+	auto path = writeFixture(directory, "default.cat", "AnyName\nacyclic po\n");
+
+	auto result = cat::Frontend().parseFile(path);
+
+	ASSERT_TRUE(result.ok());
+	EXPECT_EQ(result.model->hostProfile, cat::HostProfile::SC);
+	EXPECT_FALSE(result.model->hostProfileSpan.has_value());
+	std::filesystem::remove_all(directory);
+}
+
+/* Unknown profiles fail before exploration instead of silently using unsafe views. */
+TEST(CatFrontendTest, RejectsUnknownHostProfile)
+{
+	auto directory = createFixtureDirectory("unknown-host-profile");
+	auto path = writeFixture(directory, "unknown.cat",
+				 "(* @genmc host-profile arm *)\nUnknown\nacyclic po\n");
+
+	auto result = cat::Frontend().parseFile(path);
+
+	ASSERT_FALSE(result.ok());
+	const auto *diagnostic = findDiagnostic(result, cat::DiagnosticKind::Unsupported);
+	ASSERT_NE(diagnostic, nullptr);
+	EXPECT_NE(diagnostic->message.find("unsupported GenMC host profile 'arm'"),
+		  std::string::npos);
+	std::filesystem::remove_all(directory);
+}
+
+/* Metadata is root-only, unique, and must precede the model header. */
+TEST(CatFrontendTest, RejectsMisplacedAndDuplicateHostProfile)
+{
+	auto directory = createFixtureDirectory("misplaced-host-profile");
+	auto misplaced = writeFixture(directory, "misplaced.cat",
+				      "Misplaced\n(* @genmc host-profile tso *)\nacyclic po\n");
+	auto duplicate = writeFixture(directory, "duplicate.cat",
+				      "(* @genmc host-profile sc *)\n(* @genmc host-profile tso "
+				      "*)\nDuplicate\nacyclic po\n");
+
+	auto misplacedResult = cat::Frontend().parseFile(misplaced);
+	auto duplicateResult = cat::Frontend().parseFile(duplicate);
+
+	EXPECT_FALSE(misplacedResult.ok());
+	EXPECT_FALSE(duplicateResult.ok());
+	EXPECT_NE(findDiagnostic(misplacedResult, cat::DiagnosticKind::Parse), nullptr);
+	EXPECT_NE(findDiagnostic(duplicateResult, cat::DiagnosticKind::Parse), nullptr);
+	std::filesystem::remove_all(directory);
+}
+
+/* Included fragments cannot override the root's worker-wide exploration profile. */
+TEST(CatFrontendTest, RejectsHostProfileInInclude)
+{
+	auto directory = createFixtureDirectory("included-host-profile");
+	writeFixture(directory, "fragment.cat",
+		     "(* @genmc host-profile tso *)\nlet imported = po\n");
+	auto root = writeFixture(directory, "root.cat",
+				 "Root\ninclude \"fragment.cat\"\nacyclic imported\n");
+
+	auto result = cat::Frontend().parseFile(root);
+
+	ASSERT_FALSE(result.ok());
+	const auto *diagnostic = findDiagnostic(result, cat::DiagnosticKind::Unsupported);
+	ASSERT_NE(diagnostic, nullptr);
+	EXPECT_NE(diagnostic->message.find("only allowed in the root CAT file"), std::string::npos);
+	std::filesystem::remove_all(directory);
+}
+
 /* Every comment form and supported postfix/binary token reaches the syntax AST. */
 TEST(CatFrontendTest, ParsesCompleteOperatorSurface)
 {
