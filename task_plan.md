@@ -84,3 +84,9 @@ rebuild。unit 129/129、并行 CAT/CAAT 81/81、sanitizer incremental 6/6
 解释；随机 push/pop 树逐节点匹配 Phase 2。unit 132/132、incremental 9/9
 通过。当前显式差距是 checkpoint 为全量复制且尚未接入 ExecutionGraph；
 Phase 3.4 将实现稳定 event key、变更分类、回退原因与内存界限。
+
+**Phase 3.4 implemented** - stable `EventPos`/`SAddr` ID、inactive `_`、
+六类 graph transition、有界 checkpoint 与统计已实现；rf/co edge mutation、
+RMW/lifecycle、cut/removeAfter、non-LIFO revisit matrix 已覆盖。unit 136/136、
+parallel CAT/CAAT 98/98、ASan+UBSan focused 13/13 通过。下一目标是把该状态
+真正接入每个 `BasicCATChecker` worker；standalone API 通过不能替代此目标。

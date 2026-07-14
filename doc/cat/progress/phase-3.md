@@ -202,3 +202,42 @@ This append-only record tracks each Phase 3 substage required by
   timestamps or a support-aware undo trail. Phase 3.4 must introduce stable
   graph synchronization, retain only useful semantic predecessors, bound
   checkpoint memory, and expose rebuild/classification reasons.
+- Delivery: committed as `6d88425` (`feat(cat): add exact CAAT rollback
+  checkpoints`) and pushed successfully to `origin/genmc-caat`.
+
+## Phase 3.4: stable graph synchronization
+
+- Starting commit: `6d88425e91043cae276c798b2291e46673f70bee`.
+- Pre-check: re-read repository rules, project constraints and the complete
+  Phase 3 plan; branch and remote were synchronized and the worktree was clean.
+- Reuse/contract: reuse immutable `GraphAdapter` snapshots and `EventPos` rather
+  than retaining graph pointers. Real events use `(thread,index)` keys, virtual
+  initial writes use `SAddr`; IDs never move or get reused. Every primitive,
+  including model-unreferenced bases, participates in mutation classification.
+- Current implementation: `StableGraphAdapter` remaps dense snapshots into a
+  persistent universe with inactive holes represented by `_`; the offline and
+  incremental evaluators accept adapter-supplied `_`/`id`. `GraphSynchronizer`
+  classifies unchanged, insert, rollback, rollback-plus-insert and rebuild,
+  searches retained semantic predecessors newest-first, and bounds full-state
+  checkpoints with explicit eviction.
+- Evidence: 13/13 stable/synchronizer/incremental focused tests pass under both
+  RelWithDebInfo and ASan+UBSan. The complete unit executable passed 136/136;
+  parallel CAT/CAAT/CLI/integration selection passed 98/98.
+  Real `removeLast` and address insertion prove virtual-IW reordering stability,
+  inactive IDs, bounded history, rollback-plus-insert and mixed label-category
+  rebuild. Edge-only `rf` replacement and `co` reorder rebuild; `cutToStamp`
+  (which internally exercises `removeAfter`) restores a prefix, and same-position
+  revisit reactivates the reserved ID. Existing full-surface graph fixtures
+  cover RMW and create/join mappings. Transition and eviction counters are
+  exposed for Phase 3.5 diagnostics.
+- Errors fixed: testing exposed that normalized dead-code elimination allowed an
+  unreferenced base deletion to evade `tryInsert`; classification now compares
+  every primitive. A cut also resets GenMC stamps, confirming that stamps cannot
+  serve as stable identity. The sanitizer build initially inherited a stale
+  missing `hwloc` path; configuring `HWLOC` empty correctly exercised all new
+  code. `clang-tidy` remains unable to find `<cstddef>` in this Homebrew/Xcode
+  setup; formatter, compiler, unit, integration and sanitizers pass.
+- Gap to Phase 3: graph synchronization is a tested standalone component but is
+  not yet called by `BasicCATChecker`. Phase 3.5 must give each checker worker an
+  incremental evaluator/synchronizer, retain offline fallback for non-monotone
+  models, and prove real SC/TSO/PSO executions exercise insert/rollback paths.

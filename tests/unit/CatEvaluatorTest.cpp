@@ -15,11 +15,14 @@
 #include "genmc/CAT/CaatEvaluator.hpp"
 #include "genmc/CAT/Evaluator.hpp"
 #include "genmc/CAT/Frontend.hpp"
+#include "genmc/CAT/GraphSynchronizer.hpp"
 #include "genmc/CAT/IncrementalEvaluator.hpp"
 #include "genmc/CAT/Model.hpp"
 #include "genmc/CAT/Normalized.hpp"
 #include "genmc/CAT/Reasoner.hpp"
 #include "genmc/CAT/Value.hpp"
+#include "genmc/Execution/EventLabel.hpp"
+#include "genmc/Execution/ExecutionGraph.hpp"
 
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
@@ -41,6 +44,21 @@
 #include <unistd.h>
 
 namespace {
+
+/** Test graph exposing the protected label insertion used by synchronization fixtures. */
+class SynchronizerTestGraph : public ExecutionGraph {
+public:
+	using ExecutionGraph::addLabelToGraph;
+	using ExecutionGraph::ExecutionGraph;
+};
+
+/** Insert one owned label into a synchronization fixture. */
+template <typename Label, typename... Args>
+auto addSynchronizerLabel(SynchronizerTestGraph &graph, Args &&...args) -> Label *
+{
+	auto label = std::make_unique<Label>(std::forward<Args>(args)...);
+	return static_cast<Label *>(graph.addLabelToGraph(std::move(label)));
+}
 
 /** Compile one isolated valid model for evaluator-only tests. */
 static auto compileModel(std::string_view source) -> std::shared_ptr<const cat::ModelIR>
@@ -533,6 +551,124 @@ TEST(IncrementalCaatEvaluatorTest, RejectsCheckpointFromPreviousInitialization)
 	EXPECT_FALSE(rejected.restored);
 	EXPECT_NE(rejected.reason.find("stale"), std::string::npos);
 	EXPECT_EQ(incremental.result().values, before);
+}
+
+/* Graph synchronization selects insertion, rollback-plus-insert, and mixed rebuild exactly. */
+TEST(CaatGraphSynchronizerTest, ClassifiesStableGraphTransitionsAndBoundsHistory)
+{
+	auto analyzed = analyzeModel(R"CAT(GraphSynchronization
+let rec order = po | (order ; po)
+acyclic order
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
+	cat::IncrementalCaatEvaluator evaluator(*analyzed.model, *analyzed.analysis);
+	cat::GraphSynchronizer synchronizer(evaluator, 2);
+
+	cat::GraphAdapter empty(graph);
+	EXPECT_EQ(synchronizer.synchronize(empty).transition, cat::GraphTransition::Initialize);
+	addSynchronizerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
+	cat::GraphAdapter one(graph);
+	EXPECT_EQ(synchronizer.synchronize(one).transition, cat::GraphTransition::Insert);
+	addSynchronizerLabel<FenceLabel>(graph, Event(0, 2), MemOrdering::Relaxed);
+	cat::GraphAdapter two(graph);
+	EXPECT_EQ(synchronizer.synchronize(two).transition, cat::GraphTransition::Insert);
+	EXPECT_EQ(synchronizer.retainedCheckpoints(), 2U);
+
+	auto removedSecond = graph.removeLast(0);
+	ASSERT_NE(removedSecond, nullptr);
+	cat::GraphAdapter cut(graph);
+	EXPECT_EQ(synchronizer.synchronize(cut).transition, cat::GraphTransition::RollbackInsert);
+	EXPECT_EQ(evaluator.eventCount(), 2U);
+	EXPECT_EQ(std::get<cat::EventSet>(evaluator.baseValues().at("_")).count(), 1U);
+	expectIncrementalEqualsOffline(evaluator, *analyzed.model, *analyzed.analysis,
+				       evaluator.eventCount(), evaluator.baseValues());
+
+	/* Replacing the same EventPos with a different label category removes F and
+	 * adds W, so no retained snapshot is a semantic predecessor. */
+	auto removedFirst = graph.removeLast(0);
+	ASSERT_NE(removedFirst, nullptr);
+	auto *write = addSynchronizerLabel<WriteLabel>(graph, Event(0, 1), MemOrdering::Relaxed,
+						       SAddr(0x1000), ASize(4), SVal(1));
+	write->addCo(graph.getInitLabel());
+	cat::GraphAdapter replaced(graph);
+	const auto rebuilt = synchronizer.synchronize(replaced);
+	EXPECT_EQ(rebuilt.transition, cat::GraphTransition::Rebuild);
+	EXPECT_FALSE(rebuilt.reason.empty());
+	EXPECT_EQ(synchronizer.statistics().initializations, 1U);
+	EXPECT_EQ(synchronizer.statistics().insertions, 2U);
+	EXPECT_EQ(synchronizer.statistics().rollbackInsertions, 1U);
+	EXPECT_EQ(synchronizer.statistics().rebuilds, 1U);
+	EXPECT_EQ(synchronizer.statistics().evictedCheckpoints, 1U);
+}
+
+/* Edge-only rf replacement and coherence reorder cannot masquerade as insertion. */
+TEST(CaatGraphSynchronizerTest, RebuildsForReadsFromReplacementAndCoherenceReorder)
+{
+	auto analyzed = analyzeModel(R"CAT(GraphEdgeMutation
+acyclic (po | rf | co)
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
+	const SAddr x{0x1000};
+	auto *first = addSynchronizerLabel<WriteLabel>(graph, Event(0, 1), MemOrdering::Relaxed, x,
+						       ASize(4), SVal(1));
+	first->addCo(graph.getInitLabel());
+	auto *second = addSynchronizerLabel<WriteLabel>(graph, Event(0, 2), MemOrdering::Relaxed, x,
+							ASize(4), SVal(2));
+	second->addCo(first);
+	auto *read = addSynchronizerLabel<ReadLabel>(graph, Event(0, 3), MemOrdering::Relaxed, x,
+						     ASize(4));
+	read->setRf(first);
+	cat::IncrementalCaatEvaluator evaluator(*analyzed.model, *analyzed.analysis);
+	cat::GraphSynchronizer synchronizer(evaluator);
+	cat::GraphAdapter initial(graph);
+	ASSERT_EQ(synchronizer.synchronize(initial).transition, cat::GraphTransition::Initialize);
+
+	read->setRf(second);
+	cat::GraphAdapter changedRf(graph);
+	EXPECT_EQ(synchronizer.synchronize(changedRf).transition, cat::GraphTransition::Rebuild);
+	expectIncrementalEqualsOffline(evaluator, *analyzed.model, *analyzed.analysis,
+				       evaluator.eventCount(), evaluator.baseValues());
+
+	second->moveCo(graph.getInitLabel());
+	cat::GraphAdapter changedCo(graph);
+	EXPECT_EQ(synchronizer.synchronize(changedCo).transition, cat::GraphTransition::Rebuild);
+	expectIncrementalEqualsOffline(evaluator, *analyzed.model, *analyzed.analysis,
+				       evaluator.eventCount(), evaluator.baseValues());
+}
+
+/* Stamp cuts restore a prefix and same-position revisits are classified semantically. */
+TEST(CaatGraphSynchronizerTest, HandlesCutToStampAndNonLifoRevisit)
+{
+	auto analyzed = analyzeModel("GraphCutAndRevisit\nacyclic po\n");
+	ASSERT_NE(analyzed.model, nullptr);
+	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
+	auto *first = addSynchronizerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
+	ASSERT_EQ(first->getStamp(), Stamp(1));
+	cat::IncrementalCaatEvaluator evaluator(*analyzed.model, *analyzed.analysis);
+	cat::GraphSynchronizer synchronizer(evaluator);
+	cat::GraphAdapter prefix(graph);
+	ASSERT_EQ(synchronizer.synchronize(prefix).transition, cat::GraphTransition::Initialize);
+	auto *second = addSynchronizerLabel<FenceLabel>(graph, Event(0, 2), MemOrdering::Acquire);
+	ASSERT_EQ(second->getStamp(), Stamp(2));
+	cat::GraphAdapter extension(graph);
+	ASSERT_EQ(synchronizer.synchronize(extension).transition, cat::GraphTransition::Insert);
+
+	graph.cutToStamp(Stamp(1));
+	cat::GraphAdapter cut(graph);
+	EXPECT_EQ(synchronizer.synchronize(cut).transition, cat::GraphTransition::RollbackInsert);
+	EXPECT_EQ(std::get<cat::EventSet>(evaluator.baseValues().at("_")).count(), 1U);
+
+	/* A new label at the old position reuses its reserved stable key; reactivating
+	 * that ID and its po edges is an insertion rather than a fresh identity. */
+	auto *revisit =
+		addSynchronizerLabel<FenceLabel>(graph, Event(0, 2), MemOrdering::AcquireRelease);
+	ASSERT_EQ(revisit->getStamp(), Stamp(2));
+	cat::GraphAdapter revisited(graph);
+	EXPECT_EQ(synchronizer.synchronize(revisited).transition, cat::GraphTransition::Insert);
+	expectIncrementalEqualsOffline(evaluator, *analyzed.model, *analyzed.analysis,
+				       evaluator.eventCount(), evaluator.baseValues());
 }
 
 /* Random insertion and LIFO rollback trees equal a fresh Phase 2 evaluation at every node. */

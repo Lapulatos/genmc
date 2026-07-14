@@ -85,14 +85,10 @@ private:
 				values_[predicate.id] = emptyValue(predicate.type);
 				continue;
 			}
-			if (predicate.name == "0")
-				values_[predicate.id] = Relation(eventCount_);
-			else if (predicate.name == "_")
-				values_[predicate.id] = universe();
-			else if (predicate.name == "id")
-				values_[predicate.id] = identity(universe());
-			else if (const auto found = base_.find(predicate.name);
-				 found != base_.end()) {
+			/* Stable graph universes may contain inactive holes. Adapters can
+			 * therefore override built-ins with the exact active `_` and `id`;
+			 * standalone callers retain the dense-universe defaults. */
+			if (const auto found = base_.find(predicate.name); found != base_.end()) {
 				if (validBase(predicate, found->second))
 					values_[predicate.id] = found->second;
 				else
@@ -100,6 +96,12 @@ private:
 						{predicate.id, predicate.span,
 						 "primitive '" + predicate.name +
 							 "' has wrong type or event universe"});
+			} else if (predicate.name == "0") {
+				values_[predicate.id] = Relation(eventCount_);
+			} else if (predicate.name == "_") {
+				values_[predicate.id] = universe();
+			} else if (predicate.name == "id") {
+				values_[predicate.id] = identity(universe());
 			} else {
 				errors_.push_back(
 					{predicate.id, predicate.span,

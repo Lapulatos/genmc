@@ -142,6 +142,14 @@ public:
 	 */
 	[[nodiscard]] auto rollback(IncrementalCheckpoint checkpoint) -> IncrementalRollbackResult;
 
+	/**
+	 * Release one retained snapshot without changing the current state.
+	 *
+	 * @param checkpoint Live handle returned by checkpoint().
+	 * @return True when a retained snapshot was removed.
+	 */
+	[[nodiscard]] auto forget(IncrementalCheckpoint checkpoint) -> bool;
+
 	/** Return whether `initialize()` has published a complete state. */
 	[[nodiscard]] auto initialized() const -> bool { return result_.has_value(); }
 	/** Return the current universe size; valid after initialization. */

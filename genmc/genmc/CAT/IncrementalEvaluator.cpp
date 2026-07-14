@@ -82,15 +82,16 @@ auto universe(std::size_t size) -> EventSet
 auto baseValue(const Predicate &predicate, std::size_t eventCount, const BaseValues &base)
 	-> std::optional<Value>
 {
-	if (predicate.name == "0")
-		return Relation(eventCount);
-	if (predicate.name == "_")
-		return universe(eventCount);
-	if (predicate.name == "id")
-		return identity(universe(eventCount));
 	const auto found = base.find(predicate.name);
-	if (found == base.end())
+	if (found == base.end()) {
+		if (predicate.name == "0")
+			return Relation(eventCount);
+		if (predicate.name == "_")
+			return universe(eventCount);
+		if (predicate.name == "id")
+			return identity(universe(eventCount));
 		return std::nullopt;
+	}
 	if (predicate.type == ValueType::Set) {
 		const auto *set = std::get_if<EventSet>(&found->second);
 		if (!set || set->size() != eventCount)
@@ -277,6 +278,19 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 		VERIFY(value.has_value(), "initialized CAAT predicate has no value");
 		growValue(*value, eventCount);
 	}
+	/* Graph synchronization must classify mutations across every primitive,
+	 * including relations not referenced by the current model. Otherwise an rf,
+	 * co, or label-category replacement could be mistaken for insertion merely
+	 * because dead-code elimination omitted that base from normalized IR. */
+	for (const auto &[name, oldValue] : base_) {
+		const auto found = base.find(name);
+		if (found == base.end())
+			return reject("primitive '" + name + "' was removed");
+		auto grown = oldValue;
+		growValue(grown, eventCount);
+		if (!valueSubset(grown, found->second))
+			return reject("primitive '" + name + "' removed a fact");
+	}
 
 	std::vector<std::vector<PredicateId>> dependents(model_.predicates().size());
 	for (const auto &dependency : analysis_.dependencies())
@@ -383,6 +397,15 @@ auto IncrementalCaatEvaluator::rollback(IncrementalCheckpoint checkpoint)
 	checkpoints_.erase(std::next(found), checkpoints_.end());
 	++statistics_.rollbacks;
 	return {true, {}};
+}
+
+auto IncrementalCaatEvaluator::forget(IncrementalCheckpoint checkpoint) -> bool
+{
+	const auto found = std::ranges::find(checkpoints_, checkpoint, &Snapshot::checkpoint);
+	if (found == checkpoints_.end())
+		return false;
+	checkpoints_.erase(found);
+	return true;
 }
 
 auto IncrementalCaatEvaluator::eventCount() const -> std::size_t
