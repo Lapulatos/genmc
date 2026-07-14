@@ -26,7 +26,9 @@
 #include <vector>
 
 namespace cat {
+class ModelAnalysis;
 class ModelIR;
+class NormalizedModel;
 } /* namespace cat */
 
 enum class ExplorationMode : std::uint8_t { verify, random, estimate };
@@ -44,6 +46,12 @@ struct Config {
 	std::optional<std::filesystem::path> modelFile;
 	/** Immutable typed CAT model shared by verification workers after validation. */
 	std::shared_ptr<const cat::ModelIR> catModel;
+	/** Normalized CAAT equations used only for explicitly requested explanations. */
+	std::shared_ptr<const cat::NormalizedModel> caatExplanationModel;
+	/** Stratification matching caatExplanationModel. */
+	std::shared_ptr<const cat::ModelAnalysis> caatExplanationAnalysis;
+	/** Print source-located base-literal reasons for rejected CAT candidates. */
+	bool explainCat{};
 	/** Whether the user also explicitly selected one of GenMC's built-in models. */
 	bool modelExplicit{};
 	/** Number of `--model-file` occurrences, retained for stable duplicate diagnostics. */

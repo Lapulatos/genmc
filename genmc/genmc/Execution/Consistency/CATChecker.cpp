@@ -13,14 +13,17 @@
 
 #include "genmc/Execution/Consistency/CATChecker.hpp"
 
+#include "genmc/CAT/CaatEvaluator.hpp"
 #include "genmc/CAT/Evaluator.hpp"
 #include "genmc/CAT/GraphAdapter.hpp"
+#include "genmc/CAT/Reasoner.hpp"
 #include "genmc/Execution/EventLabel.hpp"
 #include "genmc/Execution/ExecutionGraph.hpp"
 #include "genmc/Support/Cast.hpp"
 #include "genmc/Support/Error.hpp"
 #include "genmc/Verification/Config.hpp"
 
+#include <iostream>
 #include <ranges>
 
 template <typename HostChecker>
@@ -43,6 +46,23 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 	const auto result =
 		cat::Evaluator().evaluate(*model, adapter.eventCount(), adapter.baseValues());
 	VERIFY(result.errors.empty(), "validated CAT evaluation failed");
+	if (this->getConf()->explainCat && !result.violations.empty()) {
+		const auto &normalized = this->getConf()->caatExplanationModel;
+		const auto &analysis = this->getConf()->caatExplanationAnalysis;
+		VERIFY(normalized && analysis, "CAT explanation requires validated CAAT IR");
+		auto evaluated = cat::CaatEvaluator().evaluate(
+			*normalized, *analysis, adapter.eventCount(), adapter.baseValues());
+		VERIFY(evaluated.errors.empty(), "validated CAAT explanation evaluation failed");
+		auto explained = cat::Reasoner().explain(*normalized, *analysis,
+							 adapter.eventCount(), evaluated.values,
+							 evaluated.violations);
+		VERIFY(explained.ok(), "validated CAT violation explanation failed");
+		/* One line per violation minimizes interleaving when explicitly enabled
+		 * during multi-worker exploration. */
+		for (const auto &violation : explained.violations)
+			std::cerr << "CAT explanation: " << cat::Reasoner::format(violation)
+				  << '\n';
+	}
 	return result.violations.empty();
 }
 

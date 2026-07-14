@@ -13,8 +13,10 @@
 
 #include "genmc/config.h"
 
+#include "genmc/CAT/Analysis.hpp"
 #include "genmc/CAT/Frontend.hpp"
 #include "genmc/CAT/Model.hpp"
+#include "genmc/CAT/Normalized.hpp"
 #include "genmc/Support/Error.hpp"
 #include "genmc/Verification/Config.hpp"
 
@@ -38,6 +40,8 @@ static auto doesPolicySupportSeed(const SchedulePolicy policy) -> bool
 auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 {
 	ConfigErrorList errors;
+	if (explainCat && !modelFile)
+		errors.emplace_back("--explain-cat requires --model-file.");
 
 	/* Check exploration options */
 	if (modelFile.has_value()) {
@@ -135,6 +139,36 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 							{}}.format());
 					} else {
 						catModel = std::move(compileResult.model);
+						/* Explanation provenance uses the normalized CAAT
+						 * IR, while the Phase 1 checker remains the verdict
+						 * oracle. Build it only on request to preserve
+						 * default startup cost and diagnostics exactly. */
+						if (explainCat) {
+							auto normalized =
+								cat::Normalizer().normalize(
+									*parseResult.model);
+							for (const auto &diagnostic :
+							     normalized.diagnostics)
+								errors.push_back(
+									diagnostic.format());
+							if (normalized.ok()) {
+								auto analyzed =
+									cat::Analyzer().analyze(
+										*normalized.model);
+								for (const auto &diagnostic :
+								     analyzed.diagnostics)
+									errors.push_back(
+										diagnostic
+											.format());
+								if (analyzed.ok()) {
+									caatExplanationModel = std::
+										move(normalized
+											     .model);
+									caatExplanationAnalysis = std::
+										move(analyzed.analysis);
+								}
+							}
+						}
 						/* The declaration selects transformations/views
 						 * only; consistency remains entirely model-driven.
 						 */

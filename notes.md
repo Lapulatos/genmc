@@ -116,3 +116,10 @@
 - Phase 2.2 signed dependencies mark only the normalized difference RHS negative. Tarjan SCCs are reversed into dependency-first strata; negative intra-SCC edges are rejected as non-stratifiable, and every derived difference RHS must be cut or rejected.
 - Domain-independence over recursive equations needs the greatest Boolean solution of the syntactic rules: starting false incorrectly rejects productive guarded recursion such as `ob = base | ob;ob`.
 - Phase 2.3 evaluates each SCC from bottom with a dependency worklist and no arbitrary iteration cap. Random reachability fixed points match an independently coded naive Kleene recurrence.
+- Phase 2.4 reconstructs deterministic shortest-known derivations from a completed
+  fixed point. Positive recursive membership is expanded to base facts; semi-positive
+  difference emits an explicit negative base literal. Direct relation/set replay tests
+  reproduce empty, irreflexive, and acyclic violations without consulting the reasoner.
+- `--explain-cat` is deliberately opt-in. Phase 1 remains the verdict oracle for
+  non-recursive models, while the normalized evaluator is run only for rejected
+  candidates whose explanation was requested; default startup and output remain unchanged.

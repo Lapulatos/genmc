@@ -17,6 +17,7 @@
 #include "genmc/CAT/Frontend.hpp"
 #include "genmc/CAT/Model.hpp"
 #include "genmc/CAT/Normalized.hpp"
+#include "genmc/CAT/Reasoner.hpp"
 #include "genmc/CAT/Value.hpp"
 
 #include <gtest/gtest.h>
@@ -258,6 +259,134 @@ empty reached as populated
 	EXPECT_EQ(
 		std::get<cat::EventSet>(*result.values[findPredicate(*analyzed.model, "reached")]),
 		makeSet(4, {0, 1, 2, 3}));
+}
+
+/* Recursive cycle explanations reduce fixed-point edges to positive base literals. */
+TEST(CaatReasonerTest, ExplainsRecursiveAcyclicViolation)
+{
+	auto analyzed = analyzeModel(R"CAT(RecursiveCycle
+let rec reach = po | (reach ; po)
+acyclic reach as cycle
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues base{{"po", makeRelation(3, {{0, 1}, {1, 2}, {2, 0}})}};
+	auto evaluated =
+		cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, 3, base);
+
+	ASSERT_EQ(evaluated.violations.size(), 1U);
+	auto explained = cat::Reasoner().explain(*analyzed.model, *analyzed.analysis, 3,
+						 evaluated.values, evaluated.violations);
+	ASSERT_TRUE(explained.ok());
+	ASSERT_EQ(explained.violations.size(), 1U);
+	EXPECT_EQ(explained.violations[0].violation.checkName, "cycle");
+	ASSERT_EQ(explained.violations[0].explanation.size(), 3U);
+	for (const auto &literal : explained.violations[0].explanation) {
+		EXPECT_EQ(literal.predicateName, "po");
+		EXPECT_TRUE(literal.positive);
+		EXPECT_EQ(literal.type, cat::ValueType::Relation);
+		ASSERT_TRUE(literal.second.has_value());
+	}
+	cat::Relation replayPo(3);
+	for (const auto &literal : explained.violations[0].explanation)
+		replayPo.insert(literal.first, *literal.second);
+	const auto replayReach = transitiveClosure(replayPo);
+	EXPECT_TRUE(replayReach.contains(0, 0) || replayReach.contains(1, 1) ||
+		    replayReach.contains(2, 2));
+}
+
+/* Semi-positive difference explanations retain both membership and absence facts. */
+TEST(CaatReasonerTest, ExplainsNegativeBaseLiteralAndReplaysViolation)
+{
+	auto analyzed = analyzeModel(R"CAT(Difference
+let kept = po \ rf
+empty kept as difference
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues base{{"po", makeRelation(2, {{0, 1}})}, {"rf", cat::Relation(2)}};
+	auto evaluated =
+		cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, 2, base);
+	auto explained = cat::Reasoner().explain(*analyzed.model, *analyzed.analysis, 2,
+						 evaluated.values, evaluated.violations);
+
+	ASSERT_TRUE(explained.ok());
+	ASSERT_EQ(explained.violations.size(), 1U);
+	const auto &literals = explained.violations[0].explanation;
+	ASSERT_EQ(literals.size(), 2U);
+	EXPECT_EQ(literals[0].predicateName, "po");
+	EXPECT_TRUE(literals[0].positive);
+	EXPECT_EQ(literals[1].predicateName, "rf");
+	EXPECT_FALSE(literals[1].positive);
+	EXPECT_EQ(cat::Reasoner::format(explained.violations[0]),
+		  "3:1: CAT check 'difference' failed; witness=0->1; because po(0,1) & "
+		  "!rf(0,1)");
+
+	/* Replay the two literals with direct relation algebra, not the CAAT evaluator. */
+	cat::Relation replayPo(2);
+	cat::Relation replayRf(2);
+	for (const auto &literal : literals) {
+		if (literal.positive && literal.predicateName == "po")
+			replayPo.insert(literal.first, *literal.second);
+		if (literal.positive && literal.predicateName == "rf")
+			replayRf.insert(literal.first, *literal.second);
+	}
+	EXPECT_TRUE(relationDifference(replayPo, replayRf).contains(0, 1));
+}
+
+/* Set and irreflexive witnesses are projected with their exact ground arity. */
+TEST(CaatReasonerTest, ExplainsSetAndIrreflexiveWitnesses)
+{
+	auto analyzed = analyzeModel(R"CAT(WitnessKinds
+let rec reached = R | range([reached] ; po)
+let diagonal = po ; rf
+empty reached as set-check
+irreflexive diagonal as irreflexive-check
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues base{{"R", makeSet(2, {0})},
+			     {"po", makeRelation(2, {{0, 1}})},
+			     {"rf", makeRelation(2, {{1, 0}})}};
+	auto evaluated =
+		cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, 2, base);
+	auto explained = cat::Reasoner().explain(*analyzed.model, *analyzed.analysis, 2,
+						 evaluated.values, evaluated.violations);
+
+	ASSERT_TRUE(explained.ok());
+	ASSERT_EQ(explained.violations.size(), 2U);
+	ASSERT_EQ(explained.violations[0].explanation.size(), 1U);
+	EXPECT_EQ(explained.violations[0].explanation[0].predicateName, "R");
+	EXPECT_FALSE(explained.violations[0].explanation[0].second.has_value());
+	ASSERT_EQ(explained.violations[1].explanation.size(), 2U);
+	EXPECT_TRUE(explained.violations[1].explanation[0].second.has_value());
+	EXPECT_EQ(explained.violations[0].explanation[0].first, 0U);
+	cat::Relation replayPo(2);
+	cat::Relation replayRf(2);
+	for (const auto &literal : explained.violations[1].explanation) {
+		auto &relation = literal.predicateName == "po" ? replayPo : replayRf;
+		relation.insert(literal.first, *literal.second);
+	}
+	EXPECT_TRUE(compose(replayPo, replayRf).contains(0, 0));
+}
+
+/* A stale violation cannot be paired with a misleading explanation. */
+TEST(CaatReasonerTest, RejectsStaleViolation)
+{
+	auto analyzed = analyzeModel("Stale\nempty po as present\n");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::Violation stale{"missing", cat::Statement::CheckKind::Empty, {}, {0, 1}};
+	cat::BaseValues base{{"po", makeRelation(2, {{0, 1}})}};
+	auto evaluated =
+		cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, 2, base);
+
+	auto explained = cat::Reasoner().explain(*analyzed.model, *analyzed.analysis, 2,
+						 evaluated.values, {stale});
+	EXPECT_FALSE(explained.ok());
+	EXPECT_TRUE(explained.violations.empty());
+	ASSERT_EQ(explained.errors.size(), 1U);
+	EXPECT_NE(explained.errors[0].find("unknown check"), std::string::npos);
+	auto malformed = cat::Reasoner().explain(*analyzed.model, *analyzed.analysis, 2, {},
+						 evaluated.violations);
+	EXPECT_FALSE(malformed.ok());
+	EXPECT_NE(malformed.errors[0].find("stale"), std::string::npos);
 }
 
 /* Worklist fixed points agree with an independent naive Kleene recurrence. */

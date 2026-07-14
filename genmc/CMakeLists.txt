@@ -11,6 +11,7 @@ set(LIB_SOURCES
   genmc/CAT/GraphAdapter.cpp
   genmc/CAT/Model.cpp
   genmc/CAT/Normalized.cpp
+  genmc/CAT/Reasoner.cpp
   genmc/CAT/Value.cpp
   genmc/Execution/DepExecutionGraph.cpp
   genmc/Execution/EventLabel.cpp

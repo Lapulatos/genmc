@@ -76,6 +76,10 @@ static llvm::cl::opt<std::string>
 	clModelFile("model-file", llvm::cl::value_desc("model.cat"), llvm::cl::cat(clGeneral),
 		    llvm::cl::desc("Load the memory model from a CAT file"));
 
+static llvm::cl::opt<bool>
+	clExplainCat("explain-cat", llvm::cl::cat(clGeneral),
+		     llvm::cl::desc("Print base-relation reasons for CAT consistency rejections"));
+
 static llvm::cl::opt<bool> clDisableEstimation(
 	"disable-estimation", llvm::cl::cat(clGeneral),
 	llvm::cl::desc("Do not estimate the state-space size before verifying the program"));
@@ -417,6 +421,7 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 		conf.modelFile = fs::path(clModelFile.getValue());
 	conf.modelExplicit = clModelType.getNumOccurrences() > 0;
 	conf.modelFileOccurrences = clModelFile.getNumOccurrences();
+	conf.explainCat = clExplainCat;
 	conf.estimate = !clDisableEstimation;
 	conf.estimationMax = clEstimationMax;
 	conf.estimationMin = clEstimationMin;

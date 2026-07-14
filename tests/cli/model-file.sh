@@ -42,6 +42,7 @@ expect_failure()
 # The public help must expose the new spelling used by the project contract.
 help_output="$("${genmc}" --help 2>&1)"
 grep -Fq -- "--model-file=<model.cat>" <<<"${help_output}"
+grep -Fq -- "--explain-cat" <<<"${help_output}"
 
 # All invalid combinations fail during command-line/config processing.
 expect_failure "CAT model file does not exist" \
@@ -52,6 +53,8 @@ expect_failure "cannot be combined with an explicit built-in" \
 	"${genmc}" --model-file="${model}" --sc "${program}"
 expect_failure "--model-file may only be specified once" \
 	"${genmc}" --model-file="${model}" --model-file="${model}" "${program}"
+expect_failure "--explain-cat requires --model-file" \
+	"${genmc}" --explain-cat "${program}"
 
 # A valid SC file executes through the generic checker and matches built-in SC.
 cat_output="$("${genmc}" --model-file="${model}" --disable-estimation --nthreads=2 \
@@ -65,3 +68,13 @@ if [[ -z "${cat_count}" || "${cat_count}" != "${builtin_count}" || "${cat_count}
 	echo "SC differential mismatch: CAT=${cat_count}, built-in=${builtin_count}" >&2
 	exit 1
 fi
+
+# Explanations are opt-in and identify rejected candidates using base literals.
+if grep -Fq -- "CAT explanation:" <<<"${cat_output}"; then
+	echo "Default CAT output unexpectedly contains explanations" >&2
+	exit 1
+fi
+explained_output="$("${genmc}" --model-file="${model}" --explain-cat --disable-estimation \
+	--nthreads=1 "${program}" 2>&1)"
+grep -Fq -- "CAT explanation:" <<<"${explained_output}"
+grep -Fq -- "CAT check 'sc' failed" <<<"${explained_output}"

@@ -104,3 +104,43 @@ This append-only record tracks each Phase 2 substage required by
 - Plan gap: fixed-point semantics are complete but provenance is not recorded.
   Phase 2.4 must attach derivations and produce replayable base-literal
   explanations for all three axiom kinds.
+
+## Phase 2.4: violation explanations and CLI diagnostics
+
+- Starting commit: `911c674c3955e096a6555d3fd0565626a53185ee`.
+- Pre-check: re-read `doc/development.md`, project constraints, and the Phase 2
+  plan; branch was `genmc-caat`. The only dirty files were the uncommitted
+  `Reasoner.hpp/.cpp` draft and its CMake entry from the interrupted start of
+  this same substage; no unrelated user changes were present.
+- Reuse survey: retained normalized predicate IDs, final packed values,
+  structured axiom witnesses, Config validation, CAT checker snapshots, and
+  existing CLI integration harness. Dat3M's derivation reasoner informed the
+  base-literal projection contract; the C++23 implementation is independent
+  and adds no runtime dependency.
+- Contract: reconstruct finite derivations after offline evaluation, choose a
+  deterministic shortest-known explanation, emit negative ground literals for
+  semi-positive difference, reject stale snapshots, and expose opt-in CLI
+  rendering without changing default output.
+- Implementation: `Reasoner` rebuilds provenance stratum by stratum, including
+  positive recursion, composition and closure paths; explanations are sorted,
+  deduplicated and compared by literal count then stable lexical order. It
+  handles set-empty, relation-empty, irreflexive and closed-cycle witnesses.
+  `--explain-cat` normalizes/analyzes a non-recursive Phase 1 model only when
+  requested and prints source position, witness and base literals for rejected
+  candidates; the Phase 1 evaluator remains the verdict oracle.
+- Verification: clean CMake build passed; complete unit/property suite passed
+  116/116; focused CLI plus SC/TSO/PSO integration passed 4/4. Direct replay
+  using relation algebra reproduces all three axiom kinds and the negative
+  difference fixture. CLI tests prove the flag requires `--model-file`, emits
+  on a real SB rejection, and leaves default output unchanged. `git diff
+  --check` passed.
+- Static-analysis boundary: `clang-tidy` read the generated database but the
+  standalone Apple invocation could not find libc++ `<algorithm>`/`<cstddef>`;
+  this is the recorded environment issue seen in Phase 1. Its actionable local
+  readability notes were reviewed; compilation and tests use the configured
+  LLVM 20 toolchain successfully.
+- Plan gap: provenance and requested diagnostics are complete for the Phase 1
+  path. Recursive CAT files still fail in the Phase 1 topological compiler and
+  therefore cannot reach the checker. Phase 2.5 must select the normalized
+  backend directly, add recursive model files, validate base availability, and
+  exercise real concurrent programs with one and two workers.
