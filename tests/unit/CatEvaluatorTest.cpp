@@ -469,6 +469,110 @@ acyclic reach
 	}
 }
 
+/* Nested checkpoints restore recursive values, witnesses, and word-boundary growth exactly. */
+TEST(IncrementalCaatEvaluatorTest, RestoresNestedCheckpointsAndInvalidatesDescendants)
+{
+	auto analyzed = analyzeModel(R"CAT(IncrementalRollback
+let rec reach = po | (reach ; po)
+acyclic reach as cycle
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues rootBase{{"po", makeRelation(63, {{0, 1}})}};
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	incremental.initialize(63, rootBase);
+	const auto root = incremental.checkpoint();
+
+	cat::BaseValues middleBase{{"po", makeRelation(65, {{0, 1}, {1, 64}})}};
+	ASSERT_TRUE(incremental.tryInsert(65, middleBase).applied());
+	const auto middle = incremental.checkpoint();
+	cat::BaseValues leafBase{{"po", makeRelation(65, {{0, 1}, {1, 64}, {64, 0}})}};
+	ASSERT_TRUE(incremental.tryInsert(65, leafBase).applied());
+	ASSERT_FALSE(incremental.result().consistent());
+
+	auto restoredMiddle = incremental.rollback(middle);
+	ASSERT_TRUE(restoredMiddle.restored) << restoredMiddle.reason;
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 65,
+				       middleBase);
+	EXPECT_TRUE(incremental.result().consistent());
+	const auto descendant = incremental.checkpoint();
+	ASSERT_TRUE(incremental.tryInsert(65, leafBase).applied());
+	const auto cyclic = incremental.checkpoint();
+	ASSERT_TRUE(incremental.rollback(cyclic).restored);
+	auto explanation = cat::Reasoner().explain(
+		*analyzed.model, *analyzed.analysis, incremental.eventCount(),
+		incremental.result().values, incremental.result().violations);
+	ASSERT_TRUE(explanation.ok());
+	ASSERT_EQ(explanation.violations.size(), 1U);
+	EXPECT_FALSE(explanation.violations[0].explanation.empty());
+	ASSERT_TRUE(incremental.rollback(root).restored);
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 63,
+				       rootBase);
+	EXPECT_FALSE(incremental.rollback(middle).restored);
+	EXPECT_FALSE(incremental.rollback(descendant).restored);
+	ASSERT_TRUE(incremental.rollback(root).restored);
+	EXPECT_FALSE(incremental.rollback(cyclic).restored);
+	EXPECT_EQ(incremental.statistics().rollbacks, 4U);
+	EXPECT_EQ(incremental.statistics().rejectedRollbacks, 3U);
+}
+
+/* Reinitialization starts a new checkpoint epoch and rejects every old handle. */
+TEST(IncrementalCaatEvaluatorTest, RejectsCheckpointFromPreviousInitialization)
+{
+	auto analyzed = analyzeModel("IncrementalCheckpointEpoch\nacyclic po\n");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	incremental.initialize(2, {{"po", makeRelation(2, {})}});
+	const auto stale = incremental.checkpoint();
+	cat::IncrementalCaatEvaluator other(*analyzed.model, *analyzed.analysis);
+	other.initialize(2, {{"po", makeRelation(2, {})}});
+	const auto foreign = other.checkpoint();
+	EXPECT_FALSE(incremental.rollback(foreign).restored);
+	incremental.initialize(2, {{"po", makeRelation(2, {{0, 1}})}});
+	const auto before = incremental.result().values;
+	auto rejected = incremental.rollback(stale);
+	EXPECT_FALSE(rejected.restored);
+	EXPECT_NE(rejected.reason.find("stale"), std::string::npos);
+	EXPECT_EQ(incremental.result().values, before);
+}
+
+/* Random insertion and LIFO rollback trees equal a fresh Phase 2 evaluation at every node. */
+RC_GTEST_PROP(IncrementalCaatEvaluatorPropertyTest, MatchesOfflineAcrossPushPopTree,
+	      (const std::vector<std::uint8_t> &commands))
+{
+	auto analyzed = analyzeModel(R"CAT(RandomIncrementalRollback
+let rec reach = po | (reach ; po)
+acyclic reach
+)CAT");
+	RC_ASSERT(analyzed.model != nullptr);
+	constexpr std::size_t size = 65;
+	cat::BaseValues base{{"po", makeRelation(size, {})}};
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	incremental.initialize(size, base);
+	std::vector<std::pair<cat::IncrementalCheckpoint, cat::BaseValues>> stack;
+	stack.emplace_back(incremental.checkpoint(), base);
+	for (std::size_t index = 0; index < commands.size(); ++index) {
+		if (commands[index] % 5 == 0 && stack.size() > 1) {
+			stack.pop_back();
+			base = stack.back().second;
+			RC_ASSERT(incremental.rollback(stack.back().first).restored);
+		} else if (commands[index] % 5 == 1) {
+			stack.emplace_back(incremental.checkpoint(), base);
+		} else if (index + 1 < commands.size()) {
+			auto relation = std::get<cat::Relation>(base.at("po"));
+			const auto from = commands[index] % size;
+			const auto to = commands[++index] % size;
+			relation.insert(from, to);
+			base.at("po") = relation;
+			RC_ASSERT(incremental.tryInsert(size, base).applied());
+		}
+		auto offline = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
+							     size, base);
+		RC_ASSERT(incremental.result().values == offline.values);
+		RC_ASSERT(incremental.result().violations.size() == offline.violations.size());
+		RC_ASSERT(incremental.result().consistent() == offline.consistent());
+	}
+}
+
 /* Mutual relation recursion converges to the union of both base relations. */
 TEST(CaatEvaluatorTest, EvaluatesMutualAndEmptyFixedPoints)
 {

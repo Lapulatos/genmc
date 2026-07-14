@@ -20,6 +20,7 @@
 #include <cstdint>
 #include <optional>
 #include <string>
+#include <vector>
 
 namespace cat {
 
@@ -32,6 +33,22 @@ struct IncrementalStatistics {
 	std::size_t operationEvaluations{};
 	std::size_t valueChanges{};
 	std::size_t worklistPushes{};
+	std::size_t checkpoints{};
+	std::size_t rollbacks{};
+	std::size_t rejectedRollbacks{};
+};
+
+/** Opaque, evaluator-local identity for one retained exact state. */
+struct IncrementalCheckpoint {
+	std::uint64_t id{};
+
+	auto operator==(const IncrementalCheckpoint &) const -> bool = default;
+};
+
+/** Outcome of an exact checkpoint restoration attempt. */
+struct IncrementalRollbackResult {
+	bool restored{};
+	std::string reason;
 };
 
 /** Classification returned without mutating state for unsupported updates. */
@@ -102,6 +119,29 @@ public:
 	[[nodiscard]] auto tryInsert(std::size_t eventCount, const BaseValues &base)
 		-> IncrementalUpdateResult;
 
+	/**
+	 * Retain an exact copy of the current online state.
+	 *
+	 * Handles belong to this evaluator and remain valid until initialization or
+	 * rollback invalidates them. Snapshot storage is correctness-first and costs
+	 * O(total predicate memberships) per retained checkpoint.
+	 *
+	 * @return Opaque handle accepted by rollback().
+	 */
+	[[nodiscard]] auto checkpoint() -> IncrementalCheckpoint;
+
+	/**
+	 * Restore a retained state and invalidate every later checkpoint.
+	 *
+	 * Rejected foreign, stale, or future handles do not mutate current state.
+	 * The restored handle remains live so exploration may revisit the same
+	 * branch point more than once.
+	 *
+	 * @param checkpoint Handle previously returned by this evaluator.
+	 * @return Restoration status and a deterministic diagnostic on rejection.
+	 */
+	[[nodiscard]] auto rollback(IncrementalCheckpoint checkpoint) -> IncrementalRollbackResult;
+
 	/** Return whether `initialize()` has published a complete state. */
 	[[nodiscard]] auto initialized() const -> bool { return result_.has_value(); }
 	/** Return the current universe size; valid after initialization. */
@@ -119,12 +159,21 @@ public:
 	}
 
 private:
+	/** Complete immutable-by-convention state retained for exact restoration. */
+	struct Snapshot {
+		IncrementalCheckpoint checkpoint;
+		std::size_t eventCount{};
+		BaseValues base;
+		CaatEvaluationResult result;
+	};
+
 	const NormalizedModel &model_;
 	const ModelAnalysis &analysis_;
 	std::size_t eventCount_{};
 	BaseValues base_;
 	std::optional<CaatEvaluationResult> result_;
 	IncrementalStatistics statistics_;
+	std::vector<Snapshot> checkpoints_;
 	bool supportsInsertions_{true};
 };
 

@@ -78,3 +78,9 @@ insertion-only worklist 传播；删除、缩小和 difference 会在事务提�
 rebuild。unit 129/129、并行 CAT/CAAT 81/81、sanitizer incremental 6/6
 通过，随机序列逐步匹配 Phase 2 oracle。下一目标是 checkpoint/rollback，
 不能只用重新初始化模拟回滚。
+
+**Phase 3.3 implemented** - 精确 snapshot checkpoint 支持嵌套 rollback、
+后继/foreign/旧 epoch handle 拒绝、violation witness 恢复和当前 Reasoner
+解释；随机 push/pop 树逐节点匹配 Phase 2。unit 132/132、incremental 9/9
+通过。当前显式差距是 checkpoint 为全量复制且尚未接入 ExecutionGraph；
+Phase 3.4 将实现稳定 event key、变更分类、回退原因与内存界限。

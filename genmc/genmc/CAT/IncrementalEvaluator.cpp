@@ -16,14 +16,23 @@
 #include "genmc/Support/Error.hpp"
 
 #include <algorithm>
+#include <atomic>
 #include <cstdint>
 #include <deque>
+#include <iterator>
 #include <optional>
 #include <utility>
 #include <vector>
 
 namespace cat {
 namespace {
+
+/** Allocate a process-wide ID so one worker's handle cannot match another. */
+auto allocateCheckpoint() -> IncrementalCheckpoint
+{
+	static std::atomic<std::uint64_t> next{1};
+	return {next.fetch_add(1, std::memory_order_relaxed)};
+}
 
 /** Grow one typed value copy to a common stable event universe. */
 void growValue(Value &value, std::size_t size)
@@ -236,6 +245,7 @@ auto IncrementalCaatEvaluator::initialize(std::size_t eventCount, const BaseValu
 	eventCount_ = eventCount;
 	base_ = base;
 	result_ = std::move(next);
+	checkpoints_.clear();
 	++statistics_.initializations;
 	++statistics_.offlineEvaluations;
 	return *result_;
@@ -344,6 +354,35 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 	statistics_.valueChanges += updateStatistics.valueChanges;
 	statistics_.worklistPushes += updateStatistics.worklistPushes;
 	return {IncrementalUpdateStatus::Applied, {}};
+}
+
+auto IncrementalCaatEvaluator::checkpoint() -> IncrementalCheckpoint
+{
+	VERIFY(initialized(), "incremental CAAT state has not been initialized");
+	const auto handle = allocateCheckpoint();
+	checkpoints_.push_back({handle, eventCount_, base_, *result_});
+	++statistics_.checkpoints;
+	return handle;
+}
+
+auto IncrementalCaatEvaluator::rollback(IncrementalCheckpoint checkpoint)
+	-> IncrementalRollbackResult
+{
+	const auto found = std::ranges::find(checkpoints_, checkpoint, &Snapshot::checkpoint);
+	if (found == checkpoints_.end()) {
+		++statistics_.rejectedRollbacks;
+		return {false, "incremental CAAT checkpoint is stale or belongs to another state"};
+	}
+
+	/* Publish the complete snapshot before discarding descendants. Exact value
+	 * restoration also replaces violation witnesses, evaluation counters, and
+	 * every primitive fact, so no explanation can observe a mixed epoch. */
+	eventCount_ = found->eventCount;
+	base_ = found->base;
+	result_ = found->result;
+	checkpoints_.erase(std::next(found), checkpoints_.end());
+	++statistics_.rollbacks;
+	return {true, {}};
 }
 
 auto IncrementalCaatEvaluator::eventCount() const -> std::size_t

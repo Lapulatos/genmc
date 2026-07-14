@@ -153,3 +153,52 @@ This append-only record tracks each Phase 3 substage required by
   path `RelWithDebInfo/tests/unit/GenMCUnitTests`; this build emits
   `RelWithDebInfo/bin/unit_tests`. The corrected command is recorded by the
   successful result below and no source change was needed.
+- Delivery: committed as `283bfa6` (`feat(cat): propagate incremental CAAT
+  insertions`) and pushed successfully to `origin/genmc-caat`.
+
+## Phase 3.3: checkpoints, rollback, and violation state
+
+- Starting commit: `283bfa68ebb64e144e19e17398b848c96f8312dc`.
+- Pre-check: re-read `doc/development.md`, project constraints and the complete
+  Phase 3 plan; branch was `genmc-caat`, local and remote matched, and the
+  worktree was clean.
+- Reuse survey: retained Phase 2 value/result copies as the exact state format,
+  Phase 3.2 transactional insertion, deterministic violation reconstruction,
+  and the stateless Phase 2 `Reasoner`. Dat3M timestamp/backtrack remains the
+  future memory optimization reference; this substage chose exact C++ value
+  snapshots because multiple derivation support makes a premature fact-level
+  undo trail easy to make unsound.
+- Contract: create evaluator-local opaque checkpoint handles; restore universe,
+  primitive bases, every derived predicate, evaluation counters, violations and
+  witnesses atomically; retain the restored branch point, invalidate all later
+  handles, and reject stale, foreign, or previous-initialization handles without
+  state mutation.
+- Implementation: every checkpoint owns a complete immutable-by-convention
+  snapshot. Process-wide atomic IDs prevent a handle from one worker aliasing a
+  handle in another. Rollback publishes the selected snapshot and erases only
+  descendants. Reinitialization begins a new epoch by clearing all retained
+  snapshots. Lifetime statistics count created, successful and rejected
+  rollback operations.
+- Correctness coverage: deterministic tests cross the packed 63-to-65 event
+  boundary, restore recursive multi-edge reachability and cycle witnesses,
+  exercise repeated restoration, and reject descendant, foreign and old-epoch
+  handles. A restored cyclic state is passed directly to `Reasoner` and produces
+  a current non-empty explanation. RapidCheck generates insertion/checkpoint/
+  rollback trees and compares all values, verdicts and violation counts with a
+  fresh Phase 2 evaluation at every node.
+- Verification: RelWithDebInfo built cleanly; all incremental tests passed 9/9
+  and the complete unit executable passed 132/132. `clang-format --dry-run
+  --Werror` and `git diff --check` passed.
+- Environment boundaries: the first sanitizer command referenced a nonexistent
+  old `DebugSan` directory. A fresh `/tmp/genmc-caat-asan` configuration was
+  created with ASan+UBSan, but both the full executable and unit target failed
+  only at link time because this machine could not find `libhwloc`; all changed
+  sources compiled with the sanitizer flags. Homebrew `clang-tidy` again failed
+  at the missing `<cstddef>` toolchain boundary; its actionable warning about a
+  non-const namespace atomic was removed by placing the counter inside the ID
+  allocator.
+- Gap to Phase 3: rollback is exact but each retained checkpoint costs a full
+  state copy, O(checkpoints x predicate state), rather than Dat3M-style
+  timestamps or a support-aware undo trail. Phase 3.4 must introduce stable
+  graph synchronization, retain only useful semantic predecessors, bound
+  checkpoint memory, and expose rebuild/classification reasons.
