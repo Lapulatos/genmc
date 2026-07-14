@@ -11,6 +11,7 @@
  *     https://opensource.org/licenses/MIT
  */
 
+#include "genmc/CAT/Analysis.hpp"
 #include "genmc/CAT/Frontend.hpp"
 #include "genmc/CAT/Model.hpp"
 #include "genmc/CAT/Normalized.hpp"
@@ -73,6 +74,17 @@ static auto normalizeText(std::string_view source) -> cat::NormalizeResult
 	auto normalized = cat::Normalizer().normalize(*parsed.model);
 	std::filesystem::remove(path);
 	return normalized;
+}
+
+/** Normalize and analyze one fixture for concise CAAT admissibility tests. */
+static auto analyzeText(std::string_view source) -> cat::AnalysisResult
+{
+	auto normalized = normalizeText(source);
+	EXPECT_TRUE(normalized.ok())
+		<< (normalized.diagnostics.empty() ? "" : normalized.diagnostics.front().format());
+	if (!normalized.ok())
+		return {};
+	return cat::Analyzer().analyze(*normalized.model);
 }
 
 /** Find a diagnostic category without coupling tests to secondary messages. */
@@ -316,4 +328,68 @@ TEST(CaatNormalizedModelTest, RejectsAmbiguousRecursiveType)
 	ASSERT_FALSE(result.diagnostics.empty());
 	EXPECT_EQ(result.diagnostics.front().kind, cat::DiagnosticKind::Type);
 	EXPECT_NE(result.diagnostics.front().message.find("cannot infer"), std::string::npos);
+}
+
+/* Positive mutual recursion forms one admitted SCC with deterministic strata. */
+TEST(CaatAnalysisTest, StratifiesPositiveMutualRecursion)
+{
+	auto normalized = normalizeText(R"CAT(Strata
+let rec x = po | (y ; rf)
+and y = co | x^-1
+acyclic x as recursive
+)CAT");
+	ASSERT_TRUE(normalized.ok());
+	auto result = cat::Analyzer().analyze(*normalized.model);
+
+	ASSERT_TRUE(result.ok()) << (result.diagnostics.empty()
+					     ? ""
+					     : result.diagnostics.front().format());
+	const auto &components = result.analysis->componentOf();
+	EXPECT_EQ(components[0], components[1]);
+	for (const auto &dependency : result.analysis->dependencies()) {
+		EXPECT_LE(components[dependency.source], components[dependency.target]);
+	}
+}
+
+/* A cycle not introduced by `let rec` is rejected before fixed-point solving. */
+TEST(CaatAnalysisTest, RejectsUndeclaredAndSplitRecursion)
+{
+	auto undeclared = analyzeText("Bad\nlet x = x | po\nacyclic x\n");
+	auto split = analyzeText("Bad\nlet rec x = y | po\nlet rec y = x | rf\nacyclic x\n");
+
+	EXPECT_FALSE(undeclared.ok());
+	EXPECT_FALSE(split.ok());
+	ASSERT_FALSE(undeclared.diagnostics.empty());
+	ASSERT_FALSE(split.diagnostics.empty());
+	EXPECT_NE(undeclared.diagnostics.front().message.find("let rec"), std::string::npos);
+	EXPECT_NE(split.diagnostics.front().message.find("declaration group"), std::string::npos);
+}
+
+/* Negative recursion is non-stratifiable and derived RHS difference needs a cut. */
+TEST(CaatAnalysisTest, RejectsNegativeRecursionAndNonSemiPositiveDifference)
+{
+	auto negative = analyzeText("Negative\nlet rec x = po \\ x\nacyclic x\n");
+	auto needsCut =
+		analyzeText("Cut\nlet derived = rf ; co\nlet bad = po \\ derived\nacyclic bad\n");
+
+	EXPECT_FALSE(negative.ok());
+	EXPECT_FALSE(needsCut.ok());
+	ASSERT_FALSE(negative.diagnostics.empty());
+	ASSERT_FALSE(needsCut.diagnostics.empty());
+	EXPECT_NE(negative.diagnostics.front().message.find("negative dependency"),
+		  std::string::npos);
+	EXPECT_NE(needsCut.diagnostics.front().message.find("requires cutting"), std::string::npos);
+}
+
+/* Unguarded use of the full domain fails CAAT's syntactic DI criterion. */
+TEST(CaatAnalysisTest, RejectsDomainDependentAxiom)
+{
+	auto bad = analyzeText("Domain\nempty _ * _ as all-pairs\n");
+	auto guarded = analyzeText("Guarded\nempty po & (_ * _) as guarded\n");
+
+	EXPECT_FALSE(bad.ok());
+	EXPECT_TRUE(guarded.ok());
+	ASSERT_FALSE(bad.diagnostics.empty());
+	EXPECT_NE(bad.diagnostics.front().message.find("not domain-independent"),
+		  std::string::npos);
 }

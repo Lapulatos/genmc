@@ -113,3 +113,5 @@
 - CAAT semi-positivity is checked after one-operator normalization: the right operand of every difference must be a base predicate. Dat3M's reasoner also requires this when emitting a negative base literal.
 - Phase 2 deliberately implements offline full-graph CAAT in C++23. JavaSMT integration, automatic cutting into an outer SMT formula, backtracking, and online delta propagation are not silently imported.
 - Phase 2.1 keeps the acyclic Phase 1 `ModelIR` intact and adds a separate cyclic `NormalizedModel`: named IDs are reserved before lowering, operands may point forward, and every derived predicate contains one operator. This avoids weakening Phase 1 evaluator invariants.
+- Phase 2.2 signed dependencies mark only the normalized difference RHS negative. Tarjan SCCs are reversed into dependency-first strata; negative intra-SCC edges are rejected as non-stratifiable, and every derived difference RHS must be cut or rejected.
+- Domain-independence over recursive equations needs the greatest Boolean solution of the syntactic rules: starting false incorrectly rejects productive guarded recursion such as `ob = base | ob;ob`.

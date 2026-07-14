@@ -51,3 +51,31 @@ This append-only record tracks each Phase 2 substage required by
   deliberately still selects Phase 1 `ModelIR`. Dependency/polarity analysis
   and declared-recursion validation are the Phase 2.2 target; no fixed-point
   evaluation is claimed yet.
+
+## Phase 2.2: dependency, polarity, and admissibility analysis
+
+- Starting commit: `79370580ec248dceab4763f369361ef6e62cb896`.
+- Pre-check: re-read development rules, project constraints, and the Phase 2
+  plan; branch was `genmc-caat` and the worktree was clean.
+- Reuse survey: used normalized stable IDs and source spans from 2.1 and the
+  paper's signed dependency/stratification definitions. Dat3M's dependency
+  hierarchy was inspected for behavior only; the deterministic Tarjan analysis
+  is dependency-free C++23.
+- Contract: produce an immutable dependency-first SCC stratification and reject
+  undeclared/split recursion, negative recursion, derived difference RHS, and
+  non-domain-independent axioms before evaluation.
+- Implementation: `ModelAnalysis` stores signed edges, deterministic strata,
+  dense component IDs, and per-predicate domain-independence. Diagnostics name
+  the recursive predicate, required cut predicate, or failing axiom.
+- Correctness adjustment: the first DI implementation started Boolean
+  recursion at false and rejected productive equations such as
+  `ob = base | ob ; ob`. DI validation now starts from the greatest Boolean
+  solution and removes violations, which admits guarded recursion while still
+  rejecting unguarded `_`/`id` use.
+- Verification: clean build and clang-format passed; complete unit/property
+  suite passed 108/108; focused CAT/CLI integration passed 4/4. Hand-proof
+  fixtures cover positive mutual recursion, undeclared/split recursion,
+  negative recursion, semi-positivity/cutting, and domain independence.
+- Plan gap: admissibility and strata are complete. Phase 2.3 must compute typed
+  values for those strata and compare its recursive worklist result with an
+  independent naive Kleene oracle.

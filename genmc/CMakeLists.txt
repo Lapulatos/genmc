@@ -5,6 +5,7 @@ set(LIB_SOURCES
   genmc/ADT/VectorClock.cpp
   genmc/ADT/View.cpp
   genmc/CAT/Evaluator.cpp
+  genmc/CAT/Analysis.cpp
   genmc/CAT/Frontend.cpp
   genmc/CAT/GraphAdapter.cpp
   genmc/CAT/Model.cpp
