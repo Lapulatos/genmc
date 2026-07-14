@@ -79,3 +79,28 @@ This append-only record tracks each Phase 2 substage required by
 - Plan gap: admissibility and strata are complete. Phase 2.3 must compute typed
   values for those strata and compare its recursive worklist result with an
   independent naive Kleene oracle.
+
+## Phase 2.3: stratified least-fixed-point evaluator
+
+- Starting commit: `ff5c6070b967d3173be72f88c7ab209d8cbe1e64`.
+- Pre-check: re-read development rules, project constraints, and Phase 2 plan;
+  branch was `genmc-caat` and the worktree was clean.
+- Reuse survey: reused packed `EventSet`/`Relation`, pure relational operators,
+  Phase 1 base-value contract and violation shape, plus Phase 2.2 strata. The
+  scheduling design follows CAAT/Dat3M's dependency worklist, implemented
+  independently over GenMC values.
+- Contract: evaluate dependencies before users, initialize positive recursive
+  SCCs at bottom, reschedule only same-stratum dependents whose operands
+  changed, and terminate by finite-domain convergence without an iteration cap.
+- Implementation: `CaatEvaluator` supports recursive sets and relations,
+  aliases, projections, product, Boolean algebra, composition, inverse and all
+  closures. Results expose every predicate value, per-predicate evaluation
+  counts, worklist pushes, value changes, violations, and base-value errors.
+- Verification: complete unit/property suite passed 112/112; focused CAT/CLI
+  integration passed 4/4; format and build passed. Fixtures cover recursive
+  transitive closure, mutual recursion, an empty fixed point, recursive set
+  projection, and violations. RapidCheck compares random four-event reachability
+  instances against an independent naive Kleene recurrence.
+- Plan gap: fixed-point semantics are complete but provenance is not recorded.
+  Phase 2.4 must attach derivations and produce replayable base-literal
+  explanations for all three axiom kinds.

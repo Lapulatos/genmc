@@ -9,7 +9,7 @@
 - [x] Feasibility 3: 形成风险边界和三阶段路线
 - [x] Implementation 1: CAT file support（SC/TSO/PSO full-graph consistency；实现、验证与报告已完成）
 - [x] Validation 1: 已运行 288 个不同程序（287 个有效），修复三个根因并将 SC/TSO 差异清零
-- [ ] Implementation 2: Offline CAAT backend（Phase 2.0--2.2 完成；2.3--2.6 待实现）
+- [ ] Implementation 2: Offline CAAT backend（Phase 2.0--2.3 完成；2.4--2.6 待实现）
 - [ ] Implementation 3: Incremental/online CAAT（push/pop/backtrack/early pruning）
 
 ## Key Questions
@@ -52,4 +52,4 @@
 
 **Broad validation complete** - 288 个程序中 287 个形成有效证据；574 组 SC/TSO 内置 checker 与 CAT checker 结果完全一致，最终 mismatch 为 0。一个程序因未知外部函数在验证前失败，已单独记录，未计为通过。
 
-**Current target: Phase 2.3** - 实现按 strata 求值的 least-fixed-point evaluator，并用独立 naive Kleene oracle 做性质验证。
+**Current target: Phase 2.4** - 为 fixed-point membership 记录 derivation，并为 empty/irreflexive/acyclic 输出可回放的 base-literal explanation。

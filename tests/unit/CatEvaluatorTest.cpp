@@ -11,9 +11,12 @@
  *     https://opensource.org/licenses/MIT
  */
 
+#include "genmc/CAT/Analysis.hpp"
+#include "genmc/CAT/CaatEvaluator.hpp"
 #include "genmc/CAT/Evaluator.hpp"
 #include "genmc/CAT/Frontend.hpp"
 #include "genmc/CAT/Model.hpp"
+#include "genmc/CAT/Normalized.hpp"
 #include "genmc/CAT/Value.hpp"
 
 #include <gtest/gtest.h>
@@ -53,6 +56,47 @@ static auto compileModel(std::string_view source) -> std::shared_ptr<const cat::
 	std::filesystem::remove(path);
 	EXPECT_TRUE(compiled.ok());
 	return compiled.model;
+}
+
+struct AnalyzedModel {
+	std::shared_ptr<const cat::NormalizedModel> model;
+	std::shared_ptr<const cat::ModelAnalysis> analysis;
+};
+
+/** Parse, normalize, and analyze one admissible CAAT model fixture. */
+static auto analyzeModel(std::string_view source) -> AnalyzedModel
+{
+	static std::atomic<std::uint64_t> nextFixture{};
+	auto path = std::filesystem::path(testing::TempDir()) /
+		    ("genmc-caat-evaluator-" +
+		     std::to_string(nextFixture.fetch_add(1, std::memory_order_relaxed)) + ".cat");
+	std::ofstream output(path);
+	output << source;
+	output.close();
+	auto parsed = cat::Frontend().parseFile(path);
+	EXPECT_TRUE(parsed.ok());
+	if (!parsed.ok())
+		return {};
+	auto normalized = cat::Normalizer().normalize(*parsed.model);
+	std::filesystem::remove(path);
+	EXPECT_TRUE(normalized.ok());
+	if (!normalized.ok())
+		return {};
+	auto analyzed = cat::Analyzer().analyze(*normalized.model);
+	EXPECT_TRUE(analyzed.ok())
+		<< (analyzed.diagnostics.empty() ? "" : analyzed.diagnostics.front().format());
+	return {std::move(normalized.model), std::move(analyzed.analysis)};
+}
+
+/** Find one named predicate in a normalized model used by a focused test. */
+static auto findPredicate(const cat::NormalizedModel &model, std::string_view name)
+	-> cat::PredicateId
+{
+	for (const auto &predicate : model.predicates()) {
+		if (predicate.name == name)
+			return predicate.id;
+	}
+	return static_cast<cat::PredicateId>(model.predicates().size());
 }
 
 /** Build a packed set from explicit event IDs. */
@@ -139,6 +183,116 @@ TEST(CatValueTest, EvaluatesCompositionAndClosures)
 	EXPECT_EQ(transitiveClosure(cycle).count(), 9U);
 	EXPECT_EQ(optional(makeRelation(3, {{0, 1}})),
 		  makeRelation(3, {{0, 0}, {0, 1}, {1, 1}, {2, 2}}));
+}
+
+/* A recursive relation reaches the same least fixed point as naive Kleene iteration. */
+TEST(CaatEvaluatorTest, EvaluatesRecursiveTransitiveClosure)
+{
+	auto analyzed = analyzeModel(R"CAT(RecursiveClosure
+let rec reach = po | (reach ; po)
+empty reach as populated
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	auto po = makeRelation(5, {{0, 1}, {1, 2}, {2, 3}, {1, 4}});
+	cat::BaseValues base{{"po", po}};
+
+	auto result = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, 5, base);
+	const auto reach = findPredicate(*analyzed.model, "reach");
+	ASSERT_LT(reach, result.values.size());
+	ASSERT_TRUE(result.values[reach].has_value());
+
+	cat::Relation naive(5);
+	for (;;) {
+		auto next = relationUnion(po, compose(naive, po));
+		if (next == naive)
+			break;
+		naive = std::move(next);
+	}
+	EXPECT_EQ(std::get<cat::Relation>(*result.values[reach]), naive);
+	EXPECT_FALSE(result.consistent());
+	EXPECT_GT(result.statistics.valueChanges, 0U);
+}
+
+/* Mutual relation recursion converges to the union of both base relations. */
+TEST(CaatEvaluatorTest, EvaluatesMutualAndEmptyFixedPoints)
+{
+	auto mutual = analyzeModel(R"CAT(Mutual
+let rec x = po | y
+and y = rf | x
+empty x as populated
+)CAT");
+	auto empty = analyzeModel(R"CAT(Empty
+let rec x = x ; po
+empty x as empty-fixed-point
+)CAT");
+	ASSERT_NE(mutual.model, nullptr);
+	ASSERT_NE(empty.model, nullptr);
+	auto po = makeRelation(3, {{0, 1}});
+	auto rf = makeRelation(3, {{1, 2}});
+	cat::BaseValues base{{"po", po}, {"rf", rf}};
+
+	auto mutualResult = cat::CaatEvaluator().evaluate(*mutual.model, *mutual.analysis, 3, base);
+	auto emptyResult = cat::CaatEvaluator().evaluate(*empty.model, *empty.analysis, 3, base);
+	const auto expected = relationUnion(po, rf);
+	EXPECT_EQ(std::get<cat::Relation>(*mutualResult.values[findPredicate(*mutual.model, "x")]),
+		  expected);
+	EXPECT_EQ(std::get<cat::Relation>(*mutualResult.values[findPredicate(*mutual.model, "y")]),
+		  expected);
+	EXPECT_TRUE(emptyResult.consistent());
+	EXPECT_TRUE(std::get<cat::Relation>(*emptyResult.values[findPredicate(*empty.model, "x")])
+			    .empty());
+}
+
+/* Recursive sets use relation projections and converge over the same finite domain. */
+TEST(CaatEvaluatorTest, EvaluatesRecursiveSetProjection)
+{
+	auto analyzed = analyzeModel(R"CAT(SetRecursion
+let rec reached = R | range([reached] ; po)
+empty reached as populated
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues base{{"R", makeSet(4, {0})},
+			     {"po", makeRelation(4, {{0, 1}, {1, 2}, {2, 3}})}};
+
+	auto result = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, 4, base);
+	EXPECT_EQ(
+		std::get<cat::EventSet>(*result.values[findPredicate(*analyzed.model, "reached")]),
+		makeSet(4, {0, 1, 2, 3}));
+}
+
+/* Worklist fixed points agree with an independent naive Kleene recurrence. */
+RC_GTEST_PROP(CaatEvaluatorPropertyTest, MatchesNaiveKleeneReachability,
+	      (const std::vector<std::uint8_t> &edgeBytes))
+{
+	static const auto analyzed = analyzeModel(R"CAT(Property
+let rec reach = po | (reach ; po)
+empty reach
+)CAT");
+	RC_ASSERT(analyzed.model != nullptr);
+	constexpr std::size_t size = 4;
+	cat::Relation po(size);
+	if (!edgeBytes.empty()) {
+		for (std::size_t from = 0; from < size; ++from) {
+			for (std::size_t target = 0; target < size; ++target) {
+				const auto index = from * size + target;
+				if ((edgeBytes[index % edgeBytes.size()] & 1U) != 0)
+					po.insert(from, target);
+			}
+		}
+	}
+	cat::BaseValues base{{"po", po}};
+	const auto result =
+		cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, size, base);
+
+	cat::Relation naive(size);
+	for (;;) {
+		auto next = relationUnion(po, compose(naive, po));
+		if (next == naive)
+			break;
+		naive = std::move(next);
+	}
+	const auto reach = findPredicate(*analyzed.model, "reach");
+	RC_ASSERT(std::get<cat::Relation>(*result.values[reach]) == naive);
 }
 
 /* Random set Boolean operations satisfy identities and a direct membership oracle. */

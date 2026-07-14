@@ -115,3 +115,4 @@
 - Phase 2.1 keeps the acyclic Phase 1 `ModelIR` intact and adds a separate cyclic `NormalizedModel`: named IDs are reserved before lowering, operands may point forward, and every derived predicate contains one operator. This avoids weakening Phase 1 evaluator invariants.
 - Phase 2.2 signed dependencies mark only the normalized difference RHS negative. Tarjan SCCs are reversed into dependency-first strata; negative intra-SCC edges are rejected as non-stratifiable, and every derived difference RHS must be cut or rejected.
 - Domain-independence over recursive equations needs the greatest Boolean solution of the syntactic rules: starting false incorrectly rejects productive guarded recursion such as `ob = base | ob;ob`.
+- Phase 2.3 evaluates each SCC from bottom with a dependency worklist and no arbitrary iteration cap. Random reachability fixed points match an independently coded naive Kleene recurrence.
