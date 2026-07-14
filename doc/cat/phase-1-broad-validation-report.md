@@ -2,13 +2,11 @@
 
 ## Result
 
-The frozen corpus contains 288 distinct concurrent C programs. One program
-cannot reach verification because it calls the unsupported external function
-`__VERIFIER_assume`; the remaining 287 programs produce valid SC and TSO
-differential evidence. Across 574 source/model pairs (1,148 successful GenMC
-invocations), the built-in and CAT-backed checkers have identical process
-statuses, verdict and diagnostic classes, complete/blocked execution counts,
-and bound summaries. The final mismatch count is zero.
+The frozen corpus contains 288 distinct concurrent C programs. All 288 programs
+produce valid SC and TSO differential evidence. Across 576 source/model pairs
+(1,152 successful GenMC invocations), the built-in and CAT-backed checkers have
+identical process statuses, verdict and diagnostic classes, complete/blocked
+execution counts, and bound summaries. The final mismatch count is zero.
 
 This result supports the implemented SC/TSO subset on this corpus. It is not a
 proof that every program or arbitrary CAT model is handled correctly.
@@ -34,11 +32,12 @@ The exact selection and oracle hierarchy are defined in
 arguments, SC expectation where available, both statuses, classification, and
 normalized semantic signatures for every source/model pair.
 
-The excluded source is
-`tests/correct/litmus/psc-base-notin-ar/variants/psc-base-notin-ar0.c`. Both
-checker paths exit before exploration with the same unknown-external-function
-diagnostic under SC and TSO. Its two rows are `unsupported-baseline`; they are
-not counted as matches.
+The original closing run excluded
+`tests/correct/litmus/psc-base-notin-ar/variants/psc-base-notin-ar0.c` because
+it declared the SV-COMP-style `__VERIFIER_assume` external function instead of
+including GenMC's interface. The fixture now includes `<genmc.h>` and no longer
+declares that symbol manually. Both checker paths complete one execution under
+SC and TSO, so its two rows are ordinary matches.
 
 Repository SC expectations, focused exact-count tests, the model-only PSO test,
 and the existing herd SB/MP scripts complement the differential oracle.
@@ -54,5 +53,5 @@ bash tests/cat/broad-differential.sh \
 Final summary:
 
 ```text
-discovered=288 validated=287 model-pairs=576 mismatches=0 unsupported=2
+discovered=288 validated=288 model-pairs=576 mismatches=0 unsupported=0
 ```

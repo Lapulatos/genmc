@@ -8,7 +8,7 @@
 - [x] Feasibility 2: 分析 GenMC、CAT、CAAT、Kater 与 herdtools7
 - [x] Feasibility 3: 形成风险边界和三阶段路线
 - [x] Implementation 1: CAT file support（SC/TSO/PSO full-graph consistency；实现、验证与报告已完成）
-- [x] Validation 1: 已运行 288 个不同程序（287 个有效），修复三个根因并将 SC/TSO 差异清零
+- [x] Validation 1: 已运行 288 个不同程序（288 个有效），576 组 SC/TSO 差异清零
 - [x] Implementation 2: Offline CAAT backend（Phase 2.0--2.6 已实现、广泛验证、提交并 push）
 - [ ] Implementation 3: Incremental/online CAAT（push/pop/backtrack/early pruning）
 
@@ -54,7 +54,8 @@
 ## Status
 **Phase 1 complete** - 干净构建、100/100 单元/性质测试、4/4 CAT 集成测试、herd oracle 和 fast-driver 均通过；兼容性、性能与 Phase 2 输入已记录在 `doc/cat/phase-1-report.md`。下一目标是先评审 Phase 2 详细计划，不直接扩张实现范围。
 
-**Broad validation complete** - 288 个程序中 287 个形成有效证据；574 组 SC/TSO 内置 checker 与 CAT checker 结果完全一致，最终 mismatch 为 0。一个程序因未知外部函数在验证前失败，已单独记录，未计为通过。
+**Broad validation complete** - 288 个程序全部形成有效证据；576 组 SC/TSO
+内置 checker 与 CAT checker 结果完全一致，最终 mismatch 和 unsupported 均为 0。
 
 **Phase 2 complete** - 递归语义、可接受性分析、离线 fixed point、解释、
 GenMC 集成和 864 组广泛差分均已完成；最终报告为

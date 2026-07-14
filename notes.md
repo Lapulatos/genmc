@@ -106,7 +106,10 @@
 - The final Phase 1 report freezes the supported subset and carries forward three principal inputs: Phase 2 recursive/fixed-point normalization and explanations, a future arbitrary-CAT Relinche contract, and Phase 3 incremental graph/evaluator state with proof-backed pruning.
 - The post-Phase-1 broad-validation survey found 1,013 C tests in the repository: 265 litmus C files, 414 correct variant programs, and 120 wrong variants. The frozen first corpus uses 288 distinct sources across litmus, infrastructure, data structures, safety failures, races, and memory failures; SC and TSO each compare built-in and CAT paths.
 - Broad-validation oracle policy compares status plus semantic summary, checks SC counts against repository expectations where available, and requires isolated/herd/manual analysis for every mismatch. Aggregate equality alone is not treated as proof of no false positives or negatives.
-- Broad validation finished with 287 valid programs, 574 matching SC/TSO rows, and zero final mismatch; one program/two rows fail before exploration and are explicitly unsupported.
+- Broad validation now has 288 valid programs, 576 matching SC/TSO rows, zero
+  mismatch, and zero unsupported rows. The former `psc-base-notin-ar` exclusion
+  was a fixture bug: it declared `__VERIFIER_assume` instead of including
+  `<genmc.h>`.
 - Fixed root causes: coherence-warning candidates, dynamic-address `Init` read-from candidates, and missing program-order context around TSO/PSO create/join edges.
 - Phase 2 research froze Dat3M revision `a7e3e4843359dde3a0e29500a821030e2433e316`; the repository is MIT licensed. Its CAAT backend has a predicate dependency hierarchy, SCC handling via recursive graph placeholders, delta worklist propagation, and a derivation-based reasoner.
 - CAAT canonical semantics evaluates signed-dependency SCC strata in topological order and takes a least fixed point within each stratum. A negative dependency inside an SCC is non-stratifiable and must be rejected.
@@ -133,9 +136,8 @@
   recursive reachability. Across eight real programs and one/two workers, 48
   recursive results match the corresponding Phase 1 status and semantic summary.
 - Phase 2 broad validation freezes the same 288 programs as Phase 1. The three
-  recursive model pairs produce 864 rows: 861 valid exact matches, zero mismatch,
-  and three pre-verification unsupported rows for the same external-function
-  program. Correct/wrong coverage is 696/168 rows.
+  recursive model pairs produce 864 rows: all 864 are exact matches, with zero
+  mismatch and zero unsupported rows. Correct/wrong coverage is 696/168 rows.
 - Dat3M revision `a7e3e4843359dde3a0e29500a821030e2433e316` builds successfully
   with Java 17/Maven: 699 production and 159 test sources compile and the jar is
   produced in 60 seconds with tests skipped. A direct verdict comparison is not

@@ -66,21 +66,20 @@ verdict, error/warning class, blocked/complete execution counts, and bounds.
 | correct-program model pairs | 696 |
 | wrong-program model pairs | 168 |
 | total recursive program/model pairs | 864 |
-| matching pairs | 861 |
+| matching pairs | 864 |
 | unexplained mismatches | 0 |
-| unsupported before verification | 3 |
+| unsupported before verification | 0 |
 | actual GenMC invocations | 1,728 |
 
-The three unsupported rows are the same source,
-`correct/litmus/psc-base-notin-ar/variants/psc-base-notin-ar0.c`, under SC,
-TSO, and PSO.  Both ordinary and recursive commands exit 17 before producing a
-verification signature because the program calls an unavailable external
-function.  These rows are not counted as model agreement.  Machine-readable
-results, including source hashes and exact arguments, are stored in
+The final rerun repairs `psc-base-notin-ar0.c` to use GenMC's `<genmc.h>`
+interface instead of declaring `__VERIFIER_assume` as an external function.
+Ordinary and recursive SC, TSO, and PSO each complete one safe execution, so all
+three formerly unsupported rows are now valid matches. Machine-readable results,
+including source hashes and exact arguments, are stored in
 `doc/cat/phase-2-broad-results.tsv`.
 
-The frozen Phase 1 suite was rerun unchanged: 288 programs, 576 model pairs,
-574 valid matches, zero mismatch, and two pre-verification unsupported rows.
+The same frozen Phase 1 corpus selection was rerun: 288 programs, 576 model pairs,
+576 valid matches, zero mismatch, and zero unsupported rows.
 Thus the new recursive path introduced no observed Phase 1 regression.
 
 ## External tool evidence

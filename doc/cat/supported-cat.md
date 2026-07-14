@@ -362,9 +362,9 @@ replace the final order acyclicity with a recursive reachability equation.
 real C programs and both one- and two-worker exploration.
 
 The closing broad comparison uses 288 distinct programs and all three model
-pairs, for 864 program/model pairs and 1,728 GenMC invocations.  It records 861
-valid matches, zero mismatch, and three explicitly unsupported rows from one
-program that fails before verification.  See `doc/cat/phase-2-report.md` and
+pairs, for 864 program/model pairs and 1,728 GenMC invocations.  It records 864
+valid matches, zero mismatch, and no unsupported rows.  See
+`doc/cat/phase-2-report.md` and
 `doc/cat/phase-2-broad-results.tsv` for commands, hashes, and classifications.
 
 The offline evaluator and reasoner support semi-positive difference and

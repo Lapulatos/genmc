@@ -229,3 +229,27 @@ This append-only record tracks each Phase 2 substage required by
   (`test(caat): close offline backend validation`) was pushed successfully to
   `origin/genmc-caat`. The following documentation-only closure commit records
   this SHA and marks the audited Phase 2 checklist complete.
+
+## Post-closure fixture repair: `psc-base-notin-ar`
+
+- Starting commit: `718b059065de5fc8e7f2ab223e4249b8be19ee9f` on clean
+  `genmc-caat`; repository rules, project constraints, and the Phase 2 plan were
+  re-read before editing.
+- Root cause: the fixture manually declared the SV-COMP-style external function
+  `__VERIFIER_assume` and omitted `<genmc.h>`. GenMC therefore exited 17 at
+  runtime before consistency checking instead of lowering the call to its
+  registered `__VERIFIER_assume_internal` operation.
+- Repair: the variant includes `<genmc.h>` and the shared litmus body no longer
+  declares the conflicting external symbol. This follows existing neighboring
+  litmus fixtures and changes no CAT or production runtime semantics.
+- Focused result: ordinary/recursive SC, TSO, and PSO all exit 0, report one
+  complete execution, and detect no error.
+- Broad result: Phase 1 is now 288 valid programs, 576/576 matches, zero
+  mismatch, and zero unsupported rows. Phase 2 is 864/864 recursive-pair
+  matches, zero mismatch, and zero unsupported rows across 1,728 invocations.
+- Regression result: `fast-driver` passes 1/1 in 92.84 seconds; clang-format
+  dry-run and `git diff --check` pass for the repaired fixture and records.
+- Gap analysis: the only gap was test compatibility; it is closed. No Phase 1
+  or Phase 2 model behavior, public CAT support boundary, or performance path
+  changed. Commit SHA and push status are recorded in the following closure
+  entry.
