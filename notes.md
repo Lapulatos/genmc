@@ -108,3 +108,7 @@
 - Broad-validation oracle policy compares status plus semantic summary, checks SC counts against repository expectations where available, and requires isolated/herd/manual analysis for every mismatch. Aggregate equality alone is not treated as proof of no false positives or negatives.
 - Broad validation finished with 287 valid programs, 574 matching SC/TSO rows, and zero final mismatch; one program/two rows fail before exploration and are explicitly unsupported.
 - Fixed root causes: coherence-warning candidates, dynamic-address `Init` read-from candidates, and missing program-order context around TSO/PSO create/join edges.
+- Phase 2 research froze Dat3M revision `a7e3e4843359dde3a0e29500a821030e2433e316`; the repository is MIT licensed. Its CAAT backend has a predicate dependency hierarchy, SCC handling via recursive graph placeholders, delta worklist propagation, and a derivation-based reasoner.
+- CAAT canonical semantics evaluates signed-dependency SCC strata in topological order and takes a least fixed point within each stratum. A negative dependency inside an SCC is non-stratifiable and must be rejected.
+- CAAT semi-positivity is checked after one-operator normalization: the right operand of every difference must be a base predicate. Dat3M's reasoner also requires this when emitting a negative base literal.
+- Phase 2 deliberately implements offline full-graph CAAT in C++23. JavaSMT integration, automatic cutting into an outer SMT formula, backtracking, and online delta propagation are not silently imported.

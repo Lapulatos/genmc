@@ -13,7 +13,7 @@ Before starting a substage, run:
 ```bash
 sed -n '1,300p' doc/development.md
 sed -n '1,300p' doc/cat/PROJECT_CONSTRAINTS.md
-sed -n '1,360p' doc/cat/phase-1-plan.md
+sed -n '1,420p' doc/cat/phase-2-plan.md
 git status --short
 git branch --show-current
 ```
@@ -174,6 +174,9 @@ The project keeps these durable artifacts:
 - `doc/cat/phase-1-plan.md`: Phase 1 work breakdown and acceptance criteria.
 - `doc/cat/progress/phase-1.md`: append-only Phase 1 substage results, gap
   analyses, commit SHAs, and push status.
+- `doc/cat/phase-2-plan.md`: Phase 2 offline CAAT scope and acceptance criteria.
+- `doc/cat/progress/phase-2.md`: append-only Phase 2 substage results, gap
+  analyses, commit SHAs, and push status.
 
 ## Stop conditions
 
@@ -185,4 +188,4 @@ Stop and request a decision before:
 - introducing a large runtime dependency;
 - weakening GenMC completeness or existing model behavior;
 - deleting or rewriting user-owned work;
-- expanding Phase 1 into general CAAT recursion or online solving.
+- expanding Phase 2 into incremental/backtrackable online solving.
