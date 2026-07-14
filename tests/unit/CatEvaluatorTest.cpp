@@ -139,6 +139,19 @@ static auto toReference(const cat::Relation &relation)
 	return result;
 }
 
+/** Compare every maintained predicate and verdict with a fresh Phase 2 run. */
+static void expectIncrementalEqualsOffline(const cat::IncrementalCaatEvaluator &incremental,
+					   const cat::NormalizedModel &model,
+					   const cat::ModelAnalysis &analysis,
+					   std::size_t eventCount, const cat::BaseValues &base)
+{
+	auto offline = cat::CaatEvaluator().evaluate(model, analysis, eventCount, base);
+	EXPECT_EQ(incremental.result().values, offline.values);
+	EXPECT_EQ(incremental.result().consistent(), offline.consistent());
+	EXPECT_EQ(incremental.result().violations.size(), offline.violations.size());
+	EXPECT_EQ(incremental.result().errors.size(), offline.errors.size());
+}
+
 } /* namespace */
 
 /* Packed sets retain bits across word boundaries and implement all three Boolean operations. */
@@ -305,6 +318,155 @@ empty reach as no-order
 	EXPECT_EQ(current.violations.size(), offline.violations.size());
 	EXPECT_EQ(incremental.statistics().initializations, 2U);
 	EXPECT_EQ(incremental.statistics().offlineEvaluations, 2U);
+}
+
+/* Every positive normalized operator reaches the same value after staged insertions. */
+TEST(IncrementalCaatEvaluatorTest, PropagatesCompletePositiveOperatorSurface)
+{
+	auto analyzed = analyzeModel(R"CAT(IncrementalOperators
+let restricted = [R]
+let backwards = po^-1
+let maybe = po?
+let closure = po+
+let reflexive = po*
+let sources = domain(po)
+let targets = range(rf)
+let pairs = sources * targets
+let sequence = po ; rf
+let either = po | rf
+let both = po & rf
+let rec reach = po | (reach ; po)
+acyclic reach as recursive-order
+empty sequence as composition-empty
+empty pairs as product-empty
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues base{
+		{"R", makeSet(2, {})}, {"po", makeRelation(2, {})}, {"rf", makeRelation(2, {})}};
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	incremental.initialize(2, base);
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 2, base);
+
+	base = {{"R", makeSet(2, {0})},
+		{"po", makeRelation(2, {{0, 1}})},
+		{"rf", makeRelation(2, {{1, 0}})}};
+	auto first = incremental.tryInsert(2, base);
+	ASSERT_TRUE(first.applied()) << first.reason;
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 2, base);
+
+	/* Growing without changing `po` specifically tests the implicit identity
+	 * additions in optional and reflexive-transitive closure. */
+	base = {{"R", makeSet(3, {0, 2})},
+		{"po", makeRelation(3, {{0, 1}})},
+		{"rf", makeRelation(3, {{1, 0}})}};
+	auto grown = incremental.tryInsert(3, base);
+	ASSERT_TRUE(grown.applied()) << grown.reason;
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 3, base);
+
+	base.at("po") = makeRelation(3, {{0, 1}, {1, 2}});
+	base.at("rf") = makeRelation(3, {{1, 0}, {2, 1}});
+	auto recursive = incremental.tryInsert(3, base);
+	ASSERT_TRUE(recursive.applied()) << recursive.reason;
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 3, base);
+	EXPECT_EQ(incremental.statistics().insertionUpdates, 3U);
+	EXPECT_GT(incremental.statistics().operationEvaluations, 0U);
+	EXPECT_GT(incremental.statistics().worklistPushes, 0U);
+}
+
+/* Mutual set recursion and duplicate updates converge without repeated publication. */
+TEST(IncrementalCaatEvaluatorTest, PropagatesMutualSetRecursionAndDuplicateFacts)
+{
+	auto analyzed = analyzeModel(R"CAT(IncrementalMutualSets
+let rec left = R | right
+and right = W | left
+empty left as populated
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues base{{"R", makeSet(4, {})}, {"W", makeSet(4, {})}};
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	incremental.initialize(4, base);
+
+	base.at("R") = makeSet(4, {2});
+	ASSERT_TRUE(incremental.tryInsert(4, base).applied());
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 4, base);
+	const auto afterFirst = incremental.result().values;
+	const auto beforeDuplicateChanges = incremental.statistics().valueChanges;
+	ASSERT_TRUE(incremental.tryInsert(4, base).applied());
+	EXPECT_EQ(incremental.result().values, afterFirst);
+	EXPECT_EQ(incremental.statistics().valueChanges, beforeDuplicateChanges);
+
+	base.at("W") = makeSet(4, {1, 3});
+	ASSERT_TRUE(incremental.tryInsert(4, base).applied());
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 4, base);
+	const auto left = findPredicate(*analyzed.model, "left");
+	EXPECT_EQ(std::get<cat::EventSet>(*incremental.result().values[left]),
+		  makeSet(4, {1, 2, 3}));
+}
+
+/* Unsupported deletion and difference updates preserve the last exact state. */
+TEST(IncrementalCaatEvaluatorTest, RejectsNonMonotoneUpdatesTransactionally)
+{
+	auto analyzed = analyzeModel(R"CAT(IncrementalRejection
+let rec reach = po | (reach ; po)
+acyclic reach
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues base{{"po", makeRelation(3, {{0, 1}, {1, 2}})}};
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	incremental.initialize(3, base);
+	const auto oldValues = incremental.result().values;
+	const auto oldBase = incremental.baseValues();
+
+	auto deleted = incremental.tryInsert(3, {{"po", makeRelation(3, {{0, 1}})}});
+	EXPECT_FALSE(deleted.applied());
+	EXPECT_NE(deleted.reason.find("removed a fact"), std::string::npos);
+	EXPECT_EQ(incremental.result().values, oldValues);
+	EXPECT_EQ(incremental.baseValues(), oldBase);
+	auto shrunk = incremental.tryInsert(2, {{"po", makeRelation(2, {{0, 1}})}});
+	EXPECT_FALSE(shrunk.applied());
+	EXPECT_NE(shrunk.reason.find("shrank"), std::string::npos);
+	EXPECT_EQ(incremental.eventCount(), 3U);
+
+	auto withDifference = analyzeModel(R"CAT(IncrementalDifference
+let remaining = po \ rf
+empty remaining
+)CAT");
+	ASSERT_NE(withDifference.model, nullptr);
+	cat::IncrementalCaatEvaluator nonMonotone(*withDifference.model, *withDifference.analysis);
+	cat::BaseValues differenceBase{{"po", makeRelation(2, {})}, {"rf", makeRelation(2, {})}};
+	nonMonotone.initialize(2, differenceBase);
+	EXPECT_FALSE(nonMonotone.supportsInsertions());
+	differenceBase.at("po") = makeRelation(2, {{0, 1}});
+	auto rejected = nonMonotone.tryInsert(2, differenceBase);
+	EXPECT_FALSE(rejected.applied());
+	EXPECT_NE(rejected.reason.find("difference"), std::string::npos);
+}
+
+/* Random edge arrival orders match a fresh recursive reachability fixed point each step. */
+RC_GTEST_PROP(IncrementalCaatEvaluatorPropertyTest, MatchesOfflineAfterEveryInsertion,
+	      (const std::vector<std::uint8_t> &bytes))
+{
+	auto analyzed = analyzeModel(R"CAT(RandomIncrementalReachability
+let rec reach = po | (reach ; po)
+acyclic reach
+)CAT");
+	RC_ASSERT(analyzed.model != nullptr);
+	constexpr std::size_t size = 6;
+	cat::Relation po(size);
+	cat::BaseValues base{{"po", po}};
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	incremental.initialize(size, base);
+	for (std::size_t index = 0; index + 1 < bytes.size(); index += 2) {
+		po.insert(static_cast<std::size_t>(bytes[index]) % size,
+			  static_cast<std::size_t>(bytes[index + 1]) % size);
+		base.at("po") = po;
+		const auto updated = incremental.tryInsert(size, base);
+		RC_ASSERT(updated.applied());
+		auto offline = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
+							     size, base);
+		RC_ASSERT(incremental.result().values == offline.values);
+		RC_ASSERT(incremental.result().consistent() == offline.consistent());
+	}
 }
 
 /* Mutual relation recursion converges to the union of both base relations. */

@@ -72,3 +72,9 @@ GenMC 热路径。
 增长；独立 incremental state 的初始化/重建与 Phase 2 oracle 一致。正常
 unit 125/125、并行 CAT/CAAT 77/77、ASan+UBSan focused 5/5 通过。当前差距
 是尚未实现 insertion delta；这是 Phase 3.2 的唯一生产目标。
+
+**Phase 3.2 implemented** - positive normalized operator 全部支持
+insertion-only worklist 传播；删除、缩小和 difference 会在事务提交前要求
+rebuild。unit 129/129、并行 CAT/CAAT 81/81、sanitizer incremental 6/6
+通过，随机序列逐步匹配 Phase 2 oracle。下一目标是 checkpoint/rollback，
+不能只用重新初始化模拟回滚。

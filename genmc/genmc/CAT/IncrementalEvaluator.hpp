@@ -17,7 +17,9 @@
 #include "genmc/CAT/CaatEvaluator.hpp"
 
 #include <cstddef>
+#include <cstdint>
 #include <optional>
+#include <string>
 
 namespace cat {
 
@@ -25,6 +27,26 @@ namespace cat {
 struct IncrementalStatistics {
 	std::size_t initializations{};
 	std::size_t offlineEvaluations{};
+	std::size_t insertionUpdates{};
+	std::size_t rejectedUpdates{};
+	std::size_t operationEvaluations{};
+	std::size_t valueChanges{};
+	std::size_t worklistPushes{};
+};
+
+/** Classification returned without mutating state for unsupported updates. */
+enum class IncrementalUpdateStatus : std::uint8_t { Applied, RequiresRebuild };
+
+/** Outcome of one attempted insertion-only transition. */
+struct IncrementalUpdateResult {
+	IncrementalUpdateStatus status{IncrementalUpdateStatus::RequiresRebuild};
+	std::string reason;
+
+	/** Return true exactly when the new state was committed. */
+	[[nodiscard]] auto applied() const -> bool
+	{
+		return status == IncrementalUpdateStatus::Applied;
+	}
 };
 
 /**
@@ -65,6 +87,21 @@ public:
 	auto initialize(std::size_t eventCount, const BaseValues &base)
 		-> const CaatEvaluationResult &;
 
+	/**
+	 * Apply a complete primitive snapshot that only inserts semantic facts.
+	 *
+	 * All validation and fixed-point propagation occur on temporary values.
+	 * Deletion, universe shrinkage, type changes, missing bases, evaluation
+	 * errors, or a non-monotone model return `RequiresRebuild` and preserve the
+	 * previous state byte-for-byte.
+	 *
+	 * @param eventCount New universe, greater than or equal to the current one.
+	 * @param base Complete new primitive snapshot in the same stable ID space.
+	 * @return Applied status or a deterministic offline-rebuild reason.
+	 */
+	[[nodiscard]] auto tryInsert(std::size_t eventCount, const BaseValues &base)
+		-> IncrementalUpdateResult;
+
 	/** Return whether `initialize()` has published a complete state. */
 	[[nodiscard]] auto initialized() const -> bool { return result_.has_value(); }
 	/** Return the current universe size; valid after initialization. */
@@ -73,6 +110,8 @@ public:
 	[[nodiscard]] auto baseValues() const -> const BaseValues &;
 	/** Return the exact current fixed point; valid after initialization. */
 	[[nodiscard]] auto result() const -> const CaatEvaluationResult &;
+	/** Return whether the normalized equations are monotone under insertion. */
+	[[nodiscard]] auto supportsInsertions() const -> bool { return supportsInsertions_; }
 	/** Return cumulative initialization/fallback counters. */
 	[[nodiscard]] auto statistics() const -> const IncrementalStatistics &
 	{
@@ -86,6 +125,7 @@ private:
 	BaseValues base_;
 	std::optional<CaatEvaluationResult> result_;
 	IncrementalStatistics statistics_;
+	bool supportsInsertions_{true};
 };
 
 } /* namespace cat */

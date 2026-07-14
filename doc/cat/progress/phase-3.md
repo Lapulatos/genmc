@@ -94,3 +94,62 @@ This append-only record tracks each Phase 3 substage required by
   update after initialization still requires an offline evaluation. Phase 3.2
   must add positive insertion deltas for the complete normalized operator
   surface and compare every intermediate predicate with a fresh oracle.
+- Delivery: committed as `33c6bfe` (`feat(cat): bootstrap incremental CAAT
+  state`) and pushed successfully to `origin/genmc-caat`.
+
+## Phase 3.2: insertion delta propagation
+
+- Starting commit: `33c6bfe80c369dff7c8d1ff237fc5dfbdabed39e`.
+- Pre-check: re-read repository development rules, project constraints and the
+  complete Phase 3 plan; branch was `genmc-caat`, local and remote matched, and
+  the worktree was clean.
+- Reuse survey: reused Phase 2 values and operator semantics, normalized
+  dependency edges, exact violations, and the Phase 3.1 transactional state.
+  The scheduling follows CAAT's insertion worklist and Dat3M's predicate
+  hierarchy concept, but is implemented independently in C++23. Full operator
+  recomputation followed by strict-growth publication is deliberately chosen
+  before operator-specific micro-optimizations.
+- Contract: accept a complete snapshot only when the universe grows or stays
+  fixed and every old base fact remains present; propagate affected positive
+  equations to quiescence without invoking `CaatEvaluator`; reject shrinkage,
+  deletion, missing/ill-typed bases, evaluation-error states, and any model
+  containing difference before committing mutable values.
+- Implementation: `tryInsert` grows a temporary copy of every predicate,
+  validates each built-in/graph base by semantic subset, and drives a
+  dependency worklist. An affected equation is fully evaluated for correctness,
+  but dependents are queued only if its value strictly grows. Optional and
+  reflexive-transitive closure receive explicit domain-growth tasks because
+  their new identity edges are not announced by an operand delta. Online
+  witnesses for empty, irreflexive and acyclic checks are recomputed from the
+  maintained fixed point. Cumulative counters distinguish insertion updates,
+  rejected updates, operation evaluations, changes and queue pushes.
+- Transaction rule: all validation and propagation use local copies. A
+  deletion or non-monotone derived result returns `RequiresRebuild` with a
+  deterministic reason while preserving the previous event count, bases,
+  predicate values and verdict. Difference is conservatively excluded even
+  when Phase 2 semi-positivity accepts it.
+- Verification: RelWithDebInfo built cleanly; the complete unit executable
+  passed 129/129. Parallel CAT/CAAT/CLI/integration testing passed 81/81.
+  ASan+UBSan passed all 6 incremental unit/property tests.
+- Oracle coverage: one fixture exercises alias, identity restriction,
+  domain/range, inverse, optional, product, composition, union/intersection,
+  transitive/reflexive-transitive closure and recursive union/composition over
+  three staged snapshots including universe growth. Separate tests cover mutual
+  set recursion, duplicate support, transactional deletion/shrink rejection and
+  difference fallback. RapidCheck compares every predicate and verdict with a
+  fresh Phase 2 recursive reachability evaluation after every random edge.
+- Error/gap analysis: domain growth initially depended only on operand changes,
+  which would miss the implicit new diagonal of `r?` and `r*`; this was caught
+  during design review before the complete-surface test and fixed with explicit
+  tasks. Phase 3.2 still performs whole-operator recomputation and has no
+  checkpoints. Phase 3.3 must add exact push/pop rollback and current violation
+  state across recursive facts with multiple supports.
+- Lint boundary: Homebrew LLVM `clang-tidy` could not parse the translation
+  unit because its invocation could not locate the C++ standard header
+  `<cstddef>`. The independently runnable formatter and compiler checks remain
+  authoritative for this substage. The actionable anonymous-namespace
+  redundancy warnings emitted before the fatal parse error were fixed.
+- Verification command correction: the first focused rerun used the stale
+  path `RelWithDebInfo/tests/unit/GenMCUnitTests`; this build emits
+  `RelWithDebInfo/bin/unit_tests`. The corrected command is recorded by the
+  successful result below and no source change was needed.
