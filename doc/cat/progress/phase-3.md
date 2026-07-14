@@ -48,3 +48,5 @@ This append-only record tracks each Phase 3 substage required by
 - Gap to Phase 3 after this substage: all production work 3.1--3.7 remains. The
   next target is extensible packed values and a standalone incremental state;
   GenMC integration cannot begin before its oracle equivalence is demonstrated.
+- Delivery: committed as `28f63c6` (`docs(cat): plan incremental CAAT
+  integration`) and pushed successfully to `origin/genmc-caat`.
