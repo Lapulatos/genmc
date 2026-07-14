@@ -385,3 +385,7 @@ This append-only record tracks each Phase 3 substage required by
   positive normalized fragment. Full CAT, support-aware checkpoint
   optimization and fewer rebuilds are explicitly future work, not silently
   claimed Phase 3 behavior.
+- Delivery: closure evidence was committed as `93a5fdb` (`test(cat): close
+  online CAAT validation`) and pushed successfully to `origin/genmc-caat`.
+  Immediately after that push, local `HEAD` and the remote-tracking branch both
+  resolved to `93a5fdbbe4fc5158d341ee43ee6c29e592aab635` with a clean worktree.

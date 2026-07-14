@@ -281,4 +281,4 @@ for predicate-by-predicate equality with the offline oracle.
 - [x] Runtime counters prove insertion and rollback occur on real programs.
 - [x] Performance, peak memory, rebuild rate and fallback limits are recorded.
 - [x] Documentation states exact supported semantics and non-goals.
-- [ ] Final branch is clean and equals `origin/genmc-caat`.
+- [x] Final branch is clean and equals `origin/genmc-caat`.
