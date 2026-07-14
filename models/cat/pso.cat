@@ -11,7 +11,8 @@ let com = rfe | fr | co
 let ww_loc = ([W] ; po ; [W]) & loc
 let ppo = ([R] ; po) | ww_loc | (po ; [F] ; po) |
           ([W & SC] ; po ; [SC])
+let lifecycle = (po? ; tc ; po?) | (po? ; tj ; po?)
 
 empty rmw & (fre ; coe) as atomicity
 acyclic (po & loc) | rf | fr | co as coherence
-acyclic ppo | tc | tj | com as pso
+acyclic ppo | lifecycle | com as pso

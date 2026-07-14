@@ -78,6 +78,16 @@ private:
 	 * @return All predecessor choices, or the unique rf source for an RMW write.
 	 */
 	auto getCoherentPlacings(WriteLabel *write) -> std::vector<EventLabel *> override;
+	/**
+	 * Suppress warnings caused solely by correctness-first over-enumeration.
+	 *
+	 * @param write Store whose raw predecessor candidates were enumerated.
+	 * @param placements Unfiltered candidates, including CAT-inconsistent ones.
+	 * @return Whether the host's diagnostic-only placement range is ambiguous.
+	 */
+	auto shouldReportCoherenceWarning(WriteLabel *write,
+					  const std::vector<EventLabel *> &placements)
+		-> bool override;
 };
 
 /** CAT evaluator hosted by SC causal views for models declaring/defaulting to SC. */

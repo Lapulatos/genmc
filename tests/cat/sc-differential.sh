@@ -67,6 +67,13 @@ compare_case()
 
 compare_case "correct/litmus/SB/variants/sb0.c" 3 "No errors were detected."
 compare_case "correct/litmus/LB+ctrl/variants/lb+ctrl0.c" 3 "No errors were detected."
+# These cases permanently cover two defects found by the broad corpus: a
+# harmless control assumption must not acquire a spurious coherence warning,
+# and dynamically allocated storage must not read from the static initializer.
+compare_case "correct/litmus/assume-ctrl/variants/assume-ctrl0.c" 4 \
+	"No errors were detected."
+compare_case "correct/infr/atomic-min-max/variants/atomic-min-max0.c" 1 \
+	"No errors were detected."
 compare_case "correct/litmus/WWR+2WR/variants/wwr+2wr0.c" 0 "Unordered writes"
 compare_case "wrong/infr/print-names-array/variants/names-2d-array0.c" 1 \
 	"Error: Safety violation!"

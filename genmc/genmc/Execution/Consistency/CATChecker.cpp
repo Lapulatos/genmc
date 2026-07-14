@@ -51,7 +51,13 @@ auto BasicCATChecker<HostChecker>::getCoherentStores(ReadLabel *read) -> std::ve
 {
 	VERIFY(read && read->getParent(), "rf enumeration requires a graph-owned read");
 	auto &graph = *read->getParent();
-	std::vector<EventLabel *> result{graph.getInitLabel()};
+	std::vector<EventLabel *> result;
+	/* Dynamic storage has no address-polymorphic C initializer. Its initialized
+	 * bytes are represented by real allocation/library writes; offering Init as
+	 * an rf source can fabricate initialized heap data and violates GenMC's NA
+	 * access invariant when the value is read. */
+	if (read->getAddr().isStatic())
+		result.push_back(graph.getInitLabel());
 	for (auto &write : graph.co(read->getAddr()))
 		result.push_back(&write);
 	return result;
@@ -83,6 +89,19 @@ auto BasicCATChecker<HostChecker>::getCoherentPlacings(WriteLabel *write)
 	for (auto &predecessor : graph.co(write->getAddr()))
 		result.push_back(&predecessor);
 	return result;
+}
+
+template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::shouldReportCoherenceWarning(
+	WriteLabel *write, const std::vector<EventLabel *> & /*placements*/) -> bool
+{
+	/* Raw generic candidates include choices that the CAT model will reject.
+	 * Recompute only the host's proven candidate range for the diagnostic; this
+	 * preserves real unordered-write warnings without using host pruning to
+	 * remove executions from the generic CAT search. */
+	HostChecker diagnosticHost(this->getConf());
+	ConsistencyChecker &hostInterface = diagnosticHost;
+	return hostInterface.getCoherentPlacings(write).size() > 1;
 }
 
 template class BasicCATChecker<SCChecker>;

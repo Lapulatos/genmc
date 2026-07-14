@@ -31,23 +31,32 @@ node 27 rel composition (26,9)
 node 28 rel identity (24)
 node 29 rel composition (27,28)
 node 30 rel union (23,29)
-node 31 rel builtin rmw
-node 32 rel intersection fre (3,1)
-node 33 rel intersection coe (5,1)
-node 34 rel composition (32,33)
-node 35 rel intersection (31,34)
-node 36 rel intersection (9,13)
-node 37 rel union (36,0)
-node 38 rel union (37,3)
-node 39 rel union (38,5)
-node 40 rel builtin tc
-node 41 rel union (30,40)
-node 42 rel builtin tj
-node 43 rel union (41,42)
-node 44 rel union (43,6)
+node 31 rel optional (9)
+node 32 rel builtin tc
+node 33 rel composition (31,32)
+node 34 rel optional (9)
+node 35 rel composition (33,34)
+node 36 rel optional (9)
+node 37 rel builtin tj
+node 38 rel composition (36,37)
+node 39 rel optional (9)
+node 40 rel composition (38,39)
+node 41 rel union (35,40)
+node 42 rel builtin rmw
+node 43 rel intersection fre (3,1)
+node 44 rel intersection coe (5,1)
+node 45 rel composition (43,44)
+node 46 rel intersection (42,45)
+node 47 rel intersection (9,13)
+node 48 rel union (47,0)
+node 49 rel union (48,3)
+node 50 rel union (49,5)
+node 51 rel union (30,41)
+node 52 rel union (51,6)
 let com = 6
 let ww_loc = 14
 let ppo = 30
-check empty atomicity = 35
-check acyclic coherence = 39
-check acyclic pso = 44
+let lifecycle = 41
+check empty atomicity = 46
+check acyclic coherence = 50
+check acyclic pso = 52

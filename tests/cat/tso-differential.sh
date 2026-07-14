@@ -72,6 +72,13 @@ compare_case "correct/litmus/LB+ctrl/variants/lb+ctrl0.c" 3 "No errors were dete
 compare_case "correct/litmus/MP/variants/mp1.c" 3 "No errors were detected."
 compare_case "correct/litmus/po-loc/variants/po-loc0.c" 3 "No errors were detected."
 compare_case "correct/litmus/RMWFix/variants/rmwfix0.c" 4 "No errors were detected."
+compare_case "correct/litmus/assume-ctrl/variants/assume-ctrl0.c" 4 \
+	"No errors were detected."
+compare_case "correct/infr/atomic-min-max/variants/atomic-min-max0.c" 1 \
+	"No errors were detected."
+compare_case "correct/litmus/W+JW/variants/W+JW0.c" 1 "No errors were detected."
+compare_case "correct/infr/nested-create/variants/nested-create.c" 3 \
+	"No errors were detected."
 compare_case "correct/litmus/WWR+2WR/variants/wwr+2wr0.c" 0 "Unordered writes"
 compare_case "wrong/infr/print-names-array/variants/names-2d-array0.c" 1 \
 	"Error: Safety violation!"

@@ -986,3 +986,30 @@ the substage commit is pushed.
 - Commit SHA: resolved by the Git commit carrying this entry
 - Push command/result: `git push origin genmc-caat`; verify local and remote
   refs after commit
+
+### Phase 1 broad validation: 200+ program differential search
+
+- Starting commit: `de9c60f10606c1d2038737e6a4c0e42490050d7d`
+- Pre-check: re-read `doc/development.md`, `PROJECT_CONSTRAINTS.md`, and the
+  Phase 1 plan; branch was `genmc-caat` and the worktree was clean.
+- Contract: test at least 200 distinct concurrent programs, compare built-in
+  and CAT SC/TSO outcomes, investigate every discrepancy, fix confirmed CAT
+  defects, and retain a reproducible machine-readable result.
+- Reuse survey: use GenMC's 534 existing correct/wrong variants and stored SC
+  expectations as the primary C/LLVM corpus; use generated SC/TSO checkers as
+  differential oracles and herd only for aligned anomaly adjudication. No
+  external source or incompatible implementation is copied.
+- Initial frozen selection: 288 sources (157 litmus, 47 infrastructure, 28
+  data structures, 5 safety, 28 racy, 23 memory), two models, and two checker
+  paths per source/model.
+- Initial result: 94 status/signature mismatches exposed three root causes:
+  diagnostic warnings derived from conservative CAT candidates, an invalid
+  dynamic-address `Init` candidate, and incomplete TSO/PSO lifecycle order.
+- Fixes: separate diagnostic host placement from CAT exploration; restrict
+  `Init` reads to static addresses; add program-order context around `tc`/`tj`;
+  retain focused regressions for all three defects.
+- Final result: 288 discovered, 287 valid, 574 matching SC/TSO comparisons,
+  zero mismatches, and two unsupported rows for one source that fails before
+  verification on unknown `__VERIFIER_assume`.
+- Evidence: `doc/cat/phase-1-broad-results.tsv` and
+  `doc/cat/phase-1-broad-validation-report.md`.

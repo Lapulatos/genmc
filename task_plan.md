@@ -8,6 +8,7 @@
 - [x] Feasibility 2: 分析 GenMC、CAT、CAAT、Kater 与 herdtools7
 - [x] Feasibility 3: 形成风险边界和三阶段路线
 - [x] Implementation 1: CAT file support（SC/TSO/PSO full-graph consistency；实现、验证与报告已完成）
+- [x] Validation 1: 已运行 288 个不同程序（287 个有效），修复三个根因并将 SC/TSO 差异清零
 - [ ] Implementation 2: Offline CAAT backend（normalization/fixed point/explanations）
 - [ ] Implementation 3: Incremental/online CAAT（push/pop/backtrack/early pruning）
 
@@ -44,6 +45,9 @@
 - Phase 1.6 新增 `CATChecker` 纵向执行路径；通用 evaluator 判定候选图，SC host profile 只复用视图/错误基础设施，`rf/co/revisit` 使用保守枚举。SC smoke/error 集与内置 checker 的状态、执行数和错误类别一致。
 - Phase 1.7 增加 herd-compatible 的显式 `@genmc host-profile` 元数据；TSO 模型选择生成式 TSO 宿主视图但仍由通用 evaluator 判定一致性。七个 GenMC 差分案例和两个 herd X86 oracle 均通过。
 - Phase 1.8 让 PSO 显式复用 TSO host profile，只通过 CAT `ppo` 方程放松跨地址 W→W；同一 WW+RR 程序仅替换模型文件即可区分 SC/TSO 与 PSO，并由 herd 官方 TSO/PSO 方程交叉确认。
+- Broad-validation harness 首次运行在 macOS Bash 3.2 下失败：`set -u` 不允许展开空数组，且 xargs 丢弃空 expected 参数造成 worker 参数错位。改为构造始终非空的完整命令数组，并以 `-` 编码缺失 expectation 后重跑；首轮输出不作为模型证据。
 
 ## Status
 **Phase 1 complete** - 干净构建、100/100 单元/性质测试、4/4 CAT 集成测试、herd oracle 和 fast-driver 均通过；兼容性、性能与 Phase 2 输入已记录在 `doc/cat/phase-1-report.md`。下一目标是先评审 Phase 2 详细计划，不直接扩张实现范围。
+
+**Broad validation complete** - 288 个程序中 287 个形成有效证据；574 组 SC/TSO 内置 checker 与 CAT checker 结果完全一致，最终 mismatch 为 0。一个程序因未知外部函数在验证前失败，已单独记录，未计为通过。

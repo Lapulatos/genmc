@@ -1861,7 +1861,7 @@ GenMCDriver::HandleResult<bool> GenMCDriver::handleStore(std::unique_ptr<WriteLa
 	 * print a WW-race warning if appropriate (if this moots,
 	 * exploration will anyway be cut) */
 	auto cos = getConsChecker().getCoherentPlacings(lab);
-	if (cos.size() > 1)
+	if (getConsChecker().shouldReportCoherenceWarning(lab, cos))
 		reportWarningOnce(lab->getPos(), VerificationError::VE_WWRace, cos[0]);
 
 	EventLabel *co = nullptr;

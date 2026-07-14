@@ -50,6 +50,12 @@ violation as final could otherwise prune a later consistent execution.
 
 ## Differential and oracle evidence
 
+The broad post-closure validation adds 287 distinct programs and 574 valid
+SC/TSO source/model comparisons, with zero built-in/CAT mismatch after three
+discovered defects were fixed. The detailed report is
+`doc/cat/phase-1-broad-validation-report.md`; machine-readable evidence is in
+`doc/cat/phase-1-broad-results.tsv`.
+
 | Target | Evidence | Result |
 |---|---|---|
 | SC CAT vs built-in SC | SB, LB+ctrl, WWR+2WR, safety error, two workers | equal status, verdict/error marker, and complete-execution count |

@@ -76,6 +76,19 @@ public:
 	virtual auto getCoherentStores(ReadLabel *rLab) -> std::vector<EventLabel *> = 0;
 
 	virtual auto getCoherentPlacings(WriteLabel *wLab) -> std::vector<EventLabel *> = 0;
+	/**
+	 * Return whether @p placements represent a real unordered-write warning.
+	 *
+	 * Generated checkers return only model-coherent placements, so more than one
+	 * is meaningful. A generic checker may deliberately over-enumerate and later
+	 * reject choices; it can override this hook to avoid a false warning.
+	 */
+	virtual auto shouldReportCoherenceWarning(WriteLabel *write,
+						  const std::vector<EventLabel *> &placements)
+		-> bool
+	{
+		return placements.size() > 1;
+	}
 
 	/** Updates LAB with model-specific information.
 	 * Needs to be called every time a new label is added to the graph */

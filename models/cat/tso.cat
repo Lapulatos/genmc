@@ -10,7 +10,8 @@ TSO
 let com = rfe | fr | co
 let ppo = ([R] ; po) | (po ; [W]) | (po ; [F] ; po) |
           ([W & SC] ; po ; [R & SC])
+let lifecycle = (po? ; tc ; po?) | (po? ; tj ; po?)
 
 empty rmw & (fre ; coe) as atomicity
 acyclic (po & loc) | rf | fr | co as coherence
-acyclic ppo | tc | tj | com as tso
+acyclic ppo | lifecycle | com as tso
