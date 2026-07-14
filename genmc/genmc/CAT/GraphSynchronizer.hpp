@@ -48,6 +48,7 @@ struct GraphSynchronizationStatistics {
 	std::size_t rollbackInsertions{};
 	std::size_t rebuilds{};
 	std::size_t evictedCheckpoints{};
+	std::size_t oracleChecks{};
 };
 
 /**
@@ -65,9 +66,11 @@ public:
 	 *
 	 * @param evaluator Mutable worker-local evaluator, borrowed for this lifetime.
 	 * @param checkpointLimit Maximum retained semantic predecessors; at least one.
+	 * @param oracleInterval Check every N queries against Phase 2, or zero to disable.
 	 */
 	explicit GraphSynchronizer(IncrementalCaatEvaluator &evaluator,
-				   std::size_t checkpointLimit = 32);
+				   std::size_t checkpointLimit = 32,
+				   std::size_t oracleInterval = 0);
 
 	/** Materialize and synchronize one current graph snapshot. */
 	[[nodiscard]] auto synchronize(const GraphAdapter &snapshot) -> GraphSynchronizationResult;
@@ -91,11 +94,14 @@ private:
 
 	void retainCurrent();
 	void clearHistory();
+	void verifyCurrent(GraphTransition transition);
 
 	IncrementalCaatEvaluator *evaluator_{};
 	StableGraphAdapter stable_;
 	std::vector<HistoryEntry> history_;
 	std::size_t checkpointLimit_{};
+	std::size_t oracleInterval_{};
+	std::size_t queryCount_{};
 	GraphSynchronizationStatistics statistics_;
 };
 

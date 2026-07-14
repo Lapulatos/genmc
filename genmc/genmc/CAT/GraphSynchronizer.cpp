@@ -16,6 +16,7 @@
 #include "genmc/Support/Error.hpp"
 
 #include <algorithm>
+#include <iostream>
 
 namespace cat {
 namespace {
@@ -51,13 +52,50 @@ auto baseSubset(std::size_t oldSize, const BaseValues &oldBase, std::size_t newS
 	return true;
 }
 
+/** Return a stable diagnostic spelling for a synchronization transition. */
+auto transitionName(GraphTransition transition) -> const char *
+{
+	switch (transition) {
+	case GraphTransition::Initialize:
+		return "initialize";
+	case GraphTransition::Unchanged:
+		return "unchanged";
+	case GraphTransition::Insert:
+		return "insert";
+	case GraphTransition::Rollback:
+		return "rollback";
+	case GraphTransition::RollbackInsert:
+		return "rollback-insert";
+	case GraphTransition::Rebuild:
+		return "rebuild";
+	}
+	UNREACHABLE("unknown CAAT graph transition");
+}
+
 } /* namespace */
 
 GraphSynchronizer::GraphSynchronizer(IncrementalCaatEvaluator &evaluator,
-				     std::size_t checkpointLimit)
-	: evaluator_(&evaluator), checkpointLimit_(checkpointLimit)
+				     std::size_t checkpointLimit, std::size_t oracleInterval)
+	: evaluator_(&evaluator), checkpointLimit_(checkpointLimit), oracleInterval_(oracleInterval)
 {
 	VERIFY(checkpointLimit_ > 0, "CAAT graph synchronizer needs one checkpoint");
+}
+
+void GraphSynchronizer::verifyCurrent(GraphTransition transition)
+{
+	++queryCount_;
+	if (oracleInterval_ == 0 || queryCount_ % oracleInterval_ != 0)
+		return;
+	++statistics_.oracleChecks;
+	const auto mismatch = evaluator_->offlineOracleMismatch();
+	if (!mismatch)
+		return;
+	/* Keep the dump independent of hash iteration and source addresses so the
+	 * failing query can be compared across workers and reruns. */
+	std::cerr << "CAAT oracle mismatch: query=" << queryCount_
+		  << " transition=" << transitionName(transition)
+		  << " events=" << evaluator_->eventCount() << " detail=" << *mismatch << '\n';
+	VERIFY(false, "incremental CAAT state diverged from Phase 2 oracle");
 }
 
 void GraphSynchronizer::clearHistory() { history_.clear(); }
@@ -80,11 +118,13 @@ auto GraphSynchronizer::synchronize(const GraphAdapter &snapshot) -> GraphSynchr
 		evaluator_->initialize(stable.eventCount, stable.base);
 		retainCurrent();
 		++statistics_.initializations;
+		verifyCurrent(GraphTransition::Initialize);
 		return {GraphTransition::Initialize, {}};
 	}
 	if (evaluator_->eventCount() == stable.eventCount &&
 	    evaluator_->baseValues() == stable.base) {
 		++statistics_.unchanged;
+		verifyCurrent(GraphTransition::Unchanged);
 		return {GraphTransition::Unchanged, {}};
 	}
 
@@ -92,6 +132,7 @@ auto GraphSynchronizer::synchronize(const GraphAdapter &snapshot) -> GraphSynchr
 	if (inserted.applied()) {
 		retainCurrent();
 		++statistics_.insertions;
+		verifyCurrent(GraphTransition::Insert);
 		return {GraphTransition::Insert, {}};
 	}
 
@@ -112,12 +153,14 @@ auto GraphSynchronizer::synchronize(const GraphAdapter &snapshot) -> GraphSynchr
 			       history_.end());
 		if (candidateEventCount == stable.eventCount && candidateBase == stable.base) {
 			++statistics_.rollbacks;
+			verifyCurrent(GraphTransition::Rollback);
 			return {GraphTransition::Rollback, {}};
 		}
 		auto advanced = evaluator_->tryInsert(stable.eventCount, stable.base);
 		if (advanced.applied()) {
 			retainCurrent();
 			++statistics_.rollbackInsertions;
+			verifyCurrent(GraphTransition::RollbackInsert);
 			return {GraphTransition::RollbackInsert, {}};
 		}
 		break;
@@ -129,6 +172,7 @@ auto GraphSynchronizer::synchronize(const GraphAdapter &snapshot) -> GraphSynchr
 	clearHistory();
 	retainCurrent();
 	++statistics_.rebuilds;
+	verifyCurrent(GraphTransition::Rebuild);
 	return {GraphTransition::Rebuild, std::move(inserted.reason)};
 }
 

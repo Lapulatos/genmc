@@ -563,7 +563,9 @@ acyclic order
 	ASSERT_NE(analyzed.model, nullptr);
 	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
 	cat::IncrementalCaatEvaluator evaluator(*analyzed.model, *analyzed.analysis);
-	cat::GraphSynchronizer synchronizer(evaluator, 2);
+	/* Check every transition so initialization, insertion, rollback-insert and
+	 * rebuild all compare their published values with the Phase 2 oracle. */
+	cat::GraphSynchronizer synchronizer(evaluator, 2, 1);
 
 	cat::GraphAdapter empty(graph);
 	EXPECT_EQ(synchronizer.synchronize(empty).transition, cat::GraphTransition::Initialize);
@@ -600,6 +602,7 @@ acyclic order
 	EXPECT_EQ(synchronizer.statistics().rollbackInsertions, 1U);
 	EXPECT_EQ(synchronizer.statistics().rebuilds, 1U);
 	EXPECT_EQ(synchronizer.statistics().evictedCheckpoints, 1U);
+	EXPECT_EQ(synchronizer.statistics().oracleChecks, 5U);
 }
 
 /* Edge-only rf replacement and coherence reorder cannot masquerade as insertion. */

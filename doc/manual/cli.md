@@ -36,6 +36,9 @@ A full list of the available command-line options can by viewed by issuing `genm
 - **`--cat-stats`**: With `--model-file`, print per-worker incremental graph
   transition counters at shutdown. This diagnostic is disabled by default and
   is intended for integration tests and performance analysis.
+- **`--cat-oracle`**: With `--model-file`, recompute every incremental CAAT
+  query using the Phase 2 evaluator and fail on the first predicate or witness
+  mismatch. This expensive diagnostic is intended for testing and debugging.
 - **`-nthreads=<N>`**: Perform verification concurrently (using `N` threads)
 - **`-cache-instructions`**: Caches instructions to help execution time (sacrifices memory)
 - **`-disable-bam`**: Disables Barrier-Aware Model-checking (BAM)

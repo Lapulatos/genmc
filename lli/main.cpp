@@ -84,6 +84,10 @@ static llvm::cl::opt<bool>
 	clCatStats("cat-stats", llvm::cl::cat(clGeneral),
 		   llvm::cl::desc("Print per-worker incremental CAT transition counters"));
 
+static llvm::cl::opt<bool>
+	clCatOracle("cat-oracle", llvm::cl::cat(clGeneral),
+		    llvm::cl::desc("Cross-check every incremental CAT query with Phase 2"));
+
 static llvm::cl::opt<bool> clDisableEstimation(
 	"disable-estimation", llvm::cl::cat(clGeneral),
 	llvm::cl::desc("Do not estimate the state-space size before verifying the program"));
@@ -427,6 +431,7 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	conf.modelFileOccurrences = clModelFile.getNumOccurrences();
 	conf.explainCat = clExplainCat;
 	conf.catStats = clCatStats;
+	conf.catOracle = clCatOracle;
 	conf.estimate = !clDisableEstimation;
 	conf.estimationMax = clEstimationMax;
 	conf.estimationMin = clEstimationMin;

@@ -44,6 +44,7 @@ help_output="$("${genmc}" --help 2>&1)"
 grep -Fq -- "--model-file=<model.cat>" <<<"${help_output}"
 grep -Fq -- "--explain-cat" <<<"${help_output}"
 grep -Fq -- "--cat-stats" <<<"${help_output}"
+grep -Fq -- "--cat-oracle" <<<"${help_output}"
 
 # All invalid combinations fail during command-line/config processing.
 expect_failure "CAT model file does not exist" \
@@ -58,6 +59,8 @@ expect_failure "--explain-cat requires --model-file" \
 	"${genmc}" --explain-cat "${program}"
 expect_failure "--cat-stats requires --model-file" \
 	"${genmc}" --cat-stats "${program}"
+expect_failure "--cat-oracle requires --model-file" \
+	"${genmc}" --cat-oracle "${program}"
 
 # A valid SC file executes through the generic checker and matches built-in SC.
 cat_output="$("${genmc}" --model-file="${model}" --disable-estimation --nthreads=2 \

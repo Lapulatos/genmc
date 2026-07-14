@@ -299,3 +299,49 @@ This append-only record tracks each Phase 3 substage required by
   but rebuild-heavy `rf`/`co` replacement and repeated revisit workloads need
   systematic oracle cross-checking and deterministic mismatch dumps. These are
   the sole production focus of Phase 3.6; broad performance claims wait for 3.7.
+
+## Phase 3.6: mutation/fallback hardening and differential stress
+
+- Starting commit: `d890211eca1d3f478ebc85eb81061a32494edc7d`.
+- Pre-check: re-read `doc/development.md`, project constraints, the complete
+  Phase 3 plan and `task_plan.md`; branch was `genmc-caat`, local and remote
+  matched, and the worktree was clean.
+- Reuse survey: reused the Phase 2 `CaatEvaluator` as the only semantic oracle,
+  the worker-local synchronizer as the query/classification boundary, existing
+  CLI validation and CTest integration, and repository programs that already
+  exercise RMW, join, dynamic allocation and lock-free data structures. No
+  second relation implementation or external testing runtime was added.
+- Contract: an explicitly enabled oracle recomputes the current stable universe
+  and every normalized predicate from scratch after the selected graph
+  transition. It compares errors, every optional value, checks and witnesses.
+  The first mismatch emits a deterministic query number, named transition,
+  universe size and first differing predicate/diagnostic before an invariant
+  failure. Normal verification pays no oracle cost.
+- Implementation: `IncrementalCaatEvaluator::offlineOracleMismatch()` owns the
+  complete result comparison. `GraphSynchronizer` accepts an oracle interval,
+  invokes it after initialize/unchanged/insert/rollback/rollback-insert/rebuild,
+  and counts checks. `--cat-oracle` selects interval one independently of build
+  mode; the option requires `--model-file`, is documented, and is visible in
+  `--help`. `--cat-stats` now includes the oracle count.
+- Mutation stress: `online-mutation-stress.sh` covers recursive SC/TSO/PSO,
+  one/two workers, RMWFix, W+JW lifecycle, dynamic MS queue, dynamic Treiber
+  stack, asynchronous flat combining and a malloc ordering error. Two fixed WFR
+  seeds add reproducible randomized branch orders. The final 39 rows performed
+  5,396 fresh Phase 2 comparisons with zero mismatch, unsupported status or
+  stale rollback.
+- Verification: complete unit testing passed 138/138; parallel CAT/CAAT/config/
+  CLI/integration testing passed 104/104. ASan+UBSan passed the 15 checker,
+  incremental property, checkpoint, synchronizer and stable-adapter tests. The
+  focused oracle transition test checks all five transitions in its fixture,
+  and real recursive SC/TSO/PSO integration runs with `--cat-oracle`.
+- Errors/limits: the full ASan executable aborts in existing LLVM interpreter
+  code (`value_ptr.hpp:137`, `Execution.cpp:1538`) before CAT checking. A plain
+  Debug executable with `--validate-exec-graphs` also aborts before the checker,
+  so the independent build-mode-neutral oracle option replaced that unusable
+  hook. TSO-hosted fcombiner with two workers hits the existing replay-schedule
+  assertion at `Scheduler.cpp:85`; fcombiner remains in every single-worker
+  model row, while the other five fixtures provide two-worker coverage.
+- Gap to Phase 3: correctness hardening is complete, but final closure still
+  requires the frozen 864-row broad corpus, aggregate transition/performance/RSS
+  measurements, documentation audit and local/remote equality. Those are the
+  Phase 3.7 deliverables.

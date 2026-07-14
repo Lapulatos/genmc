@@ -426,4 +426,39 @@ auto IncrementalCaatEvaluator::result() const -> const CaatEvaluationResult &
 	return *result_;
 }
 
+auto IncrementalCaatEvaluator::offlineOracleMismatch() const -> std::optional<std::string>
+{
+	VERIFY(initialized(), "incremental CAAT oracle requested before initialization");
+	const auto offline = CaatEvaluator().evaluate(model_, analysis_, eventCount_, base_);
+	if (offline.errors.size() != result_->errors.size())
+		return "error-count incremental=" + std::to_string(result_->errors.size()) +
+		       " offline=" + std::to_string(offline.errors.size());
+	for (std::size_t index = 0; index < offline.errors.size(); ++index) {
+		const auto &expected = offline.errors[index];
+		const auto &actual = result_->errors[index];
+		if (expected.node != actual.node || expected.span != actual.span ||
+		    expected.message != actual.message)
+			return "error=" + std::to_string(index) + " diagnostic differs";
+	}
+	if (offline.values.size() != result_->values.size())
+		return "value-count incremental=" + std::to_string(result_->values.size()) +
+		       " offline=" + std::to_string(offline.values.size());
+	for (std::size_t predicate = 0; predicate < offline.values.size(); ++predicate) {
+		if (offline.values[predicate] != result_->values[predicate])
+			return "predicate=" + std::to_string(predicate) + " value differs";
+	}
+	if (offline.violations.size() != result_->violations.size())
+		return "violation-count incremental=" + std::to_string(result_->violations.size()) +
+		       " offline=" + std::to_string(offline.violations.size());
+	for (std::size_t index = 0; index < offline.violations.size(); ++index) {
+		const auto &expected = offline.violations[index];
+		const auto &actual = result_->violations[index];
+		if (expected.checkName != actual.checkName ||
+		    expected.checkKind != actual.checkKind || expected.span != actual.span ||
+		    expected.witness != actual.witness)
+			return "violation=" + std::to_string(index) + " witness differs";
+	}
+	return std::nullopt;
+}
+
 } /* namespace cat */

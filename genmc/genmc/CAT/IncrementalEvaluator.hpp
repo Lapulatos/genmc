@@ -160,6 +160,15 @@ public:
 	[[nodiscard]] auto result() const -> const CaatEvaluationResult &;
 	/** Return whether the normalized equations are monotone under insertion. */
 	[[nodiscard]] auto supportsInsertions() const -> bool { return supportsInsertions_; }
+	/**
+	 * Compare the published state with a fresh Phase 2 fixed point.
+	 *
+	 * @return Empty when all predicate values and outcomes match; otherwise a
+	 * deterministic description of the first mismatch.
+	 * @errors Calling before initialize() is an internal invariant violation.
+	 * @complexity One complete offline evaluation plus a linear result comparison.
+	 */
+	[[nodiscard]] auto offlineOracleMismatch() const -> std::optional<std::string>;
 	/** Return cumulative initialization/fallback counters. */
 	[[nodiscard]] auto statistics() const -> const IncrementalStatistics &
 	{

@@ -56,6 +56,8 @@ struct Config {
 	bool explainCat{};
 	/** Print per-worker incremental synchronization counters at shutdown. */
 	bool catStats{};
+	/** Recompute and compare every incremental query with the Phase 2 oracle. */
+	bool catOracle{};
 	/** Whether the user also explicitly selected one of GenMC's built-in models. */
 	bool modelExplicit{};
 	/** Number of `--model-file` occurrences, retained for stable duplicate diagnostics. */

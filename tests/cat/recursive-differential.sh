@@ -63,15 +63,17 @@ done
 # retained-ancestor rollback before advancing along another exploration branch.
 for model in sc tso pso; do
 	stats_output="$("${genmc}" --model-file="${model_root}/recursive-${model}.cat" \
-		--cat-stats --disable-estimation --disable-mm-detector --nthreads=1 \
+		--cat-stats --cat-oracle --disable-estimation --disable-mm-detector --nthreads=1 \
 		"${source_root}/correct/data-structures/fcombiner-async/variants/main0.c" 2>&1 || true)"
 	stats_line="$(grep -F "CAT incremental statistics:" <<<"${stats_output}")"
 	insertions="$(sed -n 's/.* insert=\([0-9][0-9]*\).*/\1/p' <<<"${stats_line}")"
 	rollback_insertions="$(sed -n \
 		's/.* rollback-insert=\([0-9][0-9]*\).*/\1/p' <<<"${stats_line}")"
+	oracle_checks="$(sed -n 's/.* oracle=\([0-9][0-9]*\).*/\1/p' <<<"${stats_line}")"
 	if [[ -z "${insertions}" || "${insertions}" -eq 0 ||
-	      -z "${rollback_insertions}" || "${rollback_insertions}" -eq 0 ]]; then
-		echo "Recursive ${model} did not exercise insertion and rollback-insert:" >&2
+	      -z "${rollback_insertions}" || "${rollback_insertions}" -eq 0 ||
+	      -z "${oracle_checks}" || "${oracle_checks}" -eq 0 ]]; then
+		echo "Recursive ${model} did not exercise insertion, rollback, and oracle:" >&2
 		echo "${stats_line}" >&2
 		exit 1
 	fi

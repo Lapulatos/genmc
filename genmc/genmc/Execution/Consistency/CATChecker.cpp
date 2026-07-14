@@ -43,9 +43,12 @@ BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(
 		return;
 	incrementalEvaluator_ = std::make_unique<cat::IncrementalCaatEvaluator>(
 		*conf->caatModel, *conf->caatAnalysis);
-	if (incrementalEvaluator_->supportsInsertions())
-		graphSynchronizer_ =
-			std::make_unique<cat::GraphSynchronizer>(*incrementalEvaluator_);
+	if (incrementalEvaluator_->supportsInsertions()) {
+		/* The explicit oracle option is intentionally independent of build mode. */
+		const std::size_t oracleInterval = conf->catOracle ? 1 : 0;
+		graphSynchronizer_ = std::make_unique<cat::GraphSynchronizer>(
+			*incrementalEvaluator_, 32, oracleInterval);
+	}
 }
 
 template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
@@ -57,7 +60,8 @@ template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
 	line << "CAT incremental statistics: initialize=" << stats.initializations
 	     << " unchanged=" << stats.unchanged << " insert=" << stats.insertions
 	     << " rollback=" << stats.rollbacks << " rollback-insert=" << stats.rollbackInsertions
-	     << " rebuild=" << stats.rebuilds << " evicted=" << stats.evictedCheckpoints;
+	     << " rebuild=" << stats.rebuilds << " evicted=" << stats.evictedCheckpoints
+	     << " oracle=" << stats.oracleChecks;
 	/* A process-wide lock keeps worker records parseable under --nthreads. */
 	const std::lock_guard lock(catStatisticsMutex);
 	std::cerr << line.str() << '\n';

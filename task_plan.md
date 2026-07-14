@@ -98,3 +98,10 @@ SC/TSO/PSO 在 `fcombiner-async` 上均产生 insert 与 rollback-insert；unit
 prefix 阶段持续拒绝，difference 因可能被后续插入修复而在执行前拒绝，不能
 采用原计划中不安全的“offline prefix rejection”。下一目标是 3.6 的 mutation/
 fallback stress、周期性 Phase 2 oracle cross-check 和确定性 mismatch dump。
+
+**Phase 3.6 implemented** - 新增默认关闭的 `--cat-oracle`，逐 query 全量重算并
+比较 error、每个 predicate、check 与 witness；差异会输出确定性 query/transition/
+event/predicate 信息。39 组 exhaustive/randomized mutation rows 完成 5,396 次
+oracle check，零 mismatch；unit 138/138、parallel focused 104/104、ASan+UBSan
+15/15 通过。下一目标是 3.7 的 864+ broad validation、transition/performance/RSS
+统计、最终文档与 requirement audit。
