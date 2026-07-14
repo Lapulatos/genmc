@@ -1,0 +1,20 @@
+(*
+ * Clean-room recursive TSO model for the Phase 2 CAAT backend.
+ *
+ * The preserved-order and communication equations match the bundled Phase 1
+ * TSO model. The recursive least fixed point makes its final acyclicity check
+ * explicit as reachability rather than using the postfix closure operator.
+ *)
+(* @genmc host-profile tso *)
+RecursiveTSO
+
+let com = rfe | fr | co
+let ppo = ([R] ; po) | (po ; [W]) | (po ; [F] ; po) |
+          ([W & SC] ; po ; [R & SC])
+let lifecycle = (po? ; tc ; po?) | (po? ; tj ; po?)
+let order = ppo | lifecycle | com
+let rec reach = order | (reach ; order)
+
+empty rmw & (fre ; coe) as atomicity
+acyclic (po & loc) | rf | fr | co as coherence
+irreflexive reach as tso

@@ -9,7 +9,7 @@
 - [x] Feasibility 3: 形成风险边界和三阶段路线
 - [x] Implementation 1: CAT file support（SC/TSO/PSO full-graph consistency；实现、验证与报告已完成）
 - [x] Validation 1: 已运行 288 个不同程序（287 个有效），修复三个根因并将 SC/TSO 差异清零
-- [ ] Implementation 2: Offline CAAT backend（Phase 2.0--2.4 完成；2.5--2.6 待实现）
+- [ ] Implementation 2: Offline CAAT backend（Phase 2.0--2.5 完成；2.6 广泛验证待完成）
 - [ ] Implementation 3: Incremental/online CAAT（push/pop/backtrack/early pruning）
 
 ## Key Questions

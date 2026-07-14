@@ -100,6 +100,69 @@ TEST(ConfigModelFileTest, SelectsExplicitTSOHostProfile)
 	std::filesystem::remove(path);
 }
 
+/* Declared recursion selects the normalized CAAT backend before exploration. */
+TEST(ConfigModelFileTest, SelectsRecursiveCaatBackend)
+{
+	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-recursive.cat";
+	std::ofstream output(path);
+	output << "Recursive\nlet rec reach = po | (reach ; po)\n"
+		  "irreflexive reach as order\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+
+	auto status = config.validate(warnings);
+
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(status));
+	EXPECT_TRUE(config.useCaatBackend);
+	EXPECT_EQ(config.catModel, nullptr);
+	EXPECT_NE(config.caatModel, nullptr);
+	EXPECT_NE(config.caatAnalysis, nullptr);
+	auto checker = ConsistencyChecker::create(&config);
+	EXPECT_NE(dynamic_cast<CATChecker *>(checker.get()), nullptr);
+	std::filesystem::remove(path);
+}
+
+/* Acyclic forward references use normalized IDs when the Phase 1 DAG cannot. */
+TEST(ConfigModelFileTest, SelectsCaatBackendForForwardReference)
+{
+	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-forward.cat";
+	std::ofstream output(path);
+	output << "Forward\nlet first = later | po\nlet later = rf\nacyclic first\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+
+	auto status = config.validate(warnings);
+
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(status));
+	EXPECT_TRUE(config.useCaatBackend);
+	EXPECT_NE(config.caatModel, nullptr);
+	std::filesystem::remove(path);
+}
+
+/* Offline semi-positive difference is not silently used for prefix pruning. */
+TEST(ConfigModelFileTest, RejectsRecursiveDifferenceAtOnlineBoundary)
+{
+	auto path =
+		std::filesystem::path(testing::TempDir()) / "genmc-config-recursive-difference.cat";
+	std::ofstream output(path);
+	output << "Difference\nlet rec reach = (po \\ rf) | (reach ; po)\n"
+		  "irreflexive reach\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+
+	auto status = config.validate(warnings);
+
+	EXPECT_TRUE(hasError(status, "offline-admissible but not prefix-monotone"));
+	EXPECT_FALSE(config.useCaatBackend);
+	std::filesystem::remove(path);
+}
+
 /* Non-monotone checks remain evaluable offline but cannot prune graph prefixes safely. */
 TEST(ConfigModelFileTest, RejectsOnlineInadmissibleDifference)
 {

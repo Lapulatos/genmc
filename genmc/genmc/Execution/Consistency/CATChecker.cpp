@@ -37,25 +37,42 @@ template <typename HostChecker>
 auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) const -> bool
 {
 	const auto &model = this->getConf()->catModel;
-	VERIFY(model, "CATChecker requires a validated CAT model");
+	const auto &caatModel = this->getConf()->caatModel;
+	const auto &caatAnalysis = this->getConf()->caatAnalysis;
+	VERIFY(model || (caatModel && caatAnalysis),
+	       "CATChecker requires a validated CAT or CAAT model");
 	const cat::GraphAdapter adapter(graph);
 #ifdef ENABLE_GENMC_DEBUG
 	const auto invariantErrors = adapter.validate();
 	VERIFY(invariantErrors.empty(), "invalid CAT graph adapter state");
 #endif
-	const auto result =
-		cat::Evaluator().evaluate(*model, adapter.eventCount(), adapter.baseValues());
-	VERIFY(result.errors.empty(), "validated CAT evaluation failed");
-	if (this->getConf()->explainCat && !result.violations.empty()) {
-		const auto &normalized = this->getConf()->caatExplanationModel;
-		const auto &analysis = this->getConf()->caatExplanationAnalysis;
-		VERIFY(normalized && analysis, "CAT explanation requires validated CAAT IR");
-		auto evaluated = cat::CaatEvaluator().evaluate(
-			*normalized, *analysis, adapter.eventCount(), adapter.baseValues());
-		VERIFY(evaluated.errors.empty(), "validated CAAT explanation evaluation failed");
-		auto explained = cat::Reasoner().explain(*normalized, *analysis,
-							 adapter.eventCount(), evaluated.values,
-							 evaluated.violations);
+	std::vector<cat::Violation> violations;
+	std::vector<std::optional<cat::Value>> caatValues;
+	if (this->getConf()->useCaatBackend) {
+		auto result = cat::CaatEvaluator().evaluate(
+			*caatModel, *caatAnalysis, adapter.eventCount(), adapter.baseValues());
+		VERIFY(result.errors.empty(), "validated CAAT evaluation failed");
+		violations = std::move(result.violations);
+		caatValues = std::move(result.values);
+	} else {
+		auto result = cat::Evaluator().evaluate(*model, adapter.eventCount(),
+							adapter.baseValues());
+		VERIFY(result.errors.empty(), "validated CAT evaluation failed");
+		violations = std::move(result.violations);
+	}
+	if (this->getConf()->explainCat && !violations.empty()) {
+		VERIFY(caatModel && caatAnalysis, "CAT explanation requires validated CAAT IR");
+		if (caatValues.empty()) {
+			auto evaluated = cat::CaatEvaluator().evaluate(*caatModel, *caatAnalysis,
+								       adapter.eventCount(),
+								       adapter.baseValues());
+			VERIFY(evaluated.errors.empty(),
+			       "validated CAAT explanation evaluation failed");
+			caatValues = std::move(evaluated.values);
+			violations = std::move(evaluated.violations);
+		}
+		auto explained = cat::Reasoner().explain(
+			*caatModel, *caatAnalysis, adapter.eventCount(), caatValues, violations);
 		VERIFY(explained.ok(), "validated CAT violation explanation failed");
 		/* One line per violation minimizes interleaving when explicitly enabled
 		 * during multi-worker exploration. */
@@ -63,7 +80,7 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 			std::cerr << "CAT explanation: " << cat::Reasoner::format(violation)
 				  << '\n';
 	}
-	return result.violations.empty();
+	return violations.empty();
 }
 
 template <typename HostChecker>

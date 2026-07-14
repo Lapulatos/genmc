@@ -1,0 +1,16 @@
+(*
+ * Clean-room recursive SC model for the Phase 2 CAAT backend.
+ *
+ * The least fixed point of reach = order | reach;order is the non-empty
+ * transitive closure of order. Irreflexivity of that closure is equivalent to
+ * acyclicity of the Phase 1 SC order, while forcing real recursive evaluation.
+ *)
+(* @genmc host-profile sc *)
+RecursiveSC
+
+let com = rf | fr | co
+let order = po | tc | tj | com
+let rec reach = order | (reach ; order)
+
+empty rmw & (fre ; coe) as atomicity
+irreflexive reach as sc

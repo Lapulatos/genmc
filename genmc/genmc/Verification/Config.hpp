@@ -46,10 +46,12 @@ struct Config {
 	std::optional<std::filesystem::path> modelFile;
 	/** Immutable typed CAT model shared by verification workers after validation. */
 	std::shared_ptr<const cat::ModelIR> catModel;
-	/** Normalized CAAT equations used only for explicitly requested explanations. */
-	std::shared_ptr<const cat::NormalizedModel> caatExplanationModel;
-	/** Stratification matching caatExplanationModel. */
-	std::shared_ptr<const cat::ModelAnalysis> caatExplanationAnalysis;
+	/** Immutable normalized equations for recursive CAAT or requested explanations. */
+	std::shared_ptr<const cat::NormalizedModel> caatModel;
+	/** Stratification/admissibility result matching caatModel. */
+	std::shared_ptr<const cat::ModelAnalysis> caatAnalysis;
+	/** Select the CAAT evaluator instead of the Phase 1 topological evaluator. */
+	bool useCaatBackend{};
 	/** Print source-located base-literal reasons for rejected CAT candidates. */
 	bool explainCat{};
 	/** Whether the user also explicitly selected one of GenMC's built-in models. */

@@ -20,6 +20,7 @@
 #include "genmc/Support/Error.hpp"
 #include "genmc/Verification/Config.hpp"
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <random>
@@ -120,67 +121,104 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 			for (const auto &diagnostic : parseResult.diagnostics)
 				errors.push_back(diagnostic.format());
 			if (parseResult.ok()) {
-				auto compileResult = cat::Compiler().compile(*parseResult.model);
-				for (const auto &diagnostic : compileResult.diagnostics)
-					errors.push_back(diagnostic.format());
-				for (const auto &note : compileResult.notes)
-					warnings.push_back(note.format());
-				if (compileResult.ok()) {
-					const auto inadmissible =
-						compileResult.model->firstOnlineInadmissibleNode();
-					if (inadmissible) {
-						const auto &node = compileResult.model->nodes().at(
-							*inadmissible);
-						errors.push_back(cat::Diagnostic{
-							cat::DiagnosticKind::Unsupported,
-							node.span,
-							"CAT difference affecting a check is not "
-							"online-admissible in Phase 1",
-							{}}.format());
-					} else {
-						catModel = std::move(compileResult.model);
-						/* Explanation provenance uses the normalized CAAT
-						 * IR, while the Phase 1 checker remains the verdict
-						 * oracle. Build it only on request to preserve
-						 * default startup cost and diagnostics exactly. */
-						if (explainCat) {
-							auto normalized =
-								cat::Normalizer().normalize(
-									*parseResult.model);
-							for (const auto &diagnostic :
-							     normalized.diagnostics)
-								errors.push_back(
-									diagnostic.format());
-							if (normalized.ok()) {
-								auto analyzed =
-									cat::Analyzer().analyze(
-										*normalized.model);
-								for (const auto &diagnostic :
-								     analyzed.diagnostics)
-									errors.push_back(
-										diagnostic
-											.format());
-								if (analyzed.ok()) {
-									caatExplanationModel = std::
-										move(normalized
-											     .model);
-									caatExplanationAnalysis = std::
-										move(analyzed.analysis);
-								}
-							}
-						}
-						/* The declaration selects transformations/views
-						 * only; consistency remains entirely model-driven.
-						 */
-						switch (catModel->hostProfile()) {
-						case cat::HostProfile::SC:
-							model = ModelType::SC;
-							break;
-						case cat::HostProfile::TSO:
-							model = ModelType::TSO;
-							break;
+				const bool recursive = std::ranges::any_of(
+					parseResult.model->statements, [](const auto &statement) {
+						return statement.recursiveGroup != 0;
+					});
+				/* Build the normalized form for every file. Phase 1 remains the
+				 * preferred backend for its acyclic subset; this second form
+				 * enables recursion, forward references, and requested
+				 * explanations. */
+				{
+					auto normalized =
+						cat::Normalizer().normalize(*parseResult.model);
+					for (const auto &diagnostic : normalized.diagnostics)
+						errors.push_back(diagnostic.format());
+					if (normalized.ok()) {
+						auto analyzed =
+							cat::Analyzer().analyze(*normalized.model);
+						for (const auto &diagnostic : analyzed.diagnostics)
+							errors.push_back(diagnostic.format());
+						if (analyzed.ok()) {
+							caatModel = std::move(normalized.model);
+							caatAnalysis = std::move(analyzed.analysis);
 						}
 					}
+				}
+
+				if (recursive && caatModel && caatAnalysis) {
+					/* A from-scratch CAAT call is safe for a growing GenMC
+					 * prefix only when checked predicates are monotone. Phase 3
+					 * will provide a trail-aware contract for negative
+					 * literals. */
+					const auto difference = std::ranges::find_if(
+						caatModel->predicates(), [](const auto &predicate) {
+							return predicate.kind ==
+							       cat::Predicate::Kind::Difference;
+						});
+					if (difference != caatModel->predicates().end()) {
+						errors.push_back(cat::Diagnostic{
+							cat::DiagnosticKind::Unsupported,
+							difference->span,
+							"recursive CAT difference is "
+							"offline-admissible "
+							"but not prefix-monotone in Phase 2",
+							{}}.format());
+					} else {
+						useCaatBackend = true;
+					}
+				} else if (!recursive) {
+					auto compiled = cat::Compiler().compile(*parseResult.model);
+					if (compiled.ok()) {
+						for (const auto &note : compiled.notes)
+							warnings.push_back(note.format());
+						const auto inadmissible =
+							compiled.model
+								->firstOnlineInadmissibleNode();
+						if (inadmissible) {
+							const auto &node =
+								compiled.model->nodes().at(
+									*inadmissible);
+							errors.push_back(cat::Diagnostic{
+								cat::DiagnosticKind::Unsupported,
+								node.span,
+								"CAT difference affecting a check "
+								"is not "
+								"online-admissible in Phase 1",
+								{}}.format());
+						} else {
+							catModel = std::move(compiled.model);
+						}
+					} else if (caatModel && caatAnalysis) {
+						const auto difference = std::ranges::find_if(
+							caatModel->predicates(),
+							[](const auto &predicate) {
+								return predicate.kind ==
+								       cat::Predicate::Kind::
+									       Difference;
+							});
+						if (difference == caatModel->predicates().end())
+							useCaatBackend = true;
+						else
+							errors.push_back(cat::Diagnostic{
+								cat::DiagnosticKind::Unsupported,
+								difference->span,
+								"forward-reference CAT difference "
+								"is not "
+								"prefix-monotone in Phase 2",
+								{}}.format());
+					} else {
+						for (const auto &diagnostic : compiled.diagnostics)
+							errors.push_back(diagnostic.format());
+					}
+				}
+
+				/* Metadata chooses only the established causal-view host. */
+				if (useCaatBackend || catModel) {
+					const auto host = useCaatBackend ? caatModel->hostProfile()
+									 : catModel->hostProfile();
+					model = host == cat::HostProfile::SC ? ModelType::SC
+									     : ModelType::TSO;
 				}
 			}
 		}

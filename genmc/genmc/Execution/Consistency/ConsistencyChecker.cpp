@@ -13,6 +13,7 @@
 
 #include "genmc/Execution/Consistency/ConsistencyChecker.hpp"
 #include "genmc/CAT/Model.hpp"
+#include "genmc/CAT/Normalized.hpp"
 #include "genmc/Execution/Consistency/CATChecker.hpp"
 #include "genmc/Execution/Consistency/IMMChecker.hpp"
 #include "genmc/Execution/Consistency/RAChecker.hpp"
@@ -26,8 +27,10 @@ auto ConsistencyChecker::create(const Config *conf) -> std::unique_ptr<Consisten
 {
 	/* Explicit IR metadata selects only the causal-view host. Consistency remains
 	 * generic and is never inferred from a model name or filesystem path. */
-	if (conf->catModel) {
-		switch (conf->catModel->hostProfile()) {
+	if (conf->catModel || conf->caatModel) {
+		const auto hostProfile = conf->useCaatBackend ? conf->caatModel->hostProfile()
+							      : conf->catModel->hostProfile();
+		switch (hostProfile) {
 		case cat::HostProfile::SC:
 			return std::make_unique<CATSCChecker>(conf);
 		case cat::HostProfile::TSO:

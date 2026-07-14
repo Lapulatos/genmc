@@ -55,6 +55,14 @@ add_test(
             ${CMAKE_CURRENT_SOURCE_DIR}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
+add_test(
+    NAME caat-recursive-differential
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/recursive-differential.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat
+            ${CMAKE_CURRENT_SOURCE_DIR}
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
 
 # Unit tests
 add_subdirectory(unit)

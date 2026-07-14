@@ -1,0 +1,20 @@
+(*
+ * Clean-room recursive PSO model for the Phase 2 CAAT backend.
+ *
+ * As in the Phase 1 PSO fixture, cross-location write-to-write order may
+ * relax. The consistency order is closed by a recursive CAAT equation.
+ *)
+(* @genmc host-profile tso *)
+RecursivePSO
+
+let com = rfe | fr | co
+let ww_loc = ([W] ; po ; [W]) & loc
+let ppo = ([R] ; po) | ww_loc | (po ; [F] ; po) |
+          ([W & SC] ; po ; [SC])
+let lifecycle = (po? ; tc ; po?) | (po? ; tj ; po?)
+let order = ppo | lifecycle | com
+let rec reach = order | (reach ; order)
+
+empty rmw & (fre ; coe) as atomicity
+acyclic (po & loc) | rf | fr | co as coherence
+irreflexive reach as pso

@@ -289,11 +289,12 @@ message, and the relevant source line when available.
 The frontend reports multiple independent diagnostics from one file when
 recovery is unambiguous, but never starts program exploration after any error.
 
-## Explicitly unsupported in Phase 1
+## Explicitly unsupported after Phase 2 integration
 
-- recursive groups are parsed and retained for the Phase 2 normalized IR, but
-  are not selected by the GenMC CLI until the offline fixed-point evaluator is
-  integrated;
+- negative recursion and recursion split across incompatible declared groups;
+- recursive/forward-reference models whose checked equations contain
+  difference: the offline CAAT API accepts the semi-positive fragment, but
+  Phase 2 cannot use its negative literals to prune a growing GenMC prefix;
 - user functions, lambdas, function application, tuples, and pattern matching;
 - procedures, `call`, `forall`, `with ... from ...`, and `linearisations`;
 - enums, tags, scopes, instruction declarations, and architecture variants;
@@ -345,3 +346,23 @@ choice. With architecture checking disabled only to feed the same X86 event
 syntax to both generic CAT models, the MP anomaly is `Never` under TSO and
 `Sometimes` under PSO. No architecture-specific fence event participates.
 `tests/cat/herd-pso-oracle.sh` reproduces the comparison.
+
+## Phase 2 recursive backend
+
+`let rec ... and ...` groups and acyclic forward references select the
+normalized CAAT backend. GenMC computes signed dependencies and SCC strata once
+at startup, then recomputes each candidate graph's stratified least fixed point
+from scratch. This is the Phase 2 offline algorithm; it has no persistent
+backtrackable solver state or delta propagation between graph revisions.
+
+The clean-room `recursive-sc.cat`, `recursive-tso.cat`, and
+`recursive-pso.cat` fixtures preserve the corresponding Phase 1 equations and
+replace the final order acyclicity with a recursive reachability equation.
+`tests/cat/recursive-differential.sh` compares the three pairs across eight
+real C programs and both one- and two-worker exploration.
+
+The offline evaluator and reasoner support semi-positive difference and
+negative base literals. The command-line checker rejects difference in a model
+that requires the CAAT backend because a negative fact can become false when a
+later prefix adds an edge. Phase 3 must make such facts trail-aware before they
+can participate in sound early pruning.

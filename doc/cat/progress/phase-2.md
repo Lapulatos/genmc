@@ -144,3 +144,42 @@ This append-only record tracks each Phase 2 substage required by
   therefore cannot reach the checker. Phase 2.5 must select the normalized
   backend directly, add recursive model files, validate base availability, and
   exercise real concurrent programs with one and two workers.
+
+## Phase 2.5: GenMC integration and recursive model corpus
+
+- Starting commit: `df45ac7d6a9932435c1b71e041b3b54997ec468d`.
+- Pre-check: re-read repository development rules, project constraints, and
+  the Phase 2 plan; branch was `genmc-caat`, local/remote commits matched, and
+  the worktree was clean.
+- Reuse survey: retained Config's parse-once ownership, normalized/analyzed
+  immutable models, the existing SC/TSO host profiles, conservative CAT
+  candidate enumeration, `GraphAdapter`, and the CaatEvaluator/Reasoner. No
+  Dat3M Java code or additional dependency was imported.
+- Contract: select normalized CAAT for declared recursion and forward-reference
+  models, keep Phase 1 files on their original evaluator, reject unsupported or
+  non-prefix-monotone inputs before LLVM exploration, and prove real SC/TSO/PSO
+  behavior with one and two workers.
+- Implementation: Config now retains both normalized equations/analysis and,
+  where applicable, the Phase 1 DAG. Recursive or forward-reference files set
+  an explicit backend flag; checker/factory selection uses IR host metadata,
+  never filenames. The generic checker computes a complete fixed point from
+  scratch for every candidate snapshot and reuses that result for explanations.
+- Soundness boundary: offline semi-positive difference remains implemented and
+  tested, but a model requiring the CAAT backend is rejected if it contains a
+  difference equation. A negative base fact can disappear as a GenMC prefix
+  grows, so using it for Phase 2 pruning would be unsound; trail-aware handling
+  remains Phase 3 work.
+- Model corpus: added clean-room `recursive-sc.cat`, `recursive-tso.cat`, and
+  `recursive-pso.cat`. Each preserves the corresponding Phase 1 equations and
+  defines final reachability with a positive recursive least fixed point.
+- Verification: build passed; 119/119 unit/property tests passed; focused CLI,
+  Phase 1 SC/TSO/PSO, and recursive differential tests passed 5/5. The recursive
+  test compares 3 models × 8 real C programs × 2 worker counts = 48 recursive
+  results against Phase 1 status and semantic summaries. Coverage includes
+  relaxation, same-location order, RMW, SC fences, thread lifecycle, heap
+  storage, safety errors, and the PSO-distinguishing program. Recursive
+  `--explain-cat` emits a fixed-point/base-literal explanation on SB.
+- Plan gap: Phase 2.5 integration acceptance is complete. Phase 2.6 still needs
+  at least 200 distinct recursive program/model pairs, the frozen 288-program
+  Phase 1 regression, aligned herd/Dat3M evidence, throughput/memory/end-to-end
+  measurements, requirement audit, final report, and clean remote equality.

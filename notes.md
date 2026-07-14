@@ -123,3 +123,12 @@
 - `--explain-cat` is deliberately opt-in. Phase 1 remains the verdict oracle for
   non-recursive models, while the normalized evaluator is run only for rejected
   candidates whose explanation was requested; default startup and output remain unchanged.
+- Phase 2.5 selects the normalized backend for declared recursion and acyclic
+  forward references. Ordinary SC/TSO/PSO files retain the Phase 1 evaluator;
+  checker selection depends on immutable IR metadata rather than filenames.
+- Full recomputation does not make negative literals prefix-monotone. The CLI
+  therefore rejects difference when normalized CAAT is required, while the
+  offline evaluator/reasoner continue to support semi-positive difference.
+- Recursive SC/TSO/PSO clean-room fixtures replace final order acyclicity with
+  recursive reachability. Across eight real programs and one/two workers, 48
+  recursive results match the corresponding Phase 1 status and semantic summary.

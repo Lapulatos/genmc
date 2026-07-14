@@ -23,6 +23,11 @@ A full list of the available command-line options can by viewed by issuing `genm
   checked against an assembly-aligned herd oracle. Checks that depend on CAT
   difference are rejected by the Phase 1 online-admissibility gate, although
   difference remains supported by the frontend and offline evaluator.
+  Declared positive recursion and acyclic forward references select the Phase 2
+  normalized CAAT backend, which recomputes a stratified least fixed point for
+  each graph snapshot. Recursive models containing difference are rejected at
+  the GenMC prefix-checking boundary until Phase 3 provides trail-aware online
+  handling of negative facts.
   Relinche collection/checking options cannot yet be combined with a CAT file.
 - **`--explain-cat`**: With `--model-file`, print a source-located witness and a
   deterministic conjunction of positive or negative base-relation literals
