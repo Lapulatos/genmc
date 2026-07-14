@@ -148,3 +148,30 @@
   bytes of final packed relations. Twenty-run SB batches show ordinary/recursive
   totals of SC 1.00/0.96 s, TSO 0.97/0.97 s, and PSO 0.97/0.97 s, with peak RSS
   between 52.63 and 52.69 MB.
+- Phase 3 research confirms CAAT's exact online boundary: insertion can seed
+  iteration from the old least fixed point, while deletion and non-monotonic
+  difference are explicitly unresolved. Its delta worklist is the normative
+  insertion algorithm.
+- Current Dat3M CAAT source has `addAndPropagate`, timestamped derivables,
+  `backtrackTo(time)`, recursive predicate propagation and constraint
+  listeners. It still rejects a dynamic difference RHS and documents that
+  difference in recursion is unsupported. This is a reusable MIT-licensed
+  design baseline, not proof of a complete GenMC-style online integration.
+- Kater's incremental consistency argument starts a cycle search at the newly
+  added event because a graph known consistent before the addition can only
+  acquire a cycle containing that event. Kater restricts cached relations when
+  their edges may later disappear; Phase 3 applies the same conservative rule.
+- Thomas Haas, Roland Meyer and collaborators published OOPSLA 2023 static
+  memory-model analysis and OOPSLA 2026 RAT-CAT-SAT. RAT-CAT-SAT supports the
+  rational CAT fragment for checking properties of memory models, not DPOR
+  program executions, so it is a future analysis reference rather than the
+  Phase 3 runtime backend.
+- DRed/DRed-C, Differential Dataflow and DBSP provide general recursive
+  incremental view maintenance, including deletions in broader settings. Their
+  runtime/data model is disproportionate for GenMC; Phase 3 implements the
+  positive insertion and stack rollback case in C++23 and rebuilds on unknown
+  mutations.
+- Phase 3 uses stable event keys because Phase 1's snapshot-local dense IDs put
+  sorted virtual initial writes after real labels. Adding a real label or new
+  address can otherwise shift an existing virtual ID and be mistaken for an
+  edge deletion.

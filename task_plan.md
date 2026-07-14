@@ -61,3 +61,9 @@
 GenMC 集成和 864 组广泛差分均已完成；最终报告为
 `doc/cat/phase-2-report.md`。下一阶段仅在重新读取约束并制定 Phase 3
 详细计划后开始，不把 incremental/backtracking 工作混入 Phase 2。
+
+**Phase 3.0 ready to commit** - 已完成 CAAT/Kater/Dat3M 与 2023--2026
+后续工作的调研，第三阶段合同冻结在 `doc/cat/phase-3-plan.md`；CAT/CAAT
+基线 72/72 通过，Phase 2 广泛结果保持 864/864 match。提交并 push 后，
+从可扩展 packed values 与独立 incremental evaluator 开始，不直接跳到
+GenMC 热路径。
