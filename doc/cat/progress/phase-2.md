@@ -253,3 +253,6 @@ This append-only record tracks each Phase 2 substage required by
   or Phase 2 model behavior, public CAT support boundary, or performance path
   changed. Commit SHA and push status are recorded in the following closure
   entry.
+- Delivery: commit `939e1e93c45a5b28eee70f96d4144393f3511a96`
+  (`fix(tests): use GenMC assume interface`) was pushed successfully to
+  `origin/genmc-caat`.
