@@ -207,12 +207,12 @@ checked where the oracle exposes them.
 
 ## 8. Phase completion checklist
 
-- [ ] Phase 2.0--2.6 each have a progress entry, gap analysis, commit, and push.
-- [ ] Normalized recursive semantics match the CAAT stratified least fixed point.
-- [ ] Semi-positivity and domain-independence gates are source-located.
-- [ ] All three axiom types return replayable base explanations.
-- [ ] At least 200 recursive program/model pairs have zero unexplained mismatch.
-- [ ] Frozen 288-program Phase 1 suite still has zero mismatch.
-- [ ] Performance and memory deltas are recorded.
-- [ ] User/manual/developer documentation states exact support and limits.
-- [ ] Final branch is clean and equals `origin/genmc-caat`.
+- [x] Phase 2.0--2.6 each have a progress entry, gap analysis, commit, and push.
+- [x] Normalized recursive semantics match the CAAT stratified least fixed point.
+- [x] Semi-positivity and domain-independence gates are source-located.
+- [x] All three axiom types return replayable base explanations.
+- [x] At least 200 recursive program/model pairs have zero unexplained mismatch.
+- [x] Frozen 288-program Phase 1 suite still has zero mismatch.
+- [x] Performance and memory deltas are recorded.
+- [x] User/manual/developer documentation states exact support and limits.
+- [x] Final branch is clean and equals `origin/genmc-caat`.
