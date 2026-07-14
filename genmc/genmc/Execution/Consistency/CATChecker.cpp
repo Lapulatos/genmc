@@ -56,12 +56,17 @@ template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
 	if (!this->getConf()->catStats || !graphSynchronizer_)
 		return;
 	const auto &stats = graphSynchronizer_->statistics();
+	const auto &evaluatorStats = incrementalEvaluator_->statistics();
 	std::ostringstream line;
 	line << "CAT incremental statistics: initialize=" << stats.initializations
 	     << " unchanged=" << stats.unchanged << " insert=" << stats.insertions
 	     << " rollback=" << stats.rollbacks << " rollback-insert=" << stats.rollbackInsertions
 	     << " rebuild=" << stats.rebuilds << " evicted=" << stats.evictedCheckpoints
-	     << " oracle=" << stats.oracleChecks;
+	     << " oracle=" << stats.oracleChecks
+	     << " eval-ops=" << evaluatorStats.operationEvaluations
+	     << " value-changes=" << evaluatorStats.valueChanges
+	     << " queue-pushes=" << evaluatorStats.worklistPushes
+	     << " offline-evals=" << evaluatorStats.offlineEvaluations;
 	/* A process-wide lock keeps worker records parseable under --nthreads. */
 	const std::lock_guard lock(catStatisticsMutex);
 	std::cerr << line.str() << '\n';

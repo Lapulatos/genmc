@@ -267,18 +267,18 @@ for predicate-by-predicate equality with the offline oracle.
 
 ## 9. Phase completion checklist
 
-- [ ] Phase 3.0--3.7 each have a precheck, reuse survey, contract, verification,
+- [x] Phase 3.0--3.7 each have a precheck, reuse survey, contract, verification,
   gap analysis, commit SHA, and push result.
-- [ ] Every positive normalized operator has insertion-delta oracle coverage.
-- [ ] Checkpoint rollback is exact for values, violations and explanations.
-- [ ] Every declared GenMC mutation class is incrementally handled or safely
+- [x] Every positive normalized operator has insertion-delta oracle coverage.
+- [x] Checkpoint rollback is exact for values, violations and explanations.
+- [x] Every declared GenMC mutation class is incrementally handled or safely
   rebuilt with an observable reason.
-- [ ] Online pruning has a static monotonicity certificate and execution-level
+- [x] Online pruning has a static monotonicity certificate and execution-level
   differential evidence.
-- [ ] At least 864 real online program/model rows have zero unexplained mismatch
+- [x] At least 864 real online program/model rows have zero unexplained mismatch
   and zero unsupported rows.
-- [ ] Phase 1 and Phase 2 frozen broad suites still have zero mismatch.
-- [ ] Runtime counters prove insertion and rollback occur on real programs.
-- [ ] Performance, peak memory, rebuild rate and fallback limits are recorded.
-- [ ] Documentation states exact supported semantics and non-goals.
+- [x] Phase 1 and Phase 2 frozen broad suites still have zero mismatch.
+- [x] Runtime counters prove insertion and rollback occur on real programs.
+- [x] Performance, peak memory, rebuild rate and fallback limits are recorded.
+- [x] Documentation states exact supported semantics and non-goals.
 - [ ] Final branch is clean and equals `origin/genmc-caat`.

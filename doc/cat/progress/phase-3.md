@@ -299,6 +299,8 @@ This append-only record tracks each Phase 3 substage required by
   but rebuild-heavy `rf`/`co` replacement and repeated revisit workloads need
   systematic oracle cross-checking and deterministic mismatch dumps. These are
   the sole production focus of Phase 3.6; broad performance claims wait for 3.7.
+- Delivery: committed as `d890211` (`feat(cat): integrate online CAAT
+  checking`) and pushed successfully to `origin/genmc-caat`.
 
 ## Phase 3.6: mutation/fallback hardening and differential stress
 
@@ -345,3 +347,41 @@ This append-only record tracks each Phase 3 substage required by
   requires the frozen 864-row broad corpus, aggregate transition/performance/RSS
   measurements, documentation audit and local/remote equality. Those are the
   Phase 3.7 deliverables.
+- Delivery: committed as `ab35de0` (`test(cat): harden online mutation
+  checking`) and pushed successfully to `origin/genmc-caat`.
+
+## Phase 3.7: broad validation, performance, and closure
+
+- Starting commit: `ab35de08543ee70cacf68483521001ea5fba27b9`.
+- Pre-check: re-read `doc/development.md`, project constraints, the complete
+  Phase 3 plan and `task_plan.md`; branch was `genmc-caat`, local and remote
+  matched, and the worktree was clean.
+- Reuse survey: reused the exact Phase 2 288-program manifest and signature
+  normalizer, current CTest/property/sanitizer suites, `/usr/bin/time -lp`, and
+  an independently built detached `196d370` binary as the from-scratch
+  baseline. No synthetic workload replaced the frozen real-program corpus.
+- Broad evidence: 288 programs times recursive SC/TSO/PSO produced 864/864
+  matching rows, zero mismatch and zero unsupported. Per-row counters record
+  128,801 insertions, 620,887 rollback-insertions, 364,023 safe rebuilds and
+  31,219,757 predicate evaluations. The complete 865-line TSV includes source
+  hashes, exact arguments, semantic signatures and transition/worklist counts.
+- Performance evidence: 54 end-to-end measurements compare the detached Phase
+  2 checker and current online checker over three models, three programs and
+  three repetitions. All paired execution counts match. Mean time is 0.0700 s
+  offline versus 0.2004 s online; maximum RSS is 54,525,952 versus 54,493,184
+  bytes. The 2.86x latency regression is honestly attributed to full-state
+  checkpoint copies and SC fcombiner rather than hidden as noise.
+- Documentation/audit: `phase-3-report.md` records the architecture, pruning
+  proof, exact unsupported boundary, broad/mutation/performance evidence,
+  environment limits and requirement-by-requirement audit. `supported-cat.md`
+  now describes normalized recursion, stable online identity, transition
+  fallback, difference rejection, `--cat-stats` and `--cat-oracle`.
+- Verification: complete unit tests passed 138/138; parallel focused tests
+  passed 104/104; ASan+UBSan passed 15/15; the 39-row mutation suite completed
+  5,396 oracle comparisons; the final broad suite passed 864/864. Formatter,
+  shell syntax and whitespace checks passed. Final clean-tree/remote equality is
+  recorded after the closure commits are pushed.
+- Gap analysis: no correctness or evidence item remains for the declared
+  positive normalized fragment. Full CAT, support-aware checkpoint
+  optimization and fewer rebuilds are explicitly future work, not silently
+  claimed Phase 3 behavior.

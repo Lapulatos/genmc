@@ -27,6 +27,15 @@ normalize_output()
 		paste -sd ';' -
 }
 
+# Sum one per-worker counter from the opt-in diagnostics in a captured log.
+sum_cat_stat()
+{
+	local key="$1"
+	local file="$2"
+	sed -n "s/.* ${key}=\([0-9][0-9]*\).*/\1/p" "${file}" |
+		awk '{sum += $1} END {print sum + 0}'
+}
+
 if [[ "${1:-}" == "--worker" ]]; then
 	shift
 	[[ "$#" -eq 7 ]] || usage
@@ -58,7 +67,7 @@ if [[ "${1:-}" == "--worker" ]]; then
 			--disable-estimation --disable-mm-detector)
 		recursive_command=("${genmc}"
 			"--model-file=${models_dir}/recursive-${model}.cat"
-			--disable-estimation --disable-mm-detector)
+			--cat-stats --disable-estimation --disable-mm-detector)
 		if [[ "${genmc_args}" =~ [^[:space:]] ]]; then
 			read -r -a parsed_genmc_args <<<"${genmc_args}"
 			baseline_command+=("${parsed_genmc_args[@]}")
@@ -93,11 +102,27 @@ if [[ "${1:-}" == "--worker" ]]; then
 		fi
 		[[ -n "${baseline_signature}" ]] || baseline_signature="-"
 		[[ -n "${recursive_signature}" ]] || recursive_signature="-"
-		printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
+		initializations="$(sum_cat_stat initialize "${recursive_output}")"
+		unchanged="$(sum_cat_stat unchanged "${recursive_output}")"
+		insertions="$(sum_cat_stat insert "${recursive_output}")"
+		rollbacks="$(sum_cat_stat rollback "${recursive_output}")"
+		rollback_insertions="$(sum_cat_stat rollback-insert "${recursive_output}")"
+		rebuilds="$(sum_cat_stat rebuild "${recursive_output}")"
+		evictions="$(sum_cat_stat evicted "${recursive_output}")"
+		oracle_checks="$(sum_cat_stat oracle "${recursive_output}")"
+		evaluation_operations="$(sum_cat_stat eval-ops "${recursive_output}")"
+		value_changes="$(sum_cat_stat value-changes "${recursive_output}")"
+		queue_pushes="$(sum_cat_stat queue-pushes "${recursive_output}")"
+		offline_evaluations="$(sum_cat_stat offline-evals "${recursive_output}")"
+		printf '%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s\n' \
 			"${index}" "${kind}" "${model}" "${relative_source}" \
 			"${source_hash}" "${genmc_args} | ${clang_args}" \
 			"${baseline_status}" "${recursive_status}" "${classification}" \
-			"${baseline_signature}" "${recursive_signature}" \
+			"${baseline_signature}" "${recursive_signature}" "${initializations}" \
+			"${unchanged}" "${insertions}" "${rollbacks}" \
+			"${rollback_insertions}" "${rebuilds}" "${evictions}" "${oracle_checks}" \
+			"${evaluation_operations}" "${value_changes}" "${queue_pushes}" \
+			"${offline_evaluations}" \
 			>"${parts_dir}/${index}-${model}.tsv"
 		if [[ "${classification}" == "match" ]]; then
 			rm -f "${baseline_output}" "${recursive_output}"
@@ -154,7 +179,7 @@ if [[ "${index}" -lt 200 ]]; then
 	exit 1
 fi
 
-export -f usage normalize_output
+export -f usage normalize_output sum_cat_stat
 script_path="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 while IFS=$'\t' read -r case_index kind relative_source; do
 	printf '%s\0%s\0%s\0' "${case_index}" "${kind}" "${relative_source}"
@@ -163,7 +188,7 @@ done <"${manifest}" |
 		"${models_dir}" "${tests_dir}" "${parts_dir}"
 
 {
-	printf 'index\tkind\tmodel\tprogram\tsha256\targuments\tbaseline_status\trecursive_status\tclassification\tbaseline_signature\trecursive_signature\n'
+	printf 'index\tkind\tmodel\tprogram\tsha256\targuments\tbaseline_status\trecursive_status\tclassification\tbaseline_signature\trecursive_signature\tinitialize\tunchanged\tinsert\trollback\trollback_insert\trebuild\tevicted\toracle\teval_ops\tvalue_changes\tqueue_pushes\toffline_evals\n'
 	for case_index in $(seq 1 "${index}"); do
 		cat "${parts_dir}/${case_index}-sc.tsv" \
 			"${parts_dir}/${case_index}-tso.tsv" \
@@ -180,9 +205,16 @@ unsupported_count="$(awk -F '\t' \
 matched_pairs="$(awk -F '\t' 'NR > 1 && $9 == "match" {count++} END {print count + 0}' \
 	"${result_file}")"
 program_count="$(wc -l <"${manifest}" | tr -d ' ')"
+transition_totals="$(awk -F '\t' 'NR > 1 {
+	init += $12; same += $13; ins += $14; rb += $15; rbi += $16;
+	rebuild += $17; evict += $18; oracle += $19; ops += $20; changes += $21;
+	pushes += $22; offline += $23
+} END {printf "initialize=%d unchanged=%d insert=%d rollback=%d rollback-insert=%d rebuild=%d evicted=%d oracle=%d eval-ops=%d value-changes=%d queue-pushes=%d offline-evals=%d",
+	init, same, ins, rb, rbi, rebuild, evict, oracle, ops, changes, pushes, offline}' "${result_file}")"
 printf 'discovered=%s recursive-pairs=%s matches=%s mismatches=%s unsupported=%s result=%s\n' \
 	"${program_count}" "$((program_count * 3))" "${matched_pairs}" \
 	"${mismatch_count}" "${unsupported_count}" "${result_file}"
+printf 'transitions: %s\n' "${transition_totals}"
 
 if [[ "${matched_pairs}" -lt 200 || "${mismatch_count}" -ne 0 ]]; then
 	mismatch_dir="${result_file%.tsv}-mismatches"

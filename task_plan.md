@@ -105,3 +105,11 @@ event/predicate 信息。39 组 exhaustive/randomized mutation rows 完成 5,396
 oracle check，零 mismatch；unit 138/138、parallel focused 104/104、ASan+UBSan
 15/15 通过。下一目标是 3.7 的 864+ broad validation、transition/performance/RSS
 统计、最终文档与 requirement audit。
+
+**Phase 3.7 implemented; delivery verification pending** - 冻结 288-program ×
+SC/TSO/PSO corpus 达到 864/864 match、0 mismatch、0 unsupported；结果逐行保存
+transition/worklist counters。39-row mutation suite 有 5,396 次 oracle match。
+独立 `196d370` Phase 2 binary 与当前 online binary 的 54-run time/RSS 对比已
+记录，当前 full-snapshot checkpoint 导致平均时间 0.0700→0.2004 s，而 peak RSS
+基本不变。最终报告、支持边界与逐条 audit 已完成；剩余动作仅为最终全套验证、
+closure commit/push 和 local/remote equality。

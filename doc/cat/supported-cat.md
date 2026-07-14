@@ -1,9 +1,15 @@
-# Phase 1 Supported CAT Language
+# Supported CAT/CAAT Language
 
 This document is the compatibility contract for the Phase 1 CAT frontend. It
 freezes the syntax, types, built-ins, include behavior, and diagnostics needed
 by the bundled SC, TSO, and PSO models. Constructs not listed here are not part
 of Phase 1 even when herdtools7 accepts them.
+
+Phase 2 additionally accepts forward references and explicitly declared
+`let rec ... and ...` groups after normalization and stratification. Phase 3
+maintains positive normalized predicates incrementally across GenMC graph
+growth and retained-ancestor rollback. This later backend changes evaluation
+strategy, not the grammar, base-event mapping, or consistency axioms below.
 
 The normative language reference is *Syntax and Semantics of the Weak
 Consistency Model Specification Language Cat* (2016). The herdtools7 lexer,
@@ -168,6 +174,21 @@ Phase 1 also rejects `--model-file` with Relinche collection/checking options.
 Relinche asks the checker for a refinement-specific coherence predicate; the
 available implementation belongs to the generated SC/TSO host rather than the
 arbitrary CAT model. Failing early avoids silently applying the wrong model.
+
+Phase 3 admits normalized recursion only when every equation is positive under
+insertion. Difference remains excluded from the online boundary, including
+semi-positive offline uses: inserting an RHS fact can remove a derived fact and
+repair a prefix violation. Such a model is rejected before exploration rather
+than being used for unsound pruning. Positive `empty`, `irreflexive`, and
+`acyclic` witnesses persist until rollback and may reject a prefix immediately.
+
+The online checker gives real events stable `(thread,index)` identities and
+virtual initial writes stable address identities. It classifies each query as
+initialize, unchanged, insertion, rollback, rollback-plus-insert, or rebuild;
+mixed deletion/replacement such as an unsupported `rf`/`co` mutation uses the
+Phase 2 full evaluator. `--cat-stats` exposes these transitions and
+`--cat-oracle` checks every incremental result against a fresh Phase 2 fixed
+point. Both diagnostics are disabled by default.
 
 ## Built-in event sets
 
