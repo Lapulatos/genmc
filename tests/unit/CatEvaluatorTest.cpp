@@ -15,6 +15,7 @@
 #include "genmc/CAT/CaatEvaluator.hpp"
 #include "genmc/CAT/Evaluator.hpp"
 #include "genmc/CAT/Frontend.hpp"
+#include "genmc/CAT/IncrementalEvaluator.hpp"
 #include "genmc/CAT/Model.hpp"
 #include "genmc/CAT/Normalized.hpp"
 #include "genmc/CAT/Reasoner.hpp"
@@ -37,6 +38,8 @@
 #include <utility>
 #include <vector>
 
+#include <unistd.h>
+
 namespace {
 
 /** Compile one isolated valid model for evaluator-only tests. */
@@ -44,8 +47,9 @@ static auto compileModel(std::string_view source) -> std::shared_ptr<const cat::
 {
 	static std::atomic<std::uint64_t> nextFixture{};
 	auto path = std::filesystem::path(testing::TempDir()) /
-		    ("genmc-cat-evaluator-" +
-		     std::to_string(nextFixture.fetch_add(1, std::memory_order_relaxed)) + ".cat");
+		    ("genmc-cat-evaluator-" + std::to_string(static_cast<std::uint64_t>(getpid())) +
+		     "-" + std::to_string(nextFixture.fetch_add(1, std::memory_order_relaxed)) +
+		     ".cat");
 	std::ofstream output(path);
 	output << source;
 	output.close();
@@ -70,6 +74,7 @@ static auto analyzeModel(std::string_view source) -> AnalyzedModel
 	static std::atomic<std::uint64_t> nextFixture{};
 	auto path = std::filesystem::path(testing::TempDir()) /
 		    ("genmc-caat-evaluator-" +
+		     std::to_string(static_cast<std::uint64_t>(getpid())) + "-" +
 		     std::to_string(nextFixture.fetch_add(1, std::memory_order_relaxed)) + ".cat");
 	std::ofstream output(path);
 	output << source;
@@ -149,6 +154,21 @@ TEST(CatValueTest, EvaluatesSetAlgebraAcrossWords)
 	EXPECT_EQ(lhs.first(), 0U);
 }
 
+/* Universe growth preserves old members and zero-initializes every new event. */
+TEST(CatValueTest, GrowsEventSetsAcrossPackedWordBoundaries)
+{
+	cat::EventSet events;
+	for (const auto size : {1U, 63U, 64U, 65U, 130U}) {
+		events.grow(size);
+		events.insert(size - 1);
+		EXPECT_EQ(events.size(), size);
+		EXPECT_TRUE(events.contains(size - 1));
+	}
+	EXPECT_EQ(events.count(), 5U);
+	for (const auto event : {0U, 62U, 63U, 64U, 129U})
+		EXPECT_TRUE(events.contains(event));
+}
+
 /* Relation Boolean algebra, product, identity, and inverse preserve exact pairs. */
 TEST(CatValueTest, EvaluatesBasicRelationAlgebra)
 {
@@ -168,6 +188,26 @@ TEST(CatValueTest, EvaluatesBasicRelationAlgebra)
 	EXPECT_EQ(identity(makeSet(4, {1, 3})), makeRelation(4, {{1, 1}, {3, 3}}));
 	EXPECT_EQ(domain(lhs), makeSet(4, {0, 1, 2}));
 	EXPECT_EQ(range(lhs), makeSet(4, {1, 2, 3}));
+}
+
+/* Relation growth repacks rows without moving or inventing existing pairs. */
+TEST(CatValueTest, GrowsRelationsAcrossPackedRowBoundaries)
+{
+	cat::Relation relation;
+	relation.grow(1);
+	relation.insert(0, 0);
+	relation.grow(64);
+	relation.insert(63, 0);
+	relation.insert(0, 63);
+	relation.grow(65);
+	relation.insert(64, 64);
+	relation.grow(130);
+	relation.insert(129, 64);
+
+	EXPECT_EQ(relation.size(), 130U);
+	EXPECT_EQ(relation.count(), 5U);
+	EXPECT_EQ(toReference(relation), (std::set<std::pair<std::size_t, std::size_t>>{
+						 {0, 0}, {0, 63}, {63, 0}, {64, 64}, {129, 64}}));
 }
 
 /* Composition and closures cover empty, chain, cycle, singleton, and disconnected cases. */
@@ -212,6 +252,59 @@ empty reach as populated
 	EXPECT_EQ(std::get<cat::Relation>(*result.values[reach]), naive);
 	EXPECT_FALSE(result.consistent());
 	EXPECT_GT(result.statistics.valueChanges, 0U);
+}
+
+/* Incremental state initialization publishes the exact Phase 2 fixed point. */
+TEST(IncrementalCaatEvaluatorTest, InitializesFromOfflineOracle)
+{
+	auto analyzed = analyzeModel(R"CAT(IncrementalInitialization
+let rec reach = po | (reach ; po)
+acyclic reach as order
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues base{{"po", makeRelation(5, {{0, 1}, {1, 2}, {3, 4}})}};
+	auto offline = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, 5, base);
+
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	EXPECT_FALSE(incremental.initialized());
+	const auto &initialized = incremental.initialize(5, base);
+
+	EXPECT_TRUE(incremental.initialized());
+	EXPECT_EQ(incremental.eventCount(), 5U);
+	EXPECT_EQ(incremental.baseValues(), base);
+	EXPECT_EQ(initialized.values, offline.values);
+	EXPECT_EQ(initialized.consistent(), offline.consistent());
+	EXPECT_EQ(initialized.violations.size(), offline.violations.size());
+	EXPECT_EQ(initialized.errors.size(), offline.errors.size());
+	EXPECT_EQ(&incremental.result(), &initialized);
+	EXPECT_EQ(incremental.statistics().initializations, 1U);
+	EXPECT_EQ(incremental.statistics().offlineEvaluations, 1U);
+}
+
+/* Reinitialization atomically replaces the old universe, bases, and result. */
+TEST(IncrementalCaatEvaluatorTest, ReinitializesAfterFallback)
+{
+	auto analyzed = analyzeModel(R"CAT(IncrementalReinitialization
+let rec reach = po | (reach ; po)
+empty reach as no-order
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	incremental.initialize(2, {{"po", makeRelation(2, {})}});
+	EXPECT_TRUE(incremental.result().consistent());
+
+	cat::BaseValues replacement{{"po", makeRelation(3, {{0, 1}})}};
+	auto offline =
+		cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, 3, replacement);
+	const auto &current = incremental.initialize(3, replacement);
+
+	EXPECT_EQ(incremental.eventCount(), 3U);
+	EXPECT_EQ(incremental.baseValues(), replacement);
+	EXPECT_EQ(current.values, offline.values);
+	EXPECT_EQ(current.consistent(), offline.consistent());
+	EXPECT_EQ(current.violations.size(), offline.violations.size());
+	EXPECT_EQ(incremental.statistics().initializations, 2U);
+	EXPECT_EQ(incremental.statistics().offlineEvaluations, 2U);
 }
 
 /* Mutual relation recursion converges to the union of both base relations. */
@@ -495,6 +588,40 @@ RC_GTEST_PROP(CatValuePropertyTest, MatchesReferenceSetAlgebra,
 	RC_ASSERT(setUnion(lhs, lhs) == lhs);
 	RC_ASSERT(setIntersection(lhs, lhs) == lhs);
 	RC_ASSERT(setDifference(lhs, lhs).empty());
+}
+
+/* Random growth preserves every packed membership and leaves new cells empty. */
+RC_GTEST_PROP(CatValuePropertyTest, GrowthMatchesReferenceValues,
+	      (const std::vector<std::uint8_t> &bytes))
+{
+	const auto oldSize = bytes.empty() ? 0U : static_cast<std::size_t>(bytes.front() % 131U);
+	const auto extra = bytes.size() < 2 ? 0U : static_cast<std::size_t>(bytes[1] % 66U);
+	const auto newSize = oldSize + extra;
+	cat::EventSet events(oldSize);
+	cat::Relation relation(oldSize);
+	std::set<std::size_t> eventReference;
+	std::set<std::pair<std::size_t, std::size_t>> relationReference;
+	if (oldSize != 0) {
+		for (std::size_t index = 0; index < bytes.size(); ++index) {
+			const auto event = static_cast<std::size_t>(bytes[index]) % oldSize;
+			events.insert(event);
+			eventReference.insert(event);
+			const auto target =
+				static_cast<std::size_t>(bytes[(index + 1) % bytes.size()]) %
+				oldSize;
+			relation.insert(event, target);
+			relationReference.emplace(event, target);
+		}
+	}
+	events.grow(newSize);
+	relation.grow(newSize);
+
+	RC_ASSERT(events.size() == newSize);
+	RC_ASSERT(relation.size() == newSize);
+	RC_ASSERT(events.count() == eventReference.size());
+	RC_ASSERT(toReference(relation) == relationReference);
+	for (std::size_t event = oldSize; event < newSize; ++event)
+		RC_ASSERT(!events.contains(event));
 }
 
 /* Random packed operations agree with a std::set relation oracle. */

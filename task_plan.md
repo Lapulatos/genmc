@@ -67,3 +67,8 @@ GenMC 集成和 864 组广泛差分均已完成；最终报告为
 基线 72/72 通过，Phase 2 广泛结果保持 864/864 match。提交并 push 后，
 从可扩展 packed values 与独立 incremental evaluator 开始，不直接跳到
 GenMC 热路径。
+
+**Phase 3.1 implemented** - packed set/relation 已能跨 64 位边界保持内容
+增长；独立 incremental state 的初始化/重建与 Phase 2 oracle 一致。正常
+unit 125/125、并行 CAT/CAAT 77/77、ASan+UBSan focused 5/5 通过。当前差距
+是尚未实现 insertion delta；这是 Phase 3.2 的唯一生产目标。

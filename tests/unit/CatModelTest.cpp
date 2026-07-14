@@ -27,6 +27,8 @@
 #include <iterator>
 #include <string_view>
 
+#include <unistd.h>
+
 namespace {
 
 static auto repositoryRoot() -> std::filesystem::path
@@ -40,7 +42,8 @@ static auto compileText(std::string_view source) -> cat::CompileResult
 	static std::atomic<std::uint64_t> nextFixture{};
 	const auto nonce = nextFixture.fetch_add(1, std::memory_order_relaxed);
 	auto path = std::filesystem::path(testing::TempDir()) /
-		    ("genmc-cat-model-" + std::to_string(nonce) + ".cat");
+		    ("genmc-cat-model-" + std::to_string(static_cast<std::uint64_t>(getpid())) +
+		     "-" + std::to_string(nonce) + ".cat");
 	std::ofstream output(path);
 	output << source;
 	output.close();
@@ -60,8 +63,10 @@ static auto normalizeText(std::string_view source) -> cat::NormalizeResult
 {
 	static std::atomic<std::uint64_t> nextFixture{};
 	const auto nonce = nextFixture.fetch_add(1, std::memory_order_relaxed);
-	auto path = std::filesystem::path(testing::TempDir()) /
-		    ("genmc-caat-normalized-" + std::to_string(nonce) + ".cat");
+	auto path =
+		std::filesystem::path(testing::TempDir()) /
+		("genmc-caat-normalized-" + std::to_string(static_cast<std::uint64_t>(getpid())) +
+		 "-" + std::to_string(nonce) + ".cat");
 	std::ofstream output(path);
 	output << source;
 	output.close();

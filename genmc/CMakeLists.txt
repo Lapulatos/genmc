@@ -9,6 +9,7 @@ set(LIB_SOURCES
   genmc/CAT/CaatEvaluator.cpp
   genmc/CAT/Frontend.cpp
   genmc/CAT/GraphAdapter.cpp
+  genmc/CAT/IncrementalEvaluator.cpp
   genmc/CAT/Model.cpp
   genmc/CAT/Normalized.cpp
   genmc/CAT/Reasoner.cpp

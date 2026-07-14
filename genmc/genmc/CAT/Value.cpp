@@ -62,6 +62,13 @@ void EventSet::insert(std::size_t event)
 	words_[event / bitsPerWord] |= std::uint64_t{1} << (event % bitsPerWord);
 }
 
+void EventSet::grow(std::size_t size)
+{
+	VERIFY(size >= size_, "CAT event-set universe cannot shrink");
+	words_.resize(wordCount(size));
+	size_ = size;
+}
+
 auto EventSet::first() const -> std::size_t
 {
 	for (std::size_t word = 0; word < words_.size(); ++word) {
@@ -106,6 +113,35 @@ void Relation::insert(std::size_t from, std::size_t target)
 	VERIFY(target < size_, "CAT relation column out of range");
 	const auto offset = rowOffset(from) + target / bitsPerWord;
 	words_[offset] |= std::uint64_t{1} << (target % bitsPerWord);
+}
+
+void Relation::grow(std::size_t size)
+{
+	VERIFY(size >= size_, "CAT relation universe cannot shrink");
+	if (size == size_)
+		return;
+
+	const auto newRowWords = EventSet::wordCount(size);
+	if (newRowWords == rowWords_) {
+		/* Existing rows keep their offsets until a word boundary is crossed. */
+		words_.resize(size * newRowWords);
+		size_ = size;
+		return;
+	}
+
+	/* A wider row changes every following row offset. Copy the old packed
+	 * prefix of each row into a zero-initialized matrix with the new stride. */
+	std::vector<std::uint64_t> grown(size * newRowWords);
+	for (std::size_t row = 0; row < size_; ++row) {
+		const auto oldOffset = row * rowWords_;
+		const auto newOffset = row * newRowWords;
+		std::ranges::copy_n(words_.begin() + static_cast<std::ptrdiff_t>(oldOffset),
+				    rowWords_,
+				    grown.begin() + static_cast<std::ptrdiff_t>(newOffset));
+	}
+	words_ = std::move(grown);
+	size_ = size;
+	rowWords_ = newRowWords;
 }
 
 auto Relation::successors(std::size_t from) const -> EventSet

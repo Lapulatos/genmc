@@ -48,6 +48,13 @@ public:
 	[[nodiscard]] auto contains(std::size_t event) const -> bool;
 	/** Insert one in-range event ID. */
 	void insert(std::size_t event);
+	/**
+	 * Grow the represented universe while preserving every existing member.
+	 *
+	 * @param size New universe size; shrinking is a contract violation.
+	 * @complexity O(new packed word count) only when storage must grow.
+	 */
+	void grow(std::size_t size);
 	/** Return one present event, or `size()` as the no-event sentinel. */
 	[[nodiscard]] auto first() const -> std::size_t;
 
@@ -93,6 +100,16 @@ public:
 	[[nodiscard]] auto contains(std::size_t from, std::size_t target) const -> bool;
 	/** Insert one in-range `(from,to)` pair. */
 	void insert(std::size_t from, std::size_t target);
+	/**
+	 * Grow both relation dimensions while preserving every existing pair.
+	 *
+	 * Row packing changes whenever the target universe crosses a 64-event
+	 * boundary, so those transitions repack all live rows.
+	 *
+	 * @param size New common source/target size; shrinking is invalid.
+	 * @complexity O(old pairs' packed rows + newly allocated storage).
+	 */
+	void grow(std::size_t size);
 	/** Return all targets of @p from as a value copy. */
 	[[nodiscard]] auto successors(std::size_t from) const -> EventSet;
 

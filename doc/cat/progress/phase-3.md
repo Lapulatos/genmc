@@ -50,3 +50,47 @@ This append-only record tracks each Phase 3 substage required by
   GenMC integration cannot begin before its oracle equivalence is demonstrated.
 - Delivery: committed as `28f63c6` (`docs(cat): plan incremental CAAT
   integration`) and pushed successfully to `origin/genmc-caat`.
+
+## Phase 3.1: extensible values and standalone incremental state
+
+- Starting commit: `679f206361a5a9a5971ecdf0054cc1390ed33cd6`.
+- Pre-check: re-read `doc/development.md`, project constraints and the complete
+  Phase 3 plan; branch was `genmc-caat`, local and remote matched, and the
+  worktree was clean.
+- Reuse survey: retained Phase 2 `CaatEvaluator` as the sole initialization and
+  fallback oracle, `BaseValues` as the owned primitive snapshot, normalized
+  model/analysis as borrowed immutable metadata, and existing packed words.
+  Dat3M's mutable predicate hierarchy remains a design reference; no Java code,
+  runtime, or dependency was copied.
+- Contract: grow packed universes without changing existing memberships; add a
+  worker-local incremental state that atomically publishes an exact Phase 2
+  initialization/reinitialization; do not add delta propagation or GenMC
+  checker integration yet. Fix the process-colliding CAAT fixture names exposed
+  by Phase 3.0 so parallel tests are valid evidence.
+- Implementation: `EventSet::grow` extends zero-initialized packed storage.
+  `Relation::grow` preserves row offsets within a 64-event block and repacks
+  every live row when the stride grows. `IncrementalCaatEvaluator` borrows the
+  immutable model/analysis, owns its base snapshot and current fixed point, and
+  records initialization/offline counters. Its only publication path computes
+  a complete temporary Phase 2 result before replacing state.
+- Test infrastructure fix: evaluator/model fixture paths now include the
+  process ID as well as the atomic counter. This prevents separately launched
+  GoogleTest processes from overwriting `...-0.cat` during parallel CTest.
+- Verification: the normal RelWithDebInfo build passed; the complete unit
+  executable passed 125/125; parallel focused CAT/CAAT/CLI/integration testing
+  passed 77/77. Unit and RapidCheck tests cover growth through 0/1/63/64/65/130
+  events, random old/new universes, relation row repacking, exact offline
+  initialization and atomic fallback reinitialization.
+- Sanitizers: a fresh Debug build with AddressSanitizer and
+  UndefinedBehaviorSanitizer passed all five growth/incremental focused tests,
+  including the randomized property. Only pre-existing generated-checker and
+  driver warnings were emitted during that build.
+- Error encountered: the first build used the later `toPairs` helper name and
+  compared violation/error structs that intentionally have no equality
+  operator. Tests now use the existing `toReference` oracle and compare exact
+  predicate values plus consistency/violation/error counts. No production
+  behavior was changed to accommodate the test.
+- Gap to Phase 3: initialization and domain growth are complete, but every
+  update after initialization still requires an offline evaluation. Phase 3.2
+  must add positive insertion deltas for the complete normalized operator
+  surface and compare every intermediate predicate with a fresh oracle.
