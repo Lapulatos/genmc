@@ -9,7 +9,7 @@
 - [x] Feasibility 3: 形成风险边界和三阶段路线
 - [x] Implementation 1: CAT file support（SC/TSO/PSO full-graph consistency；实现、验证与报告已完成）
 - [x] Validation 1: 已运行 288 个不同程序（287 个有效），修复三个根因并将 SC/TSO 差异清零
-- [ ] Implementation 2: Offline CAAT backend（Phase 2.0--2.5 完成；2.6 广泛验证待完成）
+- [ ] Implementation 2: Offline CAAT backend（Phase 2.0--2.6 实现和验证完成；待最终提交、push 与远端一致性检查）
 - [ ] Implementation 3: Incremental/online CAAT（push/pop/backtrack/early pruning）
 
 ## Key Questions
@@ -56,4 +56,4 @@
 
 **Broad validation complete** - 288 个程序中 287 个形成有效证据；574 组 SC/TSO 内置 checker 与 CAT checker 结果完全一致，最终 mismatch 为 0。一个程序因未知外部函数在验证前失败，已单独记录，未计为通过。
 
-**Current target: Phase 2.4** - 为 fixed-point membership 记录 derivation，并为 empty/irreflexive/acyclic 输出可回放的 base-literal explanation。
+**Current target: Phase 2.6 closure** - 广泛差分、外部 oracle、性能/内存和完整回归已完成；正在提交最终报告并验证本地与远端一致。

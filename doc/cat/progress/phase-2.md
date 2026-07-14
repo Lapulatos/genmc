@@ -183,3 +183,45 @@ This append-only record tracks each Phase 2 substage required by
   at least 200 distinct recursive program/model pairs, the frozen 288-program
   Phase 1 regression, aligned herd/Dat3M evidence, throughput/memory/end-to-end
   measurements, requirement audit, final report, and clean remote equality.
+
+## Phase 2.6: broad validation and closure
+
+- Starting commit: `7269459761363028557488c840ad547142d147c8`.
+- Pre-check: re-read `doc/development.md`, project constraints, and the Phase 2
+  plan; branch was `genmc-caat`, local and `origin/genmc-caat` matched, and the
+  worktree contained only the in-progress broad script/result from this same
+  substage.
+- Reuse survey: reused the exact Phase 1 six-root corpus, result normalization,
+  model files, GenMC executable, herd scripts, GoogleTest property harness, and
+  Dat3M revision frozen in Phase 2.0. The new script generalizes the Phase 1
+  oracle to three ordinary/recursive model pairs; no external implementation or
+  runtime dependency was copied.
+- Contract: execute at least 200 recursive program/model pairs, retain exact
+  Phase 1 results, isolate every non-match, build the Dat3M reference, run aligned
+  herd oracles, record parser/evaluator/end-to-end time and memory, then audit
+  every Phase 2 completion requirement.
+- Broad evidence: 288 distinct programs × SC/TSO/PSO produced 864 rows and 1,728
+  GenMC invocations. There are 861 exact status/signature matches, zero mismatch,
+  and three unsupported rows from one program that fails before verification in
+  both paths. Coverage contains 696 correct and 168 wrong program/model rows.
+- Regression/external evidence: the unchanged Phase 1 suite remains 574 valid
+  matches, zero mismatch, and two unsupported rows across 576 pairs. Both herd
+  TSO/PSO oracle scripts pass. Dat3M `a7e3e48` builds 699 production and 159 test
+  sources successfully; direct verdict comparison is not claimed where C/LLVM
+  base-event meanings differ.
+- Performance: 300 parses yield 17,289 files/s; recursive chain fixed points over
+  32/64/128 events take 2.974 ms with 442 operation evaluations, 439 changes, and
+  442 pushes. Twenty-run ordinary/recursive SB totals are SC 1.00/0.96 seconds,
+  TSO 0.97/0.97 seconds, and PSO 0.97/0.97 seconds; peak RSS is 52.63--52.69 MB.
+- Verification: build passed; 120/120 unit/property tests passed; fast-driver and
+  three CAT CTests passed 4/4 in 80.61 seconds; focused recursive 48/48 and both
+  herd scripts passed. Shell syntax and the frozen Phase 1 TSV check passed.
+- Environment note: the known standalone clang-tidy/libc++ header-resolution
+  problem remains; normal configured LLVM 20 compilation succeeds. An initial
+  benchmark command used the wrong unit-test binary path and exited 127; rerunning
+  the same filter through `RelWithDebInfo/bin/unit_tests` passed 3/3.
+- Gap audit: no P0 correctness, compatibility, performance-recording, or
+  documentation gap remains inside the declared offline fragment. Incremental
+  state, backtracking, negative-fact invalidation, and early pruning remain
+  explicitly Phase 3. Delivery commit and pushed remote ref are recorded by the
+  closure entry following this substage.

@@ -424,6 +424,52 @@ empty reach
 	RC_ASSERT(std::get<cat::Relation>(*result.values[reach]) == naive);
 }
 
+/*
+ * Chain reachability gives a reproducible worst-shaped fixed-point measurement:
+ * each recurrence can extend the longest known path by only one edge.  The
+ * counters make later worklist or incremental implementations comparable
+ * without treating wall-clock time as a correctness assertion.
+ */
+TEST(CaatEvaluatorTest, BenchmarkRecursiveChainFixedPoints)
+{
+	auto analyzed = analyzeModel(R"CAT(Benchmark
+let rec reach = po | (reach ; po)
+acyclic reach
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	std::size_t operationEvaluations{};
+	std::size_t valueChanges{};
+	std::size_t worklistPushes{};
+	std::size_t packedBytes{};
+	const auto start = std::chrono::steady_clock::now();
+	for (const auto size : {32U, 64U, 128U}) {
+		cat::Relation po(size);
+		for (std::size_t event = 1; event < size; ++event)
+			po.insert(event - 1, event);
+		cat::BaseValues base{{"po", po}};
+		auto result = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
+							    size, base);
+		ASSERT_TRUE(result.errors.empty());
+		ASSERT_TRUE(result.violations.empty());
+		const auto reach = findPredicate(*analyzed.model, "reach");
+		ASSERT_LT(reach, result.values.size());
+		ASSERT_TRUE(result.values[reach].has_value());
+		const auto &value = std::get<cat::Relation>(*result.values[reach]);
+		EXPECT_EQ(value.count(), size * (size - 1) / 2);
+		operationEvaluations += result.statistics.operationEvaluations;
+		valueChanges += result.statistics.valueChanges;
+		worklistPushes += result.statistics.worklistPushes;
+		packedBytes += value.storageBytes();
+	}
+	const auto elapsed = std::chrono::steady_clock::now() - start;
+	RecordProperty("elapsed_microseconds",
+		       std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count());
+	RecordProperty("operation_evaluations", operationEvaluations);
+	RecordProperty("value_changes", valueChanges);
+	RecordProperty("worklist_pushes", worklistPushes);
+	RecordProperty("packed_result_bytes", packedBytes);
+}
+
 /* Random set Boolean operations satisfy identities and a direct membership oracle. */
 RC_GTEST_PROP(CatValuePropertyTest, MatchesReferenceSetAlgebra,
 	      (const std::vector<std::uint8_t> &lhsBytes,

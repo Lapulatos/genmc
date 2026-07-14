@@ -132,3 +132,17 @@
 - Recursive SC/TSO/PSO clean-room fixtures replace final order acyclicity with
   recursive reachability. Across eight real programs and one/two workers, 48
   recursive results match the corresponding Phase 1 status and semantic summary.
+- Phase 2 broad validation freezes the same 288 programs as Phase 1. The three
+  recursive model pairs produce 864 rows: 861 valid exact matches, zero mismatch,
+  and three pre-verification unsupported rows for the same external-function
+  program. Correct/wrong coverage is 696/168 rows.
+- Dat3M revision `a7e3e4843359dde3a0e29500a821030e2433e316` builds successfully
+  with Java 17/Maven: 699 production and 159 test sources compile and the jar is
+  produced in 60 seconds with tests skipped. A direct verdict comparison is not
+  claimed because GenMC and Dat3M do not expose an identical C/LLVM base-event
+  mapping for the frozen corpus.
+- The Phase 2 fixed-point benchmark over 32/64/128-event chains records 2.974 ms,
+  442 operation evaluations, 439 value changes, 442 worklist pushes, and 2,816
+  bytes of final packed relations. Twenty-run SB batches show ordinary/recursive
+  totals of SC 1.00/0.96 s, TSO 0.97/0.97 s, and PSO 0.97/0.97 s, with peak RSS
+  between 52.63 and 52.69 MB.
