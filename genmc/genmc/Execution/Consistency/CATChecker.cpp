@@ -24,7 +24,51 @@
 #include "genmc/Verification/Config.hpp"
 
 #include <iostream>
+#include <mutex>
 #include <ranges>
+#include <sstream>
+
+namespace {
+
+/** Serialize opt-in statistics emitted by independently destroyed workers. */
+std::mutex catStatisticsMutex;
+
+} /* namespace */
+
+template <typename HostChecker>
+BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(conf)
+{
+	VERIFY(conf, "CAT checker requires configuration");
+	if (!conf->useCaatBackend || !conf->caatModel || !conf->caatAnalysis)
+		return;
+	incrementalEvaluator_ = std::make_unique<cat::IncrementalCaatEvaluator>(
+		*conf->caatModel, *conf->caatAnalysis);
+	if (incrementalEvaluator_->supportsInsertions())
+		graphSynchronizer_ =
+			std::make_unique<cat::GraphSynchronizer>(*incrementalEvaluator_);
+}
+
+template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
+{
+	if (!this->getConf()->catStats || !graphSynchronizer_)
+		return;
+	const auto &stats = graphSynchronizer_->statistics();
+	std::ostringstream line;
+	line << "CAT incremental statistics: initialize=" << stats.initializations
+	     << " unchanged=" << stats.unchanged << " insert=" << stats.insertions
+	     << " rollback=" << stats.rollbacks << " rollback-insert=" << stats.rollbackInsertions
+	     << " rebuild=" << stats.rebuilds << " evicted=" << stats.evictedCheckpoints;
+	/* A process-wide lock keeps worker records parseable under --nthreads. */
+	const std::lock_guard lock(catStatisticsMutex);
+	std::cerr << line.str() << '\n';
+}
+
+template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::incrementalStatistics() const
+	-> const cat::GraphSynchronizationStatistics *
+{
+	return graphSynchronizer_ ? &graphSynchronizer_->statistics() : nullptr;
+}
 
 template <typename HostChecker>
 auto BasicCATChecker<HostChecker>::isConsistent(const EventLabel *lab) const -> bool
@@ -48,12 +92,24 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 #endif
 	std::vector<cat::Violation> violations;
 	std::vector<std::optional<cat::Value>> caatValues;
+	std::size_t caatEventCount = adapter.eventCount();
 	if (this->getConf()->useCaatBackend) {
-		auto result = cat::CaatEvaluator().evaluate(
-			*caatModel, *caatAnalysis, adapter.eventCount(), adapter.baseValues());
-		VERIFY(result.errors.empty(), "validated CAAT evaluation failed");
-		violations = std::move(result.violations);
-		caatValues = std::move(result.values);
+		if (graphSynchronizer_) {
+			(void)graphSynchronizer_->synchronize(adapter);
+			const auto &result = incrementalEvaluator_->result();
+			VERIFY(result.errors.empty(),
+			       "validated incremental CAAT evaluation failed");
+			violations = result.violations;
+			caatValues = result.values;
+			caatEventCount = incrementalEvaluator_->eventCount();
+		} else {
+			auto result = cat::CaatEvaluator().evaluate(*caatModel, *caatAnalysis,
+								    adapter.eventCount(),
+								    adapter.baseValues());
+			VERIFY(result.errors.empty(), "validated CAAT evaluation failed");
+			violations = std::move(result.violations);
+			caatValues = std::move(result.values);
+		}
 	} else {
 		auto result = cat::Evaluator().evaluate(*model, adapter.eventCount(),
 							adapter.baseValues());
@@ -71,8 +127,8 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 			caatValues = std::move(evaluated.values);
 			violations = std::move(evaluated.violations);
 		}
-		auto explained = cat::Reasoner().explain(
-			*caatModel, *caatAnalysis, adapter.eventCount(), caatValues, violations);
+		auto explained = cat::Reasoner().explain(*caatModel, *caatAnalysis, caatEventCount,
+							 caatValues, violations);
 		VERIFY(explained.ok(), "validated CAT violation explanation failed");
 		/* One line per violation minimizes interleaving when explicitly enabled
 		 * during multi-worker exploration. */

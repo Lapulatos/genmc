@@ -59,6 +59,24 @@ for model in sc tso pso; do
 	done
 done
 
+# Opt-in counters prove all three real recursive models use both insertion and
+# retained-ancestor rollback before advancing along another exploration branch.
+for model in sc tso pso; do
+	stats_output="$("${genmc}" --model-file="${model_root}/recursive-${model}.cat" \
+		--cat-stats --disable-estimation --disable-mm-detector --nthreads=1 \
+		"${source_root}/correct/data-structures/fcombiner-async/variants/main0.c" 2>&1 || true)"
+	stats_line="$(grep -F "CAT incremental statistics:" <<<"${stats_output}")"
+	insertions="$(sed -n 's/.* insert=\([0-9][0-9]*\).*/\1/p' <<<"${stats_line}")"
+	rollback_insertions="$(sed -n \
+		's/.* rollback-insert=\([0-9][0-9]*\).*/\1/p' <<<"${stats_line}")"
+	if [[ -z "${insertions}" || "${insertions}" -eq 0 ||
+	      -z "${rollback_insertions}" || "${rollback_insertions}" -eq 0 ]]; then
+		echo "Recursive ${model} did not exercise insertion and rollback-insert:" >&2
+		echo "${stats_line}" >&2
+		exit 1
+	fi
+done
+
 # The recursive backend feeds its own fixed-point values to the Phase 2 reasoner.
 explanation="$("${genmc}" --model-file="${model_root}/recursive-sc.cat" --explain-cat \
 	--disable-estimation --nthreads=1 \

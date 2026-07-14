@@ -14,15 +14,19 @@
 #ifndef GENMC_CAT_CHECKER_HPP
 #define GENMC_CAT_CHECKER_HPP
 
+#include "genmc/CAT/GraphSynchronizer.hpp"
 #include "genmc/Execution/Consistency/SCChecker.hpp"
 #include "genmc/Execution/Consistency/TSOChecker.hpp"
 
+#include <memory>
+
 /**
- * Correctness-first full-graph checker for a validated CAT model.
+ * Correctness-first graph checker for a validated CAT model.
  *
  * HostChecker supplies established view, prefix, race, and warning machinery
  * selected by explicit typed model metadata. CAT consistency itself is never
- * delegated: every candidate is rebuilt through the generic graph adapter and
+ * delegated. Positive normalized CAAT models synchronize each candidate into a
+ * worker-local incremental evaluator; Phase 1 models keep their from-scratch
  * evaluator. Model-specific candidate/revisit pruning is disabled in favor of
  * conservative enumeration. Like ConsistencyChecker, one instance belongs to
  * one verification worker and is not thread-safe.
@@ -37,7 +41,17 @@ public:
 	 *
 	 * @param conf Non-null Config that outlives this checker and owns catModel.
 	 */
-	explicit BasicCATChecker(const Config *conf) : HostChecker(conf) {}
+	explicit BasicCATChecker(const Config *conf);
+	/** Print opt-in, atomically emitted worker statistics before releasing state. */
+	~BasicCATChecker() override;
+
+	/**
+	 * Return online transition counters when this model has a monotone CAAT path.
+	 *
+	 * @return Worker-local counters, or null for the offline fallback.
+	 */
+	[[nodiscard]] auto incrementalStatistics() const
+		-> const cat::GraphSynchronizationStatistics *;
 
 private:
 	/**
@@ -45,7 +59,7 @@ private:
 	 *
 	 * @param lab Non-null graph-owned label whose rf/co choice is already installed.
 	 * @return True exactly when every CAT check accepts the containing graph.
-	 * @complexity One from-scratch adapter build and model evaluation.
+	 * @complexity One adapter build plus the classified incremental delta or fallback.
 	 */
 	[[nodiscard]] auto isConsistent(const EventLabel *lab) const -> bool override;
 	/**
@@ -88,6 +102,11 @@ private:
 	auto shouldReportCoherenceWarning(WriteLabel *write,
 					  const std::vector<EventLabel *> &placements)
 		-> bool override;
+
+	/** Mutable worker-local online state; const consistency queries update caches. */
+	mutable std::unique_ptr<cat::IncrementalCaatEvaluator> incrementalEvaluator_;
+	/** Synchronizer points to incrementalEvaluator_, whose allocation never moves. */
+	mutable std::unique_ptr<cat::GraphSynchronizer> graphSynchronizer_;
 };
 
 /** CAT evaluator hosted by SC causal views for models declaring/defaulting to SC. */

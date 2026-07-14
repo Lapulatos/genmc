@@ -54,6 +54,8 @@ struct Config {
 	bool useCaatBackend{};
 	/** Print source-located base-literal reasons for rejected CAT candidates. */
 	bool explainCat{};
+	/** Print per-worker incremental synchronization counters at shutdown. */
+	bool catStats{};
 	/** Whether the user also explicitly selected one of GenMC's built-in models. */
 	bool modelExplicit{};
 	/** Number of `--model-file` occurrences, retained for stable duplicate diagnostics. */

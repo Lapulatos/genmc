@@ -14,15 +14,34 @@
 #include "genmc/Verification/Config.hpp"
 #include "genmc/Execution/Consistency/CATChecker.hpp"
 #include "genmc/Execution/Consistency/ConsistencyChecker.hpp"
+#include "genmc/Execution/EventLabel.hpp"
+#include "genmc/Execution/ExecutionGraph.hpp"
 
 #include <gtest/gtest.h>
 
 #include <algorithm>
 #include <filesystem>
 #include <fstream>
+#include <memory>
 #include <string_view>
+#include <utility>
 
 namespace {
+
+/** Test graph exposing GenMC's protected label insertion primitive. */
+class CheckerTestGraph : public ExecutionGraph {
+public:
+	using ExecutionGraph::addLabelToGraph;
+	using ExecutionGraph::ExecutionGraph;
+};
+
+/** Add one owned label to a checker integration fixture. */
+template <typename Label, typename... Args>
+auto addCheckerLabel(CheckerTestGraph &graph, Args &&...args) -> Label *
+{
+	auto label = std::make_unique<Label>(std::forward<Args>(args)...);
+	return static_cast<Label *>(graph.addLabelToGraph(std::move(label)));
+}
 
 /**
  * Return whether validation produced an error containing @p fragment.
@@ -121,6 +140,61 @@ TEST(ConfigModelFileTest, SelectsRecursiveCaatBackend)
 	EXPECT_NE(config.caatAnalysis, nullptr);
 	auto checker = ConsistencyChecker::create(&config);
 	EXPECT_NE(dynamic_cast<CATChecker *>(checker.get()), nullptr);
+	std::filesystem::remove(path);
+}
+
+/* A real generic checker query drives its worker-local incremental state. */
+TEST(ConfigModelFileTest, ExercisesIncrementalCaatCheckerPath)
+{
+	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-incremental.cat";
+	std::ofstream output(path);
+	output << "IncrementalChecker\nlet rec reach = po | (reach ; po)\nacyclic reach\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+	ASSERT_TRUE(std::holds_alternative<std::monostate>(config.validate(warnings)));
+	auto checker = ConsistencyChecker::create(&config);
+	auto *catChecker = dynamic_cast<CATSCChecker *>(checker.get());
+	ASSERT_NE(catChecker, nullptr);
+	ASSERT_NE(catChecker->incrementalStatistics(), nullptr);
+
+	CheckerTestGraph graph{{nullptr, checker.get(), true}};
+	EXPECT_TRUE(checker->isConsistent(graph));
+	addCheckerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
+	EXPECT_TRUE(checker->isConsistent(graph));
+	addCheckerLabel<FenceLabel>(graph, Event(0, 2), MemOrdering::Relaxed);
+	EXPECT_TRUE(checker->isConsistent(graph));
+	EXPECT_EQ(catChecker->incrementalStatistics()->initializations, 1U);
+	EXPECT_EQ(catChecker->incrementalStatistics()->insertions, 2U);
+	EXPECT_EQ(catChecker->incrementalStatistics()->rebuilds, 0U);
+	std::filesystem::remove(path);
+}
+
+/* A positive witnessed violation persists as the prefix grows and may prune it. */
+TEST(ConfigModelFileTest, RejectsMonotoneViolationDuringIncrementalGrowth)
+{
+	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-early-prune.cat";
+	std::ofstream output(path);
+	output << "EarlyPrune\nlet rec reach = po | (reach ; po)\nempty F\n";
+	output.close();
+	Config config;
+	config.modelFile = path;
+	std::vector<std::string> warnings;
+	ASSERT_TRUE(std::holds_alternative<std::monostate>(config.validate(warnings)));
+	auto checker = ConsistencyChecker::create(&config);
+	auto *catChecker = dynamic_cast<CATSCChecker *>(checker.get());
+	ASSERT_NE(catChecker, nullptr);
+
+	CheckerTestGraph graph{{nullptr, checker.get(), true}};
+	EXPECT_TRUE(checker->isConsistent(graph));
+	addCheckerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
+	EXPECT_FALSE(checker->isConsistent(graph));
+	addCheckerLabel<FenceLabel>(graph, Event(0, 2), MemOrdering::Relaxed);
+	EXPECT_FALSE(checker->isConsistent(graph));
+	ASSERT_NE(catChecker->incrementalStatistics(), nullptr);
+	EXPECT_EQ(catChecker->incrementalStatistics()->insertions, 2U);
+	EXPECT_EQ(catChecker->incrementalStatistics()->rebuilds, 0U);
 	std::filesystem::remove(path);
 }
 

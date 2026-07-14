@@ -43,6 +43,8 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 	ConfigErrorList errors;
 	if (explainCat && !modelFile)
 		errors.emplace_back("--explain-cat requires --model-file.");
+	if (catStats && !modelFile)
+		errors.emplace_back("--cat-stats requires --model-file.");
 
 	/* Check exploration options */
 	if (modelFile.has_value()) {

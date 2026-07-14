@@ -197,7 +197,10 @@ produces the same base values as a fresh adapter/evaluator.
 Acceptance: real recursive SC/TSO/PSO programs exercise insertion and rollback
 instead of only rebuild. One/two-worker results, exact execution counts,
 warnings and errors match Phase 2; a deliberately non-monotone fixture proves
-offline fallback and no early prune.
+pre-execution rejection and therefore no unsafe early prune. The earlier
+offline-fallback wording was removed after integration showed that GenMC calls
+the consistency checker on prefixes: an offline evaluation of a non-monotone
+prefix can reject an execution that a later insertion would repair.
 
 ### Phase 3.6: mutation/fallback hardening and differential stress
 

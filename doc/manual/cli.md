@@ -33,6 +33,9 @@ A full list of the available command-line options can by viewed by issuing `genm
   deterministic conjunction of positive or negative base-relation literals
   for every candidate rejected by a CAT consistency axiom. This model-debugging
   option is disabled by default, so normal verification output is unchanged.
+- **`--cat-stats`**: With `--model-file`, print per-worker incremental graph
+  transition counters at shutdown. This diagnostic is disabled by default and
+  is intended for integration tests and performance analysis.
 - **`-nthreads=<N>`**: Perform verification concurrently (using `N` threads)
 - **`-cache-instructions`**: Caches instructions to help execution time (sacrifices memory)
 - **`-disable-bam`**: Disables Barrier-Aware Model-checking (BAM)

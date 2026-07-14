@@ -241,3 +241,61 @@ This append-only record tracks each Phase 3 substage required by
   not yet called by `BasicCATChecker`. Phase 3.5 must give each checker worker an
   incremental evaluator/synchronizer, retain offline fallback for non-monotone
   models, and prove real SC/TSO/PSO executions exercise insert/rollback paths.
+
+## Phase 3.5: GenMC checker integration and early pruning
+
+- Starting commit: `196d370e18621111cb5e8886ea26ba613bf4f043`.
+- Pre-check: re-read `doc/development.md`, project constraints, the complete
+  Phase 3 plan and `task_plan.md`; branch was `genmc-caat`, local and remote
+  matched, and the worktree was clean.
+- Reuse survey: retained `BasicCATChecker` as the worker ownership boundary,
+  `ConsistencyChecker::create` as the only production factory, GenMC's existing
+  candidate-prefix query points, Phase 2 `CaatEvaluator`/`Reasoner` as fallback
+  and explanation oracles, and the Phase 3.4 synchronizer without duplicating
+  graph mutation logic. No new runtime dependency was introduced.
+- Contract correction: the initial acceptance text requested offline fallback
+  for a non-monotone checked predicate. Inspection of `GenMCDriver` confirmed
+  that `isConsistent` rejects candidate prefixes, not only complete executions.
+  A difference RHS can grow later and repair such a prefix, so offline
+  evaluation followed by rejection would be unsound. The plan now requires the
+  existing source-located pre-execution rejection; only positive normalized
+  models receive online state and early rejection.
+- Implementation: each recursive/forward-reference `BasicCATChecker` owns one
+  `IncrementalCaatEvaluator` and `GraphSynchronizer`; immutable model/analysis
+  remain in shared `Config`. Every consistency query materializes the real
+  graph, synchronizes it and reads the current incremental result. Explanations
+  use the stable universe. Phase 1 non-recursive models retain their original
+  evaluator. `--cat-stats` prints process-serialized per-worker initialize,
+  unchanged, insert, rollback, rollback-insert, rebuild and eviction counters;
+  it is rejected without `--model-file` and documented in the CLI manual.
+- Pruning evidence: `empty F` over a positive recursive model accepts the empty
+  graph, rejects after the first fence and remains rejected after another
+  insertion with no rebuild. Recursive and acyclic difference fixtures remain
+  rejected before exploration, proving the non-monotone boundary cannot prune
+  a prefix. This is exactly the positive-growth proof recorded in Section 4.
+- Real-program evidence: recursive SC/TSO/PSO all execute insertion and retained
+  ancestor rollback-plus-insert on
+  `correct/data-structures/fcombiner-async/variants/main0.c`. The observed
+  single-worker counters were SC `insert=20, rollback-insert=176`, TSO
+  `insert=1, rollback-insert=3`, and PSO `insert=1, rollback-insert=3`; the
+  integration test requires both counters to remain nonzero for every model.
+  The existing eight-program matrix compares SC/TSO/PSO baseline versus
+  recursive models with one and two workers, including exact execution counts,
+  errors and warnings.
+- Verification: RelWithDebInfo built successfully; the complete unit executable
+  passed 138/138. Parallel CAT/CAAT/config/CLI/integration testing passed
+  103/103, including `cli-model-file` and the strengthened recursive
+  differential suite. ASan+UBSan passed 15/15 checker, incremental, rollback,
+  synchronizer and stable-adapter tests. `clang-format` and `git diff --check`
+  passed.
+- Errors encountered: libc++ on this machine exposes a `<syncstream>` header but
+  no `std::osyncstream`; statistics output now builds the whole record first and
+  emits it under one process-wide mutex. The first focused CTest regex did not
+  select GoogleTest-discovered unit names; the corrected exact-name run passed
+  4/4 before the complete 138-test run. Existing generated-checker override
+  warnings and the recorded standalone `clang-tidy` standard-header failure are
+  unchanged.
+- Gap to Phase 3: the production hot path is active and semantically matched,
+  but rebuild-heavy `rf`/`co` replacement and repeated revisit workloads need
+  systematic oracle cross-checking and deterministic mismatch dumps. These are
+  the sole production focus of Phase 3.6; broad performance claims wait for 3.7.

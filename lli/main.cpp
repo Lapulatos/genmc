@@ -12,14 +12,14 @@
  */
 
 #include "Runtime/Interpreter.h"
-#include "passes/LLIConfig.hpp"
-#include "passes/LLVMModule.hpp"
-#include "genmc/lli_config.h"
 #include "genmc/Support/Error.hpp"
 #include "genmc/Support/Logger.hpp"
 #include "genmc/Support/ThreadPool.hpp"
 #include "genmc/Verification/Config.hpp"
 #include "genmc/Verification/GenMCDriver.hpp"
+#include "genmc/lli_config.h"
+#include "passes/LLIConfig.hpp"
+#include "passes/LLVMModule.hpp"
 
 #include <llvm/Support/CommandLine.h>
 #include <llvm/Support/DynamicLibrary.h>
@@ -79,6 +79,10 @@ static llvm::cl::opt<std::string>
 static llvm::cl::opt<bool>
 	clExplainCat("explain-cat", llvm::cl::cat(clGeneral),
 		     llvm::cl::desc("Print base-relation reasons for CAT consistency rejections"));
+
+static llvm::cl::opt<bool>
+	clCatStats("cat-stats", llvm::cl::cat(clGeneral),
+		   llvm::cl::desc("Print per-worker incremental CAT transition counters"));
 
 static llvm::cl::opt<bool> clDisableEstimation(
 	"disable-estimation", llvm::cl::cat(clGeneral),
@@ -422,6 +426,7 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	conf.modelExplicit = clModelType.getNumOccurrences() > 0;
 	conf.modelFileOccurrences = clModelFile.getNumOccurrences();
 	conf.explainCat = clExplainCat;
+	conf.catStats = clCatStats;
 	conf.estimate = !clDisableEstimation;
 	conf.estimationMax = clEstimationMax;
 	conf.estimationMin = clEstimationMin;
@@ -877,8 +882,8 @@ auto estimate(const LLIConfig &lliConfig, std::shared_ptr<const Config> conf,
 	auto driver = GenMCDriver::create(conf, nullptr,
 					  GenMCDriver::EstimationMode{conf->estimationMax});
 	std::string buf;
-	auto EE = llvm::Interpreter::create(
-		std::move(newmod), std::move(newMI), &*driver, &lliConfig, &buf);
+	auto EE = llvm::Interpreter::create(std::move(newmod), std::move(newMI), &*driver,
+					    &lliConfig, &buf);
 	run(&*driver, &*EE);
 	return std::move(driver->getResult());
 }
@@ -889,8 +894,8 @@ auto sample(const LLIConfig &lliConfig, std::shared_ptr<const Config> conf,
 {
 	auto driver = GenMCDriver::create(conf, nullptr, GenMCDriver::RandomMode{conf->randomMax});
 	std::string buf;
-	auto EE = llvm::Interpreter::create(
-		std::move(mod), std::move(modInfo), &*driver, &lliConfig, &buf);
+	auto EE = llvm::Interpreter::create(std::move(mod), std::move(modInfo), &*driver,
+					    &lliConfig, &buf);
 	run(&*driver, &*EE);
 	return std::move(driver->getResult());
 }
@@ -903,8 +908,8 @@ auto verify(const LLIConfig &lliConfig, std::shared_ptr<const Config> conf,
 	if (lliConfig.threads == 1) {
 		auto driver = GenMCDriver::create(conf, nullptr, GenMCDriver::VerificationMode{});
 		std::string buf;
-		auto EE = llvm::Interpreter::create(
-			std::move(mod), std::move(modInfo), &*driver, &lliConfig, &buf);
+		auto EE = llvm::Interpreter::create(std::move(mod), std::move(modInfo), &*driver,
+						    &lliConfig, &buf);
 		run(&*driver, &*EE);
 		return std::move(driver->getResult());
 	}

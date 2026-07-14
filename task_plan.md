@@ -90,3 +90,11 @@ Phase 3.4 将实现稳定 event key、变更分类、回退原因与内存界限
 RMW/lifecycle、cut/removeAfter、non-LIFO revisit matrix 已覆盖。unit 136/136、
 parallel CAT/CAAT 98/98、ASan+UBSan focused 13/13 通过。下一目标是把该状态
 真正接入每个 `BasicCATChecker` worker；standalone API 通过不能替代此目标。
+
+**Phase 3.5 implemented** - 每个 recursive/forward-reference CAT checker worker
+已持有 incremental evaluator/synchronizer；`--cat-stats` 可观测真实 transition。
+SC/TSO/PSO 在 `fcombiner-async` 上均产生 insert 与 rollback-insert；unit
+138/138、parallel focused 103/103、ASan+UBSan 15/15 通过。正单调违例可在
+prefix 阶段持续拒绝，difference 因可能被后续插入修复而在执行前拒绝，不能
+采用原计划中不安全的“offline prefix rejection”。下一目标是 3.6 的 mutation/
+fallback stress、周期性 Phase 2 oracle cross-check 和确定性 mismatch dump。
