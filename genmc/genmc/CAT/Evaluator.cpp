@@ -120,6 +120,10 @@ private:
 	{
 		if (node.kind == Node::Kind::Identity)
 			return identity(std::get<EventSet>(*operands[0]));
+		if (node.kind == Node::Kind::Domain)
+			return domain(std::get<Relation>(*operands[0]));
+		if (node.kind == Node::Kind::Range)
+			return range(std::get<Relation>(*operands[0]));
 		if (node.kind == Node::Kind::Inverse)
 			return inverse(std::get<Relation>(*operands[0]));
 		if (node.kind == Node::Kind::Optional)

@@ -26,3 +26,28 @@ This append-only record tracks each Phase 2 substage required by
   and explanations. Backtrackable/incremental propagation is Phase 3.
 - Gap to Phase 2 plan after this substage: all implementation items 2.1--2.6
   remain; the next target is recursive syntax plus normalized typed IR.
+
+## Phase 2.1: recursive frontend and normalized IR
+
+- Starting commit: `75b55585ff48583c33f671721d9df2b91eeda1e0`.
+- Pre-check: re-read repository development rules, project constraints, and
+  the Phase 2 plan; branch was `genmc-caat` and the worktree was clean.
+- Reuse survey: retained Phase 1 source spans, AST ownership, `ValueType`,
+  packed values, relational operators, diagnostics, and CMake/unit harness.
+  Dat3M's recursive placeholders informed the separate cyclic predicate IR;
+  no Java source or runtime dependency was copied.
+- Contract: parse `let rec ... and ...`, add CAAT `domain`/`range`, infer types
+  across forward references, and lower every derived predicate to one operator
+  without changing Phase 1's topological `ModelIR` or CLI selection.
+- Implementation: recursive declarations receive stable group IDs; malformed
+  groups are diagnosed; domain/range execute over packed relations; the new
+  immutable `NormalizedModel` reserves named predicate IDs before lowering,
+  supports cyclic operands, expands conventional aliases, creates one-operation
+  temporary predicates, and rejects ambiguous recursive types.
+- Verification: clean build passed; clang-format dry-run passed; complete
+  unit/property suite passed 104/104; focused CAT/CLI integration passed 4/4.
+  Phase 1 SC/TSO/PSO golden summaries remain byte-identical.
+- Plan gap: normalization and recursive syntax are implemented, but the CLI
+  deliberately still selects Phase 1 `ModelIR`. Dependency/polarity analysis
+  and declared-recursion validation are the Phase 2.2 target; no fixed-point
+  evaluation is claimed yet.

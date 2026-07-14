@@ -387,16 +387,40 @@ TEST(CatFrontendTest, RejectsInvalidUtf8)
 	std::filesystem::remove_all(directory);
 }
 
-/* Recognizable full-CAT recursion is rejected as unsupported, not malformed syntax. */
-TEST(CatFrontendTest, ClassifiesRecursiveBindingAsUnsupported)
+/* A recursive group retains one stable ID across all `and` declarations. */
+TEST(CatFrontendTest, ParsesMutuallyRecursiveBindingGroup)
 {
-	auto directory = createFixtureDirectory("unsupported");
-	auto path = writeFixture(directory, "unsupported.cat", "Unsupported\nlet rec x = po\n");
+	auto directory = createFixtureDirectory("recursive");
+	auto path = writeFixture(directory, "recursive.cat",
+				 "Recursive\nlet rec x = po | y and y = rf | x\nacyclic x\n");
 
 	auto result = cat::Frontend().parseFile(path);
 
-	ASSERT_FALSE(result.ok());
-	EXPECT_NE(findDiagnostic(result, cat::DiagnosticKind::Unsupported), nullptr);
+	ASSERT_TRUE(result.ok()) << (result.diagnostics.empty()
+					     ? ""
+					     : result.diagnostics.front().format());
+	ASSERT_EQ(result.model->statements.size(), 3U);
+	EXPECT_NE(result.model->statements[0].recursiveGroup, 0U);
+	EXPECT_EQ(result.model->statements[0].recursiveGroup,
+		  result.model->statements[1].recursiveGroup);
+	EXPECT_EQ(result.model->statements[2].recursiveGroup, 0U);
+	std::filesystem::remove_all(directory);
+}
+
+/* `and` is legal only as the continuation of a recursive declaration group. */
+TEST(CatFrontendTest, RejectsMalformedRecursiveBindingGroup)
+{
+	auto directory = createFixtureDirectory("bad-recursive");
+	auto stray = writeFixture(directory, "stray.cat", "Bad\nand x = po\n");
+	auto missing = writeFixture(directory, "missing.cat", "Bad\nlet rec x = po and\n");
+
+	auto strayResult = cat::Frontend().parseFile(stray);
+	auto missingResult = cat::Frontend().parseFile(missing);
+
+	EXPECT_FALSE(strayResult.ok());
+	EXPECT_FALSE(missingResult.ok());
+	EXPECT_NE(findDiagnostic(strayResult, cat::DiagnosticKind::Parse), nullptr);
+	EXPECT_NE(findDiagnostic(missingResult, cat::DiagnosticKind::Parse), nullptr);
 	std::filesystem::remove_all(directory);
 }
 

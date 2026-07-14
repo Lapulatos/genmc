@@ -49,6 +49,8 @@ struct Node {
 		Intersection,
 		Product,
 		Identity,
+		Domain,
+		Range,
 		Inverse,
 		Optional,
 		TransitiveClosure,

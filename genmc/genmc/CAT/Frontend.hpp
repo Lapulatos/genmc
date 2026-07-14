@@ -84,6 +84,8 @@ struct Expression {
 		Difference,
 		Intersection,
 		Product,
+		Domain,
+		Range,
 		Inverse,
 		Optional,
 		TransitiveClosure,
@@ -109,6 +111,8 @@ struct Statement {
 	SourceSpan span;
 	std::string name;
 	std::unique_ptr<Expression> expression;
+	/** Shared nonzero ID for declarations in one `let rec ... and ...` group. */
+	std::uint32_t recursiveGroup{};
 };
 
 /**

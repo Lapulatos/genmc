@@ -136,6 +136,8 @@ set to an identity relation.
 | `r+` | `rel` | `rel` | transitive closure |
 | `r*` | `rel` | `rel` | reflexive-transitive closure |
 | `[S]` | `set` | `rel` | `{(e,e) | e in S}` |
+| `domain(r)` | `rel` | `set` | sources of edges in `r` |
+| `range(r)` | `rel` | `set` | targets of edges in `r` |
 
 `acyclic` and `irreflexive` require a relation. `empty` accepts a set or a
 relation. A check without `as` receives a stable generated name based on its
@@ -289,7 +291,9 @@ recovery is unambiguous, but never starts program exploration after any error.
 
 ## Explicitly unsupported in Phase 1
 
-- `let rec`, mutually recursive bindings, and fixed-point definitions;
+- recursive groups are parsed and retained for the Phase 2 normalized IR, but
+  are not selected by the GenMC CLI until the offline fixed-point evaluator is
+  integrated;
 - user functions, lambdas, function application, tuples, and pattern matching;
 - procedures, `call`, `forall`, `with ... from ...`, and `linearisations`;
 - enums, tags, scopes, instruction declarations, and architecture variants;

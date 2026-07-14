@@ -30,11 +30,15 @@ enum class TokenKind : std::uint8_t {
 	String,
 	Zero,
 	Let,
+	Rec,
+	And,
 	Include,
 	Acyclic,
 	Irreflexive,
 	Empty,
 	As,
+	Domain,
+	Range,
 	Equal,
 	Pipe,
 	Semicolon,
@@ -359,6 +363,10 @@ private:
 		TokenKind kind = TokenKind::Identifier;
 		if (text == "let")
 			kind = TokenKind::Let;
+		else if (text == "rec")
+			kind = TokenKind::Rec;
+		else if (text == "and")
+			kind = TokenKind::And;
 		else if (text == "include")
 			kind = TokenKind::Include;
 		else if (text == "acyclic")
@@ -369,6 +377,10 @@ private:
 			kind = TokenKind::Empty;
 		else if (text == "as")
 			kind = TokenKind::As;
+		else if (text == "domain")
+			kind = TokenKind::Domain;
+		else if (text == "range")
+			kind = TokenKind::Range;
 		else if (unsupported.contains(text))
 			kind = TokenKind::Unsupported;
 		return {kind, {begin, location()}, std::move(text)};
@@ -557,6 +569,9 @@ private:
 	auto parseStatements(std::vector<Statement> &statements) -> bool;
 	/** Parse one include, binding, or check and append its expanded result. */
 	auto parseStatement(std::vector<Statement> &statements) -> bool;
+	/** Parse one declaration body after `let` or `and`. */
+	auto parseBinding(std::vector<Statement> &statements, SourceLocation begin,
+			  std::uint32_t recursiveGroup) -> bool;
 	/** Enter the expression precedence hierarchy at its lowest, union level. */
 	auto parseExpression() -> std::unique_ptr<Expression>;
 	/** Parse each precedence level, returning null after a diagnosed error. */
@@ -584,6 +599,7 @@ private:
 	std::vector<Token> tokens_;
 	std::vector<Diagnostic> &diagnostics_;
 	std::size_t position_{};
+	std::uint32_t nextRecursiveGroup_{1};
 };
 
 /** Per-call include loader owning the active stack and all accumulated diagnostics. */
@@ -774,24 +790,16 @@ auto Parser::parseStatement(std::vector<Statement> &statements) -> bool
 		return false;
 	}
 	if (match(TokenKind::Let)) {
-		if (current().kind == TokenKind::Identifier && current().text == "rec") {
-			diagnose(DiagnosticKind::Unsupported, current().span,
-				 "recursive CAT bindings are not supported in Phase 1");
-			return false;
-		}
 		const auto begin = tokens_[position_ - 1].span.begin;
-		const auto *name =
-			expect(TokenKind::Identifier, "expected binding name after 'let'");
-		if (!name || !expect(TokenKind::Equal, "expected '=' after binding name"))
+		const bool recursive = match(TokenKind::Rec);
+		const auto group = recursive ? nextRecursiveGroup_++ : 0;
+		if (!parseBinding(statements, begin, group))
 			return false;
-		auto expression = parseExpression();
-		if (!expression)
-			return false;
-		statements.push_back({Statement::Kind::Let,
-				      Statement::CheckKind::Acyclic,
-				      {begin, expression->span.end},
-				      name->text,
-				      std::move(expression)});
+		while (recursive && match(TokenKind::And)) {
+			const auto andBegin = tokens_[position_ - 1].span.begin;
+			if (!parseBinding(statements, andBegin, group))
+				return false;
+		}
 		return true;
 	}
 
@@ -826,6 +834,27 @@ auto Parser::parseStatement(std::vector<Statement> &statements) -> bool
 			      {begin, end},
 			      std::move(name),
 			      std::move(expression)});
+	return true;
+}
+
+auto Parser::parseBinding(std::vector<Statement> &statements, SourceLocation begin,
+			  std::uint32_t recursiveGroup) -> bool
+{
+	const auto *name = expect(TokenKind::Identifier,
+				  recursiveGroup == 0 ? "expected binding name after 'let'"
+						      : "expected binding name in recursive group");
+	if (!name || !expect(TokenKind::Equal, "expected '=' after binding name"))
+		return false;
+	auto expression = parseExpression();
+	if (!expression)
+		return false;
+	Statement statement{Statement::Kind::Let,
+			    Statement::CheckKind::Acyclic,
+			    {begin, expression->span.end},
+			    name->text,
+			    std::move(expression)};
+	statement.recursiveGroup = recursiveGroup;
+	statements.push_back(std::move(statement));
 	return true;
 }
 
@@ -925,7 +954,8 @@ auto Parser::parsePostfix() -> std::unique_ptr<Expression>
 auto Parser::startsPrimary(TokenKind kind) -> bool
 {
 	return kind == TokenKind::Identifier || kind == TokenKind::Zero ||
-	       kind == TokenKind::LeftParen || kind == TokenKind::LeftBracket;
+	       kind == TokenKind::LeftParen || kind == TokenKind::LeftBracket ||
+	       kind == TokenKind::Domain || kind == TokenKind::Range;
 }
 
 auto Parser::startsStatement(TokenKind kind) -> bool
@@ -967,6 +997,21 @@ auto Parser::parsePrimary() -> std::unique_ptr<Expression>
 			return nullptr;
 		auto node = std::make_unique<Expression>();
 		node->kind = Expression::Kind::Identity;
+		node->span = {token.span.begin, end->span.end};
+		node->operands.push_back(std::move(expression));
+		return node;
+	}
+	if (match(TokenKind::Domain) || match(TokenKind::Range)) {
+		const auto kind = token.kind == TokenKind::Domain ? Expression::Kind::Domain
+								  : Expression::Kind::Range;
+		if (!expect(TokenKind::LeftParen, "expected '(' after projection name"))
+			return nullptr;
+		auto expression = parseExpression();
+		const auto *end = expect(TokenKind::RightParen, "expected ')' after projection");
+		if (!expression || !end)
+			return nullptr;
+		auto node = std::make_unique<Expression>();
+		node->kind = kind;
 		node->span = {token.span.begin, end->span.end};
 		node->operands.push_back(std::move(expression));
 		return node;

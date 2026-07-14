@@ -8,6 +8,7 @@ set(LIB_SOURCES
   genmc/CAT/Frontend.cpp
   genmc/CAT/GraphAdapter.cpp
   genmc/CAT/Model.cpp
+  genmc/CAT/Normalized.cpp
   genmc/CAT/Value.cpp
   genmc/Execution/DepExecutionGraph.cpp
   genmc/Execution/EventLabel.cpp

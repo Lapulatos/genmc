@@ -121,6 +121,8 @@ TEST(CatValueTest, EvaluatesBasicRelationAlgebra)
 	EXPECT_EQ(product(makeSet(4, {0, 2}), makeSet(4, {1, 3})),
 		  makeRelation(4, {{0, 1}, {0, 3}, {2, 1}, {2, 3}}));
 	EXPECT_EQ(identity(makeSet(4, {1, 3})), makeRelation(4, {{1, 1}, {3, 3}}));
+	EXPECT_EQ(domain(lhs), makeSet(4, {0, 1, 2}));
+	EXPECT_EQ(range(lhs), makeSet(4, {1, 2, 3}));
 }
 
 /* Composition and closures cover empty, chain, cycle, singleton, and disconnected cases. */

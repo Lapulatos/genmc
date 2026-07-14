@@ -134,6 +134,10 @@ private:
 [[nodiscard]] auto product(const EventSet &lhs, const EventSet &rhs) -> Relation;
 /** Identity restriction `[events]`. */
 [[nodiscard]] auto identity(const EventSet &events) -> Relation;
+/** Set of sources that have at least one outgoing relation edge. */
+[[nodiscard]] auto domain(const Relation &relation) -> EventSet;
+/** Set of targets that have at least one incoming relation edge. */
+[[nodiscard]] auto range(const Relation &relation) -> EventSet;
 /** Relational inverse. */
 [[nodiscard]] auto inverse(const Relation &relation) -> Relation;
 /** Relational composition `lhs ; rhs`. */

@@ -203,6 +203,28 @@ auto identity(const EventSet &events) -> Relation
 	return result;
 }
 
+auto domain(const Relation &relation) -> EventSet
+{
+	EventSet result(relation.size());
+	for (std::size_t from = 0; from < relation.size(); ++from) {
+		if (!relation.successors(from).empty())
+			result.insert(from);
+	}
+	return result;
+}
+
+auto range(const Relation &relation) -> EventSet
+{
+	EventSet result(relation.size());
+	for (std::size_t from = 0; from < relation.size(); ++from) {
+		for (std::size_t target = 0; target < relation.size(); ++target) {
+			if (relation.contains(from, target))
+				result.insert(target);
+		}
+	}
+	return result;
+}
+
 auto inverse(const Relation &relation) -> Relation
 {
 	Relation result(relation.size_);

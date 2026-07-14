@@ -13,6 +13,7 @@
 
 #include "genmc/CAT/Frontend.hpp"
 #include "genmc/CAT/Model.hpp"
+#include "genmc/CAT/Normalized.hpp"
 
 #include <gtest/gtest.h>
 #include <rapidcheck.h>
@@ -53,6 +54,27 @@ static auto compileText(std::string_view source) -> cat::CompileResult
 	return compiled;
 }
 
+/** Parse and normalize one source while preserving recursive forward references. */
+static auto normalizeText(std::string_view source) -> cat::NormalizeResult
+{
+	static std::atomic<std::uint64_t> nextFixture{};
+	const auto nonce = nextFixture.fetch_add(1, std::memory_order_relaxed);
+	auto path = std::filesystem::path(testing::TempDir()) /
+		    ("genmc-caat-normalized-" + std::to_string(nonce) + ".cat");
+	std::ofstream output(path);
+	output << source;
+	output.close();
+	auto parsed = cat::Frontend().parseFile(path);
+	EXPECT_TRUE(parsed.ok()) << (parsed.diagnostics.empty()
+					     ? ""
+					     : parsed.diagnostics.front().format());
+	if (!parsed.ok())
+		return {};
+	auto normalized = cat::Normalizer().normalize(*parsed.model);
+	std::filesystem::remove(path);
+	return normalized;
+}
+
 /** Find a diagnostic category without coupling tests to secondary messages. */
 static auto hasDiagnostic(const cat::CompileResult &result, cat::DiagnosticKind kind) -> bool
 {
@@ -81,6 +103,8 @@ let sets = (R | W) & (M \ IW)
 let product = R * W
 let identity = [sets]
 let relations = (po | rf) & (loc \ 0)
+let sources = domain(relations)
+let targets = range(relations)
 let composed = identity ; relations
 let postfix = (composed^-1)? | composed+ | composed*
 empty sets as set-empty
@@ -92,7 +116,7 @@ irreflexive product as product-irreflexive
 	ASSERT_TRUE(result.ok()) << (result.diagnostics.empty()
 					     ? ""
 					     : result.diagnostics.front().format());
-	EXPECT_EQ(result.model->bindings().size(), 6U);
+	EXPECT_EQ(result.model->bindings().size(), 8U);
 	EXPECT_EQ(result.model->checks().size(), 4U);
 	for (const auto &node : result.model->nodes()) {
 		EXPECT_EQ(node.id, &node - result.model->nodes().data());
@@ -237,4 +261,59 @@ TEST(CatModelTest, AcceptsBundledModelsForOnlineChecking)
 		ASSERT_TRUE(result.ok()) << name;
 		EXPECT_FALSE(result.model->firstOnlineInadmissibleNode().has_value()) << name;
 	}
+}
+
+/* Normalization reserves named IDs before lowering mutually recursive bodies. */
+TEST(CaatNormalizedModelTest, ResolvesAndNormalizesMutualRecursion)
+{
+	auto result = normalizeText(R"CAT(Recursive
+let rec x = po | (y ; rf)
+and y = x^-1 | co
+acyclic x as recursive
+)CAT");
+
+	ASSERT_TRUE(result.ok()) << (result.diagnostics.empty()
+					     ? ""
+					     : result.diagnostics.front().format());
+	const auto &predicates = result.model->predicates();
+	ASSERT_GE(predicates.size(), 7U);
+	EXPECT_EQ(predicates[0].name, "x");
+	EXPECT_EQ(predicates[1].name, "y");
+	EXPECT_NE(predicates[0].declaredRecursiveGroup, 0U);
+	EXPECT_EQ(predicates[0].declaredRecursiveGroup, predicates[1].declaredRecursiveGroup);
+	for (const auto &predicate : predicates)
+		EXPECT_LE(predicate.operands.size(), 2U);
+	ASSERT_EQ(result.model->checks().size(), 1U);
+	EXPECT_EQ(result.model->checks()[0].predicate, 0U);
+}
+
+/* CAAT projections produce set predicates and can feed a Cartesian product. */
+TEST(CaatNormalizedModelTest, TypesProjectionAndCartesianEquations)
+{
+	auto result = normalizeText(R"CAT(Projections
+let sources = domain(po | rf)
+let targets = range(co)
+let pairs = sources * targets
+empty pairs as projection-product
+)CAT");
+
+	ASSERT_TRUE(result.ok()) << (result.diagnostics.empty()
+					     ? ""
+					     : result.diagnostics.front().format());
+	EXPECT_EQ(result.model->predicates()[0].type, cat::ValueType::Set);
+	EXPECT_EQ(result.model->predicates()[1].type, cat::ValueType::Set);
+	EXPECT_EQ(result.model->predicates()[2].type, cat::ValueType::Relation);
+	EXPECT_NE(result.model->summary().find("domain"), std::string::npos);
+	EXPECT_NE(result.model->summary().find("range"), std::string::npos);
+}
+
+/* A recursive type with no constraining operator is rejected instead of guessed. */
+TEST(CaatNormalizedModelTest, RejectsAmbiguousRecursiveType)
+{
+	auto result = normalizeText("Ambiguous\nlet rec x = x | x\nempty x\n");
+
+	EXPECT_FALSE(result.ok());
+	ASSERT_FALSE(result.diagnostics.empty());
+	EXPECT_EQ(result.diagnostics.front().kind, cat::DiagnosticKind::Type);
+	EXPECT_NE(result.diagnostics.front().message.find("cannot infer"), std::string::npos);
 }

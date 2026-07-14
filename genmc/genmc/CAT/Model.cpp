@@ -51,6 +51,10 @@ static auto nodeKindName(Node::Kind kind) -> std::string_view
 		return "product";
 	case Node::Kind::Identity:
 		return "identity";
+	case Node::Kind::Domain:
+		return "domain";
+	case Node::Kind::Range:
+		return "range";
 	case Node::Kind::Inverse:
 		return "inverse";
 	case Node::Kind::Optional:
@@ -215,7 +219,7 @@ private:
 		if (!operand)
 			return std::nullopt;
 		Node::Kind kind{Node::Kind::Identity};
-		constexpr ValueType resultType{ValueType::Relation};
+		ValueType resultType{ValueType::Relation};
 		if (expression.kind == Expression::Kind::Identity) {
 			kind = Node::Kind::Identity;
 			if (typeOf(*operand) != ValueType::Set) {
@@ -224,6 +228,16 @@ private:
 						 std::string(typeName(typeOf(*operand))));
 				return std::nullopt;
 			}
+		} else if (expression.kind == Expression::Kind::Domain ||
+			   expression.kind == Expression::Kind::Range) {
+			if (typeOf(*operand) != ValueType::Relation) {
+				diagnose(DiagnosticKind::Type, expression.span,
+					 "domain/range projection requires rel, found set");
+				return std::nullopt;
+			}
+			kind = expression.kind == Expression::Kind::Domain ? Node::Kind::Domain
+									   : Node::Kind::Range;
+			resultType = ValueType::Set;
 		} else {
 			if (typeOf(*operand) != ValueType::Relation) {
 				diagnose(DiagnosticKind::Type, expression.span,
