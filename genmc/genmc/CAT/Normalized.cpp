@@ -58,6 +58,19 @@ static auto kindName(Predicate::Kind kind) -> std::string_view
 	return "base";
 }
 
+static auto checkKindName(Statement::CheckKind kind) -> std::string_view
+{
+	switch (kind) {
+	case Statement::CheckKind::Acyclic:
+		return "acyclic";
+	case Statement::CheckKind::Irreflexive:
+		return "irreflexive";
+	case Statement::CheckKind::Empty:
+		return "empty";
+	}
+	return "acyclic";
+}
+
 static auto typeName(ValueType type) -> std::string_view
 {
 	return type == ValueType::Set ? "set" : "rel";
@@ -547,7 +560,8 @@ auto NormalizedModel::summary() const -> std::string
 		output << "\n";
 	}
 	for (const auto &check : checks_)
-		output << "check " << check.name << " = " << check.predicate << "\n";
+		output << "check " << checkKindName(check.kind) << " " << check.name << " = "
+		       << check.predicate << "\n";
 	return output.str();
 }
 
@@ -576,8 +590,8 @@ predicate 14 rel union $n1 (6,7)
 predicate 15 rel union $n2 (14,8)
 predicate 16 rel composition $n3 (11,12)
 predicate 17 rel intersection $n4 (9,16)
-check atomicity = 17
-check sc = 2
+check empty atomicity = 17
+check irreflexive sc = 2
 )CAT";
 	static constexpr std::string_view recursiveTSO = R"CAT(model RecursiveTSO
 host-profile tso
@@ -633,9 +647,9 @@ predicate 48 rel intersection $n27 (11,20)
 predicate 49 rel union $n28 (48,5)
 predicate 50 rel union $n29 (49,8)
 predicate 51 rel union $n30 (50,9)
-check atomicity = 47
-check coherence = 51
-check tso = 4
+check empty atomicity = 47
+check acyclic coherence = 51
+check irreflexive tso = 4
 )CAT";
 
 	const auto fingerprint = summary();
@@ -709,9 +723,9 @@ predicate 50 rel intersection $n28 (12,13)
 predicate 51 rel union $n29 (50,6)
 predicate 52 rel union $n30 (51,9)
 predicate 53 rel union $n31 (52,10)
-check atomicity = 49
-check coherence = 53
-check pso = 5
+check empty atomicity = 49
+check acyclic coherence = 53
+check irreflexive pso = 5
 )CAT";
 	return summary() == recursivePSO;
 }

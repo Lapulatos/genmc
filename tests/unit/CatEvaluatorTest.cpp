@@ -727,6 +727,24 @@ TEST(CaatOptimizationTest, CertifiesOnlyExactBundledRecursiveModels)
 	EXPECT_EQ(pso.model->certifiedCandidateProfile(), std::nullopt);
 	EXPECT_TRUE(pso.model->certifiedAdaptiveOffline());
 
+	/* Check kinds are part of the closed-world certificate: changing coherence
+	 * from acyclic to irreflexive retains the same predicate DAG but changes the
+	 * accepted executions. */
+	const auto tsoPath =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat/recursive-tso.cat";
+	std::ifstream tsoInput(tsoPath);
+	ASSERT_TRUE(tsoInput.good());
+	std::string changedKind{std::istreambuf_iterator<char>{tsoInput},
+				std::istreambuf_iterator<char>{}};
+	const auto oldCheck = changedKind.find("acyclic (po & loc)");
+	ASSERT_NE(oldCheck, std::string::npos);
+	changedKind.replace(oldCheck, std::string_view{"acyclic"}.size(), "irreflexive");
+	auto changed = analyzeModel(changedKind);
+	ASSERT_NE(changed.model, nullptr);
+	EXPECT_EQ(changed.model->certifiedCandidateProfile(), std::nullopt);
+	EXPECT_FALSE(changed.model->certifiedAdaptiveOffline());
+
 	auto modified = analyzeModel(R"CAT(RecursiveSC
 let rec reach = order | (reach ; order)
 let com = rf | fr | co
