@@ -479,6 +479,174 @@ auto NormalizedModel::summary() const -> std::string
 	return output.str();
 }
 
+auto NormalizedModel::certifiedCandidateProfile() const -> std::optional<HostProfile>
+{
+	/* These are semantic fingerprints, rather than filenames or host-profile
+	 * assertions. Keeping the full normalized form makes the certificate fail
+	 * closed when any checked relation or axiom changes. */
+	static constexpr std::string_view recursiveSC = R"CAT(model RecursiveSC
+host-profile sc
+predicate 0 rel union com (13,5)
+predicate 1 rel union order (15,0)
+predicate 2 rel union reach rec=1 (1,16)
+predicate 3 rel base rf
+predicate 4 rel base fr
+predicate 5 rel base co
+predicate 6 rel base po
+predicate 7 rel base tc
+predicate 8 rel base tj
+predicate 9 rel base rmw
+predicate 10 rel base ext
+predicate 11 rel intersection fre (4,10)
+predicate 12 rel intersection coe (5,10)
+predicate 13 rel union $n0 (3,4)
+predicate 14 rel union $n1 (6,7)
+predicate 15 rel union $n2 (14,8)
+predicate 16 rel composition $n3 (2,1)
+predicate 17 rel composition $n4 (11,12)
+predicate 18 rel intersection $n5 (9,17)
+check atomicity = 18
+check sc = 2
+)CAT";
+	static constexpr std::string_view recursiveTSO = R"CAT(model RecursiveTSO
+host-profile tso
+predicate 0 rel union com (21,9)
+predicate 1 rel union ppo (30,36)
+predicate 2 rel union lifecycle (40,44)
+predicate 3 rel union order (45,0)
+predicate 4 rel union reach rec=1 (3,46)
+predicate 5 rel base rf
+predicate 6 rel base ext
+predicate 7 rel intersection rfe (5,6)
+predicate 8 rel base fr
+predicate 9 rel base co
+predicate 10 set base R
+predicate 11 rel base po
+predicate 12 set base W
+predicate 13 set base F
+predicate 14 set base SC
+predicate 15 rel base tc
+predicate 16 rel base tj
+predicate 17 rel base rmw
+predicate 18 rel intersection fre (8,6)
+predicate 19 rel intersection coe (9,6)
+predicate 20 rel base loc
+predicate 21 rel union $n0 (7,8)
+predicate 22 rel identity $n1 (10)
+predicate 23 rel composition $n2 (22,11)
+predicate 24 rel identity $n3 (12)
+predicate 25 rel composition $n4 (11,24)
+predicate 26 rel union $n5 (23,25)
+predicate 27 rel identity $n6 (13)
+predicate 28 rel composition $n7 (11,27)
+predicate 29 rel composition $n8 (28,11)
+predicate 30 rel union $n9 (26,29)
+predicate 31 set intersection $n10 (12,14)
+predicate 32 rel identity $n11 (31)
+predicate 33 rel composition $n12 (32,11)
+predicate 34 set intersection $n13 (10,14)
+predicate 35 rel identity $n14 (34)
+predicate 36 rel composition $n15 (33,35)
+predicate 37 rel optional $n16 (11)
+predicate 38 rel composition $n17 (37,15)
+predicate 39 rel optional $n18 (11)
+predicate 40 rel composition $n19 (38,39)
+predicate 41 rel optional $n20 (11)
+predicate 42 rel composition $n21 (41,16)
+predicate 43 rel optional $n22 (11)
+predicate 44 rel composition $n23 (42,43)
+predicate 45 rel union $n24 (1,2)
+predicate 46 rel composition $n25 (4,3)
+predicate 47 rel composition $n26 (18,19)
+predicate 48 rel intersection $n27 (17,47)
+predicate 49 rel intersection $n28 (11,20)
+predicate 50 rel union $n29 (49,5)
+predicate 51 rel union $n30 (50,8)
+predicate 52 rel union $n31 (51,9)
+check atomicity = 48
+check coherence = 52
+check tso = 4
+)CAT";
+
+	const auto fingerprint = summary();
+	if (fingerprint == recursiveSC)
+		return HostProfile::SC;
+	if (fingerprint == recursiveTSO)
+		return HostProfile::TSO;
+	return std::nullopt;
+}
+
+auto NormalizedModel::certifiedAdaptiveOffline() const -> bool
+{
+	/* Backend selection changes only how the same normalized fixed point is
+	 * evaluated. Keep a separate PSO fingerprint here: PSO uses the TSO causal
+	 * host, but TSO's candidate-pruning theorem must not be applied to PSO. */
+	if (certifiedCandidateProfile())
+		return true;
+	static constexpr std::string_view recursivePSO = R"CAT(model RecursivePSO
+host-profile tso
+predicate 0 rel union com (22,10)
+predicate 1 rel intersection ww_loc (26,13)
+predicate 2 rel union ppo (33,38)
+predicate 3 rel union lifecycle (42,46)
+predicate 4 rel union order (47,0)
+predicate 5 rel union reach rec=1 (4,48)
+predicate 6 rel base rf
+predicate 7 rel base ext
+predicate 8 rel intersection rfe (6,7)
+predicate 9 rel base fr
+predicate 10 rel base co
+predicate 11 set base W
+predicate 12 rel base po
+predicate 13 rel base loc
+predicate 14 set base R
+predicate 15 set base F
+predicate 16 set base SC
+predicate 17 rel base tc
+predicate 18 rel base tj
+predicate 19 rel base rmw
+predicate 20 rel intersection fre (9,7)
+predicate 21 rel intersection coe (10,7)
+predicate 22 rel union $n0 (8,9)
+predicate 23 rel identity $n1 (11)
+predicate 24 rel composition $n2 (23,12)
+predicate 25 rel identity $n3 (11)
+predicate 26 rel composition $n4 (24,25)
+predicate 27 rel identity $n5 (14)
+predicate 28 rel composition $n6 (27,12)
+predicate 29 rel union $n7 (28,1)
+predicate 30 rel identity $n8 (15)
+predicate 31 rel composition $n9 (12,30)
+predicate 32 rel composition $n10 (31,12)
+predicate 33 rel union $n11 (29,32)
+predicate 34 set intersection $n12 (11,16)
+predicate 35 rel identity $n13 (34)
+predicate 36 rel composition $n14 (35,12)
+predicate 37 rel identity $n15 (16)
+predicate 38 rel composition $n16 (36,37)
+predicate 39 rel optional $n17 (12)
+predicate 40 rel composition $n18 (39,17)
+predicate 41 rel optional $n19 (12)
+predicate 42 rel composition $n20 (40,41)
+predicate 43 rel optional $n21 (12)
+predicate 44 rel composition $n22 (43,18)
+predicate 45 rel optional $n23 (12)
+predicate 46 rel composition $n24 (44,45)
+predicate 47 rel union $n25 (2,3)
+predicate 48 rel composition $n26 (5,4)
+predicate 49 rel composition $n27 (20,21)
+predicate 50 rel intersection $n28 (19,49)
+predicate 51 rel intersection $n29 (12,13)
+predicate 52 rel union $n30 (51,6)
+predicate 53 rel union $n31 (52,9)
+predicate 54 rel union $n32 (53,10)
+check atomicity = 50
+check coherence = 54
+check pso = 5
+)CAT";
+	return summary() == recursivePSO;
+}
+
 auto Normalizer::normalize(const Model &syntax) const -> NormalizeResult
 {
 	return Builder{}.build(syntax);

@@ -228,6 +228,7 @@ TEST(CatStableGraphAdapterTest, PreservesIdsAcrossAddressInsertionAndRemoval)
 	const auto stableWrite = first.denseToStable[*firstDense.id(fixture.writeX->getPos())];
 	const auto stableInitX = first.denseToStable[*firstDense.initialId(fixture.x)];
 	EXPECT_EQ(first.eventCount, 13U);
+	EXPECT_EQ(first.activeEventCount, 13U);
 
 	const SAddr z{0x0800};
 	auto *writeZ = addLabel<WriteLabel>(fixture.graph, Event(0, 7), MemOrdering::Relaxed, z,
@@ -239,6 +240,7 @@ TEST(CatStableGraphAdapterTest, PreservesIdsAcrossAddressInsertionAndRemoval)
 	EXPECT_EQ(second.denseToStable[*secondDense.initialId(fixture.x)], stableInitX);
 	EXPECT_EQ(std::get<cat::EventSet>(second.base.at("_")).count(), secondDense.eventCount());
 	EXPECT_EQ(second.eventCount, 15U);
+	EXPECT_EQ(second.activeEventCount, 15U);
 
 	/* Removing the real event leaves GenMC's discovered location and virtual IW
 	 * active. Only the removed real event becomes an inactive stable ID. */
@@ -247,6 +249,7 @@ TEST(CatStableGraphAdapterTest, PreservesIdsAcrossAddressInsertionAndRemoval)
 	cat::GraphAdapter thirdDense(fixture.graph);
 	auto third = stable.materialize(thirdDense);
 	EXPECT_EQ(third.eventCount, 15U);
+	EXPECT_EQ(third.activeEventCount, 14U);
 	EXPECT_EQ(std::get<cat::EventSet>(third.base.at("_")).count(), 14U);
 	EXPECT_EQ(std::get<cat::Relation>(third.base.at("id")).count(), 14U);
 	EXPECT_EQ(third.denseToStable[*thirdDense.id(fixture.writeX->getPos())], stableWrite);

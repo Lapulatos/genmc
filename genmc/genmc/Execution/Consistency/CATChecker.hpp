@@ -19,6 +19,7 @@
 #include "genmc/Execution/Consistency/TSOChecker.hpp"
 
 #include <memory>
+#include <cstdint>
 
 /**
  * Correctness-first graph checker for a validated CAT model.
@@ -107,6 +108,12 @@ private:
 	mutable std::unique_ptr<cat::IncrementalCaatEvaluator> incrementalEvaluator_;
 	/** Synchronizer points to incrementalEvaluator_, whose allocation never moves. */
 	mutable std::unique_ptr<cat::GraphSynchronizer> graphSynchronizer_;
+	/** Separate generated checker used only under an exact semantic certificate. */
+	std::unique_ptr<HostChecker> pruningHost_;
+	/** Opt-in wall-time attribution; only updated under --cat-stats. */
+	mutable std::uint64_t adapterNanoseconds_{};
+	mutable std::uint64_t synchronizationNanoseconds_{};
+	mutable std::size_t profiledQueries_{};
 };
 
 /** CAT evaluator hosted by SC causal views for models declaring/defaulting to SC. */

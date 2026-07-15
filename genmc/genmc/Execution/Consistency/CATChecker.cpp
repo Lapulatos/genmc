@@ -23,6 +23,7 @@
 #include "genmc/Support/Error.hpp"
 #include "genmc/Verification/Config.hpp"
 
+#include <chrono>
 #include <iostream>
 #include <mutex>
 #include <ranges>
@@ -39,15 +40,32 @@ template <typename HostChecker>
 BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(conf)
 {
 	VERIFY(conf, "CAT checker requires configuration");
+	const auto &candidateModel = conf->useCaatBackend ? conf->caatModel : nullptr;
+	const auto certifiedCandidates =
+		candidateModel &&
+		candidateModel->certifiedCandidateProfile() == candidateModel->hostProfile();
+	const auto certifiedAdaptiveOffline =
+		candidateModel && candidateModel->certifiedAdaptiveOffline();
+	/* Oracle mode deliberately enumerates the generic superset so mutation
+	 * stress still compares every candidate with a fresh offline evaluation. */
+	if (!conf->catOracle && certifiedCandidates)
+		pruningHost_ = std::make_unique<HostChecker>(conf);
 	if (!conf->useCaatBackend || !conf->caatModel || !conf->caatAnalysis)
 		return;
 	incrementalEvaluator_ = std::make_unique<cat::IncrementalCaatEvaluator>(
-		*conf->caatModel, *conf->caatAnalysis);
+		*conf->caatModel, *conf->caatAnalysis, conf->catStats);
 	if (incrementalEvaluator_->supportsInsertions()) {
 		/* The explicit oracle option is intentionally independent of build mode. */
 		const std::size_t oracleInterval = conf->catOracle ? 1 : 0;
+		std::vector<std::string> requiredPrimitives;
+		for (const auto &predicate : conf->caatModel->predicates()) {
+			if (predicate.kind == cat::Predicate::Kind::Base)
+				requiredPrimitives.push_back(predicate.name);
+		}
 		graphSynchronizer_ = std::make_unique<cat::GraphSynchronizer>(
-			*incrementalEvaluator_, 32, oracleInterval);
+			*incrementalEvaluator_, 32, oracleInterval, conf->catStats,
+			std::move(requiredPrimitives),
+			!conf->catOracle && certifiedAdaptiveOffline ? 512 : 0);
 	}
 }
 
@@ -61,12 +79,37 @@ template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
 	line << "CAT incremental statistics: initialize=" << stats.initializations
 	     << " unchanged=" << stats.unchanged << " insert=" << stats.insertions
 	     << " rollback=" << stats.rollbacks << " rollback-insert=" << stats.rollbackInsertions
-	     << " rebuild=" << stats.rebuilds << " evicted=" << stats.evictedCheckpoints
-	     << " oracle=" << stats.oracleChecks
+	     << " replace=" << stats.replacements << " rebuild=" << stats.rebuilds
+	     << " evicted=" << stats.evictedCheckpoints << " oracle=" << stats.oracleChecks
+	     << " adaptive-offline=" << stats.adaptiveOfflineSelections
 	     << " eval-ops=" << evaluatorStats.operationEvaluations
 	     << " value-changes=" << evaluatorStats.valueChanges
 	     << " queue-pushes=" << evaluatorStats.worklistPushes
-	     << " offline-evals=" << evaluatorStats.offlineEvaluations;
+	     << " offline-evals=" << evaluatorStats.offlineEvaluations
+	     << " adapter-ns=" << adapterNanoseconds_ << " sync-ns=" << synchronizationNanoseconds_
+	     << " offline-ns=" << evaluatorStats.offlineNanoseconds
+	     << " copy-ns=" << evaluatorStats.transactionalCopyNanoseconds
+	     << " worklist-ns=" << evaluatorStats.worklistNanoseconds
+	     << " checkpoint-ns=" << evaluatorStats.checkpointNanoseconds
+	     << " rollback-ns=" << evaluatorStats.rollbackNanoseconds
+	     << " retained-undo-bytes=" << evaluatorStats.retainedUndoBytes
+	     << " peak-undo-bytes=" << evaluatorStats.peakRetainedUndoBytes
+	     << " retained-snapshot-equivalent-bytes="
+	     << evaluatorStats.retainedSnapshotEquivalentBytes << " peak-snapshot-equivalent-bytes="
+	     << evaluatorStats.peakRetainedSnapshotEquivalentBytes
+	     << " materialize-ns=" << stats.materializeNanoseconds
+	     << " equality-ns=" << stats.equalityNanoseconds
+	     << " insert-attempt-ns=" << stats.insertionAttemptNanoseconds
+	     << " history-ns=" << stats.historySearchNanoseconds
+	     << " rebuild-ns=" << stats.rebuildNanoseconds
+	     << " max-active-events=" << stats.maximumActiveEvents
+	     << " max-stable-events=" << stats.maximumStableEvents
+	     << " max-inactive-events=" << stats.maximumInactiveEvents
+	     << " max-current-base-bytes=" << stats.maximumCurrentBaseBytes
+	     << " max-history-base-bytes=" << stats.maximumHistoryBaseBytes
+	     << " max-base-relation-pairs=" << stats.maximumBaseRelationPairs
+	     << " max-base-relation-density-ppm=" << stats.maximumBaseRelationDensityPpm
+	     << " profiled-queries=" << profiledQueries_;
 	/* A process-wide lock keeps worker records parseable under --nthreads. */
 	const std::lock_guard lock(catStatisticsMutex);
 	std::cerr << line.str() << '\n';
@@ -94,7 +137,41 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 	const auto &caatAnalysis = this->getConf()->caatAnalysis;
 	VERIFY(model || (caatModel && caatAnalysis),
 	       "CATChecker requires a validated CAT or CAAT model");
+	const auto profile = this->getConf()->catStats;
+	if (this->getConf()->useCaatBackend && graphSynchronizer_) {
+		const auto syncStart = profile ? std::chrono::steady_clock::now()
+					       : std::chrono::steady_clock::time_point{};
+		(void)graphSynchronizer_->synchronize(graph);
+		if (profile) {
+			synchronizationNanoseconds_ += static_cast<std::uint64_t>(
+				std::chrono::duration_cast<std::chrono::nanoseconds>(
+					std::chrono::steady_clock::now() - syncStart)
+					.count());
+			++profiledQueries_;
+		}
+		const auto &result = incrementalEvaluator_->result();
+		VERIFY(result.errors.empty(), "validated incremental CAAT evaluation failed");
+		if (this->getConf()->explainCat && !result.violations.empty()) {
+			auto explained = cat::Reasoner().explain(
+				*caatModel, *caatAnalysis, incrementalEvaluator_->eventCount(),
+				result.values, result.violations);
+			VERIFY(explained.ok(), "validated CAT violation explanation failed");
+			for (const auto &violation : explained.violations)
+				std::cerr << "CAT explanation: " << cat::Reasoner::format(violation)
+					  << '\n';
+		}
+		return result.violations.empty();
+	}
+	const auto adapterStart = profile ? std::chrono::steady_clock::now()
+					  : std::chrono::steady_clock::time_point{};
 	const cat::GraphAdapter adapter(graph);
+	if (profile) {
+		adapterNanoseconds_ += static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(
+				std::chrono::steady_clock::now() - adapterStart)
+				.count());
+		++profiledQueries_;
+	}
 #ifdef ENABLE_GENMC_DEBUG
 	const auto invariantErrors = adapter.validate();
 	VERIFY(invariantErrors.empty(), "invalid CAT graph adapter state");
@@ -104,12 +181,24 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 	std::size_t caatEventCount = adapter.eventCount();
 	if (this->getConf()->useCaatBackend) {
 		if (graphSynchronizer_) {
+			const auto syncStart = profile ? std::chrono::steady_clock::now()
+						       : std::chrono::steady_clock::time_point{};
 			(void)graphSynchronizer_->synchronize(adapter);
+			if (profile)
+				synchronizationNanoseconds_ += static_cast<std::uint64_t>(
+					std::chrono::duration_cast<std::chrono::nanoseconds>(
+						std::chrono::steady_clock::now() - syncStart)
+						.count());
 			const auto &result = incrementalEvaluator_->result();
 			VERIFY(result.errors.empty(),
 			       "validated incremental CAAT evaluation failed");
 			violations = result.violations;
-			caatValues = result.values;
+			/* Predicate values are only consumed by the opt-in explanation path.
+			 * Avoid copying every fixed-point relation for ordinary consistency
+			 * queries, which otherwise turns a read-only result lookup into an
+			 * O(total predicate state) operation. */
+			if (this->getConf()->explainCat)
+				caatValues = result.values;
 			caatEventCount = incrementalEvaluator_->eventCount();
 		} else {
 			auto result = cat::CaatEvaluator().evaluate(*caatModel, *caatAnalysis,
@@ -151,6 +240,10 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 template <typename HostChecker>
 auto BasicCATChecker<HostChecker>::getCoherentStores(ReadLabel *read) -> std::vector<EventLabel *>
 {
+	if (pruningHost_) {
+		ConsistencyChecker &host = *pruningHost_;
+		return host.getCoherentStores(read);
+	}
 	VERIFY(read && read->getParent(), "rf enumeration requires a graph-owned read");
 	auto &graph = *read->getParent();
 	std::vector<EventLabel *> result;
@@ -166,9 +259,14 @@ auto BasicCATChecker<HostChecker>::getCoherentStores(ReadLabel *read) -> std::ve
 }
 
 template <typename HostChecker>
-void BasicCATChecker<HostChecker>::filterCoherentRevisits(WriteLabel * /*write*/,
-							  std::vector<ReadLabel *> & /*reads*/)
+void BasicCATChecker<HostChecker>::filterCoherentRevisits(WriteLabel *write,
+							  std::vector<ReadLabel *> &reads)
 {
+	if (pruningHost_) {
+		ConsistencyChecker &host = *pruningHost_;
+		host.filterCoherentRevisits(write, reads);
+		return;
+	}
 	/* No generic CAT theorem currently justifies removing a revisit. */
 }
 
@@ -176,6 +274,10 @@ template <typename HostChecker>
 auto BasicCATChecker<HostChecker>::getCoherentPlacings(WriteLabel *write)
 	-> std::vector<EventLabel *>
 {
+	if (pruningHost_) {
+		ConsistencyChecker &host = *pruningHost_;
+		return host.getCoherentPlacings(write);
+	}
 	VERIFY(write && write->getParent(), "co enumeration requires a graph-owned write");
 	auto &graph = *write->getParent();
 
@@ -195,8 +297,12 @@ auto BasicCATChecker<HostChecker>::getCoherentPlacings(WriteLabel *write)
 
 template <typename HostChecker>
 auto BasicCATChecker<HostChecker>::shouldReportCoherenceWarning(
-	WriteLabel *write, const std::vector<EventLabel *> & /*placements*/) -> bool
+	WriteLabel *write, const std::vector<EventLabel *> &placements) -> bool
 {
+	if (pruningHost_) {
+		ConsistencyChecker &host = *pruningHost_;
+		return host.shouldReportCoherenceWarning(write, placements);
+	}
 	/* Raw generic candidates include choices that the CAT model will reject.
 	 * Recompute only the host's proven candidate range for the diagnostic; this
 	 * preserves real unordered-write warnings without using host pruning to

@@ -17,6 +17,8 @@
 #include "genmc/CAT/GraphAdapter.hpp"
 
 #include <map>
+#include <set>
+#include <string>
 #include <variant>
 #include <vector>
 
@@ -28,6 +30,8 @@ using StableEventKey = std::variant<Event, SAddr>;
 /** One graph snapshot remapped into a worker-lifetime, never-reused ID space. */
 struct StableGraphSnapshot {
 	std::size_t eventCount{};
+	/** Number of currently active IDs; eventCount also includes retained holes. */
+	std::size_t activeEventCount{};
 	BaseValues base;
 	std::vector<GraphAdapter::EventId> denseToStable;
 };
@@ -42,6 +46,15 @@ struct StableGraphSnapshot {
  */
 class StableGraphAdapter {
 public:
+	explicit StableGraphAdapter(std::vector<std::string> requiredPrimitives = {});
+	/**
+	 * Materialize directly from GenMC into the persistent stable-ID universe.
+	 *
+	 * This avoids constructing a dense GraphAdapter and then remapping every
+	 * primitive. Stable IDs are still retained across cuts and revisits.
+	 */
+	[[nodiscard]] auto materialize(const ExecutionGraph &graph) -> StableGraphSnapshot;
+
 	/**
 	 * Remap a complete immutable dense snapshot into the persistent universe.
 	 *
@@ -57,8 +70,11 @@ public:
 	[[nodiscard]] auto id(const StableEventKey &key) const -> std::optional<std::size_t>;
 
 private:
+	[[nodiscard]] auto required(std::string_view name) const -> bool;
 	std::map<StableEventKey, std::size_t> ids_;
 	std::vector<StableEventKey> keys_;
+	std::set<std::string, std::less<>> requiredPrimitives_;
+	bool buildAllPrimitives_{};
 };
 
 } /* namespace cat */

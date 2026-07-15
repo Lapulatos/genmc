@@ -30,12 +30,22 @@ struct IncrementalStatistics {
 	std::size_t offlineEvaluations{};
 	std::size_t insertionUpdates{};
 	std::size_t rejectedUpdates{};
+	std::size_t replacementUpdates{};
 	std::size_t operationEvaluations{};
 	std::size_t valueChanges{};
 	std::size_t worklistPushes{};
 	std::size_t checkpoints{};
 	std::size_t rollbacks{};
 	std::size_t rejectedRollbacks{};
+	std::uint64_t offlineNanoseconds{};
+	std::uint64_t transactionalCopyNanoseconds{};
+	std::uint64_t worklistNanoseconds{};
+	std::uint64_t checkpointNanoseconds{};
+	std::uint64_t rollbackNanoseconds{};
+	std::size_t retainedUndoBytes{};
+	std::size_t peakRetainedUndoBytes{};
+	std::size_t retainedSnapshotEquivalentBytes{};
+	std::size_t peakRetainedSnapshotEquivalentBytes{};
 };
 
 /** Opaque, evaluator-local identity for one retained exact state. */
@@ -87,7 +97,8 @@ public:
 	 * @param model Immutable predicate equations, borrowed for this lifetime.
 	 * @param analysis Analysis produced for exactly @p model, also borrowed.
 	 */
-	IncrementalCaatEvaluator(const NormalizedModel &model, const ModelAnalysis &analysis);
+	IncrementalCaatEvaluator(const NormalizedModel &model, const ModelAnalysis &analysis,
+				 bool profiling = false);
 
 	/**
 	 * Replace all mutable state with one exact Phase 2 fixed point.
@@ -118,13 +129,21 @@ public:
 	 */
 	[[nodiscard]] auto tryInsert(std::size_t eventCount, const BaseValues &base)
 		-> IncrementalUpdateResult;
+	/**
+	 * Apply a same-universe replacement for an acyclic alias/union model.
+	 *
+	 * Recomputing affected union nodes preserves a tuple while any operand still
+	 * supports it. Richer operators and recursive SCCs fail closed to rebuild.
+	 */
+	[[nodiscard]] auto tryReplace(std::size_t eventCount, const BaseValues &base)
+		-> IncrementalUpdateResult;
 
 	/**
-	 * Retain an exact copy of the current online state.
+	 * Retain an exact marker for the current online state.
 	 *
 	 * Handles belong to this evaluator and remain valid until initialization or
-	 * rollback invalidates them. Snapshot storage is correctness-first and costs
-	 * O(total predicate memberships) per retained checkpoint.
+	 * rollback invalidates them. Successful insertions append an undo delta;
+	 * checkpoint creation itself is O(1).
 	 *
 	 * @return Opaque handle accepted by rollback().
 	 */
@@ -176,22 +195,41 @@ public:
 	}
 
 private:
-	/** Complete immutable-by-convention state retained for exact restoration. */
+	/** O(1) marker into the insertion undo trail. */
 	struct Snapshot {
 		IncrementalCheckpoint checkpoint;
-		std::size_t eventCount{};
-		BaseValues base;
-		CaatEvaluationResult result;
+		std::size_t trailIndex{};
+		std::size_t snapshotEquivalentBytes{};
 	};
+	/** Facts and metadata needed to undo one committed monotone insertion. */
+	struct UndoDelta {
+		std::size_t previousEventCount{};
+		BaseValues addedBase;
+		std::vector<std::string> newBaseNames;
+		std::vector<std::optional<Value>> addedValues;
+		std::vector<std::size_t> evaluationCountDeltas;
+		std::vector<Violation> previousViolations;
+		std::vector<EvaluationError> previousErrors;
+		FixedPointStatistics previousFixedPointStatistics;
+	};
+	/** Drop trail prefixes no live checkpoint can reach. */
+	void compactUndoTrail();
+	/** Refresh opt-in packed-storage counters for retained restoration state. */
+	void updateCheckpointMemoryStatistics();
 
 	const NormalizedModel &model_;
 	const ModelAnalysis &analysis_;
+	/** Immutable reverse dependency adjacency, shared by every insertion update. */
+	std::vector<std::vector<PredicateId>> dependents_;
 	std::size_t eventCount_{};
 	BaseValues base_;
 	std::optional<CaatEvaluationResult> result_;
 	IncrementalStatistics statistics_;
 	std::vector<Snapshot> checkpoints_;
+	std::vector<UndoDelta> undoTrail_;
 	bool supportsInsertions_{true};
+	bool supportsReplacements_{true};
+	bool profiling_{};
 };
 
 } /* namespace cat */

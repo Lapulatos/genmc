@@ -30,6 +30,7 @@ enum class GraphTransition : std::uint8_t {
 	Insert,
 	Rollback,
 	RollbackInsert,
+	Replace,
 	Rebuild
 };
 
@@ -46,9 +47,24 @@ struct GraphSynchronizationStatistics {
 	std::size_t insertions{};
 	std::size_t rollbacks{};
 	std::size_t rollbackInsertions{};
+	std::size_t replacements{};
 	std::size_t rebuilds{};
 	std::size_t evictedCheckpoints{};
 	std::size_t oracleChecks{};
+	std::size_t adaptiveOfflineSelections{};
+	std::uint64_t materializeNanoseconds{};
+	std::uint64_t equalityNanoseconds{};
+	std::uint64_t insertionAttemptNanoseconds{};
+	std::uint64_t historySearchNanoseconds{};
+	std::uint64_t rebuildNanoseconds{};
+	std::size_t maximumActiveEvents{};
+	std::size_t maximumStableEvents{};
+	std::size_t maximumInactiveEvents{};
+	std::size_t maximumCurrentBaseBytes{};
+	std::size_t maximumHistoryBaseBytes{};
+	std::size_t maximumBaseRelationPairs{};
+	/** Maximum primitive-relation density relative to active_events^2, in ppm. */
+	std::uint64_t maximumBaseRelationDensityPpm{};
 };
 
 /**
@@ -69,11 +85,15 @@ public:
 	 * @param oracleInterval Check every N queries against Phase 2, or zero to disable.
 	 */
 	explicit GraphSynchronizer(IncrementalCaatEvaluator &evaluator,
-				   std::size_t checkpointLimit = 32,
-				   std::size_t oracleInterval = 0);
+				   std::size_t checkpointLimit = 32, std::size_t oracleInterval = 0,
+				   bool profiling = false,
+				   std::vector<std::string> requiredPrimitives = {},
+				   std::size_t adaptiveOfflineEventLimit = 0);
 
 	/** Materialize and synchronize one current graph snapshot. */
 	[[nodiscard]] auto synchronize(const GraphAdapter &snapshot) -> GraphSynchronizationResult;
+	/** Materialize directly in stable IDs and synchronize one GenMC graph. */
+	[[nodiscard]] auto synchronize(const ExecutionGraph &graph) -> GraphSynchronizationResult;
 
 	/** Return the persistent event universe used by the evaluator. */
 	[[nodiscard]] auto stableAdapter() const -> const StableGraphAdapter & { return stable_; }
@@ -95,6 +115,9 @@ private:
 	void retainCurrent();
 	void clearHistory();
 	void verifyCurrent(GraphTransition transition);
+	void recordSpaceStatistics(const StableGraphSnapshot &stable);
+	void refreshHistoryBytes();
+	[[nodiscard]] auto synchronize(StableGraphSnapshot stable) -> GraphSynchronizationResult;
 
 	IncrementalCaatEvaluator *evaluator_{};
 	StableGraphAdapter stable_;
@@ -102,7 +125,9 @@ private:
 	std::size_t checkpointLimit_{};
 	std::size_t oracleInterval_{};
 	std::size_t queryCount_{};
+	std::size_t adaptiveOfflineEventLimit_{};
 	GraphSynchronizationStatistics statistics_;
+	bool profiling_{};
 };
 
 } /* namespace cat */

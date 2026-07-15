@@ -62,10 +62,27 @@ void EventSet::insert(std::size_t event)
 	words_[event / bitsPerWord] |= std::uint64_t{1} << (event % bitsPerWord);
 }
 
+void EventSet::erase(std::size_t event)
+{
+	VERIFY(event < size_, "CAT event-set index out of range");
+	words_[event / bitsPerWord] &= ~(std::uint64_t{1} << (event % bitsPerWord));
+}
+
 void EventSet::grow(std::size_t size)
 {
 	VERIFY(size >= size_, "CAT event-set universe cannot shrink");
+	if (size == size_)
+		return;
 	words_.resize(wordCount(size));
+	size_ = size;
+}
+
+void EventSet::shrink(std::size_t size)
+{
+	VERIFY(size <= size_, "CAT event-set shrink cannot grow universe");
+	words_.resize(wordCount(size));
+	if (size % bitsPerWord != 0 && !words_.empty())
+		words_.back() &= (std::uint64_t{1} << (size % bitsPerWord)) - 1;
 	size_ = size;
 }
 
@@ -115,6 +132,13 @@ void Relation::insert(std::size_t from, std::size_t target)
 	words_[offset] |= std::uint64_t{1} << (target % bitsPerWord);
 }
 
+void Relation::erase(std::size_t from, std::size_t target)
+{
+	VERIFY(target < size_, "CAT relation column out of range");
+	const auto offset = rowOffset(from) + target / bitsPerWord;
+	words_[offset] &= ~(std::uint64_t{1} << (target % bitsPerWord));
+}
+
 void Relation::grow(std::size_t size)
 {
 	VERIFY(size >= size_, "CAT relation universe cannot shrink");
@@ -142,6 +166,21 @@ void Relation::grow(std::size_t size)
 	words_ = std::move(grown);
 	size_ = size;
 	rowWords_ = newRowWords;
+}
+
+void Relation::shrink(std::size_t size)
+{
+	VERIFY(size <= size_, "CAT relation shrink cannot grow universe");
+	if (size == size_)
+		return;
+	Relation smaller(size);
+	for (std::size_t from = 0; from < size; ++from) {
+		for (std::size_t to = 0; to < size; ++to) {
+			if (contains(from, to))
+				smaller.insert(from, to);
+		}
+	}
+	*this = std::move(smaller);
 }
 
 auto Relation::successors(std::size_t from) const -> EventSet

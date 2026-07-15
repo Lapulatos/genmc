@@ -460,6 +460,29 @@ empty remaining
 	EXPECT_NE(rejected.reason.find("difference"), std::string::npos);
 }
 
+TEST(IncrementalCaatEvaluatorTest, PreservesUnionFactsUntilLastReplacementSupport)
+{
+	auto analyzed = analyzeModel(R"CAT(SupportAwareReplacement
+let order = rf | co
+empty order
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	cat::BaseValues base{{"rf", makeRelation(3, {{0, 1}})}, {"co", makeRelation(3, {{0, 1}})}};
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis);
+	incremental.initialize(3, base);
+
+	base.at("rf") = makeRelation(3, {});
+	ASSERT_TRUE(incremental.tryReplace(3, base).applied());
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 3, base);
+	EXPECT_FALSE(incremental.result().consistent());
+
+	base.at("co") = makeRelation(3, {});
+	ASSERT_TRUE(incremental.tryReplace(3, base).applied());
+	expectIncrementalEqualsOffline(incremental, *analyzed.model, *analyzed.analysis, 3, base);
+	EXPECT_TRUE(incremental.result().consistent());
+	EXPECT_EQ(incremental.statistics().replacementUpdates, 2U);
+}
+
 /* Random edge arrival orders match a fresh recursive reachability fixed point each step. */
 RC_GTEST_PROP(IncrementalCaatEvaluatorPropertyTest, MatchesOfflineAfterEveryInsertion,
 	      (const std::vector<std::uint8_t> &bytes))
@@ -565,7 +588,7 @@ acyclic order
 	cat::IncrementalCaatEvaluator evaluator(*analyzed.model, *analyzed.analysis);
 	/* Check every transition so initialization, insertion, rollback-insert and
 	 * rebuild all compare their published values with the Phase 2 oracle. */
-	cat::GraphSynchronizer synchronizer(evaluator, 2, 1);
+	cat::GraphSynchronizer synchronizer(evaluator, 2, 1, true);
 
 	cat::GraphAdapter empty(graph);
 	EXPECT_EQ(synchronizer.synchronize(empty).transition, cat::GraphTransition::Initialize);
@@ -603,10 +626,85 @@ acyclic order
 	EXPECT_EQ(synchronizer.statistics().rebuilds, 1U);
 	EXPECT_EQ(synchronizer.statistics().evictedCheckpoints, 1U);
 	EXPECT_EQ(synchronizer.statistics().oracleChecks, 5U);
+	EXPECT_EQ(synchronizer.statistics().maximumActiveEvents, 2U);
+	EXPECT_EQ(synchronizer.statistics().maximumStableEvents, 3U);
+	EXPECT_GE(synchronizer.statistics().maximumInactiveEvents, 1U);
+	EXPECT_GT(synchronizer.statistics().maximumCurrentBaseBytes, 0U);
+	EXPECT_GT(synchronizer.statistics().maximumHistoryBaseBytes, 0U);
+}
+
+/* Direct stable materialization is exactly equivalent to dense-build/remap. */
+TEST(CatStableGraphAdapterTest, DirectMaterializationMatchesDenseRemapAcrossMutations)
+{
+	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
+	const SAddr x{0x1000};
+	auto *first = addSynchronizerLabel<WriteLabel>(graph, Event(0, 1), MemOrdering::Relaxed, x,
+						       ASize(4), SVal(1));
+	first->addCo(graph.getInitLabel());
+	auto *second = addSynchronizerLabel<WriteLabel>(graph, Event(0, 2), MemOrdering::Relaxed, x,
+							ASize(4), SVal(2));
+	second->addCo(first);
+	auto *read = addSynchronizerLabel<ReadLabel>(graph, Event(0, 3), MemOrdering::Relaxed, x,
+						     ASize(4));
+	read->setRf(first);
+
+	cat::StableGraphAdapter legacy;
+	cat::StableGraphAdapter direct;
+	const auto compare = [&] {
+		const cat::GraphAdapter dense(graph);
+		const auto expected = legacy.materialize(dense);
+		const auto actual = direct.materialize(graph);
+		EXPECT_EQ(actual.eventCount, expected.eventCount);
+		EXPECT_EQ(actual.activeEventCount, expected.activeEventCount);
+		EXPECT_EQ(actual.denseToStable, expected.denseToStable);
+		EXPECT_EQ(actual.base, expected.base);
+	};
+	compare();
+	read->setRf(second);
+	compare();
+	second->moveCo(graph.getInitLabel());
+	compare();
+	auto removed = graph.removeLast(0);
+	ASSERT_NE(removed, nullptr);
+	compare();
+}
+
+TEST(CaatOptimizationTest, CertifiesOnlyExactBundledRecursiveModels)
+{
+	for (const auto &[name, expected] :
+	     {std::pair{"sc", cat::HostProfile::SC}, std::pair{"tso", cat::HostProfile::TSO}}) {
+		auto parsed = cat::Frontend().parseFile(
+			std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+			"models/cat" / ("recursive-" + std::string(name) + ".cat"));
+		ASSERT_TRUE(parsed.ok());
+		auto normalized = cat::Normalizer().normalize(*parsed.model);
+		ASSERT_TRUE(normalized.ok());
+		EXPECT_EQ(normalized.model->certifiedCandidateProfile(), expected);
+		EXPECT_TRUE(normalized.model->certifiedAdaptiveOffline());
+	}
+
+	auto psoParsed = cat::Frontend().parseFile(
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat/recursive-pso.cat");
+	ASSERT_TRUE(psoParsed.ok());
+	auto pso = cat::Normalizer().normalize(*psoParsed.model);
+	ASSERT_TRUE(pso.ok());
+	EXPECT_EQ(pso.model->certifiedCandidateProfile(), std::nullopt);
+	EXPECT_TRUE(pso.model->certifiedAdaptiveOffline());
+
+	auto modified = analyzeModel(R"CAT(RecursiveSC
+let rec reach = order | (reach ; order)
+let com = rf | fr | co
+let order = po | tc | tj
+acyclic reach as sc
+)CAT");
+	ASSERT_NE(modified.model, nullptr);
+	EXPECT_EQ(modified.model->certifiedCandidateProfile(), std::nullopt);
+	EXPECT_FALSE(modified.model->certifiedAdaptiveOffline());
 }
 
 /* Edge-only rf replacement and coherence reorder cannot masquerade as insertion. */
-TEST(CaatGraphSynchronizerTest, RebuildsForReadsFromReplacementAndCoherenceReorder)
+TEST(CaatGraphSynchronizerTest, ReplacesSupportedReadsFromAndCoherenceMutations)
 {
 	auto analyzed = analyzeModel(R"CAT(GraphEdgeMutation
 acyclic (po | rf | co)
@@ -630,13 +728,13 @@ acyclic (po | rf | co)
 
 	read->setRf(second);
 	cat::GraphAdapter changedRf(graph);
-	EXPECT_EQ(synchronizer.synchronize(changedRf).transition, cat::GraphTransition::Rebuild);
+	EXPECT_EQ(synchronizer.synchronize(changedRf).transition, cat::GraphTransition::Replace);
 	expectIncrementalEqualsOffline(evaluator, *analyzed.model, *analyzed.analysis,
 				       evaluator.eventCount(), evaluator.baseValues());
 
 	second->moveCo(graph.getInitLabel());
 	cat::GraphAdapter changedCo(graph);
-	EXPECT_EQ(synchronizer.synchronize(changedCo).transition, cat::GraphTransition::Rebuild);
+	EXPECT_EQ(synchronizer.synchronize(changedCo).transition, cat::GraphTransition::Replace);
 	expectIncrementalEqualsOffline(evaluator, *analyzed.model, *analyzed.analysis,
 				       evaluator.eventCount(), evaluator.baseValues());
 }

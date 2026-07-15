@@ -48,6 +48,8 @@ public:
 	[[nodiscard]] auto contains(std::size_t event) const -> bool;
 	/** Insert one in-range event ID. */
 	void insert(std::size_t event);
+	/** Remove one in-range event ID. */
+	void erase(std::size_t event);
 	/**
 	 * Grow the represented universe while preserving every existing member.
 	 *
@@ -55,6 +57,8 @@ public:
 	 * @complexity O(new packed word count) only when storage must grow.
 	 */
 	void grow(std::size_t size);
+	/** Shrink the universe, discarding members outside the retained prefix. */
+	void shrink(std::size_t size);
 	/** Return one present event, or `size()` as the no-event sentinel. */
 	[[nodiscard]] auto first() const -> std::size_t;
 
@@ -100,6 +104,8 @@ public:
 	[[nodiscard]] auto contains(std::size_t from, std::size_t target) const -> bool;
 	/** Insert one in-range `(from,to)` pair. */
 	void insert(std::size_t from, std::size_t target);
+	/** Remove one in-range `(from,to)` pair. */
+	void erase(std::size_t from, std::size_t target);
 	/**
 	 * Grow both relation dimensions while preserving every existing pair.
 	 *
@@ -110,6 +116,8 @@ public:
 	 * @complexity O(old pairs' packed rows + newly allocated storage).
 	 */
 	void grow(std::size_t size);
+	/** Shrink both dimensions to a prefix universe. */
+	void shrink(std::size_t size);
 	/** Return all targets of @p from as a value copy. */
 	[[nodiscard]] auto successors(std::size_t from) const -> EventSet;
 

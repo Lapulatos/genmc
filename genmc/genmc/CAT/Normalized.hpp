@@ -18,6 +18,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <string>
 #include <string_view>
 #include <vector>
@@ -117,6 +118,22 @@ public:
 	}
 	/** Return a deterministic summary for golden tests and human review. */
 	[[nodiscard]] auto summary() const -> std::string;
+	/**
+	 * Return the host profile whose generated candidate pruning is certified.
+	 *
+	 * Certification is deliberately closed-world: only the exact normalized
+	 * bundled recursive SC/TSO models are admitted. Any semantic edit, renamed
+	 * model, reordered equation, or unsupported profile falls back to generic
+	 * CAT enumeration.
+	 */
+	[[nodiscard]] auto certifiedCandidateProfile() const -> std::optional<HostProfile>;
+	/**
+	 * Whether this exact bundled model may use the semantically equivalent
+	 * from-scratch evaluator as a performance-only synchronization backend.
+	 * Unlike certifiedCandidateProfile(), this does not authorize host-side
+	 * rf/co/revisit pruning.
+	 */
+	[[nodiscard]] auto certifiedAdaptiveOffline() const -> bool;
 
 private:
 	std::string name_;

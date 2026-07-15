@@ -16,6 +16,7 @@
 #include "genmc/Support/Error.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <atomic>
 #include <cstdint>
 #include <deque>
@@ -67,6 +68,60 @@ auto valueSubset(const Value &subset, const Value &superset) -> bool
 		}
 	}
 	return true;
+}
+
+/** Return the facts present in @p value but absent from @p previous. */
+auto valueDifference(const Value &value, const Value &previous) -> Value
+{
+	if (const auto *set = std::get_if<EventSet>(&value))
+		return setDifference(*set, std::get<EventSet>(previous));
+	return relationDifference(std::get<Relation>(value), std::get<Relation>(previous));
+}
+
+/** Accumulate insertion facts of the same type and universe. */
+void mergeFacts(Value &target, const Value &added)
+{
+	if (const auto *set = std::get_if<EventSet>(&target))
+		target = setUnion(*set, std::get<EventSet>(added));
+	else
+		target = relationUnion(std::get<Relation>(target), std::get<Relation>(added));
+}
+
+/** Remove one insertion delta and restore the preceding event universe. */
+void removeFactsAndShrink(Value &target, const Value &added, std::size_t size)
+{
+	if (auto *set = std::get_if<EventSet>(&target)) {
+		const auto &delta = std::get<EventSet>(added);
+		for (std::size_t event = 0; event < delta.size(); ++event) {
+			if (delta.contains(event))
+				set->erase(event);
+		}
+		set->shrink(size);
+		return;
+	}
+	auto &relation = std::get<Relation>(target);
+	const auto &delta = std::get<Relation>(added);
+	for (std::size_t from = 0; from < delta.size(); ++from) {
+		for (std::size_t to = 0; to < delta.size(); ++to) {
+			if (delta.contains(from, to))
+				relation.erase(from, to);
+		}
+	}
+	relation.shrink(size);
+}
+
+/** Shrink a value whose insertion delta was empty. */
+void shrinkValue(Value &value, std::size_t size)
+{
+	if (auto *set = std::get_if<EventSet>(&value))
+		set->shrink(size);
+	else
+		std::get<Relation>(value).shrink(size);
+}
+
+auto valueStorageBytes(const Value &value) -> std::size_t
+{
+	return std::visit([](const auto &typed) { return typed.storageBytes(); }, value);
 }
 
 /** Construct the complete active event set used by `_` and `id`. */
@@ -227,19 +282,40 @@ auto violations(const NormalizedModel &model, const std::vector<std::optional<Va
 } /* namespace */
 
 IncrementalCaatEvaluator::IncrementalCaatEvaluator(const NormalizedModel &model,
-						   const ModelAnalysis &analysis)
-	: model_(model), analysis_(analysis)
+						   const ModelAnalysis &analysis, bool profiling)
+	: model_(model), analysis_(analysis), dependents_(model.predicates().size()),
+	  profiling_(profiling)
 {
 	VERIFY(analysis_.componentOf().size() == model_.predicates().size(),
 	       "incremental CAAT analysis/model predicate count mismatch");
+	for (const auto &dependency : analysis_.dependencies())
+		dependents_[dependency.source].push_back(dependency.target);
 	supportsInsertions_ = std::ranges::none_of(model_.predicates(), [](const auto &predicate) {
 		return predicate.kind == Predicate::Kind::Difference;
 	});
+	for (const auto &predicate : model_.predicates()) {
+		if (predicate.kind != Predicate::Kind::Base &&
+		    predicate.kind != Predicate::Kind::Alias &&
+		    predicate.kind != Predicate::Kind::Union)
+			supportsReplacements_ = false;
+	}
+	for (const auto &stratum : analysis_.strata()) {
+		if (stratum.size() > 1)
+			supportsReplacements_ = false;
+		if (stratum.size() == 1) {
+			const auto id = stratum.front();
+			if (std::ranges::any_of(model_.predicates()[id].operands,
+					       [id](auto operand) { return operand == id; }))
+				supportsReplacements_ = false;
+		}
+	}
 }
 
 auto IncrementalCaatEvaluator::initialize(std::size_t eventCount, const BaseValues &base)
 	-> const CaatEvaluationResult &
 {
+	const auto started = profiling_ ? std::chrono::steady_clock::now()
+					: std::chrono::steady_clock::time_point{};
 	/* Compute into a temporary first. An evaluation error is a valid published
 	 * result, but an exception or assertion cannot leave a mixed old/new state. */
 	auto next = CaatEvaluator().evaluate(model_, analysis_, eventCount, base);
@@ -247,8 +323,14 @@ auto IncrementalCaatEvaluator::initialize(std::size_t eventCount, const BaseValu
 	base_ = base;
 	result_ = std::move(next);
 	checkpoints_.clear();
+	undoTrail_.clear();
 	++statistics_.initializations;
 	++statistics_.offlineEvaluations;
+	if (profiling_)
+		statistics_.offlineNanoseconds += static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(
+				std::chrono::steady_clock::now() - started)
+				.count());
 	return *result_;
 }
 
@@ -272,12 +354,27 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 	/* All work happens on copies. This transactional boundary is essential:
 	 * discovering a deletion halfway through base validation cannot corrupt the
 	 * last exact checkpoint that the synchronizer may still need. */
+	const auto copyStarted = profiling_ ? std::chrono::steady_clock::now()
+					    : std::chrono::steady_clock::time_point{};
 	auto values = result_->values;
 	auto counts = result_->evaluationCounts;
+	UndoDelta undo{eventCount_,
+		       {},
+		       {},
+		       std::vector<std::optional<Value>>(model_.predicates().size()),
+		       std::vector<std::size_t>(model_.predicates().size()),
+		       result_->violations,
+		       result_->errors,
+		       result_->statistics};
 	for (auto &value : values) {
 		VERIFY(value.has_value(), "initialized CAAT predicate has no value");
 		growValue(*value, eventCount);
 	}
+	if (profiling_)
+		statistics_.transactionalCopyNanoseconds += static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(
+				std::chrono::steady_clock::now() - copyStarted)
+				.count());
 	/* Graph synchronization must classify mutations across every primitive,
 	 * including relations not referenced by the current model. Otherwise an rf,
 	 * co, or label-category replacement could be mistaken for insertion merely
@@ -291,10 +388,25 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 		if (!valueSubset(grown, found->second))
 			return reject("primitive '" + name + "' removed a fact");
 	}
+	/* Retain only newly inserted primitive facts. Extra primitive names are
+	 * recorded so rollback can erase them rather than snapshotting the map. */
+	for (const auto &[name, nextValue] : base) {
+		auto previous = nextValue;
+		if (const auto found = base_.find(name); found != base_.end()) {
+			previous = found->second;
+			growValue(previous, eventCount);
+		} else {
+			undo.newBaseNames.push_back(name);
+			previous = std::holds_alternative<EventSet>(nextValue)
+					   ? Value{EventSet(eventCount)}
+					   : Value{Relation(eventCount)};
+		}
+		auto added = valueDifference(nextValue, previous);
+		const auto empty = std::visit([](const auto &facts) { return facts.empty(); }, added);
+		if (!empty)
+			undo.addedBase.emplace(name, std::move(added));
+	}
 
-	std::vector<std::vector<PredicateId>> dependents(model_.predicates().size());
-	for (const auto &dependency : analysis_.dependencies())
-		dependents[dependency.source].push_back(dependency.target);
 	std::deque<PredicateId> worklist;
 	std::vector<bool> queued(model_.predicates().size());
 	FixedPointStatistics updateStatistics;
@@ -328,32 +440,47 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 			return reject("primitive '" + predicate.name + "' removed a fact");
 		if (*values[predicate.id] == *next)
 			continue;
+		undo.addedValues[predicate.id] =
+			valueDifference(*next, *values[predicate.id]);
 		values[predicate.id] = std::move(*next);
 		++updateStatistics.valueChanges;
-		for (const auto dependent : dependents[predicate.id])
+		for (const auto dependent : dependents_[predicate.id])
 			enqueue(dependent);
 	}
 
 	/* Re-evaluating an affected operator is deliberately correctness-first.
 	 * Only strict growth is published to its users, which is the CAAT delta
 	 * worklist contract; later profiling may specialize individual operators. */
+	const auto worklistStarted = profiling_ ? std::chrono::steady_clock::now()
+						: std::chrono::steady_clock::time_point{};
 	while (!worklist.empty()) {
 		const auto id = worklist.front();
 		worklist.pop_front();
 		queued[id] = false;
 		const auto next = operation(model_.predicates()[id], values);
 		++counts[id];
+		++undo.evaluationCountDeltas[id];
 		++updateStatistics.operationEvaluations;
 		if (!valueSubset(*values[id], next))
 			return reject("derived predicate '" + model_.predicates()[id].name +
 				      "' was non-monotone");
 		if (*values[id] == next)
 			continue;
+		auto added = valueDifference(next, *values[id]);
+		if (undo.addedValues[id])
+			mergeFacts(*undo.addedValues[id], added);
+		else
+			undo.addedValues[id] = std::move(added);
 		values[id] = next;
 		++updateStatistics.valueChanges;
-		for (const auto dependent : dependents[id])
+		for (const auto dependent : dependents_[id])
 			enqueue(dependent);
 	}
+	if (profiling_)
+		statistics_.worklistNanoseconds += static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(
+				std::chrono::steady_clock::now() - worklistStarted)
+				.count());
 
 	CaatEvaluationResult nextResult{violations(model_, values, eventCount),
 					{},
@@ -363,6 +490,7 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 	eventCount_ = eventCount;
 	base_ = base;
 	result_ = std::move(nextResult);
+	undoTrail_.push_back(std::move(undo));
 	++statistics_.insertionUpdates;
 	statistics_.operationEvaluations += updateStatistics.operationEvaluations;
 	statistics_.valueChanges += updateStatistics.valueChanges;
@@ -370,32 +498,147 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 	return {IncrementalUpdateStatus::Applied, {}};
 }
 
+auto IncrementalCaatEvaluator::tryReplace(std::size_t eventCount, const BaseValues &base)
+	-> IncrementalUpdateResult
+{
+	const auto reject = [&](std::string reason) {
+		++statistics_.rejectedUpdates;
+		return IncrementalUpdateResult{IncrementalUpdateStatus::RequiresRebuild,
+					       std::move(reason)};
+	};
+	if (!initialized())
+		return reject("incremental CAAT state has not been initialized");
+	if (!supportsReplacements_)
+		return reject("replacement closure needs operators beyond acyclic alias/union");
+	if (eventCount != eventCount_)
+		return reject("replacement changed the event universe");
+
+	auto values = result_->values;
+	auto counts = result_->evaluationCounts;
+	std::deque<PredicateId> worklist;
+	std::vector<bool> queued(model_.predicates().size());
+	const auto enqueue = [&](PredicateId id) {
+		if (!queued[id]) {
+			queued[id] = true;
+			worklist.push_back(id);
+		}
+	};
+	for (const auto &predicate : model_.predicates()) {
+		if (predicate.kind != Predicate::Kind::Base)
+			continue;
+		auto next = baseValue(predicate, eventCount, base);
+		if (!next)
+			return reject("replacement primitive is missing or ill-typed");
+		if (*values[predicate.id] == *next)
+			continue;
+		values[predicate.id] = std::move(*next);
+		for (const auto dependent : dependents_[predicate.id])
+			enqueue(dependent);
+	}
+	FixedPointStatistics updateStatistics;
+	while (!worklist.empty()) {
+		const auto id = worklist.front();
+		worklist.pop_front();
+		queued[id] = false;
+		const auto next = operation(model_.predicates()[id], values);
+		++counts[id];
+		++updateStatistics.operationEvaluations;
+		if (*values[id] == next)
+			continue;
+		values[id] = next;
+		++updateStatistics.valueChanges;
+		for (const auto dependent : dependents_[id])
+			enqueue(dependent);
+	}
+	result_ = CaatEvaluationResult{violations(model_, values, eventCount),
+				       {}, std::move(values), std::move(counts), updateStatistics};
+	base_ = base;
+	checkpoints_.clear();
+	undoTrail_.clear();
+	++statistics_.replacementUpdates;
+	statistics_.operationEvaluations += updateStatistics.operationEvaluations;
+	statistics_.valueChanges += updateStatistics.valueChanges;
+	return {IncrementalUpdateStatus::Applied, {}};
+}
+
 auto IncrementalCaatEvaluator::checkpoint() -> IncrementalCheckpoint
 {
+	const auto started = profiling_ ? std::chrono::steady_clock::now()
+					: std::chrono::steady_clock::time_point{};
 	VERIFY(initialized(), "incremental CAAT state has not been initialized");
+	compactUndoTrail();
 	const auto handle = allocateCheckpoint();
-	checkpoints_.push_back({handle, eventCount_, base_, *result_});
+	std::size_t snapshotEquivalentBytes{};
+	if (profiling_) {
+		for (const auto &[name, value] : base_)
+			snapshotEquivalentBytes += valueStorageBytes(value);
+		for (const auto &value : result_->values)
+			snapshotEquivalentBytes += valueStorageBytes(*value);
+		snapshotEquivalentBytes +=
+			result_->evaluationCounts.size() * sizeof(std::size_t);
+	}
+	checkpoints_.push_back({handle, undoTrail_.size(), snapshotEquivalentBytes});
+	updateCheckpointMemoryStatistics();
 	++statistics_.checkpoints;
+	if (profiling_)
+		statistics_.checkpointNanoseconds += static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(
+				std::chrono::steady_clock::now() - started)
+				.count());
 	return handle;
 }
 
 auto IncrementalCaatEvaluator::rollback(IncrementalCheckpoint checkpoint)
 	-> IncrementalRollbackResult
 {
+	const auto started = profiling_ ? std::chrono::steady_clock::now()
+					: std::chrono::steady_clock::time_point{};
 	const auto found = std::ranges::find(checkpoints_, checkpoint, &Snapshot::checkpoint);
 	if (found == checkpoints_.end()) {
 		++statistics_.rejectedRollbacks;
 		return {false, "incremental CAAT checkpoint is stale or belongs to another state"};
 	}
 
-	/* Publish the complete snapshot before discarding descendants. Exact value
-	 * restoration also replaces violation witnesses, evaluation counters, and
-	 * every primitive fact, so no explanation can observe a mixed epoch. */
-	eventCount_ = found->eventCount;
-	base_ = found->base;
-	result_ = found->result;
+	const auto target = found->trailIndex;
+	while (undoTrail_.size() > target) {
+		auto &undo = undoTrail_.back();
+		for (const auto &[name, added] : undo.addedBase) {
+			auto current = base_.find(name);
+			VERIFY(current != base_.end(), "CAAT undo base predicate is missing");
+			removeFactsAndShrink(current->second, added, undo.previousEventCount);
+		}
+		for (auto &[name, value] : base_) {
+			if (!undo.addedBase.contains(name))
+				shrinkValue(value, undo.previousEventCount);
+		}
+		for (const auto &name : undo.newBaseNames)
+			base_.erase(name);
+		for (std::size_t id = 0; id < result_->values.size(); ++id) {
+			auto &value = *result_->values[id];
+			if (undo.addedValues[id])
+				removeFactsAndShrink(value, *undo.addedValues[id],
+						     undo.previousEventCount);
+			else
+				shrinkValue(value, undo.previousEventCount);
+			VERIFY(result_->evaluationCounts[id] >= undo.evaluationCountDeltas[id],
+			       "CAAT undo evaluation count underflow");
+			result_->evaluationCounts[id] -= undo.evaluationCountDeltas[id];
+		}
+		result_->violations = std::move(undo.previousViolations);
+		result_->errors = std::move(undo.previousErrors);
+		result_->statistics = undo.previousFixedPointStatistics;
+		eventCount_ = undo.previousEventCount;
+		undoTrail_.pop_back();
+	}
 	checkpoints_.erase(std::next(found), checkpoints_.end());
 	++statistics_.rollbacks;
+	if (profiling_)
+		statistics_.rollbackNanoseconds += static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(
+				std::chrono::steady_clock::now() - started)
+				.count());
+	compactUndoTrail();
+	updateCheckpointMemoryStatistics();
 	return {true, {}};
 }
 
@@ -405,7 +648,49 @@ auto IncrementalCaatEvaluator::forget(IncrementalCheckpoint checkpoint) -> bool
 	if (found == checkpoints_.end())
 		return false;
 	checkpoints_.erase(found);
+	compactUndoTrail();
+	updateCheckpointMemoryStatistics();
 	return true;
+}
+
+void IncrementalCaatEvaluator::compactUndoTrail()
+{
+	if (checkpoints_.empty()) {
+		undoTrail_.clear();
+		return;
+	}
+	const auto firstNeeded = std::ranges::min(checkpoints_, {}, &Snapshot::trailIndex).trailIndex;
+	if (firstNeeded == 0)
+		return;
+	undoTrail_.erase(undoTrail_.begin(),
+			 std::next(undoTrail_.begin(), static_cast<std::ptrdiff_t>(firstNeeded)));
+	for (auto &snapshot : checkpoints_)
+		snapshot.trailIndex -= firstNeeded;
+}
+
+void IncrementalCaatEvaluator::updateCheckpointMemoryStatistics()
+{
+	if (!profiling_)
+		return;
+	std::size_t undoBytes{};
+	for (const auto &undo : undoTrail_) {
+		for (const auto &[name, value] : undo.addedBase)
+			undoBytes += valueStorageBytes(value);
+		for (const auto &value : undo.addedValues) {
+			if (value)
+				undoBytes += valueStorageBytes(*value);
+		}
+		undoBytes += undo.evaluationCountDeltas.size() * sizeof(std::size_t);
+	}
+	std::size_t snapshotBytes{};
+	for (const auto &checkpoint : checkpoints_)
+		snapshotBytes += checkpoint.snapshotEquivalentBytes;
+	statistics_.retainedUndoBytes = undoBytes;
+	statistics_.retainedSnapshotEquivalentBytes = snapshotBytes;
+	statistics_.peakRetainedUndoBytes =
+		std::max(statistics_.peakRetainedUndoBytes, undoBytes);
+	statistics_.peakRetainedSnapshotEquivalentBytes =
+		std::max(statistics_.peakRetainedSnapshotEquivalentBytes, snapshotBytes);
 }
 
 auto IncrementalCaatEvaluator::eventCount() const -> std::size_t
