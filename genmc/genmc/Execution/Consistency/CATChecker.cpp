@@ -44,8 +44,15 @@ BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(
 	const auto certifiedCandidates =
 		candidateModel &&
 		candidateModel->certifiedCandidateProfile() == candidateModel->hostProfile();
-	const auto certifiedAdaptiveOffline =
-		candidateModel && candidateModel->certifiedAdaptiveOffline();
+	const auto certifiedAdaptiveOffline = candidateModel &&
+					      candidateModel->certifiedAdaptiveOffline();
+	if (conf->catPreventivePruning && certifiedAdaptiveOffline && !certifiedCandidates) {
+		for (const auto &predicate : candidateModel->predicates()) {
+			if (predicate.name == "reach")
+				preventiveReachId_ = predicate.id;
+		}
+		VERIFY(preventiveReachId_, "certified preventive model lacks reach");
+	}
 	/* Oracle mode deliberately enumerates the generic superset so mutation
 	 * stress still compares every candidate with a fresh offline evaluation. */
 	if (!conf->catOracle && certifiedCandidates)
@@ -109,7 +116,15 @@ template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
 	     << " max-history-base-bytes=" << stats.maximumHistoryBaseBytes
 	     << " max-base-relation-pairs=" << stats.maximumBaseRelationPairs
 	     << " max-base-relation-density-ppm=" << stats.maximumBaseRelationDensityPpm
-	     << " profiled-queries=" << profiledQueries_;
+	     << " profiled-queries=" << profiledQueries_
+	     << " preventive-prefix-queries=" << preventivePrefixQueries_
+	     << " preventive-prefix-inconsistent=" << preventivePrefixInconsistent_
+	     << " preventive-rf-candidates=" << preventiveRfCandidates_
+	     << " preventive-rf-pruned=" << preventiveRfPruned_
+	     << " preventive-co-candidates=" << preventiveCoCandidates_
+	     << " preventive-co-pruned=" << preventiveCoPruned_
+	     << " preventive-all-pruned-fallbacks=" << preventiveAllPrunedFallbacks_
+	     << " preventive-lookup-ns=" << preventiveLookupNanoseconds_;
 	/* A process-wide lock keeps worker records parseable under --nthreads. */
 	const std::lock_guard lock(catStatisticsMutex);
 	std::cerr << line.str() << '\n';
@@ -238,6 +253,129 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 }
 
 template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::preparePreventivePrefix(const ExecutionGraph &graph)
+	-> const cat::Relation *
+{
+	if (!preventiveReachId_ || !graphSynchronizer_ || !incrementalEvaluator_)
+		return nullptr;
+	++preventivePrefixQueries_;
+	const auto profile = this->getConf()->catStats;
+	const auto started = profile ? std::chrono::steady_clock::now()
+				     : std::chrono::steady_clock::time_point{};
+	(void)graphSynchronizer_->synchronize(graph);
+	if (profile) {
+		synchronizationNanoseconds_ += static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(
+				std::chrono::steady_clock::now() - started)
+				.count());
+		++profiledQueries_;
+	}
+	const auto &result = incrementalEvaluator_->result();
+	VERIFY(result.errors.empty(), "preventive prefix evaluation failed");
+	if (!result.violations.empty()) {
+		++preventivePrefixInconsistent_;
+		return nullptr;
+	}
+	const auto &value = result.values.at(*preventiveReachId_);
+	VERIFY(value.has_value(), "preventive reach is not evaluated");
+	const auto *reach = std::get_if<cat::Relation>(&*value);
+	VERIFY(reach, "preventive reach has unexpected type");
+	return reach;
+}
+
+template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::preventsRf(const ReadLabel &read, const EventLabel &source,
+					      const cat::Relation &reach) const -> bool
+{
+	const auto &stable = graphSynchronizer_->stableAdapter();
+	const auto readId = stable.id(cat::StableEventKey{read.getPos()});
+	const auto sourceId = genmc::isa<InitLabel>(&source)
+				      ? stable.id(cat::StableEventKey{read.getAddr()})
+				      : stable.id(cat::StableEventKey{source.getPos()});
+	VERIFY(readId && sourceId, "preventive RF endpoint lacks stable identity");
+	/* Recursive PSO contributes only external RF directly to order. */
+	if ((genmc::isa<InitLabel>(&source) || source.getThread() != read.getThread()) &&
+	    reach.contains(*readId, *sourceId))
+		return true;
+
+	const auto &graph = *read.getParent();
+	if (genmc::isa<InitLabel>(&source)) {
+		for (const auto &successor : graph.co(read.getAddr())) {
+			const auto successorId = stable.id(cat::StableEventKey{successor.getPos()});
+			VERIFY(successorId, "preventive FR target lacks stable identity");
+			if (reach.contains(*successorId, *readId))
+				return true;
+		}
+		return false;
+	}
+	for (const auto &successor : graph.co_succs(&source)) {
+		const auto successorId = stable.id(cat::StableEventKey{successor.getPos()});
+		VERIFY(successorId, "preventive FR target lacks stable identity");
+		if (reach.contains(*successorId, *readId))
+			return true;
+	}
+	return false;
+}
+
+template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::preventsCo(const WriteLabel &write,
+					      const EventLabel &predecessor,
+					      const cat::Relation &reach) const -> bool
+{
+	const auto &graph = *write.getParent();
+	const auto &stable = graphSynchronizer_->stableAdapter();
+	const auto writeId = stable.id(cat::StableEventKey{write.getPos()});
+	VERIFY(writeId, "preventive CO write lacks stable identity");
+	std::vector<const EventLabel *> ordered{graph.getInitLabel()};
+	for (const auto &existing : graph.co(write.getAddr()))
+		ordered.push_back(&existing);
+	const auto predecessorIt = std::ranges::find(ordered, &predecessor);
+	VERIFY(predecessorIt != ordered.end(), "preventive CO predecessor is not ordered");
+	const auto predecessorIndex =
+		static_cast<std::size_t>(std::distance(ordered.begin(), predecessorIt));
+	const auto stableId = [&](const EventLabel &label) {
+		const auto id = genmc::isa<InitLabel>(&label)
+					? stable.id(cat::StableEventKey{write.getAddr()})
+					: stable.id(cat::StableEventKey{label.getPos()});
+		VERIFY(id, "preventive CO endpoint lacks stable identity");
+		return *id;
+	};
+
+	/* Strict total CO adds every earlier->write and write->later pair. */
+	for (std::size_t index = 0; index < ordered.size(); ++index) {
+		const auto otherId = stableId(*ordered[index]);
+		if (index <= predecessorIndex) {
+			if (reach.contains(*writeId, otherId))
+				return true;
+		} else if (reach.contains(otherId, *writeId)) {
+			return true;
+		}
+	}
+	/* Reads from an earlier source gain FR to the newly inserted write. */
+	for (std::size_t index = 0; index <= predecessorIndex; ++index) {
+		if (const auto *initial = genmc::dyn_cast<InitLabel>(ordered[index])) {
+			for (const auto &reader : initial->rfs(write.getAddr())) {
+				const auto readerId =
+					stable.id(cat::StableEventKey{reader.getPos()});
+				VERIFY(readerId, "preventive FR reader lacks stable identity");
+				if (reach.contains(*writeId, *readerId))
+					return true;
+			}
+		} else {
+			const auto *earlier = genmc::cast<WriteLabel>(ordered[index]);
+			for (const auto &reader : earlier->readers()) {
+				const auto readerId =
+					stable.id(cat::StableEventKey{reader.getPos()});
+				VERIFY(readerId, "preventive FR reader lacks stable identity");
+				if (reach.contains(*writeId, *readerId))
+					return true;
+			}
+		}
+	}
+	return false;
+}
+
+template <typename HostChecker>
 auto BasicCATChecker<HostChecker>::getCoherentStores(ReadLabel *read) -> std::vector<EventLabel *>
 {
 	if (pruningHost_) {
@@ -255,6 +393,29 @@ auto BasicCATChecker<HostChecker>::getCoherentStores(ReadLabel *read) -> std::ve
 		result.push_back(graph.getInitLabel());
 	for (auto &write : graph.co(read->getAddr()))
 		result.push_back(&write);
+	/* With zero/one offered source, filtering cannot shrink the search: an empty
+	 * result would immediately take the all-pruned fallback. More importantly,
+	 * avoid materializing recursive reach for large deterministic prefixes. */
+	if (!read->getRf() && result.size() > 1) {
+		if (const auto *reach = preparePreventivePrefix(graph)) {
+			const auto original = result;
+			preventiveRfCandidates_ += result.size();
+			const auto started = std::chrono::steady_clock::now();
+			std::erase_if(result, [&](const auto *source) {
+				const auto prune = preventsRf(*read, *source, *reach);
+				preventiveRfPruned_ += prune ? 1U : 0U;
+				return prune;
+			});
+			preventiveLookupNanoseconds_ += static_cast<std::uint64_t>(
+				std::chrono::duration_cast<std::chrono::nanoseconds>(
+					std::chrono::steady_clock::now() - started)
+					.count());
+			if (result.empty()) {
+				++preventiveAllPrunedFallbacks_;
+				result = original;
+			}
+		}
+	}
 	return result;
 }
 
@@ -292,6 +453,27 @@ auto BasicCATChecker<HostChecker>::getCoherentPlacings(WriteLabel *write)
 	std::vector<EventLabel *> result{graph.getInitLabel()};
 	for (auto &predecessor : graph.co(write->getAddr()))
 		result.push_back(&predecessor);
+	/* A sole placement is likewise unfilterable under the safety fallback. */
+	if (!write->isInCo() && result.size() > 1) {
+		if (const auto *reach = preparePreventivePrefix(graph)) {
+			const auto original = result;
+			preventiveCoCandidates_ += result.size();
+			const auto started = std::chrono::steady_clock::now();
+			std::erase_if(result, [&](const auto *predecessor) {
+				const auto prune = preventsCo(*write, *predecessor, *reach);
+				preventiveCoPruned_ += prune ? 1U : 0U;
+				return prune;
+			});
+			preventiveLookupNanoseconds_ += static_cast<std::uint64_t>(
+				std::chrono::duration_cast<std::chrono::nanoseconds>(
+					std::chrono::steady_clock::now() - started)
+					.count());
+			if (result.empty()) {
+				++preventiveAllPrunedFallbacks_;
+				result = original;
+			}
+		}
+	}
 	return result;
 }
 

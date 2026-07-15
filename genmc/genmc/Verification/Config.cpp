@@ -45,6 +45,8 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 		errors.emplace_back("--explain-cat requires --model-file.");
 	if (catStats && !modelFile)
 		errors.emplace_back("--cat-stats requires --model-file.");
+	if (catPreventivePruning && !modelFile)
+		errors.emplace_back("--cat-preventive-pruning requires --model-file.");
 	if (catOracle && !modelFile)
 		errors.emplace_back("--cat-oracle requires --model-file.");
 
@@ -227,6 +229,11 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 			}
 		}
 	}
+	if (catPreventivePruning &&
+	    (!useCaatBackend || !caatModel || !caatModel->certifiedAdaptiveOffline() ||
+	     caatModel->certifiedCandidateProfile()))
+		errors.emplace_back(
+			"--cat-preventive-pruning requires the exact bundled recursive PSO model.");
 	if (LAPOR) {
 		errors.emplace_back("LAPOR is temporarily disabled.");
 	}

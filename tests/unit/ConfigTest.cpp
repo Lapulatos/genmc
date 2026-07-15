@@ -143,6 +143,29 @@ TEST(ConfigModelFileTest, SelectsRecursiveCaatBackend)
 	std::filesystem::remove(path);
 }
 
+/* Preventive pruning is a closed-world recursive-PSO certificate, not a host-checker
+ * shortcut or a filename-based model selection. */
+TEST(ConfigModelFileTest, CertifiesPreventivePruningOnlyForRecursivePSO)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	std::vector<std::string> warnings;
+	Config pso;
+	pso.modelFile = modelRoot / "recursive-pso.cat";
+	pso.catPreventivePruning = true;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(pso.validate(warnings)));
+	EXPECT_TRUE(pso.useCaatBackend);
+	EXPECT_TRUE(pso.caatModel->certifiedAdaptiveOffline());
+	EXPECT_EQ(pso.caatModel->certifiedCandidateProfile(), std::nullopt);
+
+	warnings.clear();
+	Config sc;
+	sc.modelFile = modelRoot / "recursive-sc.cat";
+	sc.catPreventivePruning = true;
+	EXPECT_TRUE(hasError(sc.validate(warnings), "exact bundled recursive PSO"));
+}
+
 /* A real generic checker query drives its worker-local incremental state. */
 TEST(ConfigModelFileTest, ExercisesIncrementalCaatCheckerPath)
 {

@@ -18,8 +18,9 @@
 #include "genmc/Execution/Consistency/SCChecker.hpp"
 #include "genmc/Execution/Consistency/TSOChecker.hpp"
 
-#include <memory>
 #include <cstdint>
+#include <memory>
+#include <optional>
 
 /**
  * Correctness-first graph checker for a validated CAT model.
@@ -71,6 +72,15 @@ private:
 	 * @errors Internal invariant failure if validated IR/primitives cannot evaluate.
 	 */
 	[[nodiscard]] auto isConsistent(const ExecutionGraph &graph) const -> bool override;
+	/** Synchronize one no-choice PSO prefix and expose its exact reach relation. */
+	[[nodiscard]] auto preparePreventivePrefix(const ExecutionGraph &graph)
+		-> const cat::Relation *;
+	/** Whether assigning @p read to @p source inserts an edge reversing prefix reach. */
+	[[nodiscard]] auto preventsRf(const ReadLabel &read, const EventLabel &source,
+				      const cat::Relation &reach) const -> bool;
+	/** Whether placing @p write after @p predecessor reverses prefix reach. */
+	[[nodiscard]] auto preventsCo(const WriteLabel &write, const EventLabel &predecessor,
+				      const cat::Relation &reach) const -> bool;
 
 	/**
 	 * Return every currently available same-location rf source.
@@ -114,6 +124,16 @@ private:
 	mutable std::uint64_t adapterNanoseconds_{};
 	mutable std::uint64_t synchronizationNanoseconds_{};
 	mutable std::size_t profiledQueries_{};
+	/** Predicate IDs and counters for the opt-in exact recursive-PSO fast path. */
+	std::optional<cat::PredicateId> preventiveReachId_;
+	mutable std::size_t preventivePrefixQueries_{};
+	mutable std::size_t preventivePrefixInconsistent_{};
+	mutable std::size_t preventiveRfCandidates_{};
+	mutable std::size_t preventiveRfPruned_{};
+	mutable std::size_t preventiveCoCandidates_{};
+	mutable std::size_t preventiveCoPruned_{};
+	mutable std::size_t preventiveAllPrunedFallbacks_{};
+	mutable std::uint64_t preventiveLookupNanoseconds_{};
 };
 
 /** CAT evaluator hosted by SC causal views for models declaring/defaulting to SC. */

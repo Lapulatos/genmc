@@ -84,6 +84,10 @@ static llvm::cl::opt<bool>
 	clCatStats("cat-stats", llvm::cl::cat(clGeneral),
 		   llvm::cl::desc("Print per-worker incremental CAT transition counters"));
 
+static llvm::cl::opt<bool> clCatPreventivePruning(
+	"cat-preventive-pruning", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Filter certified recursive-PSO choices by preventive order reversal"));
+
 static llvm::cl::opt<bool>
 	clCatOracle("cat-oracle", llvm::cl::cat(clGeneral),
 		    llvm::cl::desc("Cross-check every incremental CAT query with Phase 2"));
@@ -431,6 +435,7 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	conf.modelFileOccurrences = clModelFile.getNumOccurrences();
 	conf.explainCat = clExplainCat;
 	conf.catStats = clCatStats;
+	conf.catPreventivePruning = clCatPreventivePruning;
 	conf.catOracle = clCatOracle;
 	conf.estimate = !clDisableEstimation;
 	conf.estimationMax = clEstimationMax;

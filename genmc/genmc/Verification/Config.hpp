@@ -56,6 +56,8 @@ struct Config {
 	bool explainCat{};
 	/** Print per-worker incremental synchronization counters at shutdown. */
 	bool catStats{};
+	/** Filter exact recursive-PSO RF/CO choices by preventive reach reversal. */
+	bool catPreventivePruning{};
 	/** Recompute and compare every incremental query with the Phase 2 oracle. */
 	bool catOracle{};
 	/** Whether the user also explicitly selected one of GenMC's built-in models. */
