@@ -304,6 +304,45 @@ acyclic x as recursive
 	EXPECT_EQ(result.model->checks()[0].predicate, 0U);
 }
 
+/* Linear left/right recursive reachability is canonical relation algebra, not a
+ * fixed-model dispatch; equivalent syntax maps to the existing closure operator. */
+TEST(CaatNormalizedModelTest, CanonicalizesStructurallyEquivalentLinearClosures)
+{
+	for (const auto source : {
+		     "RenamedA\nlet rec path = po | (path ; po)\nempty path\n",
+		     "RenamedB\nlet rec path = (path ; po) | po\nempty path\n",
+		     "RenamedC\nlet rec path = po | (po ; path)\nempty path\n",
+		     "RenamedD\nlet rec path = (po ; path) | po\nempty path\n",
+		     "Compound\nlet rec path = (po | rf) | (path ; (po | rf))\nempty path\n"}) {
+		auto result = normalizeText(source);
+		ASSERT_TRUE(result.ok());
+		const auto &path = result.model->predicates().front();
+		EXPECT_EQ(path.name, "path");
+		EXPECT_EQ(path.kind, cat::Predicate::Kind::TransitiveClosure);
+		ASSERT_EQ(path.operands.size(), 1U);
+		auto analysis = cat::Analyzer().analyze(*result.model);
+		ASSERT_TRUE(analysis.ok());
+	}
+}
+
+/* Similar but inequivalent or mutually recursive equations retain their original SCC. */
+TEST(CaatNormalizedModelTest, LeavesLinearClosureNearNeighborsRecursive)
+{
+	for (const auto source : {
+		     "DifferentSeed\nlet rec path = po | (path ; rf)\nempty path\n",
+		     "WrongOperator\nlet rec path = po | (path & po)\nempty path\n",
+		     "ExtraTerm\nlet rec path = (po | co) | (path ; po)\nempty path\n",
+		     "Mutual\nlet rec path = other | (path ; other)\n"
+		     "and other = po | path\nempty path\n"}) {
+		auto result = normalizeText(source);
+		ASSERT_TRUE(result.ok());
+		const auto &path = result.model->predicates().front();
+		EXPECT_NE(path.kind, cat::Predicate::Kind::TransitiveClosure);
+		auto analysis = cat::Analyzer().analyze(*result.model);
+		ASSERT_TRUE(analysis.ok());
+	}
+}
+
 /* CAAT projections produce set predicates and can feed a Cartesian product. */
 TEST(CaatNormalizedModelTest, TypesProjectionAndCartesianEquations)
 {

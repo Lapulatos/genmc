@@ -152,8 +152,25 @@ private:
 					      std::size_t target) const
 		-> std::optional<Explanation>
 	{
-		if (source == target)
-			return Explanation{};
+		/* A non-reflexive closure contains (x,x) only when the seed relation has a
+		 * non-empty cycle.  Treating that pair as the empty path loses the base
+		 * literals needed to replay an acyclicity violation. */
+		if (source == target) {
+			std::optional<Explanation> result;
+			for (std::size_t next = 0; next < eventCount_; ++next) {
+				const auto *first = reason(operand, source, next);
+				if (!first)
+					continue;
+				std::optional<Explanation> candidate;
+				if (next == source)
+					candidate = *first;
+				else if (auto suffix = shortestPathReason(operand, next, source))
+					candidate = combine(*first, *suffix);
+				if (candidate && (!result || better(*candidate, *result)))
+					result = std::move(candidate);
+			}
+			return result;
+		}
 		std::vector<std::size_t> parent(eventCount_, eventCount_);
 		std::deque<std::size_t> queue;
 		queue.push_back(source);

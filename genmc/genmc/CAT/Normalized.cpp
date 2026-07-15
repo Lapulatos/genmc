@@ -383,6 +383,71 @@ private:
 		}
 	}
 
+	/** Compare expression algebra while deliberately ignoring source locations. */
+	static auto sameExpression(const Expression &lhs, const Expression &rhs) -> bool
+	{
+		if (lhs.kind != rhs.kind || lhs.name != rhs.name ||
+		    lhs.operands.size() != rhs.operands.size())
+			return false;
+		for (std::size_t index = 0; index < lhs.operands.size(); ++index) {
+			if (!sameExpression(*lhs.operands[index], *rhs.operands[index]))
+				return false;
+		}
+		return true;
+	}
+
+	/** Return whether an expression references any declaration in @p group. */
+	[[nodiscard]] auto referencesRecursiveGroup(const Expression &expression,
+						    std::uint32_t group) const -> bool
+	{
+		if (expression.kind == Expression::Kind::Identifier) {
+			const auto found = symbols_.find(expression.name);
+			return found != symbols_.end() && found->second.declaration &&
+			       found->second.declaration->recursiveGroup == group;
+		}
+		for (const auto &operand : expression.operands) {
+			if (referencesRecursiveGroup(*operand, group))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Recognize a finite-relation closure equation without inspecting model identity.
+	 *
+	 * The least fixed point of `X = R | X;R` or `X = R | R;X` is exactly `R+`.
+	 * Requiring the same recursion-free seed on both occurrences keeps the rewrite
+	 * fail-closed for mutual recursion and superficially similar equations.
+	 */
+	[[nodiscard]] auto linearClosureSeed(const Statement &statement) const
+		-> const Expression *
+	{
+		if (statement.recursiveGroup == 0 ||
+		    statement.expression->kind != Expression::Kind::Union)
+			return nullptr;
+		const auto match = [&](const Expression &seed,
+				       const Expression &recursive) -> const Expression * {
+			if (referencesRecursiveGroup(seed, statement.recursiveGroup) ||
+			    recursive.kind != Expression::Kind::Composition)
+				return nullptr;
+			const auto isSelf = [&](const Expression &expression) {
+				return expression.kind == Expression::Kind::Identifier &&
+				       expression.name == statement.name;
+			};
+			if ((isSelf(*recursive.operands[0]) &&
+			     sameExpression(seed, *recursive.operands[1])) ||
+			    (isSelf(*recursive.operands[1]) &&
+			     sameExpression(seed, *recursive.operands[0])))
+				return &seed;
+			return nullptr;
+		};
+		const auto &lhs = *statement.expression->operands[0];
+		const auto &rhs = *statement.expression->operands[1];
+		if (const auto *seed = match(lhs, rhs))
+			return seed;
+		return match(rhs, lhs);
+	}
+
 	auto lowerExpression(const Expression &expression,
 			     std::optional<PredicateId> target = std::nullopt) -> PredicateId
 	{
@@ -413,6 +478,13 @@ private:
 	{
 		if (statement.kind == Statement::Kind::Let) {
 			const auto target = symbols_.at(statement.name).predicate;
+			if (const auto *seed = linearClosureSeed(statement)) {
+				auto &predicate = predicates_[target];
+				predicate.kind = Predicate::Kind::TransitiveClosure;
+				predicate.type = ValueType::Relation;
+				predicate.operands = {lowerExpression(*seed)};
+				return;
+			}
 			if (statement.expression->kind == Expression::Kind::Identifier ||
 			    statement.expression->kind == Expression::Kind::EmptyRelation ||
 			    statement.expression->kind == Expression::Kind::Universe) {
@@ -488,7 +560,7 @@ auto NormalizedModel::certifiedCandidateProfile() const -> std::optional<HostPro
 host-profile sc
 predicate 0 rel union com (13,5)
 predicate 1 rel union order (15,0)
-predicate 2 rel union reach rec=1 (1,16)
+predicate 2 rel transitive-closure reach rec=1 (1)
 predicate 3 rel base rf
 predicate 4 rel base fr
 predicate 5 rel base co
@@ -502,10 +574,9 @@ predicate 12 rel intersection coe (5,10)
 predicate 13 rel union $n0 (3,4)
 predicate 14 rel union $n1 (6,7)
 predicate 15 rel union $n2 (14,8)
-predicate 16 rel composition $n3 (2,1)
-predicate 17 rel composition $n4 (11,12)
-predicate 18 rel intersection $n5 (9,17)
-check atomicity = 18
+predicate 16 rel composition $n3 (11,12)
+predicate 17 rel intersection $n4 (9,16)
+check atomicity = 17
 check sc = 2
 )CAT";
 	static constexpr std::string_view recursiveTSO = R"CAT(model RecursiveTSO
@@ -514,7 +585,7 @@ predicate 0 rel union com (21,9)
 predicate 1 rel union ppo (30,36)
 predicate 2 rel union lifecycle (40,44)
 predicate 3 rel union order (45,0)
-predicate 4 rel union reach rec=1 (3,46)
+predicate 4 rel transitive-closure reach rec=1 (3)
 predicate 5 rel base rf
 predicate 6 rel base ext
 predicate 7 rel intersection rfe (5,6)
@@ -556,15 +627,14 @@ predicate 42 rel composition $n21 (41,16)
 predicate 43 rel optional $n22 (11)
 predicate 44 rel composition $n23 (42,43)
 predicate 45 rel union $n24 (1,2)
-predicate 46 rel composition $n25 (4,3)
-predicate 47 rel composition $n26 (18,19)
-predicate 48 rel intersection $n27 (17,47)
-predicate 49 rel intersection $n28 (11,20)
-predicate 50 rel union $n29 (49,5)
-predicate 51 rel union $n30 (50,8)
-predicate 52 rel union $n31 (51,9)
-check atomicity = 48
-check coherence = 52
+predicate 46 rel composition $n25 (18,19)
+predicate 47 rel intersection $n26 (17,46)
+predicate 48 rel intersection $n27 (11,20)
+predicate 49 rel union $n28 (48,5)
+predicate 50 rel union $n29 (49,8)
+predicate 51 rel union $n30 (50,9)
+check atomicity = 47
+check coherence = 51
 check tso = 4
 )CAT";
 
@@ -590,7 +660,7 @@ predicate 1 rel intersection ww_loc (26,13)
 predicate 2 rel union ppo (33,38)
 predicate 3 rel union lifecycle (42,46)
 predicate 4 rel union order (47,0)
-predicate 5 rel union reach rec=1 (4,48)
+predicate 5 rel transitive-closure reach rec=1 (4)
 predicate 6 rel base rf
 predicate 7 rel base ext
 predicate 8 rel intersection rfe (6,7)
@@ -633,15 +703,14 @@ predicate 44 rel composition $n22 (43,18)
 predicate 45 rel optional $n23 (12)
 predicate 46 rel composition $n24 (44,45)
 predicate 47 rel union $n25 (2,3)
-predicate 48 rel composition $n26 (5,4)
-predicate 49 rel composition $n27 (20,21)
-predicate 50 rel intersection $n28 (19,49)
-predicate 51 rel intersection $n29 (12,13)
-predicate 52 rel union $n30 (51,6)
-predicate 53 rel union $n31 (52,9)
-predicate 54 rel union $n32 (53,10)
-check atomicity = 50
-check coherence = 54
+predicate 48 rel composition $n26 (20,21)
+predicate 49 rel intersection $n27 (19,48)
+predicate 50 rel intersection $n28 (12,13)
+predicate 51 rel union $n29 (50,6)
+predicate 52 rel union $n30 (51,9)
+predicate 53 rel union $n31 (52,10)
+check atomicity = 49
+check coherence = 53
 check pso = 5
 )CAT";
 	return summary() == recursivePSO;

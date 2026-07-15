@@ -285,6 +285,41 @@ empty reach as populated
 	EXPECT_GT(result.statistics.valueChanges, 0U);
 }
 
+/* The canonical closure value matches an independent Kleene construction for random
+ * finite relations, preventing the optimized offline/incremental paths from serving as
+ * each other's only oracle. */
+RC_GTEST_PROP(CaatOptimizationPropertyTest, LinearClosureMatchesNaiveKleene,
+	      (const std::vector<std::uint8_t> &bytes))
+{
+	const std::size_t size = 1 + std::min<std::size_t>(bytes.size(), 15);
+	cat::Relation po(size);
+	for (std::size_t pair = 0; pair < size * size; ++pair) {
+		if (!bytes.empty() && (bytes[pair % bytes.size()] & 1U) != 0)
+			po.insert(pair / size, pair % size);
+	}
+	cat::Relation naive(size);
+	for (;;) {
+		auto next = relationUnion(po, compose(naive, po));
+		if (next == naive)
+			break;
+		naive = std::move(next);
+	}
+	for (const auto source : {
+		     "LeftA\nlet rec path = po | (path ; po)\nempty path\n",
+		     "LeftB\nlet rec path = (path ; po) | po\nempty path\n",
+		     "RightA\nlet rec path = po | (po ; path)\nempty path\n",
+		     "RightB\nlet rec path = (po ; path) | po\nempty path\n"}) {
+		auto analyzed = analyzeModel(source);
+		RC_ASSERT(analyzed.model != nullptr);
+		const auto result = cat::CaatEvaluator().evaluate(
+			*analyzed.model, *analyzed.analysis, size, {{"po", po}});
+		const auto path = findPredicate(*analyzed.model, "path");
+		RC_ASSERT(analyzed.model->predicates()[path].kind ==
+			  cat::Predicate::Kind::TransitiveClosure);
+		RC_ASSERT(std::get<cat::Relation>(*result.values[path]) == naive);
+	}
+}
+
 /* Incremental state initialization publishes the exact Phase 2 fixed point. */
 TEST(IncrementalCaatEvaluatorTest, InitializesFromOfflineOracle)
 {
