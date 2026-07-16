@@ -13,6 +13,8 @@
 
 #include "genmc/CAT/Normalized.hpp"
 
+#include "genmc/Support/Error.hpp"
+
 #include <optional>
 #include <sstream>
 #include <string_view>
@@ -150,6 +152,7 @@ public:
 			lowerStatement(statement);
 		if (!diagnostics_.empty())
 			return {nullptr, std::move(diagnostics_)};
+		sliceCycleCheckedClosures();
 		std::shared_ptr<const NormalizedModel> result = std::make_shared<NormalizedModel>(
 			syntax.name, syntax.hostProfile, std::move(predicates_),
 			std::move(checks_));
@@ -526,6 +529,78 @@ private:
 			{statement.checkKind, std::move(name), predicate, statement.span});
 	}
 
+	/** Remove one predicate after every observable consumer has been redirected. */
+	void erasePredicate(PredicateId removed)
+	{
+		predicates_.erase(predicates_.begin() + removed);
+		for (PredicateId id = 0; id < predicates_.size(); ++id) {
+			auto &predicate = predicates_[id];
+			predicate.id = id;
+			for (auto &operand : predicate.operands) {
+				VERIFY(operand != removed,
+				       "sliced CAT predicate still has a predicate consumer");
+				if (operand > removed)
+					--operand;
+			}
+		}
+		for (auto &check : checks_) {
+			VERIFY(check.predicate != removed,
+			       "sliced CAT predicate still has a check consumer");
+			if (check.predicate > removed)
+				--check.predicate;
+		}
+	}
+
+	/**
+	 * Slice an unobservable closure from an equivalent acyclicity query.
+	 *
+	 * For every finite relation, both `acyclic(R+)` and `irreflexive(R+)` are
+	 * equivalent to `acyclic(R)`. A closure value is therefore dead when no
+	 * predicate consumes it and every check consumer is one of these cycle tests.
+	 * Other checks and downstream expressions retain the complete value. Repeating
+	 * after each erase safely handles nested closure chains.
+	 */
+	void sliceCycleCheckedClosures()
+	{
+		for (;;) {
+			std::vector<bool> consumedByPredicate(predicates_.size());
+			for (const auto &predicate : predicates_) {
+				for (const auto operand : predicate.operands)
+					consumedByPredicate[operand] = true;
+			}
+			std::optional<PredicateId> sliced;
+			for (const auto &predicate : predicates_) {
+				if (predicate.kind != Predicate::Kind::TransitiveClosure ||
+				    predicate.operands.size() != 1 ||
+				    consumedByPredicate[predicate.id])
+					continue;
+				bool hasConsumer = false;
+				bool onlyCycleChecks = true;
+				for (const auto &check : checks_) {
+					if (check.predicate != predicate.id)
+						continue;
+					hasConsumer = true;
+					onlyCycleChecks &=
+						check.kind == Statement::CheckKind::Acyclic ||
+						check.kind == Statement::CheckKind::Irreflexive;
+				}
+				if (!hasConsumer || !onlyCycleChecks)
+					continue;
+				for (auto &check : checks_) {
+					if (check.predicate == predicate.id) {
+						check.predicate = predicate.operands[0];
+						check.kind = Statement::CheckKind::Acyclic;
+					}
+				}
+				sliced = predicate.id;
+				break;
+			}
+			if (!sliced)
+				return;
+			erasePredicate(*sliced);
+		}
+	}
+
 	TypeVariables types_;
 	std::unordered_map<const Expression *, std::size_t> expressionTypes_;
 	std::unordered_map<std::string, Symbol> symbols_;
@@ -572,84 +647,82 @@ auto NormalizedModel::certifiedCandidateProfile() const -> std::optional<HostPro
 	 * closed when any checked relation or axiom changes. */
 	static constexpr std::string_view recursiveSC = R"CAT(model RecursiveSC
 host-profile sc
-predicate 0 rel union com (13,5)
-predicate 1 rel union order (15,0)
-predicate 2 rel transitive-closure reach rec=1 (1)
-predicate 3 rel base rf
-predicate 4 rel base fr
-predicate 5 rel base co
-predicate 6 rel base po
-predicate 7 rel base tc
-predicate 8 rel base tj
-predicate 9 rel base rmw
-predicate 10 rel base ext
-predicate 11 rel intersection fre (4,10)
-predicate 12 rel intersection coe (5,10)
-predicate 13 rel union $n0 (3,4)
-predicate 14 rel union $n1 (6,7)
-predicate 15 rel union $n2 (14,8)
-predicate 16 rel composition $n3 (11,12)
-predicate 17 rel intersection $n4 (9,16)
-check empty atomicity = 17
-check irreflexive sc = 2
+predicate 0 rel union com (12,4)
+predicate 1 rel union order (14,0)
+predicate 2 rel base rf
+predicate 3 rel base fr
+predicate 4 rel base co
+predicate 5 rel base po
+predicate 6 rel base tc
+predicate 7 rel base tj
+predicate 8 rel base rmw
+predicate 9 rel base ext
+predicate 10 rel intersection fre (3,9)
+predicate 11 rel intersection coe (4,9)
+predicate 12 rel union $n0 (2,3)
+predicate 13 rel union $n1 (5,6)
+predicate 14 rel union $n2 (13,7)
+predicate 15 rel composition $n3 (10,11)
+predicate 16 rel intersection $n4 (8,15)
+check empty atomicity = 16
+check acyclic sc = 1
 )CAT";
 	static constexpr std::string_view recursiveTSO = R"CAT(model RecursiveTSO
 host-profile tso
-predicate 0 rel union com (21,9)
-predicate 1 rel union ppo (30,36)
-predicate 2 rel union lifecycle (40,44)
-predicate 3 rel union order (45,0)
-predicate 4 rel transitive-closure reach rec=1 (3)
-predicate 5 rel base rf
-predicate 6 rel base ext
-predicate 7 rel intersection rfe (5,6)
-predicate 8 rel base fr
-predicate 9 rel base co
-predicate 10 set base R
-predicate 11 rel base po
-predicate 12 set base W
-predicate 13 set base F
-predicate 14 set base SC
-predicate 15 rel base tc
-predicate 16 rel base tj
-predicate 17 rel base rmw
-predicate 18 rel intersection fre (8,6)
-predicate 19 rel intersection coe (9,6)
-predicate 20 rel base loc
-predicate 21 rel union $n0 (7,8)
-predicate 22 rel identity $n1 (10)
-predicate 23 rel composition $n2 (22,11)
-predicate 24 rel identity $n3 (12)
-predicate 25 rel composition $n4 (11,24)
-predicate 26 rel union $n5 (23,25)
-predicate 27 rel identity $n6 (13)
-predicate 28 rel composition $n7 (11,27)
-predicate 29 rel composition $n8 (28,11)
-predicate 30 rel union $n9 (26,29)
-predicate 31 set intersection $n10 (12,14)
-predicate 32 rel identity $n11 (31)
-predicate 33 rel composition $n12 (32,11)
-predicate 34 set intersection $n13 (10,14)
-predicate 35 rel identity $n14 (34)
-predicate 36 rel composition $n15 (33,35)
-predicate 37 rel optional $n16 (11)
-predicate 38 rel composition $n17 (37,15)
-predicate 39 rel optional $n18 (11)
-predicate 40 rel composition $n19 (38,39)
-predicate 41 rel optional $n20 (11)
-predicate 42 rel composition $n21 (41,16)
-predicate 43 rel optional $n22 (11)
-predicate 44 rel composition $n23 (42,43)
-predicate 45 rel union $n24 (1,2)
-predicate 46 rel composition $n25 (18,19)
-predicate 47 rel intersection $n26 (17,46)
-predicate 48 rel intersection $n27 (11,20)
-predicate 49 rel union $n28 (48,5)
-predicate 50 rel union $n29 (49,8)
-predicate 51 rel union $n30 (50,9)
-check empty atomicity = 47
-check acyclic coherence = 51
-check irreflexive tso = 4
+predicate 0 rel union com (20,8)
+predicate 1 rel union ppo (29,35)
+predicate 2 rel union lifecycle (39,43)
+predicate 3 rel union order (44,0)
+predicate 4 rel base rf
+predicate 5 rel base ext
+predicate 6 rel intersection rfe (4,5)
+predicate 7 rel base fr
+predicate 8 rel base co
+predicate 9 set base R
+predicate 10 rel base po
+predicate 11 set base W
+predicate 12 set base F
+predicate 13 set base SC
+predicate 14 rel base tc
+predicate 15 rel base tj
+predicate 16 rel base rmw
+predicate 17 rel intersection fre (7,5)
+predicate 18 rel intersection coe (8,5)
+predicate 19 rel base loc
+predicate 20 rel union $n0 (6,7)
+predicate 21 rel identity $n1 (9)
+predicate 22 rel composition $n2 (21,10)
+predicate 23 rel identity $n3 (11)
+predicate 24 rel composition $n4 (10,23)
+predicate 25 rel union $n5 (22,24)
+predicate 26 rel identity $n6 (12)
+predicate 27 rel composition $n7 (10,26)
+predicate 28 rel composition $n8 (27,10)
+predicate 29 rel union $n9 (25,28)
+predicate 30 set intersection $n10 (11,13)
+predicate 31 rel identity $n11 (30)
+predicate 32 rel composition $n12 (31,10)
+predicate 33 set intersection $n13 (9,13)
+predicate 34 rel identity $n14 (33)
+predicate 35 rel composition $n15 (32,34)
+predicate 36 rel optional $n16 (10)
+predicate 37 rel composition $n17 (36,14)
+predicate 38 rel optional $n18 (10)
+predicate 39 rel composition $n19 (37,38)
+predicate 40 rel optional $n20 (10)
+predicate 41 rel composition $n21 (40,15)
+predicate 42 rel optional $n22 (10)
+predicate 43 rel composition $n23 (41,42)
+predicate 44 rel union $n24 (1,2)
+predicate 45 rel composition $n25 (17,18)
+predicate 46 rel intersection $n26 (16,45)
+predicate 47 rel intersection $n27 (10,19)
+predicate 48 rel union $n28 (47,4)
+predicate 49 rel union $n29 (48,7)
+predicate 50 rel union $n30 (49,8)
+check empty atomicity = 46
+check acyclic coherence = 50
+check acyclic tso = 3
 )CAT";
 
 	const auto fingerprint = summary();
@@ -669,63 +742,62 @@ auto NormalizedModel::certifiedAdaptiveOffline() const -> bool
 		return true;
 	static constexpr std::string_view recursivePSO = R"CAT(model RecursivePSO
 host-profile tso
-predicate 0 rel union com (22,10)
-predicate 1 rel intersection ww_loc (26,13)
-predicate 2 rel union ppo (33,38)
-predicate 3 rel union lifecycle (42,46)
-predicate 4 rel union order (47,0)
-predicate 5 rel transitive-closure reach rec=1 (4)
-predicate 6 rel base rf
-predicate 7 rel base ext
-predicate 8 rel intersection rfe (6,7)
-predicate 9 rel base fr
-predicate 10 rel base co
-predicate 11 set base W
-predicate 12 rel base po
-predicate 13 rel base loc
-predicate 14 set base R
-predicate 15 set base F
-predicate 16 set base SC
-predicate 17 rel base tc
-predicate 18 rel base tj
-predicate 19 rel base rmw
-predicate 20 rel intersection fre (9,7)
-predicate 21 rel intersection coe (10,7)
-predicate 22 rel union $n0 (8,9)
-predicate 23 rel identity $n1 (11)
-predicate 24 rel composition $n2 (23,12)
-predicate 25 rel identity $n3 (11)
-predicate 26 rel composition $n4 (24,25)
-predicate 27 rel identity $n5 (14)
-predicate 28 rel composition $n6 (27,12)
-predicate 29 rel union $n7 (28,1)
-predicate 30 rel identity $n8 (15)
-predicate 31 rel composition $n9 (12,30)
-predicate 32 rel composition $n10 (31,12)
-predicate 33 rel union $n11 (29,32)
-predicate 34 set intersection $n12 (11,16)
-predicate 35 rel identity $n13 (34)
-predicate 36 rel composition $n14 (35,12)
-predicate 37 rel identity $n15 (16)
-predicate 38 rel composition $n16 (36,37)
-predicate 39 rel optional $n17 (12)
-predicate 40 rel composition $n18 (39,17)
-predicate 41 rel optional $n19 (12)
-predicate 42 rel composition $n20 (40,41)
-predicate 43 rel optional $n21 (12)
-predicate 44 rel composition $n22 (43,18)
-predicate 45 rel optional $n23 (12)
-predicate 46 rel composition $n24 (44,45)
-predicate 47 rel union $n25 (2,3)
-predicate 48 rel composition $n26 (20,21)
-predicate 49 rel intersection $n27 (19,48)
-predicate 50 rel intersection $n28 (12,13)
-predicate 51 rel union $n29 (50,6)
-predicate 52 rel union $n30 (51,9)
-predicate 53 rel union $n31 (52,10)
-check empty atomicity = 49
-check acyclic coherence = 53
-check irreflexive pso = 5
+predicate 0 rel union com (21,9)
+predicate 1 rel intersection ww_loc (25,12)
+predicate 2 rel union ppo (32,37)
+predicate 3 rel union lifecycle (41,45)
+predicate 4 rel union order (46,0)
+predicate 5 rel base rf
+predicate 6 rel base ext
+predicate 7 rel intersection rfe (5,6)
+predicate 8 rel base fr
+predicate 9 rel base co
+predicate 10 set base W
+predicate 11 rel base po
+predicate 12 rel base loc
+predicate 13 set base R
+predicate 14 set base F
+predicate 15 set base SC
+predicate 16 rel base tc
+predicate 17 rel base tj
+predicate 18 rel base rmw
+predicate 19 rel intersection fre (8,6)
+predicate 20 rel intersection coe (9,6)
+predicate 21 rel union $n0 (7,8)
+predicate 22 rel identity $n1 (10)
+predicate 23 rel composition $n2 (22,11)
+predicate 24 rel identity $n3 (10)
+predicate 25 rel composition $n4 (23,24)
+predicate 26 rel identity $n5 (13)
+predicate 27 rel composition $n6 (26,11)
+predicate 28 rel union $n7 (27,1)
+predicate 29 rel identity $n8 (14)
+predicate 30 rel composition $n9 (11,29)
+predicate 31 rel composition $n10 (30,11)
+predicate 32 rel union $n11 (28,31)
+predicate 33 set intersection $n12 (10,15)
+predicate 34 rel identity $n13 (33)
+predicate 35 rel composition $n14 (34,11)
+predicate 36 rel identity $n15 (15)
+predicate 37 rel composition $n16 (35,36)
+predicate 38 rel optional $n17 (11)
+predicate 39 rel composition $n18 (38,16)
+predicate 40 rel optional $n19 (11)
+predicate 41 rel composition $n20 (39,40)
+predicate 42 rel optional $n21 (11)
+predicate 43 rel composition $n22 (42,17)
+predicate 44 rel optional $n23 (11)
+predicate 45 rel composition $n24 (43,44)
+predicate 46 rel union $n25 (2,3)
+predicate 47 rel composition $n26 (19,20)
+predicate 48 rel intersection $n27 (18,47)
+predicate 49 rel intersection $n28 (11,12)
+predicate 50 rel union $n29 (49,5)
+predicate 51 rel union $n30 (50,8)
+predicate 52 rel union $n31 (51,9)
+check empty atomicity = 48
+check acyclic coherence = 52
+check acyclic pso = 4
 )CAT";
 	return summary() == recursivePSO;
 }

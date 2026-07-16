@@ -493,6 +493,86 @@ RC_GTEST_PROP(CaatOptimizationPropertyTest, LinearClosureMatchesNaiveKleene,
 	}
 }
 
+/* Sliced closure checks agree with an independent DFS over every random seed graph. */
+RC_GTEST_PROP(CaatOptimizationPropertyTest, AcyclicClosureSliceMatchesNaiveDfs,
+	      (const std::vector<std::uint8_t> &bytes))
+{
+	const std::size_t size = 1 + std::min<std::size_t>(bytes.size(), 15);
+	cat::Relation po(size);
+	for (std::size_t pair = 0; pair < size * size; ++pair) {
+		if (!bytes.empty() && (bytes[pair % bytes.size()] & 1U) != 0)
+			po.insert(pair / size, pair % size);
+	}
+	std::vector<std::uint8_t> color(size);
+	const auto visit = [&](auto &self, std::size_t event) -> bool {
+		color[event] = 1;
+		for (std::size_t target = 0; target < size; ++target) {
+			if (!po.contains(event, target))
+				continue;
+			if (color[target] == 1 || (color[target] == 0 && self(self, target)))
+				return true;
+		}
+		color[event] = 2;
+		return false;
+	};
+	bool hasCycle = false;
+	for (std::size_t event = 0; event < size && !hasCycle; ++event) {
+		if (color[event] == 0)
+			hasCycle = visit(visit, event);
+	}
+	for (const auto source : {
+		     "AcyclicSliceProperty\nlet path = po+\nacyclic path as cycle\n",
+		     "IrreflexiveSliceProperty\nlet path = po+\nirreflexive path as cycle\n"}) {
+		auto analyzed = analyzeModel(source);
+		RC_ASSERT(analyzed.model != nullptr);
+		RC_ASSERT(std::ranges::none_of(
+			analyzed.model->predicates(), [](const auto &predicate) {
+				return predicate.kind == cat::Predicate::Kind::TransitiveClosure;
+			}));
+		RC_ASSERT(analyzed.model->checks()[0].kind ==
+			  cat::Statement::CheckKind::Acyclic);
+		const auto result = cat::CaatEvaluator().evaluate(
+			*analyzed.model, *analyzed.analysis, size, {{"po", po}});
+		RC_ASSERT(result.consistent() == !hasCycle);
+	}
+}
+
+/* Only a dead non-reflexive closure observed exclusively by cycle checks is sliced. */
+TEST(CaatOptimizationTest, SlicesOnlyExactCycleCheckedClosures)
+{
+	const auto closureCount = [](const cat::NormalizedModel &model) {
+		return std::ranges::count_if(model.predicates(), [](const auto &predicate) {
+			return predicate.kind == cat::Predicate::Kind::TransitiveClosure ||
+			       predicate.kind == cat::Predicate::Kind::ReflexiveTransitiveClosure;
+		});
+	};
+
+	auto exact = analyzeModel(R"CAT(ExactSlice
+let first = po+
+let second = first+
+acyclic second as a
+irreflexive second as b
+)CAT");
+	ASSERT_NE(exact.model, nullptr);
+	EXPECT_EQ(closureCount(*exact.model), 0);
+	ASSERT_EQ(exact.model->checks().size(), 2U);
+	for (const auto &check : exact.model->checks()) {
+		EXPECT_EQ(check.kind, cat::Statement::CheckKind::Acyclic);
+		EXPECT_EQ(exact.model->predicates()[check.predicate].name, "po");
+	}
+
+	for (const auto source : {
+		     "EmptyUse\nlet path = po+\nempty path\n",
+		     "PredicateUse\nlet path = po+\nlet copy = path\nacyclic path\n",
+		     "ReflexiveUse\nlet path = po*\nirreflexive path\n",
+		     "MixedUse\nlet path = po+\nacyclic path\nempty path\n",
+		     "Unused\nlet path = po+\nacyclic po\n"}) {
+		auto retained = analyzeModel(source);
+		ASSERT_NE(retained.model, nullptr) << source;
+		EXPECT_EQ(closureCount(*retained.model), 1) << source;
+	}
+}
+
 /* Incremental state initialization publishes the exact Phase 2 fixed point. */
 TEST(IncrementalCaatEvaluatorTest, InitializesFromOfflineOracle)
 {
@@ -954,7 +1034,8 @@ TEST(CaatOptimizationTest, CertifiesOnlyExactBundledRecursiveModels)
 		ASSERT_TRUE(parsed.ok());
 		auto normalized = cat::Normalizer().normalize(*parsed.model);
 		ASSERT_TRUE(normalized.ok());
-		EXPECT_EQ(normalized.model->certifiedCandidateProfile(), expected);
+		EXPECT_EQ(normalized.model->certifiedCandidateProfile(), expected)
+			<< normalized.model->summary();
 		EXPECT_TRUE(normalized.model->certifiedAdaptiveOffline());
 	}
 
@@ -964,8 +1045,8 @@ TEST(CaatOptimizationTest, CertifiesOnlyExactBundledRecursiveModels)
 	ASSERT_TRUE(psoParsed.ok());
 	auto pso = cat::Normalizer().normalize(*psoParsed.model);
 	ASSERT_TRUE(pso.ok());
-	EXPECT_EQ(pso.model->certifiedCandidateProfile(), std::nullopt);
-	EXPECT_TRUE(pso.model->certifiedAdaptiveOffline());
+	EXPECT_EQ(pso.model->certifiedCandidateProfile(), std::nullopt) << pso.model->summary();
+	EXPECT_TRUE(pso.model->certifiedAdaptiveOffline()) << pso.model->summary();
 
 	/* Check kinds are part of the closed-world certificate: changing coherence
 	 * from acyclic to irreflexive retains the same predicate DAG but changes the
@@ -1321,9 +1402,10 @@ empty reach
  */
 TEST(CaatEvaluatorTest, BenchmarkRecursiveChainFixedPoints)
 {
-	auto analyzed = analyzeModel(R"CAT(Benchmark
+auto analyzed = analyzeModel(R"CAT(Benchmark
 let rec reach = po | (reach ; po)
-acyclic reach
+let observed = reach
+acyclic observed
 )CAT");
 	ASSERT_NE(analyzed.model, nullptr);
 	std::size_t operationEvaluations{};
