@@ -158,6 +158,8 @@ TEST(ConfigModelFileTest, CertifiesPreventivePruningOnlyForRecursivePSO)
 	EXPECT_TRUE(pso.useCaatBackend);
 	EXPECT_TRUE(pso.caatModel->certifiedAdaptiveOffline());
 	EXPECT_EQ(pso.caatModel->certifiedCandidateProfile(), std::nullopt);
+	auto psoChecker = ConsistencyChecker::create(&pso);
+	EXPECT_NE(dynamic_cast<CATTSOChecker *>(psoChecker.get()), nullptr);
 
 	warnings.clear();
 	Config sc;

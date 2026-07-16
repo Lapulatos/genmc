@@ -124,8 +124,12 @@ private:
 	mutable std::uint64_t adapterNanoseconds_{};
 	mutable std::uint64_t synchronizationNanoseconds_{};
 	mutable std::size_t profiledQueries_{};
-	/** Predicate IDs and counters for the opt-in exact recursive-PSO fast path. */
-	std::optional<cat::PredicateId> preventiveReachId_;
+	/** Relation supplying exact reachability for the opt-in recursive-PSO fast path. */
+	std::optional<cat::PredicateId> preventiveOrderId_;
+	/** Whether the certified relation is `order` and needs an on-demand closure. */
+	bool preventiveOrderNeedsClosure_{};
+	/** Worker-local lifetime for an on-demand closure returned to candidate filters. */
+	std::optional<cat::Relation> preventiveReachCache_;
 	mutable std::size_t preventivePrefixQueries_{};
 	mutable std::size_t preventivePrefixInconsistent_{};
 	mutable std::size_t preventiveRfCandidates_{};

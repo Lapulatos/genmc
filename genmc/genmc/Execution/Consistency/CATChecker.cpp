@@ -48,10 +48,17 @@ BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(
 					      candidateModel->certifiedAdaptiveOffline();
 	if (conf->catPreventivePruning && certifiedAdaptiveOffline && !certifiedCandidates) {
 		for (const auto &predicate : candidateModel->predicates()) {
-			if (predicate.name == "reach")
-				preventiveReachId_ = predicate.id;
+			if (predicate.name == "reach") {
+				preventiveOrderId_ = predicate.id;
+				preventiveOrderNeedsClosure_ = false;
+				break;
+			}
+			if (predicate.name == "order") {
+				preventiveOrderId_ = predicate.id;
+				preventiveOrderNeedsClosure_ = true;
+			}
 		}
-		VERIFY(preventiveReachId_, "certified preventive model lacks reach");
+		VERIFY(preventiveOrderId_, "certified preventive model lacks order relation");
 	}
 	/* Oracle mode deliberately enumerates the generic superset so mutation
 	 * stress still compares every candidate with a fresh offline evaluation. */
@@ -256,7 +263,7 @@ template <typename HostChecker>
 auto BasicCATChecker<HostChecker>::preparePreventivePrefix(const ExecutionGraph &graph)
 	-> const cat::Relation *
 {
-	if (!preventiveReachId_ || !graphSynchronizer_ || !incrementalEvaluator_)
+	if (!preventiveOrderId_ || !graphSynchronizer_ || !incrementalEvaluator_)
 		return nullptr;
 	++preventivePrefixQueries_;
 	const auto profile = this->getConf()->catStats;
@@ -276,11 +283,17 @@ auto BasicCATChecker<HostChecker>::preparePreventivePrefix(const ExecutionGraph 
 		++preventivePrefixInconsistent_;
 		return nullptr;
 	}
-	const auto &value = result.values.at(*preventiveReachId_);
-	VERIFY(value.has_value(), "preventive reach is not evaluated");
-	const auto *reach = std::get_if<cat::Relation>(&*value);
-	VERIFY(reach, "preventive reach has unexpected type");
-	return reach;
+	const auto &value = result.values.at(*preventiveOrderId_);
+	VERIFY(value.has_value(), "preventive order is not evaluated");
+	const auto *order = std::get_if<cat::Relation>(&*value);
+	VERIFY(order, "preventive order has unexpected type");
+	if (!preventiveOrderNeedsClosure_)
+		return order;
+	/* Cycle-only closure slicing removes the published `reach=order+` value.
+	 * Preventive pruning is an extra-model reachability consumer, so reconstruct
+	 * that exact finite closure only when the opt-in pruning path requests it. */
+	preventiveReachCache_ = cat::transitiveClosure(*order);
+	return &*preventiveReachCache_;
 }
 
 template <typename HostChecker>
