@@ -28,6 +28,9 @@ struct FixedPointStatistics {
 	std::size_t operationEvaluations{};
 	std::size_t valueChanges{};
 	std::size_t worklistPushes{};
+	std::size_t lazyCycleChecks{};
+	std::size_t lazyEdgeCandidates{};
+	std::size_t lazyUniqueEdges{};
 };
 
 /** Complete offline CAAT evaluation result, including predicate fixed points. */
@@ -66,7 +69,8 @@ public:
 	 * @errors Missing, ill-typed, or wrong-universe base predicates.
 	 */
 	[[nodiscard]] auto evaluate(const NormalizedModel &model, const ModelAnalysis &analysis,
-				    std::size_t eventCount, const BaseValues &base) const
+				    std::size_t eventCount, const BaseValues &base,
+				    bool enableLazyCycles = false) const
 		-> CaatEvaluationResult;
 };
 

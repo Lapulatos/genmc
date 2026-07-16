@@ -13,6 +13,7 @@
 
 #include "genmc/CAT/IncrementalEvaluator.hpp"
 
+#include "genmc/CAT/LazyCycle.hpp"
 #include "genmc/Support/Error.hpp"
 
 #include <algorithm>
@@ -234,11 +235,25 @@ auto findCycle(const Relation &relation) -> std::vector<std::size_t>
 }
 
 /** Recompute small axiom witnesses from the final incrementally maintained values. */
-auto violations(const NormalizedModel &model, const std::vector<std::optional<Value>> &values,
-		std::size_t eventCount) -> std::vector<Violation>
+auto violations(const NormalizedModel &model, const ModelAnalysis &analysis,
+		const std::vector<std::optional<Value>> &values, std::size_t eventCount,
+		bool enableLazyCycles, FixedPointStatistics *statistics) -> std::vector<Violation>
 {
 	std::vector<Violation> result;
-	for (const auto &check : model.checks()) {
+	for (std::size_t checkIndex = 0; checkIndex < model.checks().size(); ++checkIndex) {
+		const auto &check = model.checks()[checkIndex];
+		if (enableLazyCycles && analysis.lazyCycleRoots()[checkIndex]) {
+			LazyCycleStatistics lazyStatistics;
+			auto witness = findLazyCycle(model, *analysis.lazyCycleRoots()[checkIndex],
+						 values, eventCount, &lazyStatistics);
+			statistics->lazyCycleChecks += lazyStatistics.checks;
+			statistics->lazyEdgeCandidates += lazyStatistics.emittedCandidates;
+			statistics->lazyUniqueEdges += lazyStatistics.uniqueSuccessors;
+			if (!witness.empty())
+				result.push_back({check.name, check.kind, check.span,
+						  std::move(witness)});
+			continue;
+		}
 		const auto &value = *values[check.predicate];
 		std::vector<std::size_t> witness;
 		if (check.kind == Statement::CheckKind::Empty) {
@@ -274,9 +289,10 @@ auto violations(const NormalizedModel &model, const std::vector<std::optional<Va
 } /* namespace */
 
 IncrementalCaatEvaluator::IncrementalCaatEvaluator(const NormalizedModel &model,
-						   const ModelAnalysis &analysis, bool profiling)
+						   const ModelAnalysis &analysis, bool profiling,
+						   bool enableLazyCycles)
 	: model_(model), analysis_(analysis), dependents_(model.predicates().size()),
-	  profiling_(profiling)
+	  profiling_(profiling), enableLazyCycles_(enableLazyCycles)
 {
 	VERIFY(analysis_.componentOf().size() == model_.predicates().size(),
 	       "incremental CAAT analysis/model predicate count mismatch");
@@ -310,10 +326,14 @@ auto IncrementalCaatEvaluator::initialize(std::size_t eventCount, const BaseValu
 					: std::chrono::steady_clock::time_point{};
 	/* Compute into a temporary first. An evaluation error is a valid published
 	 * result, but an exception or assertion cannot leave a mixed old/new state. */
-	auto next = CaatEvaluator().evaluate(model_, analysis_, eventCount, base);
+	auto next = CaatEvaluator().evaluate(model_, analysis_, eventCount, base,
+					     enableLazyCycles_);
 	eventCount_ = eventCount;
 	base_ = base;
 	result_ = std::move(next);
+	statistics_.lazyCycleChecks += result_->statistics.lazyCycleChecks;
+	statistics_.lazyEdgeCandidates += result_->statistics.lazyEdgeCandidates;
+	statistics_.lazyUniqueEdges += result_->statistics.lazyUniqueEdges;
 	checkpoints_.clear();
 	undoTrail_.clear();
 	++statistics_.initializations;
@@ -359,8 +379,8 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 		       result_->errors,
 		       result_->statistics};
 	for (auto &value : values) {
-		VERIFY(value.has_value(), "initialized CAAT predicate has no value");
-		growValue(*value, eventCount);
+		if (value)
+			growValue(*value, eventCount);
 	}
 	if (profiling_)
 		statistics_.transactionalCopyNanoseconds += static_cast<std::uint64_t>(
@@ -415,8 +435,11 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 		 * not change. Their dependency edge alone cannot expose domain growth. */
 		for (const auto &predicate : model_.predicates()) {
 			if (predicate.kind == Predicate::Kind::Optional ||
-			    predicate.kind == Predicate::Kind::ReflexiveTransitiveClosure)
+			    predicate.kind == Predicate::Kind::ReflexiveTransitiveClosure) {
+				if (enableLazyCycles_ && analysis_.lazyCycleElided()[predicate.id])
+					continue;
 				enqueue(predicate.id);
+			}
 		}
 	}
 
@@ -436,8 +459,10 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 		undo.addedValues[predicate.id] = valueDifference(*next, *values[predicate.id]);
 		values[predicate.id] = std::move(*next);
 		++updateStatistics.valueChanges;
-		for (const auto dependent : dependents_[predicate.id])
-			enqueue(dependent);
+		for (const auto dependent : dependents_[predicate.id]) {
+			if (!(enableLazyCycles_ && analysis_.lazyCycleElided()[dependent]))
+				enqueue(dependent);
+		}
 	}
 
 	/* Re-evaluating an affected operator is deliberately correctness-first.
@@ -465,8 +490,10 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 			undo.addedValues[id] = std::move(added);
 		values[id] = next;
 		++updateStatistics.valueChanges;
-		for (const auto dependent : dependents_[id])
-			enqueue(dependent);
+		for (const auto dependent : dependents_[id]) {
+			if (!(enableLazyCycles_ && analysis_.lazyCycleElided()[dependent]))
+				enqueue(dependent);
+		}
 	}
 	if (profiling_)
 		statistics_.worklistNanoseconds += static_cast<std::uint64_t>(
@@ -474,7 +501,8 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 				std::chrono::steady_clock::now() - worklistStarted)
 				.count());
 
-	CaatEvaluationResult nextResult{violations(model_, values, eventCount),
+	CaatEvaluationResult nextResult{violations(model_, analysis_, values, eventCount,
+						enableLazyCycles_, &updateStatistics),
 					{},
 					std::move(values),
 					std::move(counts),
@@ -487,6 +515,9 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 	statistics_.operationEvaluations += updateStatistics.operationEvaluations;
 	statistics_.valueChanges += updateStatistics.valueChanges;
 	statistics_.worklistPushes += updateStatistics.worklistPushes;
+	statistics_.lazyCycleChecks += updateStatistics.lazyCycleChecks;
+	statistics_.lazyEdgeCandidates += updateStatistics.lazyEdgeCandidates;
+	statistics_.lazyUniqueEdges += updateStatistics.lazyUniqueEdges;
 	return {IncrementalUpdateStatus::Applied, {}};
 }
 
@@ -524,8 +555,10 @@ auto IncrementalCaatEvaluator::tryReplace(std::size_t eventCount, const BaseValu
 		if (*values[predicate.id] == *next)
 			continue;
 		values[predicate.id] = std::move(*next);
-		for (const auto dependent : dependents_[predicate.id])
-			enqueue(dependent);
+		for (const auto dependent : dependents_[predicate.id]) {
+			if (!(enableLazyCycles_ && analysis_.lazyCycleElided()[dependent]))
+				enqueue(dependent);
+		}
 	}
 	FixedPointStatistics updateStatistics;
 	while (!worklist.empty()) {
@@ -539,10 +572,13 @@ auto IncrementalCaatEvaluator::tryReplace(std::size_t eventCount, const BaseValu
 			continue;
 		values[id] = next;
 		++updateStatistics.valueChanges;
-		for (const auto dependent : dependents_[id])
-			enqueue(dependent);
+		for (const auto dependent : dependents_[id]) {
+			if (!(enableLazyCycles_ && analysis_.lazyCycleElided()[dependent]))
+				enqueue(dependent);
+		}
 	}
-	result_ = CaatEvaluationResult{violations(model_, values, eventCount),
+	result_ = CaatEvaluationResult{violations(model_, analysis_, values, eventCount,
+					       enableLazyCycles_, &updateStatistics),
 				       {},
 				       std::move(values),
 				       std::move(counts),
@@ -553,6 +589,9 @@ auto IncrementalCaatEvaluator::tryReplace(std::size_t eventCount, const BaseValu
 	++statistics_.replacementUpdates;
 	statistics_.operationEvaluations += updateStatistics.operationEvaluations;
 	statistics_.valueChanges += updateStatistics.valueChanges;
+	statistics_.lazyCycleChecks += updateStatistics.lazyCycleChecks;
+	statistics_.lazyEdgeCandidates += updateStatistics.lazyEdgeCandidates;
+	statistics_.lazyUniqueEdges += updateStatistics.lazyUniqueEdges;
 	return {IncrementalUpdateStatus::Applied, {}};
 }
 
@@ -567,8 +606,10 @@ auto IncrementalCaatEvaluator::checkpoint() -> IncrementalCheckpoint
 	if (profiling_) {
 		for (const auto &[name, value] : base_)
 			snapshotEquivalentBytes += valueStorageBytes(value);
-		for (const auto &value : result_->values)
-			snapshotEquivalentBytes += valueStorageBytes(*value);
+		for (const auto &value : result_->values) {
+			if (value)
+				snapshotEquivalentBytes += valueStorageBytes(*value);
+		}
 		snapshotEquivalentBytes += result_->evaluationCounts.size() * sizeof(std::size_t);
 	}
 	checkpoints_.push_back({handle, undoTrail_.size(), snapshotEquivalentBytes});
@@ -608,6 +649,8 @@ auto IncrementalCaatEvaluator::rollback(IncrementalCheckpoint checkpoint)
 		for (const auto &name : undo.newBaseNames)
 			base_.erase(name);
 		for (std::size_t id = 0; id < result_->values.size(); ++id) {
+			if (!result_->values[id])
+				continue;
 			auto &value = *result_->values[id];
 			if (undo.addedValues[id])
 				removeFactsAndShrink(value, *undo.addedValues[id],
@@ -708,7 +751,8 @@ auto IncrementalCaatEvaluator::result() const -> const CaatEvaluationResult &
 auto IncrementalCaatEvaluator::offlineOracleMismatch() const -> std::optional<std::string>
 {
 	VERIFY(initialized(), "incremental CAAT oracle requested before initialization");
-	const auto offline = CaatEvaluator().evaluate(model_, analysis_, eventCount_, base_);
+	const auto offline = CaatEvaluator().evaluate(model_, analysis_, eventCount_, base_,
+						      enableLazyCycles_);
 	if (offline.errors.size() != result_->errors.size())
 		return "error-count incremental=" + std::to_string(result_->errors.size()) +
 		       " offline=" + std::to_string(offline.errors.size());

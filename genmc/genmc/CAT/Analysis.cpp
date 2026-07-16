@@ -42,9 +42,11 @@ public:
 		validateCheckDomains();
 		if (!diagnostics_.empty())
 			return {nullptr, std::move(diagnostics_)};
+		buildLazyCyclePlans();
 		std::shared_ptr<const ModelAnalysis> analysis = std::make_shared<ModelAnalysis>(
 			std::move(dependencies_), std::move(strata_), std::move(componentOf_),
-			std::move(domainIndependent_));
+			std::move(domainIndependent_), std::move(lazyCycleRoots_),
+			std::move(lazyCycleElided_));
 		return {std::move(analysis), {}};
 	}
 
@@ -250,6 +252,133 @@ private:
 		}
 	}
 
+	[[nodiscard]] auto componentIsRecursive(PredicateId id) const -> bool
+	{
+		const auto component = componentOf_[id];
+		if (strata_[component].size() != 1)
+			return true;
+		return std::ranges::any_of(dependencies_, [id](const auto &dependency) {
+			return dependency.source == id && dependency.target == id;
+		});
+	}
+
+	/** Validate the exact positive expression grammar used by lazy cycle DFS. */
+	[[nodiscard]] auto collectLazyCone(PredicateId id, std::vector<bool> &cone,
+					   std::vector<bool> &visiting) const -> bool
+	{
+		if (cone[id])
+			return true;
+		if (visiting[id] || componentIsRecursive(id))
+			return false;
+		const auto &predicate = model_.predicates()[id];
+		if (predicate.kind == Predicate::Kind::Base)
+			return true;
+		visiting[id] = true;
+		const auto relationOperand = [&](std::size_t index) {
+			const auto operand = predicate.operands[index];
+			return model_.predicates()[operand].type == ValueType::Relation &&
+			       collectLazyCone(operand, cone, visiting);
+		};
+		const auto setOperand = [&](std::size_t index) {
+			const auto operand = predicate.operands[index];
+			return model_.predicates()[operand].type == ValueType::Set &&
+			       collectLazyCone(operand, cone, visiting);
+		};
+		bool supported{};
+		if (predicate.type == ValueType::Set) {
+			supported = (predicate.kind == Predicate::Kind::Alias && setOperand(0)) ||
+				    ((predicate.kind == Predicate::Kind::Union ||
+				      predicate.kind == Predicate::Kind::Intersection ||
+				      predicate.kind == Predicate::Kind::Difference) &&
+				     setOperand(0) && setOperand(1));
+		} else {
+			switch (predicate.kind) {
+			case Predicate::Kind::Alias:
+			case Predicate::Kind::Optional:
+				supported = relationOperand(0);
+				break;
+			case Predicate::Kind::Union:
+			case Predicate::Kind::Composition:
+				supported = relationOperand(0) && relationOperand(1);
+				break;
+			case Predicate::Kind::Intersection: {
+				const auto lhs = predicate.operands[0];
+				const auto rhs = predicate.operands[1];
+				const auto cheapFilter = [&](PredicateId operand) {
+					const auto kind = model_.predicates()[operand].kind;
+					return kind == Predicate::Kind::Base ||
+					       kind == Predicate::Kind::Identity;
+				};
+				supported = (cheapFilter(lhs) || cheapFilter(rhs)) &&
+					    relationOperand(0) && relationOperand(1);
+				break;
+			}
+			case Predicate::Kind::Identity:
+				supported = setOperand(0);
+				break;
+			default:
+				supported = false;
+				break;
+			}
+		}
+		visiting[id] = false;
+		if (supported)
+			cone[id] = true;
+		return supported;
+	}
+
+	void buildLazyCyclePlans()
+	{
+		lazyCycleRoots_.resize(model_.checks().size());
+		lazyCycleElided_.assign(model_.predicates().size(), false);
+		for (std::size_t checkIndex = 0; checkIndex < model_.checks().size(); ++checkIndex) {
+			const auto &check = model_.checks()[checkIndex];
+			if (check.kind != Statement::CheckKind::Acyclic ||
+			    model_.predicates()[check.predicate].type != ValueType::Relation ||
+			    model_.predicates()[check.predicate].kind == Predicate::Kind::Base)
+				continue;
+			std::vector<bool> cone(model_.predicates().size());
+			std::vector<bool> visiting(model_.predicates().size());
+			if (!collectLazyCone(check.predicate, cone, visiting))
+				continue;
+			bool exclusive = true;
+			for (PredicateId id = 0; id < cone.size() && exclusive; ++id) {
+				if (!cone[id] || model_.predicates()[id].kind == Predicate::Kind::Base)
+					continue;
+				for (const auto &dependency : dependencies_) {
+					if (dependency.source == id && !cone[dependency.target]) {
+						exclusive = false;
+						break;
+					}
+				}
+				for (std::size_t other = 0; other < model_.checks().size(); ++other) {
+					if (other != checkIndex && model_.checks()[other].predicate == id)
+						exclusive = false;
+				}
+			}
+			if (!exclusive)
+				continue;
+			lazyCycleRoots_[checkIndex] = check.predicate;
+			for (PredicateId id = 0; id < cone.size(); ++id) {
+				if (cone[id] && model_.predicates()[id].kind != Predicate::Kind::Base)
+					lazyCycleElided_[id] = true;
+			}
+		}
+		/* Lazy enumeration amortizes its per-edge dispatch only when it removes at
+		 * least one expensive composition cone. Union-only orders are faster and
+		 * smaller in the packed generic evaluator, so select by normalized structure
+		 * rather than a model/profile name or a runtime verdict. */
+		const auto removesComposition = std::ranges::any_of(
+			model_.predicates(), [&](const auto &predicate) {
+				return lazyCycleElided_[predicate.id] &&
+				       predicate.kind == Predicate::Kind::Composition;
+			});
+		if (!removesComposition) {
+			std::ranges::fill(lazyCycleRoots_, std::nullopt);
+			std::ranges::fill(lazyCycleElided_, false);
+		}
+	}
+
 	const NormalizedModel &model_;
 	std::vector<Dependency> dependencies_;
 	std::vector<std::vector<PredicateId>> adjacency_;
@@ -262,6 +391,8 @@ private:
 	std::vector<std::vector<PredicateId>> strata_;
 	std::vector<std::uint32_t> componentOf_;
 	std::vector<bool> domainIndependent_;
+	std::vector<std::optional<PredicateId>> lazyCycleRoots_;
+	std::vector<bool> lazyCycleElided_;
 	std::vector<Diagnostic> diagnostics_;
 };
 

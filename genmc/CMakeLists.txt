@@ -11,6 +11,7 @@ set(LIB_SOURCES
   genmc/CAT/GraphAdapter.cpp
   genmc/CAT/GraphSynchronizer.cpp
   genmc/CAT/IncrementalEvaluator.cpp
+  genmc/CAT/LazyCycle.cpp
   genmc/CAT/Model.cpp
   genmc/CAT/Normalized.cpp
   genmc/CAT/Reasoner.cpp

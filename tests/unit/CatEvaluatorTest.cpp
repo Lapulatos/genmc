@@ -202,6 +202,24 @@ TEST(CatValueTest, GrowsEventSetsAcrossPackedWordBoundaries)
 		EXPECT_TRUE(events.contains(event));
 }
 
+/* Packed, CSR, and structural rows expose the same ascending successor cursor. */
+TEST(CatValueTest, IteratesRelationSuccessorsWithoutMaterializingRows)
+{
+	const std::vector<std::pair<std::size_t, std::size_t>> edges{{0, 1}, {0, 64},
+							      {0, 129}, {64, 0}};
+	cat::Relation dense(130);
+	for (const auto [from, target] : edges)
+		dense.insert(from, target);
+	auto sparse = cat::Relation::sparse(130, edges);
+	for (const auto &relation : {dense, sparse}) {
+		EXPECT_EQ(relation.nextSuccessor(0, 0), 1U);
+		EXPECT_EQ(relation.nextSuccessor(0, 2), 64U);
+		EXPECT_EQ(relation.nextSuccessor(0, 65), 129U);
+		EXPECT_EQ(relation.nextSuccessor(0, 130), 130U);
+		EXPECT_EQ(relation.nextSuccessor(1, 0), 130U);
+	}
+}
+
 /* Relation Boolean algebra, product, identity, and inverse preserve exact pairs. */
 TEST(CatValueTest, EvaluatesBasicRelationAlgebra)
 {
@@ -537,6 +555,90 @@ RC_GTEST_PROP(CaatOptimizationPropertyTest, AcyclicClosureSliceMatchesNaiveDfs,
 	}
 }
 
+/* The lazy plan interprets a positive union/composition/filter DAG extensionally and
+ * agrees with independently materialized CAAT values for every random finite input. */
+RC_GTEST_PROP(CaatOptimizationPropertyTest, LazyCyclePlanMatchesMaterializedRelation,
+	      (const std::vector<std::uint8_t> &bytes))
+{
+	static const auto analyzed = analyzeModel(R"CAT(LazyCycleProperty
+let order = ([R] ; po) | (po ; [W]) | ((po ; rf) & loc)
+acyclic order as cycle
+)CAT");
+	RC_ASSERT(analyzed.model != nullptr);
+	RC_ASSERT(analyzed.analysis->lazyCycleRoots().size() == 1);
+	RC_ASSERT(analyzed.analysis->lazyCycleRoots()[0].has_value());
+	const std::size_t size = 1 + std::min<std::size_t>(bytes.size(), 14);
+	cat::Relation po(size), rf(size), loc(size);
+	cat::EventSet reads(size), writes(size);
+	const auto byte = [&](std::size_t index) {
+		return bytes.empty() ? std::uint8_t{} : bytes[index % bytes.size()];
+	};
+	for (std::size_t event = 0; event < size; ++event) {
+		if ((byte(event) & 1U) != 0)
+			reads.insert(event);
+		if ((byte(event) & 2U) != 0)
+			writes.insert(event);
+	}
+	for (std::size_t pair = 0; pair < size * size; ++pair) {
+		const auto from = pair / size;
+		const auto target = pair % size;
+		const auto bits = byte(size + pair);
+		if ((bits & 1U) != 0)
+			po.insert(from, target);
+		if ((bits & 2U) != 0)
+			rf.insert(from, target);
+		if ((bits & 4U) != 0)
+			loc.insert(from, target);
+	}
+	cat::BaseValues base{{"R", reads}, {"W", writes}, {"po", po}, {"rf", rf},
+			     {"loc", loc}};
+	const auto materialized = cat::CaatEvaluator().evaluate(
+		*analyzed.model, *analyzed.analysis, size, base, false);
+	const auto lazy = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
+						       size, base, true);
+	RC_ASSERT(materialized.errors.empty());
+	RC_ASSERT(lazy.errors.empty());
+	RC_ASSERT(materialized.consistent() == lazy.consistent());
+	RC_ASSERT(materialized.violations.size() == lazy.violations.size());
+	for (std::size_t index = 0; index < materialized.violations.size(); ++index) {
+		RC_ASSERT(materialized.violations[index].checkName ==
+			  lazy.violations[index].checkName);
+		RC_ASSERT(materialized.violations[index].checkKind ==
+			  lazy.violations[index].checkKind);
+		RC_ASSERT(materialized.violations[index].span == lazy.violations[index].span);
+		RC_ASSERT(materialized.violations[index].witness ==
+			  lazy.violations[index].witness);
+	}
+	const auto root = *analyzed.analysis->lazyCycleRoots()[0];
+	RC_ASSERT(materialized.values[root].has_value());
+	RC_ASSERT(!lazy.values[root].has_value());
+}
+
+/* Shared, recursive, and expensive-membership cones retain the generic evaluator. */
+TEST(CaatOptimizationTest, LazyCyclePlanFailsClosedForNearNeighbours)
+{
+	auto exact = analyzeModel(
+		"LazyExact\nlet order = po | (rf ; co)\nacyclic order\n");
+	ASSERT_NE(exact.model, nullptr);
+	ASSERT_EQ(exact.analysis->lazyCycleRoots().size(), 1U);
+	EXPECT_TRUE(exact.analysis->lazyCycleRoots()[0].has_value());
+
+	for (const auto source : {
+		     "LazyCheap\nlet order = po | rf\nacyclic order\n",
+		     "LazyShared\nlet order = po | rf\nacyclic order\nempty order\n",
+		     "LazyRecursive\nlet rec order = po | (order ; rf)\nacyclic order\n",
+		     "LazyIntersection\nlet order = (po ; rf) & (rf ; po)\nacyclic order\n"}) {
+		auto fallback = analyzeModel(source);
+		ASSERT_NE(fallback.model, nullptr) << source;
+		EXPECT_TRUE(std::ranges::none_of(fallback.analysis->lazyCycleRoots(),
+						[](const auto &root) { return root.has_value(); }))
+			<< source;
+		EXPECT_TRUE(std::ranges::none_of(fallback.analysis->lazyCycleElided(),
+						[](bool elided) { return elided; }))
+			<< source;
+	}
+}
+
 /* Only a dead non-reflexive closure observed exclusively by cycle checks is sliced. */
 TEST(CaatOptimizationTest, SlicesOnlyExactCycleCheckedClosures)
 {
@@ -598,6 +700,47 @@ acyclic reach as order
 	EXPECT_EQ(&incremental.result(), &initialized);
 	EXPECT_EQ(incremental.statistics().initializations, 1U);
 	EXPECT_EQ(incremental.statistics().offlineEvaluations, 1U);
+}
+
+/* Lazy predicates remain absent across monotone insertion and exact rollback while the
+ * extensional cycle verdict tracks a full materialized evaluation. */
+TEST(IncrementalCaatEvaluatorTest, MaintainsLazyCycleAcrossInsertionAndRollback)
+{
+	auto analyzed = analyzeModel(R"CAT(IncrementalLazyCycle
+let order = po | (rf ; co)
+acyclic order as cycle
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	ASSERT_TRUE(analyzed.analysis->lazyCycleRoots()[0].has_value());
+	constexpr std::size_t size = 513;
+	cat::BaseValues root{{"po", cat::Relation(size)},
+			     {"rf", cat::Relation(size)},
+			     {"co", cat::Relation(size)}};
+	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis, true,
+						 true);
+	incremental.initialize(size, root);
+	const auto order = *analyzed.analysis->lazyCycleRoots()[0];
+	ASSERT_FALSE(incremental.result().values[order].has_value());
+	ASSERT_TRUE(incremental.result().consistent());
+	const auto checkpoint = incremental.checkpoint();
+
+	auto forward = root;
+	std::get<cat::Relation>(forward["po"]).insert(0, 1);
+	ASSERT_TRUE(incremental.tryInsert(size, forward).applied());
+	EXPECT_TRUE(incremental.result().consistent());
+	auto cycle = forward;
+	std::get<cat::Relation>(cycle["po"]).insert(1, 0);
+	ASSERT_TRUE(incremental.tryInsert(size, cycle).applied());
+	EXPECT_FALSE(incremental.result().consistent());
+	const auto materialized =
+		cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, size, cycle);
+	EXPECT_EQ(incremental.result().consistent(), materialized.consistent());
+
+	const auto restored = incremental.rollback(checkpoint);
+	ASSERT_TRUE(restored.restored) << restored.reason;
+	EXPECT_TRUE(incremental.result().consistent());
+	EXPECT_EQ(incremental.eventCount(), size);
+	EXPECT_GT(incremental.statistics().lazyCycleChecks, 0U);
 }
 
 /* Reinitialization atomically replaces the old universe, bases, and result. */

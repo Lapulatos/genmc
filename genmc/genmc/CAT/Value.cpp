@@ -500,6 +500,40 @@ auto Relation::successors(std::size_t from) const -> EventSet
 	return result;
 }
 
+auto Relation::nextSuccessor(std::size_t from, std::size_t lowerBound) const -> std::size_t
+{
+	VERIFY(from < size_, "CAT relation row out of range");
+	if (lowerBound >= size_)
+		return size_;
+	if (isStructural()) {
+		if (structure_->kind == StructuralRelationKind::ExplicitEdges) {
+			const auto begin = structure_->targets.begin() + structure_->offsets[from];
+			const auto end = structure_->targets.begin() + structure_->offsets[from + 1];
+			const auto found = std::lower_bound(begin, end,
+						    static_cast<std::uint32_t>(lowerBound));
+			return found == end ? size_ : *found;
+		}
+		for (auto target = lowerBound; target < size_; ++target) {
+			if (structuralContains(from, target))
+				return target;
+		}
+		return size_;
+	}
+
+	const auto offset = rowOffset(from);
+	auto word = lowerBound / bitsPerWord;
+	auto facts = words_[offset + word] & (~std::uint64_t{} << (lowerBound % bitsPerWord));
+	for (;;) {
+		if (facts != 0) {
+			const auto target = word * bitsPerWord + std::countr_zero(facts);
+			return target < size_ ? target : size_;
+		}
+		if (++word == rowWords_)
+			return size_;
+		facts = words_[offset + word];
+	}
+}
+
 void Relation::unionRow(std::size_t target, std::size_t source)
 {
 	const auto targetOffset = rowOffset(target);

@@ -34,6 +34,9 @@ struct IncrementalStatistics {
 	std::size_t operationEvaluations{};
 	std::size_t valueChanges{};
 	std::size_t worklistPushes{};
+	std::size_t lazyCycleChecks{};
+	std::size_t lazyEdgeCandidates{};
+	std::size_t lazyUniqueEdges{};
 	std::size_t checkpoints{};
 	std::size_t rollbacks{};
 	std::size_t rejectedRollbacks{};
@@ -98,7 +101,7 @@ public:
 	 * @param analysis Analysis produced for exactly @p model, also borrowed.
 	 */
 	IncrementalCaatEvaluator(const NormalizedModel &model, const ModelAnalysis &analysis,
-				 bool profiling = false);
+				 bool profiling = false, bool enableLazyCycles = false);
 
 	/**
 	 * Replace all mutable state with one exact Phase 2 fixed point.
@@ -230,6 +233,7 @@ private:
 	bool supportsInsertions_{true};
 	bool supportsReplacements_{true};
 	bool profiling_{};
+	bool enableLazyCycles_{};
 };
 
 } /* namespace cat */

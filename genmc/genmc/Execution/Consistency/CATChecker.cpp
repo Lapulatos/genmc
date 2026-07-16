@@ -67,7 +67,8 @@ BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(
 	if (!conf->useCaatBackend || !conf->caatModel || !conf->caatAnalysis)
 		return;
 	incrementalEvaluator_ = std::make_unique<cat::IncrementalCaatEvaluator>(
-		*conf->caatModel, *conf->caatAnalysis, conf->catStats);
+		*conf->caatModel, *conf->caatAnalysis, conf->catStats,
+		!conf->explainCat && !conf->catOracle && !conf->catPreventivePruning);
 	if (incrementalEvaluator_->supportsInsertions()) {
 		/* The explicit oracle option is intentionally independent of build mode. */
 		const std::size_t oracleInterval = conf->catOracle ? 1 : 0;
@@ -99,6 +100,9 @@ template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
 	     << " eval-ops=" << evaluatorStats.operationEvaluations
 	     << " value-changes=" << evaluatorStats.valueChanges
 	     << " queue-pushes=" << evaluatorStats.worklistPushes
+	     << " lazy-cycle-checks=" << evaluatorStats.lazyCycleChecks
+	     << " lazy-edge-candidates=" << evaluatorStats.lazyEdgeCandidates
+	     << " lazy-unique-edges=" << evaluatorStats.lazyUniqueEdges
 	     << " offline-evals=" << evaluatorStats.offlineEvaluations
 	     << " adapter-ns=" << adapterNanoseconds_ << " sync-ns=" << synchronizationNanoseconds_
 	     << " offline-ns=" << evaluatorStats.offlineNanoseconds

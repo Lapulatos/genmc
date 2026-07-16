@@ -18,6 +18,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <vector>
 
 namespace cat {
@@ -49,10 +50,14 @@ public:
 	 */
 	ModelAnalysis(std::vector<Dependency> dependencies,
 		      std::vector<std::vector<PredicateId>> strata,
-		      std::vector<std::uint32_t> componentOf, std::vector<bool> domainIndependent)
+		      std::vector<std::uint32_t> componentOf, std::vector<bool> domainIndependent,
+		      std::vector<std::optional<PredicateId>> lazyCycleRoots,
+		      std::vector<bool> lazyCycleElided)
 		: dependencies_(std::move(dependencies)), strata_(std::move(strata)),
 		  componentOf_(std::move(componentOf)),
-		  domainIndependent_(std::move(domainIndependent))
+		  domainIndependent_(std::move(domainIndependent)),
+		  lazyCycleRoots_(std::move(lazyCycleRoots)),
+		  lazyCycleElided_(std::move(lazyCycleElided))
 	{}
 
 	/** Return signed edges in stable target/operand order. */
@@ -75,12 +80,25 @@ public:
 	{
 		return domainIndependent_;
 	}
+	/** Per-check root admitted for exact lazy cycle evaluation, if any. */
+	[[nodiscard]] auto lazyCycleRoots() const
+		-> const std::vector<std::optional<PredicateId>> &
+	{
+		return lazyCycleRoots_;
+	}
+	/** Derived predicates whose only observable consumer is an admitted plan. */
+	[[nodiscard]] auto lazyCycleElided() const -> const std::vector<bool> &
+	{
+		return lazyCycleElided_;
+	}
 
 private:
 	std::vector<Dependency> dependencies_;
 	std::vector<std::vector<PredicateId>> strata_;
 	std::vector<std::uint32_t> componentOf_;
 	std::vector<bool> domainIndependent_;
+	std::vector<std::optional<PredicateId>> lazyCycleRoots_;
+	std::vector<bool> lazyCycleElided_;
 };
 
 /** Result of signed dependency and CAAT admissibility analysis. */

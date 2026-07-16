@@ -13,6 +13,8 @@
 
 #include "genmc/CAT/CaatEvaluator.hpp"
 
+#include "genmc/CAT/LazyCycle.hpp"
+
 #include "genmc/Support/Error.hpp"
 
 #include <algorithm>
@@ -27,10 +29,10 @@ namespace {
 class Evaluation {
 public:
 	Evaluation(const NormalizedModel &model, const ModelAnalysis &analysis,
-		   std::size_t eventCount, const BaseValues &base)
+		   std::size_t eventCount, const BaseValues &base, bool enableLazyCycles)
 		: model_(model), analysis_(analysis), eventCount_(eventCount), base_(base),
 		  values_(model.predicates().size()), counts_(model.predicates().size()),
-		  dependents_(model.predicates().size())
+		  dependents_(model.predicates().size()), enableLazyCycles_(enableLazyCycles)
 	{
 		VERIFY(analysis.componentOf().size() == model.predicates().size(),
 		       "CAAT analysis/model predicate count mismatch");
@@ -81,6 +83,8 @@ private:
 	void initializeValues()
 	{
 		for (const auto &predicate : model_.predicates()) {
+			if (enableLazyCycles_ && analysis_.lazyCycleElided()[predicate.id])
+				continue;
 			if (predicate.kind != Predicate::Kind::Base) {
 				values_[predicate.id] = emptyValue(predicate.type);
 				continue;
@@ -176,7 +180,8 @@ private:
 			}
 		};
 		for (const auto predicate : analysis_.strata()[stratum]) {
-			if (model_.predicates()[predicate].kind != Predicate::Kind::Base)
+			if (model_.predicates()[predicate].kind != Predicate::Kind::Base &&
+			    !(enableLazyCycles_ && analysis_.lazyCycleElided()[predicate]))
 				enqueue(predicate, worklist, queued, statistics_);
 		}
 		while (!worklist.empty()) {
@@ -232,7 +237,21 @@ private:
 
 	void evaluateChecks()
 	{
-		for (const auto &check : model_.checks()) {
+		for (std::size_t checkIndex = 0; checkIndex < model_.checks().size(); ++checkIndex) {
+			const auto &check = model_.checks()[checkIndex];
+			if (enableLazyCycles_ && analysis_.lazyCycleRoots()[checkIndex]) {
+				LazyCycleStatistics lazyStatistics;
+				auto witness = findLazyCycle(model_,
+							 *analysis_.lazyCycleRoots()[checkIndex], values_,
+							 eventCount_, &lazyStatistics);
+				statistics_.lazyCycleChecks += lazyStatistics.checks;
+				statistics_.lazyEdgeCandidates += lazyStatistics.emittedCandidates;
+				statistics_.lazyUniqueEdges += lazyStatistics.uniqueSuccessors;
+				if (!witness.empty())
+					violations_.push_back({check.name, check.kind, check.span,
+							   std::move(witness)});
+				continue;
+			}
 			const auto &value = *values_[check.predicate];
 			std::vector<std::size_t> witness;
 			if (check.kind == Statement::CheckKind::Empty) {
@@ -276,15 +295,17 @@ private:
 	std::vector<Violation> violations_;
 	std::vector<EvaluationError> errors_;
 	FixedPointStatistics statistics_;
+	bool enableLazyCycles_{};
 };
 
 } /* namespace */
 
 auto CaatEvaluator::evaluate(const NormalizedModel &model, const ModelAnalysis &analysis,
-			     std::size_t eventCount, const BaseValues &base) const
+			     std::size_t eventCount, const BaseValues &base,
+			     bool enableLazyCycles) const
 	-> CaatEvaluationResult
 {
-	return Evaluation(model, analysis, eventCount, base).run();
+	return Evaluation(model, analysis, eventCount, base, enableLazyCycles).run();
 }
 
 } /* namespace cat */

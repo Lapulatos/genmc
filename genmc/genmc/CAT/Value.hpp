@@ -152,6 +152,14 @@ public:
 	void shrink(std::size_t size);
 	/** Return all targets of @p from as a value copy. */
 	[[nodiscard]] auto successors(std::size_t from) const -> EventSet;
+	/**
+	 * Return the first successor at or after @p lowerBound, or size() if absent.
+	 *
+	 * Dense rows use packed-word scans and explicit sparse rows use their sorted
+	 * CSR slice. Structural predicates retain exact membership semantics.
+	 */
+	[[nodiscard]] auto nextSuccessor(std::size_t from, std::size_t lowerBound) const
+		-> std::size_t;
 
 	/** Compare exact memberships, using O(events) keys for matching views. */
 	auto operator==(const Relation &other) const -> bool;
