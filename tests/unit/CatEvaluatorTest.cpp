@@ -29,12 +29,14 @@
 #include <rapidcheck/gtest.h>
 
 #include <algorithm>
+#include <array>
 #include <atomic>
 #include <chrono>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <iterator>
+#include <map>
 #include <memory>
 #include <set>
 #include <string_view>
@@ -219,6 +221,177 @@ TEST(CatValueTest, EvaluatesBasicRelationAlgebra)
 	EXPECT_EQ(identity(makeSet(4, {1, 3})), makeRelation(4, {{1, 1}, {3, 3}}));
 	EXPECT_EQ(domain(lhs), makeSet(4, {0, 1, 2}));
 	EXPECT_EQ(range(lhs), makeSet(4, {1, 2, 3}));
+}
+
+/* Packed row insertion is exactly equivalent to inserting every selected pair. */
+TEST(CatValueTest, InsertsPackedSuccessorRows)
+{
+	cat::Relation relation(130);
+	relation.insert(64, 0);
+	relation.insertSuccessors(64, makeSet(130, {1, 63, 64, 65, 129}));
+
+	EXPECT_EQ(relation,
+		  makeRelation(130, {{64, 0}, {64, 1}, {64, 63}, {64, 64}, {64, 65}, {64, 129}}));
+}
+
+/* Structural primitive views are exact operands and fail closed to dense on mutation. */
+TEST(CatValueTest, StructuralRelationsMatchDenseAlgebraAndMutation)
+{
+	constexpr std::size_t size = 7;
+	const auto threadKey = [](std::uint64_t group, std::uint32_t index = 0) {
+		return (group << 32) | index;
+	};
+	const std::vector<std::uint64_t> threads{threadKey(2, 0), threadKey(2, 2), threadKey(3, 0),
+						 threadKey(1),	  threadKey(1),	   0,
+						 threadKey(2, 1)};
+	const std::vector<std::uint64_t> locations{1, 2, 1, 1, 2, 0, 0};
+	const std::array kinds{
+		cat::StructuralRelationKind::ProgramOrder, cat::StructuralRelationKind::Internal,
+		cat::StructuralRelationKind::External, cat::StructuralRelationKind::Location};
+	cat::Relation extra(size);
+	extra.insert(0, 2);
+	extra.insert(2, 6);
+	extra.insert(4, 0);
+
+	for (const auto kind : kinds) {
+		const auto &keys = kind == cat::StructuralRelationKind::Location ? locations
+										 : threads;
+		auto view = cat::Relation::structural(kind, keys);
+		cat::Relation dense(size);
+		for (std::size_t from = 0; from < size; ++from) {
+			for (std::size_t to = 0; to < size; ++to) {
+				const auto lhs = keys[from], rhs = keys[to];
+				const auto lhsGroup = lhs >> 32, rhsGroup = rhs >> 32;
+				const bool present =
+					kind == cat::StructuralRelationKind::Location
+						? lhs != 0 && lhs == rhs
+					: kind == cat::StructuralRelationKind::ProgramOrder
+						? lhsGroup >= 2 && lhsGroup == rhsGroup &&
+							  static_cast<std::uint32_t>(lhs) <
+								  static_cast<std::uint32_t>(rhs)
+					: kind == cat::StructuralRelationKind::Internal
+						? (lhsGroup == 1 && rhsGroup == 1) ||
+							  (lhsGroup >= 2 && lhsGroup == rhsGroup)
+						: (lhsGroup == 1 && rhsGroup >= 2) ||
+							  (lhsGroup >= 2 && rhsGroup == 1) ||
+							  (lhsGroup >= 2 && rhsGroup >= 2 &&
+							   lhsGroup != rhsGroup);
+				if (present)
+					dense.insert(from, to);
+			}
+		}
+
+		EXPECT_TRUE(view.isStructural());
+		EXPECT_EQ(view, dense);
+		EXPECT_EQ(dense, view);
+		EXPECT_TRUE(view.isSubsetOf(dense));
+		EXPECT_TRUE(dense.isSubsetOf(view));
+		EXPECT_EQ(view.count(), dense.count());
+		EXPECT_EQ(view.empty(), dense.empty());
+		EXPECT_EQ(domain(view), domain(dense));
+		EXPECT_EQ(range(view), range(dense));
+		EXPECT_EQ(inverse(view), inverse(dense));
+		EXPECT_EQ(optional(view), optional(dense));
+		EXPECT_EQ(transitiveClosure(view), transitiveClosure(dense));
+		EXPECT_EQ(relationUnion(view, extra), relationUnion(dense, extra));
+		EXPECT_EQ(relationIntersection(view, extra), relationIntersection(dense, extra));
+		EXPECT_EQ(relationDifference(view, extra), relationDifference(dense, extra));
+		EXPECT_EQ(compose(view, extra), compose(dense, extra));
+		EXPECT_EQ(compose(extra, view), compose(extra, dense));
+
+		auto grownView = view;
+		auto grownDense = dense;
+		grownView.grow(9);
+		grownDense.grow(9);
+		EXPECT_TRUE(grownView.isStructural());
+		EXPECT_EQ(grownView, grownDense);
+		grownView.shrink(size);
+		EXPECT_EQ(grownView, dense);
+
+		auto mutated = view;
+		auto expected = dense;
+		bool erased = false;
+		for (std::size_t from = 0; from < size && !erased; ++from) {
+			for (std::size_t to = 0; to < size; ++to) {
+				if (!dense.contains(from, to))
+					continue;
+				mutated.erase(from, to);
+				expected.erase(from, to);
+				erased = true;
+				break;
+			}
+		}
+		ASSERT_TRUE(erased);
+		EXPECT_FALSE(mutated.isStructural());
+		EXPECT_EQ(mutated, expected);
+	}
+
+	auto oldInternal =
+		cat::Relation::structural(cat::StructuralRelationKind::Internal, threads);
+	auto extendedThreads = threads;
+	extendedThreads[5] = threadKey(4, 0);
+	auto newInternal =
+		cat::Relation::structural(cat::StructuralRelationKind::Internal, extendedThreads);
+	EXPECT_TRUE(oldInternal.isSubsetOf(newInternal));
+	EXPECT_FALSE(newInternal.isSubsetOf(oldInternal));
+	auto relabeledLocations = locations;
+	for (auto &key : relabeledLocations) {
+		if (key == 1)
+			key = 9;
+		else if (key == 2)
+			key = 4;
+	}
+	auto oldLocation =
+		cat::Relation::structural(cat::StructuralRelationKind::Location, locations);
+	auto relabeledLocation = cat::Relation::structural(cat::StructuralRelationKind::Location,
+							   relabeledLocations);
+	EXPECT_TRUE(oldLocation.isSubsetOf(relabeledLocation));
+	EXPECT_TRUE(relabeledLocation.isSubsetOf(oldLocation));
+}
+
+/* Explicit CSR relations preserve arbitrary sparse edges and exact dense fallback. */
+TEST(CatValueTest, SparseRelationsMatchDenseAlgebraGrowthAndMutation)
+{
+	const std::vector<std::pair<std::size_t, std::size_t>> edges{
+		{6, 1}, {0, 4}, {2, 2}, {0, 1}, {6, 1}, {4, 6}};
+	auto sparse = cat::Relation::sparse(7, edges);
+	auto dense = makeRelation(7, {{0, 1}, {0, 4}, {2, 2}, {4, 6}, {6, 1}});
+	auto other = makeRelation(7, {{1, 3}, {2, 2}, {4, 0}, {6, 5}});
+
+	EXPECT_TRUE(sparse.isStructural());
+	EXPECT_EQ(sparse.storageBytes(), 13U * sizeof(std::uint32_t));
+	EXPECT_EQ(sparse, dense);
+	EXPECT_TRUE(sparse.isSubsetOf(dense));
+	EXPECT_TRUE(dense.isSubsetOf(sparse));
+	EXPECT_EQ(sparse.count(), dense.count());
+	EXPECT_EQ(domain(sparse), domain(dense));
+	EXPECT_EQ(range(sparse), range(dense));
+	EXPECT_EQ(inverse(sparse), inverse(dense));
+	EXPECT_EQ(optional(sparse), optional(dense));
+	EXPECT_EQ(transitiveClosure(sparse), transitiveClosure(dense));
+	EXPECT_EQ(relationUnion(sparse, other), relationUnion(dense, other));
+	EXPECT_EQ(relationIntersection(sparse, other), relationIntersection(dense, other));
+	EXPECT_EQ(relationDifference(sparse, other), relationDifference(dense, other));
+	EXPECT_EQ(compose(sparse, other), compose(dense, other));
+	EXPECT_EQ(compose(other, sparse), compose(other, dense));
+
+	auto subset = cat::Relation::sparse(7, {{0, 1}, {4, 6}});
+	EXPECT_TRUE(subset.isSubsetOf(sparse));
+	EXPECT_FALSE(sparse.isSubsetOf(subset));
+	subset.grow(10);
+	EXPECT_TRUE(subset.isStructural());
+	EXPECT_TRUE(subset.contains(4, 6));
+	subset.shrink(5);
+	EXPECT_TRUE(subset.contains(0, 1));
+	EXPECT_FALSE(subset.contains(4, 4));
+
+	auto mutated = sparse;
+	mutated.erase(2, 2);
+	mutated.insert(3, 5);
+	dense.erase(2, 2);
+	dense.insert(3, 5);
+	EXPECT_FALSE(mutated.isStructural());
+	EXPECT_EQ(mutated, dense);
 }
 
 /* Relation growth repacks rows without moving or inventing existing pairs. */
@@ -673,6 +846,7 @@ TEST(CatStableGraphAdapterTest, DirectMaterializationMatchesDenseRemapAcrossMuta
 {
 	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
 	const SAddr x{0x1000};
+	const SAddr y{0x2000};
 	auto *first = addSynchronizerLabel<WriteLabel>(graph, Event(0, 1), MemOrdering::Relaxed, x,
 						       ASize(4), SVal(1));
 	first->addCo(graph.getInitLabel());
@@ -682,6 +856,11 @@ TEST(CatStableGraphAdapterTest, DirectMaterializationMatchesDenseRemapAcrossMuta
 	auto *read = addSynchronizerLabel<ReadLabel>(graph, Event(0, 3), MemOrdering::Relaxed, x,
 						     ASize(4));
 	read->setRf(first);
+	graph.addNewThread();
+	auto *otherThread = addSynchronizerLabel<WriteLabel>(
+		graph, Event(1, 0), MemOrdering::Relaxed, y, ASize(4), SVal(3));
+	otherThread->addCo(graph.getInitLabel());
+	addSynchronizerLabel<FenceLabel>(graph, Event(1, 1), MemOrdering::Acquire);
 
 	cat::StableGraphAdapter legacy;
 	cat::StableGraphAdapter direct;
@@ -693,6 +872,9 @@ TEST(CatStableGraphAdapterTest, DirectMaterializationMatchesDenseRemapAcrossMuta
 		EXPECT_EQ(actual.activeEventCount, expected.activeEventCount);
 		EXPECT_EQ(actual.denseToStable, expected.denseToStable);
 		EXPECT_EQ(actual.base, expected.base);
+		for (const auto name : {"po", "int", "ext", "loc"})
+			EXPECT_FALSE(std::get<cat::Relation>(actual.base.at(name)).isStructural())
+				<< name;
 	};
 	compare();
 	read->setRf(second);
@@ -702,6 +884,64 @@ TEST(CatStableGraphAdapterTest, DirectMaterializationMatchesDenseRemapAcrossMuta
 	auto removed = graph.removeLast(0);
 	ASSERT_NE(removed, nullptr);
 	compare();
+}
+
+/* Structural bases start only beyond the adaptive-offline event boundary. */
+TEST(CatStableGraphAdapterTest, UsesStructuralViewsAboveAdaptiveOfflineBoundary)
+{
+	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
+	cat::StableGraphAdapter direct;
+	for (int index = 1; index <= 512; ++index)
+		addSynchronizerLabel<FenceLabel>(graph, Event(0, index), MemOrdering::Relaxed);
+	const auto boundary = direct.materialize(graph);
+	ASSERT_EQ(boundary.eventCount, 512U);
+	for (const auto name : {"po", "int", "ext", "loc"})
+		EXPECT_FALSE(std::get<cat::Relation>(boundary.base.at(name)).isStructural())
+			<< name;
+
+	addSynchronizerLabel<FenceLabel>(graph, Event(0, 513), MemOrdering::Relaxed);
+	const auto large = direct.materialize(graph);
+	ASSERT_EQ(large.eventCount, 513U);
+	for (const auto name : {"po", "int", "ext", "loc"})
+		EXPECT_TRUE(std::get<cat::Relation>(large.base.at(name)).isStructural()) << name;
+	const cat::GraphAdapter dense(graph);
+	cat::StableGraphAdapter remapped;
+	EXPECT_EQ(large.base, remapped.materialize(dense).base);
+}
+
+/* Large stable snapshots emit exact CSR rf/co/fr and empty lifecycle primitives. */
+TEST(CatStableGraphAdapterTest, SparseEdgePrimitivesMatchDenseLargeSnapshot)
+{
+	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
+	for (int index = 1; index <= 509; ++index)
+		addSynchronizerLabel<FenceLabel>(graph, Event(0, index), MemOrdering::Relaxed);
+	const SAddr x{0x1000};
+	auto *first = addSynchronizerLabel<WriteLabel>(
+		graph, Event(0, 510), MemOrdering::Relaxed, x, ASize(4), SVal(1));
+	first->addCo(graph.getInitLabel());
+	auto *second = addSynchronizerLabel<WriteLabel>(
+		graph, Event(0, 511), MemOrdering::Relaxed, x, ASize(4), SVal(2));
+	second->addCo(first);
+	auto *read = addSynchronizerLabel<ReadLabel>(
+		graph, Event(0, 512), MemOrdering::Relaxed, x, ASize(4));
+	read->setRf(first);
+
+	cat::StableGraphAdapter adapter({"rf", "co", "fr", "rmw", "tc", "tj"});
+	const auto snapshot = adapter.materialize(graph);
+	ASSERT_EQ(snapshot.eventCount, 513U);
+	const std::map<std::string_view, cat::Relation> expected{
+		{"rf", makeRelation(513, {{509, 511}})},
+		{"co", makeRelation(513, {{512, 509}, {512, 510}, {509, 510}})},
+		{"fr", makeRelation(513, {{511, 510}})},
+		{"rmw", cat::Relation(513)},
+		{"tc", cat::Relation(513)},
+		{"tj", cat::Relation(513)}};
+	for (const auto &[name, dense] : expected) {
+		const auto &actual = std::get<cat::Relation>(snapshot.base.at(std::string(name)));
+		EXPECT_TRUE(actual.isStructural()) << name;
+		EXPECT_EQ(actual, dense) << name;
+		EXPECT_LE(actual.storageBytes(), dense.storageBytes() / 2) << name;
+	}
 }
 
 TEST(CaatOptimizationTest, CertifiesOnlyExactBundledRecursiveModels)

@@ -81,28 +81,28 @@ void buildLabelPrimitives(const ExecutionGraph &graph,
 			if (genmc::isa<InitLabel>(read->getRf())) {
 				if (const auto source = initialIds.find(read->getAddr());
 				    source != initialIds.end())
-					readsFrom.insert(source->second, event);
+					readsFrom.insertDense(source->second, event);
 			} else if (const auto source = lookup(ids, read->getRf()->getPos())) {
-				readsFrom.insert(*source, event);
+				readsFrom.insertDense(*source, event);
 			}
 			/* GenMC represents a successful RMW as adjacent read/write labels. */
 			if (read->isRMW()) {
 				const auto *write = graph.po_imm_succ(read);
 				if (write) {
 					if (const auto writeId = lookup(ids, write->getPos()))
-						readModifyWrite.insert(event, *writeId);
+						readModifyWrite.insertDense(event, *writeId);
 				}
 			}
 		}
 		if (const auto *start = genmc::dyn_cast<ThreadStartLabel>(label);
 		    start && start->getCreate()) {
 			if (const auto create = lookup(ids, start->getCreate()->getPos()))
-				threadCreate.insert(*create, event);
+				threadCreate.insertDense(*create, event);
 		}
 		if (const auto *finish = genmc::dyn_cast<ThreadFinishLabel>(label);
 		    finish && finish->getParentJoin()) {
 			if (const auto join = lookup(ids, finish->getParentJoin()->getPos()))
-				threadJoin.insert(event, *join);
+				threadJoin.insertDense(event, *join);
 		}
 	}
 }
@@ -122,11 +122,11 @@ void buildPairPrimitives(const std::vector<const EventLabel *> &labels,
 			/* Virtual initial writes share one synthetic initialization thread. */
 			if ((lhsInit && rhsInit) ||
 			    (!lhsInit && !rhsInit && lhs->getThread() == rhs->getThread())) {
-				internal.insert(from, to);
+				internal.insertDense(from, to);
 				if (!lhsInit && lhs->getIndex() < rhs->getIndex())
-					programOrder.insert(from, to);
+					programOrder.insertDense(from, to);
 			} else {
-				external.insert(from, to);
+				external.insertDense(from, to);
 			}
 
 			const auto lhsLocation =
@@ -144,7 +144,7 @@ void buildPairPrimitives(const std::vector<const EventLabel *> &labels,
 								     ->getAddr())
 						   : std::nullopt);
 			if (lhsLocation && rhsLocation && *lhsLocation == *rhsLocation)
-				location.insert(from, to);
+				location.insertDense(from, to);
 		}
 	}
 }
@@ -164,9 +164,9 @@ void buildCoherence(const ExecutionGraph &graph,
 		const auto initial = initialIds.find(location->first);
 		for (std::size_t current = 0; current < stores.size(); ++current) {
 			if (initial != initialIds.end())
-				coherence.insert(initial->second, stores[current]);
+				coherence.insertDense(initial->second, stores[current]);
 			for (std::size_t later = current + 1; later < stores.size(); ++later)
-				coherence.insert(stores[current], stores[later]);
+				coherence.insertDense(stores[current], stores[later]);
 		}
 	}
 }

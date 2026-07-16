@@ -55,12 +55,19 @@ auto baseSubset(std::size_t oldSize, const BaseValues &oldBase, std::size_t newS
 		} else {
 			const auto &oldRelation = std::get<Relation>(oldValue);
 			const auto &newRelation = std::get<Relation>(found->second);
-			for (std::size_t from = 0; from < oldSize; ++from) {
-				for (std::size_t to = 0; to < oldSize; ++to) {
-					if (oldRelation.contains(from, to) &&
-					    !newRelation.contains(from, to))
-						return false;
+			if (!oldRelation.isStructural() && !newRelation.isStructural()) {
+				for (std::size_t from = 0; from < oldSize; ++from) {
+					for (std::size_t to = 0; to < oldSize; ++to) {
+						if (oldRelation.contains(from, to) &&
+						    !newRelation.contains(from, to))
+							return false;
+					}
 				}
+			} else {
+				auto grown = oldRelation;
+				grown.grow(newSize);
+				if (!grown.isSubsetOf(newRelation))
+					return false;
 			}
 		}
 	}

@@ -16,8 +16,8 @@
 #include "genmc/Support/Error.hpp"
 
 #include <algorithm>
-#include <chrono>
 #include <atomic>
+#include <chrono>
 #include <cstdint>
 #include <deque>
 #include <iterator>
@@ -59,15 +59,7 @@ auto valueSubset(const Value &subset, const Value &superset) -> bool
 	}
 	const auto *lhs = std::get_if<Relation>(&subset);
 	const auto *rhs = std::get_if<Relation>(&superset);
-	if (!rhs || lhs->size() != rhs->size())
-		return false;
-	for (std::size_t from = 0; from < lhs->size(); ++from) {
-		for (std::size_t to = 0; to < lhs->size(); ++to) {
-			if (lhs->contains(from, to) && !rhs->contains(from, to))
-				return false;
-		}
-	}
-	return true;
+	return rhs && lhs->isSubsetOf(*rhs);
 }
 
 /** Return the facts present in @p value but absent from @p previous. */
@@ -305,7 +297,7 @@ IncrementalCaatEvaluator::IncrementalCaatEvaluator(const NormalizedModel &model,
 		if (stratum.size() == 1) {
 			const auto id = stratum.front();
 			if (std::ranges::any_of(model_.predicates()[id].operands,
-					       [id](auto operand) { return operand == id; }))
+						[id](auto operand) { return operand == id; }))
 				supportsReplacements_ = false;
 		}
 	}
@@ -402,7 +394,8 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 					   : Value{Relation(eventCount)};
 		}
 		auto added = valueDifference(nextValue, previous);
-		const auto empty = std::visit([](const auto &facts) { return facts.empty(); }, added);
+		const auto empty =
+			std::visit([](const auto &facts) { return facts.empty(); }, added);
 		if (!empty)
 			undo.addedBase.emplace(name, std::move(added));
 	}
@@ -440,8 +433,7 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 			return reject("primitive '" + predicate.name + "' removed a fact");
 		if (*values[predicate.id] == *next)
 			continue;
-		undo.addedValues[predicate.id] =
-			valueDifference(*next, *values[predicate.id]);
+		undo.addedValues[predicate.id] = valueDifference(*next, *values[predicate.id]);
 		values[predicate.id] = std::move(*next);
 		++updateStatistics.valueChanges;
 		for (const auto dependent : dependents_[predicate.id])
@@ -551,7 +543,10 @@ auto IncrementalCaatEvaluator::tryReplace(std::size_t eventCount, const BaseValu
 			enqueue(dependent);
 	}
 	result_ = CaatEvaluationResult{violations(model_, values, eventCount),
-				       {}, std::move(values), std::move(counts), updateStatistics};
+				       {},
+				       std::move(values),
+				       std::move(counts),
+				       updateStatistics};
 	base_ = base;
 	checkpoints_.clear();
 	undoTrail_.clear();
@@ -574,8 +569,7 @@ auto IncrementalCaatEvaluator::checkpoint() -> IncrementalCheckpoint
 			snapshotEquivalentBytes += valueStorageBytes(value);
 		for (const auto &value : result_->values)
 			snapshotEquivalentBytes += valueStorageBytes(*value);
-		snapshotEquivalentBytes +=
-			result_->evaluationCounts.size() * sizeof(std::size_t);
+		snapshotEquivalentBytes += result_->evaluationCounts.size() * sizeof(std::size_t);
 	}
 	checkpoints_.push_back({handle, undoTrail_.size(), snapshotEquivalentBytes});
 	updateCheckpointMemoryStatistics();
@@ -659,7 +653,8 @@ void IncrementalCaatEvaluator::compactUndoTrail()
 		undoTrail_.clear();
 		return;
 	}
-	const auto firstNeeded = std::ranges::min(checkpoints_, {}, &Snapshot::trailIndex).trailIndex;
+	const auto firstNeeded =
+		std::ranges::min(checkpoints_, {}, &Snapshot::trailIndex).trailIndex;
 	if (firstNeeded == 0)
 		return;
 	undoTrail_.erase(undoTrail_.begin(),
@@ -687,8 +682,7 @@ void IncrementalCaatEvaluator::updateCheckpointMemoryStatistics()
 		snapshotBytes += checkpoint.snapshotEquivalentBytes;
 	statistics_.retainedUndoBytes = undoBytes;
 	statistics_.retainedSnapshotEquivalentBytes = snapshotBytes;
-	statistics_.peakRetainedUndoBytes =
-		std::max(statistics_.peakRetainedUndoBytes, undoBytes);
+	statistics_.peakRetainedUndoBytes = std::max(statistics_.peakRetainedUndoBytes, undoBytes);
 	statistics_.peakRetainedSnapshotEquivalentBytes =
 		std::max(statistics_.peakRetainedSnapshotEquivalentBytes, snapshotBytes);
 }

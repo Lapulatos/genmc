@@ -16,11 +16,24 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <memory>
+#include <utility>
 #include <vector>
 
 namespace cat {
 
 class Relation;
+class GraphAdapter;
+class StableGraphAdapter;
+
+/** Exact compact encodings for stable-graph structural primitive relations. */
+enum class StructuralRelationKind : std::uint8_t {
+	ProgramOrder,
+	Internal,
+	External,
+	Location,
+	ExplicitEdges
+};
 
 /**
  * Dense finite event set backed by 64-bit words.
@@ -88,22 +101,41 @@ private:
 class Relation {
 public:
 	explicit Relation(std::size_t size = 0);
+	/**
+	 * Construct one immutable structural primitive from stable per-event keys.
+	 *
+	 * Zero keys are inactive. Thread keys encode category/group in the high
+	 * 32 bits and program-order index in the low 32 bits: group one is Init,
+	 * and groups two or greater are real threads. Location keys use any
+	 * nonzero equal value for events at the same address.
+	 */
+	[[nodiscard]] static auto structural(StructuralRelationKind kind,
+					     std::vector<std::uint64_t> keys) -> Relation;
+	/** Construct an immutable exact CSR relation from arbitrary edge pairs. */
+	[[nodiscard]] static auto sparse(std::size_t size,
+					 std::vector<std::pair<std::size_t, std::size_t>> edges)
+		-> Relation;
 
 	/** Return the common source/target event universe size. */
 	[[nodiscard]] auto size() const -> std::size_t { return size_; }
 	/** Return the number of relation pairs. */
 	[[nodiscard]] auto count() const -> std::size_t;
-	/** Return owned packed-row bytes, excluding vector object overhead. */
-	[[nodiscard]] auto storageBytes() const -> std::size_t
-	{
-		return words_.size() * sizeof(std::uint64_t);
-	}
+	/** Return owned dense words or shared structural payload bytes. */
+	[[nodiscard]] auto storageBytes() const -> std::size_t;
+	/** Return whether this relation currently uses an immutable structural view. */
+	[[nodiscard]] auto isStructural() const -> bool { return structure_ != nullptr; }
+	/** Return whether every pair is also present in @p other. */
+	[[nodiscard]] auto isSubsetOf(const Relation &other) const -> bool;
 	/** Return true when no pair is present. */
 	[[nodiscard]] auto empty() const -> bool;
 	/** Test one in-range `(from,to)` pair. */
 	[[nodiscard]] auto contains(std::size_t from, std::size_t target) const -> bool;
 	/** Insert one in-range `(from,to)` pair. */
 	void insert(std::size_t from, std::size_t target);
+	/** Insert one pair into a caller-established dense build target. */
+	void insertDense(std::size_t from, std::size_t target);
+	/** Insert every member of @p targets into one row of a dense build target. */
+	void insertSuccessors(std::size_t from, const EventSet &targets);
 	/** Remove one in-range `(from,to)` pair. */
 	void erase(std::size_t from, std::size_t target);
 	/**
@@ -121,14 +153,20 @@ public:
 	/** Return all targets of @p from as a value copy. */
 	[[nodiscard]] auto successors(std::size_t from) const -> EventSet;
 
-	auto operator==(const Relation &) const -> bool = default;
+	/** Compare exact memberships, using O(events) keys for matching views. */
+	auto operator==(const Relation &other) const -> bool;
 
 private:
+	struct StructuralData;
+
+	friend class GraphAdapter;
+	friend class StableGraphAdapter;
 	friend auto relationUnion(const Relation &, const Relation &) -> Relation;
 	friend auto relationIntersection(const Relation &, const Relation &) -> Relation;
 	friend auto relationDifference(const Relation &, const Relation &) -> Relation;
 	friend auto product(const EventSet &, const EventSet &) -> Relation;
 	friend auto identity(const EventSet &) -> Relation;
+	friend auto range(const Relation &) -> EventSet;
 	friend auto inverse(const Relation &) -> Relation;
 	friend auto compose(const Relation &, const Relation &) -> Relation;
 	friend auto optional(const Relation &) -> Relation;
@@ -136,11 +174,19 @@ private:
 	friend auto reflexiveTransitiveClosure(const Relation &) -> Relation;
 
 	[[nodiscard]] auto rowOffset(std::size_t row) const -> std::size_t;
+	[[nodiscard]] auto denseContains(std::size_t from, std::size_t target) const -> bool;
+	[[nodiscard]] auto structuralContains(std::size_t from, std::size_t target) const -> bool;
+	/** Insert every structural membership into an already dense target relation. */
+	void insertStructureInto(Relation &target) const;
+	/** Convert an immutable view to the exact packed matrix before mutation. */
+	void ensureDense();
+	/** Merge two dense rows after the caller has materialized the relation once. */
 	void unionRow(std::size_t target, std::size_t source);
 
 	std::size_t size_{};
 	std::size_t rowWords_{};
 	std::vector<std::uint64_t> words_;
+	std::shared_ptr<const StructuralData> structure_;
 };
 
 /** Set union; operands must have identical universes. */

@@ -19,7 +19,9 @@
 #include "genmc/Support/Cast.hpp"
 
 #include <algorithm>
+#include <limits>
 #include <ranges>
+#include <unordered_map>
 
 namespace cat {
 namespace {
@@ -32,6 +34,42 @@ auto isRealEvent(const EventLabel &label) -> bool
 template <typename T> void addValue(BaseValues &values, std::string_view name, T value)
 {
 	values.emplace(std::string(name), std::move(value));
+}
+
+using RelationEdges = std::vector<std::pair<std::size_t, std::size_t>>;
+
+/** Select exact CSR only when its owned payload is at most half the dense matrix. */
+auto sizeAdaptiveRelation(std::size_t size, RelationEdges edges) -> Relation
+{
+	std::ranges::sort(edges);
+	edges.erase(std::unique(edges.begin(), edges.end()), edges.end());
+	const auto denseBytes = size * ((size + 63) / 64) * sizeof(std::uint64_t);
+	const auto sparseBytes = (size + 1 + edges.size()) * sizeof(std::uint32_t);
+	if (size > 512 && size <= std::numeric_limits<std::uint32_t>::max() &&
+	    edges.size() <= std::numeric_limits<std::uint32_t>::max() &&
+	    sparseBytes <= denseBytes / 2)
+		return Relation::sparse(size, std::move(edges));
+	Relation result(size);
+	for (const auto [from, target] : edges)
+		result.insertDense(from, target);
+	return result;
+}
+
+/** Derive exact `fr = rf^-1 ; co` edges without constructing either dense operand. */
+auto fromReadEdges(const RelationEdges &readsFrom, const RelationEdges &coherence)
+	-> RelationEdges
+{
+	std::unordered_map<std::size_t, std::vector<std::size_t>> laterWrites;
+	for (const auto [before, after] : coherence)
+		laterWrites[before].push_back(after);
+	RelationEdges result;
+	for (const auto [write, read] : readsFrom) {
+		if (const auto found = laterWrites.find(write); found != laterWrites.end()) {
+			for (const auto later : found->second)
+				result.emplace_back(read, later);
+		}
+	}
+	return result;
 }
 
 /** Remap every live membership while preserving the source value type. */
@@ -51,7 +89,7 @@ auto remapValue(const Value &value, std::size_t size,
 	for (std::size_t from = 0; from < mapping.size(); ++from) {
 		for (std::size_t to = 0; to < mapping.size(); ++to) {
 			if (relation.contains(from, to))
-				result.insert(mapping[from], mapping[to]);
+				result.insertDense(mapping[from], mapping[to]);
 		}
 	}
 	return result;
@@ -112,11 +150,13 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 	EventSet universe(needUniverse ? size : 0), reads(needR ? size : 0),
 		writes(needW ? size : 0), fences(needF ? size : 0),
 		initialWrites(needIW ? size : 0), sequentiallyConsistent(needSC ? size : 0);
-	Relation programOrder(needPo ? size : 0), readsFrom(needReadsFrom ? size : 0),
-		coherence(needCoherence ? size : 0), rmw(needRmw ? size : 0),
-		location(needLoc ? size : 0), internal(needInt ? size : 0),
-		external(needExt ? size : 0), threadCreate(needTc ? size : 0),
-		threadJoin(needTj ? size : 0);
+	const auto denseStructuralSize = size <= 512 ? size : 0;
+	Relation programOrder(needPo ? denseStructuralSize : 0),
+		location(needLoc ? denseStructuralSize : 0),
+		internal(needInt ? denseStructuralSize : 0),
+		external(needExt ? denseStructuralSize : 0);
+	RelationEdges readsFromEdges, coherenceEdges, rmwEdges, threadCreateEdges,
+		threadJoinEdges;
 
 	const auto eventId = [&](Event event) -> std::optional<std::size_t> {
 		const auto found = ids_.find(StableEventKey(event));
@@ -140,26 +180,26 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 			if (genmc::isa<InitLabel>(read->getRf())) {
 				if (const auto source = initialIds.find(read->getAddr());
 				    source != initialIds.end())
-					readsFrom.insert(source->second, stable);
+					readsFromEdges.emplace_back(source->second, stable);
 			} else if (const auto source = eventId(read->getRf()->getPos())) {
-				readsFrom.insert(*source, stable);
+				readsFromEdges.emplace_back(*source, stable);
 			}
 			if (needRmw && read->isRMW()) {
 				if (const auto *write = graph.po_imm_succ(read)) {
 					if (const auto writeId = eventId(write->getPos()))
-						rmw.insert(stable, *writeId);
+						rmwEdges.emplace_back(stable, *writeId);
 				}
 			}
 		}
 		if (const auto *start = genmc::dyn_cast<ThreadStartLabel>(label);
 		    needTc && start && start->getCreate()) {
 			if (const auto create = eventId(start->getCreate()->getPos()))
-				threadCreate.insert(*create, stable);
+				threadCreateEdges.emplace_back(*create, stable);
 		}
 		if (const auto *finish = genmc::dyn_cast<ThreadFinishLabel>(label);
 		    needTj && finish && finish->getParentJoin()) {
 			if (const auto join = eventId(finish->getParentJoin()->getPos()))
-				threadJoin.insert(stable, *join);
+				threadJoinEdges.emplace_back(stable, *join);
 		}
 	}
 	for (const auto &[initialLocation, stable] : initialIds) {
@@ -172,45 +212,125 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 			initialWrites.insert(stable);
 	}
 
-	const bool needPairPrimitives = needPo || needLoc || needInt || needExt;
-	if (needPairPrimitives)
-		for (const auto &[lhsId, lhs] : active) {
-			for (const auto &[rhsId, rhs] : active) {
-				if (lhs->getThread() == rhs->getThread()) {
-					if (needInt)
-						internal.insert(lhsId, rhsId);
-					if (needPo && lhs->getIndex() < rhs->getIndex())
-						programOrder.insert(lhsId, rhsId);
-				} else if (needExt) {
-					external.insert(lhsId, rhsId);
-				}
-				const auto *lhsMem = genmc::dyn_cast<MemAccessLabel>(lhs);
-				const auto *rhsMem = genmc::dyn_cast<MemAccessLabel>(rhs);
-				if (needLoc && lhsMem && rhsMem &&
-				    lhsMem->getAddr() == rhsMem->getAddr())
-					location.insert(lhsId, rhsId);
-			}
-			for (const auto &[address, initId] : initialIds) {
-				if (needExt) {
-					external.insert(lhsId, initId);
-					external.insert(initId, lhsId);
-				}
-				if (const auto *memory = genmc::dyn_cast<MemAccessLabel>(lhs);
-				    needLoc && memory && memory->getAddr() == address) {
-					location.insert(lhsId, initId);
-					location.insert(initId, lhsId);
+	if (needPo || needLoc || needInt || needExt) {
+		if (size > 512) {
+			std::vector<std::uint64_t> threadKeys((needPo || needInt || needExt) ? size
+											     : 0);
+			std::vector<std::uint64_t> locationKeys(needLoc ? size : 0);
+			std::map<SAddr, std::uint64_t> locationGroups;
+			if (needLoc) {
+				std::uint64_t nextGroup = 1;
+				for (const auto &[address, stable] : initialIds) {
+					locationGroups.emplace(address, nextGroup);
+					locationKeys[stable] = nextGroup++;
 				}
 			}
-		}
-	if (needInt || needLoc)
-		for (const auto &[lhsAddress, lhsId] : initialIds) {
-			for (const auto &[rhsAddress, rhsId] : initialIds) {
+			for (const auto &[address, stable] : initialIds) {
+				(void)address;
+				if (needPo || needInt || needExt)
+					threadKeys[stable] = std::uint64_t{1} << 32;
+			}
+			for (const auto &[stable, label] : active) {
+				if (needPo || needInt || needExt) {
+					const auto group =
+						static_cast<std::uint64_t>(label->getThread()) + 2;
+					threadKeys[stable] =
+						(group << 32) |
+						static_cast<std::uint32_t>(label->getIndex());
+				}
+				if (const auto *memory = genmc::dyn_cast<MemAccessLabel>(label);
+				    needLoc && memory) {
+					const auto found = locationGroups.find(memory->getAddr());
+					VERIFY(found != locationGroups.end(),
+					       "CAT memory event lacks an initial location group");
+					locationKeys[stable] = found->second;
+				}
+			}
+			if (needPo)
+				programOrder = Relation::structural(
+					StructuralRelationKind::ProgramOrder, threadKeys);
+			if (needInt)
+				internal = Relation::structural(StructuralRelationKind::Internal,
+								threadKeys);
+			if (needExt)
+				external = Relation::structural(StructuralRelationKind::External,
+								threadKeys);
+			if (needLoc)
+				location = Relation::structural(StructuralRelationKind::Location,
+								locationKeys);
+		} else {
+			std::map<int, std::vector<std::pair<int, std::size_t>>> threadMembers;
+			std::map<SAddr, std::vector<std::size_t>> locationMembers;
+			EventSet activeEvents(needExt ? size : 0),
+				initialEvents((needInt || needExt) ? size : 0);
+			for (const auto &[stable, label] : active) {
+				if (needExt)
+					activeEvents.insert(stable);
+				if (needPo || needInt || needExt)
+					threadMembers[label->getThread()].emplace_back(
+						label->getIndex(), stable);
+				if (const auto *memory = genmc::dyn_cast<MemAccessLabel>(label);
+				    needLoc && memory)
+					locationMembers[memory->getAddr()].push_back(stable);
+			}
+			for (const auto &[address, stable] : initialIds) {
+				if (needInt || needExt)
+					initialEvents.insert(stable);
+				if (needLoc)
+					locationMembers[address].push_back(stable);
+			}
+			for (auto &[thread, members] : threadMembers) {
+				(void)thread;
+				std::ranges::sort(members);
+				EventSet memberSet((needInt || needExt) ? size : 0),
+					later(needPo ? size : 0);
+				if (needInt || needExt)
+					for (const auto &[index, stable] : members) {
+						(void)index;
+						memberSet.insert(stable);
+					}
 				if (needInt)
-					internal.insert(lhsId, rhsId);
-				if (needLoc && lhsAddress == rhsAddress)
-					location.insert(lhsId, rhsId);
+					for (const auto &[index, stable] : members) {
+						(void)index;
+						internal.insertSuccessors(stable, memberSet);
+					}
+				if (needPo)
+					for (auto member = members.rbegin();
+					     member != members.rend(); ++member) {
+						programOrder.insertSuccessors(member->second,
+									      later);
+						later.insert(member->second);
+					}
+				if (needExt) {
+					auto otherThreads = setDifference(activeEvents, memberSet);
+					otherThreads = setUnion(otherThreads, initialEvents);
+					for (const auto &[index, stable] : members) {
+						(void)index;
+						external.insertSuccessors(stable, otherThreads);
+					}
+				}
 			}
+			if (needInt)
+				for (const auto &[address, stable] : initialIds) {
+					(void)address;
+					internal.insertSuccessors(stable, initialEvents);
+				}
+			if (needExt)
+				for (const auto &[address, stable] : initialIds) {
+					(void)address;
+					external.insertSuccessors(stable, activeEvents);
+				}
+			if (needLoc)
+				for (const auto &[address, members] : locationMembers) {
+					(void)address;
+					EventSet memberSet(size);
+					for (const auto stable : members)
+						memberSet.insert(stable);
+					for (const auto stable : members)
+						location.insertSuccessors(stable, memberSet);
+				}
 		}
+	}
 
 	if (needCoherence)
 		for (auto currentLocation = graph.loc_begin(); currentLocation != graph.loc_end();
@@ -223,12 +343,25 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 			const auto initial = initialIds.find(currentLocation->first);
 			for (std::size_t current = 0; current < stores.size(); ++current) {
 				if (initial != initialIds.end())
-					coherence.insert(initial->second, stores[current]);
+					coherenceEdges.emplace_back(initial->second, stores[current]);
 				for (std::size_t later = current + 1; later < stores.size();
 				     ++later)
-					coherence.insert(stores[current], stores[later]);
+					coherenceEdges.emplace_back(stores[current], stores[later]);
 			}
 		}
+	auto frEdges = needFr ? fromReadEdges(readsFromEdges, coherenceEdges) : RelationEdges{};
+	Relation readsFrom = needReadsFrom
+				     ? sizeAdaptiveRelation(size, std::move(readsFromEdges))
+				     : Relation{};
+	Relation coherence = needCoherence
+				     ? sizeAdaptiveRelation(size, std::move(coherenceEdges))
+				     : Relation{};
+	Relation fromRead = needFr ? sizeAdaptiveRelation(size, std::move(frEdges)) : Relation{};
+	Relation rmw = needRmw ? sizeAdaptiveRelation(size, std::move(rmwEdges)) : Relation{};
+	Relation threadCreate =
+		needTc ? sizeAdaptiveRelation(size, std::move(threadCreateEdges)) : Relation{};
+	Relation threadJoin =
+		needTj ? sizeAdaptiveRelation(size, std::move(threadJoinEdges)) : Relation{};
 
 	BaseValues values;
 	if (needUnderscore)
@@ -254,7 +387,7 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 	if (needCo)
 		addValue(values, "co", coherence);
 	if (needFr)
-		addValue(values, "fr", compose(inverse(readsFrom), coherence));
+		addValue(values, "fr", std::move(fromRead));
 	if (needRmw)
 		addValue(values, "rmw", std::move(rmw));
 	if (needLoc)
