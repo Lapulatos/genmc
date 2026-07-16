@@ -36,7 +36,7 @@ struct IncrementalStatistics {
 	std::size_t worklistPushes{};
 	std::size_t lazyCycleChecks{};
 	std::size_t lazyEdgeCandidates{};
-	std::size_t lazyUniqueEdges{};
+	std::size_t lazyDepthFallbacks{};
 	std::size_t checkpoints{};
 	std::size_t rollbacks{};
 	std::size_t rejectedRollbacks{};

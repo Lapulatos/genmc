@@ -246,7 +246,7 @@ private:
 							 eventCount_, &lazyStatistics);
 				statistics_.lazyCycleChecks += lazyStatistics.checks;
 				statistics_.lazyEdgeCandidates += lazyStatistics.emittedCandidates;
-				statistics_.lazyUniqueEdges += lazyStatistics.uniqueSuccessors;
+				statistics_.lazyDepthFallbacks += lazyStatistics.depthFallbacks;
 				if (!witness.empty())
 					violations_.push_back({check.name, check.kind, check.span,
 							   std::move(witness)});

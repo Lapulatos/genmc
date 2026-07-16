@@ -30,7 +30,7 @@ struct FixedPointStatistics {
 	std::size_t worklistPushes{};
 	std::size_t lazyCycleChecks{};
 	std::size_t lazyEdgeCandidates{};
-	std::size_t lazyUniqueEdges{};
+	std::size_t lazyDepthFallbacks{};
 };
 
 /** Complete offline CAAT evaluation result, including predicate fixed points. */

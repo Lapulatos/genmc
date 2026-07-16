@@ -248,7 +248,7 @@ auto violations(const NormalizedModel &model, const ModelAnalysis &analysis,
 						 values, eventCount, &lazyStatistics);
 			statistics->lazyCycleChecks += lazyStatistics.checks;
 			statistics->lazyEdgeCandidates += lazyStatistics.emittedCandidates;
-			statistics->lazyUniqueEdges += lazyStatistics.uniqueSuccessors;
+			statistics->lazyDepthFallbacks += lazyStatistics.depthFallbacks;
 			if (!witness.empty())
 				result.push_back({check.name, check.kind, check.span,
 						  std::move(witness)});
@@ -333,7 +333,7 @@ auto IncrementalCaatEvaluator::initialize(std::size_t eventCount, const BaseValu
 	result_ = std::move(next);
 	statistics_.lazyCycleChecks += result_->statistics.lazyCycleChecks;
 	statistics_.lazyEdgeCandidates += result_->statistics.lazyEdgeCandidates;
-	statistics_.lazyUniqueEdges += result_->statistics.lazyUniqueEdges;
+	statistics_.lazyDepthFallbacks += result_->statistics.lazyDepthFallbacks;
 	checkpoints_.clear();
 	undoTrail_.clear();
 	++statistics_.initializations;
@@ -517,7 +517,7 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 	statistics_.worklistPushes += updateStatistics.worklistPushes;
 	statistics_.lazyCycleChecks += updateStatistics.lazyCycleChecks;
 	statistics_.lazyEdgeCandidates += updateStatistics.lazyEdgeCandidates;
-	statistics_.lazyUniqueEdges += updateStatistics.lazyUniqueEdges;
+	statistics_.lazyDepthFallbacks += updateStatistics.lazyDepthFallbacks;
 	return {IncrementalUpdateStatus::Applied, {}};
 }
 
@@ -591,7 +591,7 @@ auto IncrementalCaatEvaluator::tryReplace(std::size_t eventCount, const BaseValu
 	statistics_.valueChanges += updateStatistics.valueChanges;
 	statistics_.lazyCycleChecks += updateStatistics.lazyCycleChecks;
 	statistics_.lazyEdgeCandidates += updateStatistics.lazyEdgeCandidates;
-	statistics_.lazyUniqueEdges += updateStatistics.lazyUniqueEdges;
+	statistics_.lazyDepthFallbacks += updateStatistics.lazyDepthFallbacks;
 	return {IncrementalUpdateStatus::Applied, {}};
 }
 

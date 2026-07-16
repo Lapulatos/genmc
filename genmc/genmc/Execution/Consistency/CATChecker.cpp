@@ -102,7 +102,7 @@ template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
 	     << " queue-pushes=" << evaluatorStats.worklistPushes
 	     << " lazy-cycle-checks=" << evaluatorStats.lazyCycleChecks
 	     << " lazy-edge-candidates=" << evaluatorStats.lazyEdgeCandidates
-	     << " lazy-unique-edges=" << evaluatorStats.lazyUniqueEdges
+	     << " lazy-depth-fallbacks=" << evaluatorStats.lazyDepthFallbacks
 	     << " offline-evals=" << evaluatorStats.offlineEvaluations
 	     << " adapter-ns=" << adapterNanoseconds_ << " sync-ns=" << synchronizationNanoseconds_
 	     << " offline-ns=" << evaluatorStats.offlineNanoseconds

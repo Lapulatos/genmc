@@ -21,7 +21,7 @@ namespace cat {
 struct LazyCycleStatistics {
 	std::size_t checks{};
 	std::size_t emittedCandidates{};
-	std::size_t uniqueSuccessors{};
+	std::size_t depthFallbacks{};
 };
 
 /**

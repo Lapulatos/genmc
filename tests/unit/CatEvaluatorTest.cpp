@@ -596,22 +596,87 @@ acyclic order as cycle
 		*analyzed.model, *analyzed.analysis, size, base, false);
 	const auto lazy = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
 						       size, base, true);
+	const auto repeated = cat::CaatEvaluator().evaluate(
+		*analyzed.model, *analyzed.analysis, size, base, true);
 	RC_ASSERT(materialized.errors.empty());
 	RC_ASSERT(lazy.errors.empty());
+	RC_ASSERT(repeated.errors.empty());
 	RC_ASSERT(materialized.consistent() == lazy.consistent());
 	RC_ASSERT(materialized.violations.size() == lazy.violations.size());
+	RC_ASSERT(lazy.violations.size() == repeated.violations.size());
+	const auto root = *analyzed.analysis->lazyCycleRoots()[0];
+	RC_ASSERT(materialized.values[root].has_value());
+	const auto &rootRelation = std::get<cat::Relation>(*materialized.values[root]);
 	for (std::size_t index = 0; index < materialized.violations.size(); ++index) {
 		RC_ASSERT(materialized.violations[index].checkName ==
 			  lazy.violations[index].checkName);
 		RC_ASSERT(materialized.violations[index].checkKind ==
 			  lazy.violations[index].checkKind);
 		RC_ASSERT(materialized.violations[index].span == lazy.violations[index].span);
-		RC_ASSERT(materialized.violations[index].witness ==
-			  lazy.violations[index].witness);
+		RC_ASSERT(lazy.violations[index].witness == repeated.violations[index].witness);
+		const auto &witness = lazy.violations[index].witness;
+		RC_ASSERT(witness.size() >= 2);
+		RC_ASSERT(witness.front() == witness.back());
+		for (std::size_t edge = 1; edge < witness.size(); ++edge)
+			RC_ASSERT(rootRelation.contains(witness[edge - 1], witness[edge]));
 	}
-	const auto root = *analyzed.analysis->lazyCycleRoots()[0];
-	RC_ASSERT(materialized.values[root].has_value());
 	RC_ASSERT(!lazy.values[root].has_value());
+}
+
+/* A streamed back edge stops the remaining union/composition derivations instead of
+ * first materializing and sorting every successor of the current event. */
+TEST(CaatOptimizationTest, StreamingLazyCycleStopsAtFirstBackEdge)
+{
+	auto analyzed = analyzeModel(R"CAT(StreamingEarlyStop
+let tail = rf ; co
+let order = po | tail
+acyclic order as cycle
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	ASSERT_TRUE(analyzed.analysis->lazyCycleRoots()[0].has_value());
+	constexpr std::size_t size = 65;
+	cat::Relation po(size), rf(size), co(size);
+	po.insert(0, 0);
+	for (std::size_t event = 0; event < size; ++event) {
+		rf.insert(0, event);
+		for (std::size_t target = 0; target < size; ++target)
+			co.insert(event, target);
+	}
+	const auto result = cat::CaatEvaluator().evaluate(
+		*analyzed.model, *analyzed.analysis, size,
+		{{"po", po}, {"rf", rf}, {"co", co}}, true);
+	ASSERT_FALSE(result.consistent());
+	ASSERT_EQ(result.violations.size(), 1U);
+	EXPECT_EQ(result.violations[0].witness, (std::vector<std::size_t>{0, 0}));
+	EXPECT_EQ(result.statistics.lazyCycleChecks, 1U);
+	EXPECT_EQ(result.statistics.lazyEdgeCandidates, 1U);
+}
+
+/* Deep event paths leave the native call stack before its safety bound and restart the
+ * exact check with heap-resident DFS frames. */
+TEST(CaatOptimizationTest, DeepStreamingCycleUsesIterativeFallback)
+{
+	auto analyzed = analyzeModel(R"CAT(StreamingDepthFallback
+let tail = rf ; co
+let order = po | tail
+acyclic order as cycle
+)CAT");
+	ASSERT_NE(analyzed.model, nullptr);
+	ASSERT_TRUE(analyzed.analysis->lazyCycleRoots()[0].has_value());
+	constexpr std::size_t size = 8193;
+	cat::Relation po(size), rf(size), co(size);
+	for (std::size_t event = 1; event < size; ++event)
+		po.insert(event - 1, event);
+	po.insert(size - 1, 0);
+	const auto result = cat::CaatEvaluator().evaluate(
+		*analyzed.model, *analyzed.analysis, size,
+		{{"po", po}, {"rf", rf}, {"co", co}}, true);
+	ASSERT_FALSE(result.consistent());
+	ASSERT_EQ(result.violations.size(), 1U);
+	EXPECT_EQ(result.violations[0].witness.size(), size + 1);
+	EXPECT_EQ(result.violations[0].witness.front(), result.violations[0].witness.back());
+	EXPECT_EQ(result.statistics.lazyCycleChecks, 1U);
+	EXPECT_EQ(result.statistics.lazyDepthFallbacks, 1U);
 }
 
 /* Shared, recursive, and expensive-membership cones retain the generic evaluator. */
