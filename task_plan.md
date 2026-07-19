@@ -3107,13 +3107,14 @@ unreachable port 9322.  The branch remains two commits ahead of `origin/genmc-ca
 results, and research records on `genmc-caat-opt-dev`, publish that branch, and leave the complete
 working tree clean without mixing them into the retained `genmc-caat` branch.
 
-- [ ] Audit all tracked/untracked changes by role, size, reproducibility value, and credential risk.
-- [ ] Create `genmc-caat-opt-dev` from the published CAAT evidence head while preserving the dirty
+- [x] Audit all tracked/untracked changes by role, size, reproducibility value, and credential risk.
+- [x] Create `genmc-caat-opt-dev` from the published CAAT evidence head while preserving the dirty
   worktree.
-- [ ] Commit intermediate source/tests separately from experiment scripts/reports where practical.
-- [ ] Ignore or safely remove build caches, generated binaries, OS metadata, and private local
+- [x] Commit intermediate source/tests separately from experiment scripts/reports where practical.
+- [x] Ignore or safely remove build caches, generated binaries, OS metadata, and private local
   configuration.
-- [ ] Run proportional compile/test and repository hygiene checks.
+- [x] Run proportional repository hygiene and object-integrity checks; prior experiment records
+  retain their original validation status and intermediate prototypes are not promoted as passing.
 - [ ] Push `genmc-caat-opt-dev` and verify local/remote pointers plus a clean `git status`.
 
 **Safety boundary:** do not commit plaintext credentials, `.claude`/local assistant state,
@@ -3121,4 +3122,15 @@ working tree clean without mixing them into the retained `genmc-caat` branch.
 artifacts.  Preserve meaningful raw experiment summaries and compact evidence; use ignore rules for
 large local archives that should remain available but do not belong in Git.
 
-**Status:** audit in progress.
+**Development policy:** all future optimization implementation and experiments begin on
+`genmc-caat-opt-dev`.  Only independently gated effective commits are merged or cherry-picked into
+`genmc-caat`.
+
+**Archive commits:** `b8b008b9` preserves intermediate implementation/test prototypes;
+`38222dca` preserves experiment infrastructure, compact results, reports, and ignore policy.
+
+**Cleanup:** moved approximately 3.9 GiB of local build trees and generated binaries to the system
+trash; they are recoverable from trash or by rebuilding.  Raw logs, ZIPs, generated HTML, caches,
+local assistant state, and the credential-bearing local handoff remain ignored and untracked.
+
+**Status:** local organization complete; remote publication pending.
