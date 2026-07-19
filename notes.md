@@ -3389,3 +3389,15 @@ collected. No direction may claim them based only on missing buffered log marker
   and includes native continuation time, so it is pre-evidence only. A host rebuild later reused a
   Docker-owned tree and failed before compilation; rebuilding inside the original image passed
   18/18. Never rebuild that tree with host CMake.
+
+## Deagle/RVF source-refinement r1 (2026-07-20)
+
+- Cartesian class-member refinement is rejected: concrete-SC completes 2/15 within 120 seconds,
+  while the candidate times out on 15/15. Incremental lazy member selectors repair that explosion,
+  but `safe010_tso` only changes 310 -> 305 concrete candidates and about 45.58 -> 45.00 seconds.
+  Do not repeat or broaden this sub-threshold result.
+- The nine-combination concrete/refined SC oracle passes under ASan+UBSan. Abstract assignments
+  remain rejected at materialization; only concrete refinements can be checked or replayed.
+- Next: encode “some member of the selected value class is the latest same-location write before
+  the load” directly in Deagle's SC ordering theory. Merely delaying source selectors does not
+  remove repeated SC completion. Full report: `deagle-rvf-refinement-r1-report-20260720.md`.
