@@ -3115,7 +3115,7 @@ working tree clean without mixing them into the retained `genmc-caat` branch.
   configuration.
 - [x] Run proportional repository hygiene and object-integrity checks; prior experiment records
   retain their original validation status and intermediate prototypes are not promoted as passing.
-- [ ] Push `genmc-caat-opt-dev` and verify local/remote pointers plus a clean `git status`.
+- [x] Push `genmc-caat-opt-dev` and verify local/remote pointers plus a clean `git status`.
 
 **Safety boundary:** do not commit plaintext credentials, `.claude`/local assistant state,
 `.DS_Store`, compiler build trees, downloaded binaries, Python caches, or oversized regenerable
@@ -3133,4 +3133,4 @@ large local archives that should remain available but do not belong in Git.
 trash; they are recoverable from trash or by rebuilding.  Raw logs, ZIPs, generated HTML, caches,
 local assistant state, and the credential-bearing local handoff remain ignored and untracked.
 
-**Status:** local organization complete; remote publication pending.
+**Status:** complete and published to `origin/genmc-caat-opt-dev`.
