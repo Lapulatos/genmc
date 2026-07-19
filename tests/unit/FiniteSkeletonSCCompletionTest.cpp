@@ -1,0 +1,219 @@
+/*
+ * GenMC -- Generic Model Checking.
+ *
+ * This project is dual-licensed under the Apache License 2.0 and the MIT License.
+ */
+
+#include "genmc/Verification/FiniteSkeletonCAT.hpp"
+#include "genmc/Verification/FiniteSkeletonSCCompletion.hpp"
+
+#include <gtest/gtest.h>
+
+#include <array>
+#include <algorithm>
+
+namespace {
+
+auto storeBufferingProgram() -> genmc::skeleton::Program
+{
+	using namespace genmc;
+	skeleton::Program program;
+	program.functions.push_back(
+		{.id = 0, .name = "t0", .entry = 0, .isMain = true, .blocks = {0}});
+	program.functions.push_back(
+		{.id = 1, .name = "t1", .entry = 1, .isThreadEntry = true, .blocks = {1}});
+	program.blocks.push_back({.id = 0, .function = 0});
+	program.blocks.push_back({.id = 1, .function = 1});
+	program.values.push_back({.id = 0, .block = 0,
+				  .opcode = skeleton::ValueOpcode::constant,
+				  .width = 8, .constant = 1});
+	program.values.push_back({.id = 1, .block = 0,
+				  .opcode = skeleton::ValueOpcode::load, .width = 8});
+	program.values.push_back({.id = 2, .block = 1,
+				  .opcode = skeleton::ValueOpcode::load, .width = 8});
+	program.events.push_back({.id = 0, .kind = skeleton::EventKind::store,
+				  .function = 0, .block = 0, .value = 0,
+				  .address = "x", .width = 8});
+	program.events.push_back({.id = 1, .kind = skeleton::EventKind::load,
+				  .function = 0, .block = 0, .value = 1,
+				  .address = "y", .width = 8});
+	program.events.push_back({.id = 2, .kind = skeleton::EventKind::store,
+				  .function = 1, .block = 1, .value = 0,
+				  .address = "y", .width = 8});
+	program.events.push_back({.id = 3, .kind = skeleton::EventKind::load,
+				  .function = 1, .block = 1, .value = 2,
+				  .address = "x", .width = 8});
+	program.initialValues.push_back({.address = "x", .width = 8, .value = 0});
+	program.initialValues.push_back({.address = "y", .width = 8, .value = 0});
+	return program;
+}
+
+auto exactSCBaseAccepts(const genmc::skeleton::Program &program,
+			const genmc::symbolic::FiniteAssignment &assignment) -> bool
+{
+	auto [snapshot, base] =
+		genmc::symbolic::materializeFiniteAssignment(program, assignment);
+	if (!snapshot.errors.empty())
+		return false;
+	const auto &po = std::get<cat::Relation>(base.at("po"));
+	const auto &tc = std::get<cat::Relation>(base.at("tc"));
+	const auto &tj = std::get<cat::Relation>(base.at("tj"));
+	const auto &rf = std::get<cat::Relation>(base.at("rf"));
+	const auto &fr = std::get<cat::Relation>(base.at("fr"));
+	const auto &co = std::get<cat::Relation>(base.at("co"));
+	auto order = cat::relationUnion(po, tc);
+	order = cat::relationUnion(order, tj);
+	order = cat::relationUnion(order, rf);
+	order = cat::relationUnion(order, fr);
+	order = cat::relationUnion(order, co);
+	const auto closure = cat::transitiveClosure(order);
+	for (std::size_t event = 0; event < snapshot.eventCount; ++event)
+		if (closure.contains(event, event))
+			return false;
+	return true;
+}
+
+TEST(FiniteSkeletonSCCompletionTest, RejectsSCStoreBufferingZeroZero)
+{
+	using namespace genmc;
+	const auto program = storeBufferingProgram();
+	symbolic::FiniteAssignment assignment;
+	assignment.activeEvents = {0, 1, 2, 3};
+	assignment.values.resize(program.values.size());
+	assignment.readsFrom.resize(program.events.size());
+	assignment.readsFrom[1] = skeleton::invalidNode;
+	assignment.readsFrom[3] = skeleton::invalidNode;
+
+	const auto result = symbolic::completeFiniteSC(program, assignment);
+	EXPECT_EQ(result.status, symbolic::FiniteSCCompletionStatus::noWitness);
+	EXPECT_FALSE(result.assignment.has_value());
+	EXPECT_TRUE(result.refinementSafe);
+	EXPECT_EQ(result.rfCoreLoads.size(), 2U);
+	EXPECT_GT(result.coreChecks, 0U);
+	const auto ordering = symbolic::completeFiniteSCWithOrdering(program, assignment);
+	EXPECT_EQ(ordering.status, symbolic::FiniteSCCompletionStatus::noWitness);
+	EXPECT_TRUE(ordering.refinementSafe);
+	EXPECT_FALSE(ordering.rfCoreLoads.empty());
+	EXPECT_EQ(ordering.coreChecks, 1U);
+}
+
+TEST(FiniteSkeletonSCCompletionTest, CompletesEverySCFeasibleStoreBufferingRfShape)
+{
+	using namespace genmc;
+	const auto program = storeBufferingProgram();
+	const std::array<skeleton::NodeID, 2> firstSources = {skeleton::invalidNode, 2};
+	const std::array<skeleton::NodeID, 2> secondSources = {skeleton::invalidNode, 0};
+	for (const auto first : firstSources) {
+		for (const auto second : secondSources) {
+			if (first == skeleton::invalidNode && second == skeleton::invalidNode)
+				continue;
+			symbolic::FiniteAssignment assignment;
+			assignment.activeEvents = {0, 1, 2, 3};
+			assignment.values.resize(program.values.size());
+			assignment.readsFrom.resize(program.events.size());
+			assignment.readsFrom[1] = first;
+			assignment.readsFrom[3] = second;
+
+			const auto result = symbolic::completeFiniteSC(program, assignment);
+			ASSERT_EQ(result.status, symbolic::FiniteSCCompletionStatus::completed)
+				<< "first=" << first << " second=" << second << " error="
+				<< result.error;
+			ASSERT_TRUE(result.assignment);
+			EXPECT_EQ(result.assignment->coherenceOrder.size(), 2U);
+			auto [snapshot, base] =
+				symbolic::materializeFiniteAssignment(program, *result.assignment);
+			EXPECT_TRUE(snapshot.errors.empty());
+			EXPECT_EQ(std::get<cat::Relation>(base.at("co")).count(), 2U);
+		}
+	}
+}
+
+TEST(FiniteSkeletonSCCompletionTest, FailsOpenWhenAnActiveReadHasNoRfSource)
+{
+	using namespace genmc;
+	const auto program = storeBufferingProgram();
+	symbolic::FiniteAssignment assignment;
+	assignment.activeEvents = {0, 1, 2, 3};
+	assignment.values.resize(program.values.size());
+	assignment.readsFrom.resize(program.events.size());
+	assignment.readsFrom[1] = skeleton::invalidNode;
+
+	const auto result = symbolic::completeFiniteSC(program, assignment);
+	EXPECT_EQ(result.status, symbolic::FiniteSCCompletionStatus::invalidInput);
+	EXPECT_FALSE(result.error.empty());
+}
+
+TEST(FiniteSkeletonSCCompletionTest, MatchesExhaustiveCoOracleForAllFixedRfShapes)
+{
+	using namespace genmc;
+	auto program = storeBufferingProgram();
+	program.events[1].address = "x";
+	program.events[2].address = "x";
+	program.events[3].address = "x";
+	program.initialValues.resize(1U);
+	const std::array<skeleton::NodeID, 3> sources = {skeleton::invalidNode, 0, 2};
+	for (const auto first : sources) {
+		for (const auto second : sources) {
+			symbolic::FiniteAssignment assignment;
+			assignment.activeEvents = {0, 1, 2, 3};
+			assignment.values.resize(program.values.size());
+			assignment.readsFrom.resize(program.events.size());
+			assignment.readsFrom[1] = first;
+			assignment.readsFrom[3] = second;
+
+			bool oracle = false;
+			for (const auto &co : {std::array<skeleton::NodeID, 2>{0, 2},
+					       std::array<skeleton::NodeID, 2>{2, 0}}) {
+				auto concrete = assignment;
+				concrete.coherenceOrder.assign(co.begin(), co.end());
+				oracle = oracle || exactSCBaseAccepts(program, concrete);
+			}
+			const auto result = symbolic::completeFiniteSC(program, assignment);
+			EXPECT_EQ(result.status == symbolic::FiniteSCCompletionStatus::completed,
+				  oracle)
+				<< "first=" << first << " second=" << second
+				<< " error=" << result.error;
+			const auto ordering =
+				symbolic::completeFiniteSCWithOrdering(program, assignment);
+			EXPECT_EQ(ordering.status ==
+					  symbolic::FiniteSCCompletionStatus::completed,
+				  oracle)
+				<< "ordering first=" << first << " second=" << second
+				<< " error=" << ordering.error;
+		}
+	}
+}
+
+TEST(FiniteSkeletonSCCompletionTest, RfCoreRefinementFindsACompletableGraph)
+{
+	using namespace genmc;
+	if (!symbolic::Solver::backendAvailable())
+		GTEST_SKIP() << "Z3 is unavailable in this build";
+	auto program = storeBufferingProgram();
+	/* This unit fixture has no explicit create event; enable its second finite entry
+	 * directly so the encoder can enumerate the same two-thread event set. */
+	program.functions[1].isMain = true;
+	program.events.push_back({.id = 4, .kind = skeleton::EventKind::error,
+				  .function = 0, .block = 0});
+	symbolic::FiniteSkeletonEncoder encoder(
+		program, {.requireActiveError = true,
+			  .encodeCo = false,
+			  .rfCardinality = symbolic::RfCardinalityEncoding::native});
+	bool completed = false;
+	for (std::size_t attempt = 0; attempt < 16U; ++attempt) {
+		auto step = encoder.next();
+		ASSERT_EQ(step.status, symbolic::CheckResult::sat);
+		ASSERT_TRUE(step.assignment);
+		const auto completion = symbolic::completeFiniteSC(program, *step.assignment);
+		if (completion.status == symbolic::FiniteSCCompletionStatus::completed) {
+			completed = true;
+			break;
+		}
+		ASSERT_EQ(completion.status, symbolic::FiniteSCCompletionStatus::noWitness);
+		ASSERT_TRUE(completion.refinementSafe);
+		encoder.blockCurrentRfCore(completion.rfCoreLoads);
+	}
+	EXPECT_TRUE(completed);
+}
+
+} /* namespace */

@@ -325,6 +325,63 @@ TEST(CaatNormalizedModelTest, CanonicalizesStructurallyEquivalentLinearClosures)
 	}
 }
 
+TEST(CaatAnalysisTest, DerivesPreventiveOrdersFromStructureNotNames)
+{
+	for (const auto source : {
+		     "RenamedA\nlet fixed = po | tc\nlet com = (rf & ext) | fr | co\n"
+		     "let rec closure = fixed | com | (closure ; (fixed | com))\n"
+		     "irreflexive closure as safe\n",
+		     "RenamedB\nlet changing = co | (fr | (ext & rf))\n"
+		     "let stable = tj | po\nlet rec path = (stable | changing) | "
+		     "((stable | changing) ; path)\nirreflexive path\n"}) {
+		auto result = analyzeText(source);
+		ASSERT_TRUE(result.ok());
+		ASSERT_EQ(result.analysis->preventiveOrders().size(), 1U);
+		const auto &certificate = result.analysis->preventiveOrders().front();
+		EXPECT_EQ(certificate.rfMode, cat::PreventiveRfMode::External);
+		EXPECT_TRUE(certificate.includesFr);
+		EXPECT_TRUE(certificate.includesCo);
+		EXPECT_TRUE(certificate.unassignedReadSink);
+		EXPECT_TRUE(certificate.unplacedWriteSink);
+	}
+}
+
+TEST(CaatAnalysisTest, PreventiveFocusSinkCertificateFailsClosed)
+{
+	for (const auto source : {
+		     "Optional\nlet order = po? | rf | fr | co\nacyclic order\n",
+		     "UnknownBase\nlet order = ext | rf | fr | co\nacyclic order\n",
+		     "UnknownFirstStep\nlet order = (loc ; po) | rf | fr | co\nacyclic order\n"}) {
+		auto result = analyzeText(source);
+		ASSERT_TRUE(result.ok());
+		ASSERT_EQ(result.analysis->preventiveOrders().size(), 1U);
+		EXPECT_FALSE(result.analysis->preventiveOrders()[0].unassignedReadSink);
+		EXPECT_FALSE(result.analysis->preventiveOrders()[0].unplacedWriteSink);
+	}
+
+	for (const auto source : {
+		     "Intersection\nlet order = (po & loc) | rf | fr | co\nacyclic order\n",
+		     "Composition\nlet order = (po ; loc) | rf | fr | co\nacyclic order\n"}) {
+		auto result = analyzeText(source);
+		ASSERT_TRUE(result.ok());
+		ASSERT_EQ(result.analysis->preventiveOrders().size(), 1U);
+		EXPECT_TRUE(result.analysis->preventiveOrders()[0].unassignedReadSink);
+		EXPECT_TRUE(result.analysis->preventiveOrders()[0].unplacedWriteSink);
+	}
+}
+
+TEST(CaatAnalysisTest, PreventiveOrdersFailClosedForTransformedChoiceEdges)
+{
+	for (const auto source : {
+		     "Composed\nlet order = po | (fr ; po) | co\nacyclic order\n",
+		     "FilteredFr\nlet order = po | (fr & ext) | co\nacyclic order\n",
+		     "RecursiveUnknown\nlet rec order = po | (order ; rf)\nacyclic order\n"}) {
+		auto result = analyzeText(source);
+		ASSERT_TRUE(result.ok());
+		EXPECT_TRUE(result.analysis->preventiveOrders().empty());
+	}
+}
+
 /* Similar but inequivalent or mutually recursive equations retain their original SCC. */
 TEST(CaatNormalizedModelTest, LeavesLinearClosureNearNeighborsRecursive)
 {

@@ -14,7 +14,9 @@
 #include "genmc/CAT/Analysis.hpp"
 
 #include <algorithm>
+#include <array>
 #include <limits>
+#include <set>
 #include <string>
 #include <utility>
 
@@ -43,10 +45,13 @@ public:
 		if (!diagnostics_.empty())
 			return {nullptr, std::move(diagnostics_)};
 		buildLazyCyclePlans();
+		buildPreventiveOrders();
+		buildSCValueExplorationCertificate();
 		std::shared_ptr<const ModelAnalysis> analysis = std::make_shared<ModelAnalysis>(
 			std::move(dependencies_), std::move(strata_), std::move(componentOf_),
 			std::move(domainIndependent_), std::move(lazyCycleRoots_),
-			std::move(lazyCycleElided_));
+			std::move(lazyCycleElided_), std::move(preventiveOrders_),
+			scValueExploration_);
 		return {std::move(analysis), {}};
 	}
 
@@ -331,7 +336,8 @@ private:
 	{
 		lazyCycleRoots_.resize(model_.checks().size());
 		lazyCycleElided_.assign(model_.predicates().size(), false);
-		for (std::size_t checkIndex = 0; checkIndex < model_.checks().size(); ++checkIndex) {
+		for (std::size_t checkIndex = 0; checkIndex < model_.checks().size();
+		     ++checkIndex) {
 			const auto &check = model_.checks()[checkIndex];
 			if (check.kind != Statement::CheckKind::Acyclic ||
 			    model_.predicates()[check.predicate].type != ValueType::Relation ||
@@ -343,7 +349,8 @@ private:
 				continue;
 			bool exclusive = true;
 			for (PredicateId id = 0; id < cone.size() && exclusive; ++id) {
-				if (!cone[id] || model_.predicates()[id].kind == Predicate::Kind::Base)
+				if (!cone[id] ||
+				    model_.predicates()[id].kind == Predicate::Kind::Base)
 					continue;
 				for (const auto &dependency : dependencies_) {
 					if (dependency.source == id && !cone[dependency.target]) {
@@ -351,8 +358,10 @@ private:
 						break;
 					}
 				}
-				for (std::size_t other = 0; other < model_.checks().size(); ++other) {
-					if (other != checkIndex && model_.checks()[other].predicate == id)
+				for (std::size_t other = 0; other < model_.checks().size();
+				     ++other) {
+					if (other != checkIndex &&
+					    model_.checks()[other].predicate == id)
 						exclusive = false;
 				}
 			}
@@ -360,7 +369,8 @@ private:
 				continue;
 			lazyCycleRoots_[checkIndex] = check.predicate;
 			for (PredicateId id = 0; id < cone.size(); ++id) {
-				if (cone[id] && model_.predicates()[id].kind != Predicate::Kind::Base)
+				if (cone[id] &&
+				    model_.predicates()[id].kind != Predicate::Kind::Base)
 					lazyCycleElided_[id] = true;
 			}
 		}
@@ -368,8 +378,8 @@ private:
 		 * least one expensive composition cone. Union-only orders are faster and
 		 * smaller in the packed generic evaluator, so select by normalized structure
 		 * rather than a model/profile name or a runtime verdict. */
-		const auto removesComposition = std::ranges::any_of(
-			model_.predicates(), [&](const auto &predicate) {
+		const auto removesComposition =
+			std::ranges::any_of(model_.predicates(), [&](const auto &predicate) {
 				return lazyCycleElided_[predicate.id] &&
 				       predicate.kind == Predicate::Kind::Composition;
 			});
@@ -377,6 +387,308 @@ private:
 			std::ranges::fill(lazyCycleRoots_, std::nullopt);
 			std::ranges::fill(lazyCycleElided_, false);
 		}
+	}
+
+	[[nodiscard]] auto dependsOnChoice(PredicateId id, std::vector<std::int8_t> &memo) const
+		-> bool
+	{
+		if (memo[id] >= 0)
+			return memo[id] != 0;
+		if (memo[id] == -2)
+			return true; /* Recursive unknowns fail closed. */
+		memo[id] = -2;
+		const auto &predicate = model_.predicates()[id];
+		bool dependent = predicate.kind == Predicate::Kind::Base &&
+				 (predicate.name == "rf" || predicate.name == "fr" ||
+				  predicate.name == "co");
+		for (const auto operand : predicate.operands)
+			dependent = dependent || dependsOnChoice(operand, memo);
+		memo[id] = dependent ? 1 : 0;
+		return dependent;
+	}
+
+	[[nodiscard]] auto isBase(PredicateId id, std::string_view name) const -> bool
+	{
+		const auto &predicate = model_.predicates()[id];
+		return predicate.kind == Predicate::Kind::Base && predicate.name == name;
+	}
+
+	[[nodiscard]] auto collectPreventiveSeed(PredicateId id,
+						 PreventiveOrderCertificate &certificate,
+						 std::vector<std::int8_t> &choiceMemo) const -> bool
+	{
+		const auto &predicate = model_.predicates()[id];
+		if (predicate.kind == Predicate::Kind::Alias)
+			return collectPreventiveSeed(predicate.operands[0], certificate,
+						     choiceMemo);
+		if (predicate.kind == Predicate::Kind::Union)
+			return collectPreventiveSeed(predicate.operands[0], certificate,
+						     choiceMemo) &&
+			       collectPreventiveSeed(predicate.operands[1], certificate,
+						     choiceMemo);
+		if (isBase(id, "rf")) {
+			certificate.rfMode = PreventiveRfMode::All;
+			return true;
+		}
+		if (isBase(id, "fr")) {
+			certificate.includesFr = true;
+			return true;
+		}
+		if (isBase(id, "co")) {
+			certificate.includesCo = true;
+			return true;
+		}
+		if (predicate.kind == Predicate::Kind::Intersection &&
+		    ((isBase(predicate.operands[0], "rf") &&
+		      isBase(predicate.operands[1], "ext")) ||
+		     (isBase(predicate.operands[1], "rf") &&
+		      isBase(predicate.operands[0], "ext")))) {
+			if (certificate.rfMode == PreventiveRfMode::None)
+				certificate.rfMode = PreventiveRfMode::External;
+			return true;
+		}
+		return !dependsOnChoice(id, choiceMemo);
+	}
+
+	enum class FocusKind : std::uint8_t { Read, Write };
+	enum class FocusFlow : std::int8_t { Empty = 0, SelfOnly = 1, Other = 2 };
+
+	/** Conservatively decide whether a typed fresh focus may belong to one set. */
+	[[nodiscard]] auto focusMayBelong(PredicateId id, FocusKind focus,
+					 std::vector<std::int8_t> &memo) const -> bool
+	{
+		if (memo[id] >= 0)
+			return memo[id] != 0;
+		if (memo[id] == -2)
+			return true;
+		memo[id] = -2;
+		const auto &predicate = model_.predicates()[id];
+		bool possible = true;
+		if (predicate.kind == Predicate::Kind::Base) {
+			if (predicate.name == "R")
+				possible = focus == FocusKind::Read;
+			else if (predicate.name == "W")
+				possible = focus == FocusKind::Write;
+			else if (predicate.name == "F" || predicate.name == "IW")
+				possible = false;
+		} else {
+			const auto operand = [&](std::size_t index) {
+				return focusMayBelong(predicate.operands[index], focus, memo);
+			};
+			switch (predicate.kind) {
+			case Predicate::Kind::Alias:
+				possible = operand(0);
+				break;
+			case Predicate::Kind::Union:
+				possible = operand(0) || operand(1);
+				break;
+			case Predicate::Kind::Intersection:
+				possible = operand(0) && operand(1);
+				break;
+			case Predicate::Kind::Difference:
+				possible = operand(0);
+				break;
+			default:
+				possible = true;
+				break;
+			}
+		}
+		memo[id] = possible ? 1 : 0;
+		return possible;
+	}
+
+	/**
+	 * Prove that a fresh thread-suffix focus has no outgoing edge in @p id.
+	 *
+	 * The four choice relations are empty from an unassigned focus: a read has
+	 * no RF and therefore no FR, while a write has neither readers nor a CO
+	 * placement. PO is outgoing-empty because the caller separately verifies
+	 * that the focus is the current thread suffix. Unknown bases fail closed.
+	 */
+	[[nodiscard]] auto focusFlow(PredicateId id, FocusKind focus,
+				    std::vector<std::int8_t> &memo) const -> FocusFlow
+	{
+		if (memo[id] >= 0)
+			return static_cast<FocusFlow>(memo[id]);
+		if (memo[id] == -2)
+			return FocusFlow::Other;
+		memo[id] = -2;
+		const auto &predicate = model_.predicates()[id];
+		FocusFlow flow = FocusFlow::Other;
+		if (predicate.kind == Predicate::Kind::Base) {
+			if (predicate.name == "0")
+				flow = FocusFlow::Empty;
+			else if (predicate.name == "id")
+				flow = FocusFlow::SelfOnly;
+			else if (predicate.name == "po" || predicate.name == "rf" ||
+				 predicate.name == "fr" || predicate.name == "co" ||
+				 predicate.name == "rmw" || predicate.name == "tc" ||
+				 predicate.name == "tj")
+				flow = FocusFlow::Empty;
+		} else {
+			const auto operand = [&](std::size_t index) {
+				return focusFlow(predicate.operands[index], focus, memo);
+			};
+			switch (predicate.kind) {
+			case Predicate::Kind::Alias:
+			case Predicate::Kind::TransitiveClosure:
+				flow = operand(0);
+				break;
+			case Predicate::Kind::Union: {
+				const auto lhs = operand(0), rhs = operand(1);
+				flow = lhs == FocusFlow::Other || rhs == FocusFlow::Other
+					       ? FocusFlow::Other
+					       : lhs == FocusFlow::SelfOnly || rhs == FocusFlow::SelfOnly
+						       ? FocusFlow::SelfOnly
+						       : FocusFlow::Empty;
+				break;
+			}
+			case Predicate::Kind::Intersection: {
+				const auto lhs = operand(0), rhs = operand(1);
+				flow = lhs == FocusFlow::Empty || rhs == FocusFlow::Empty
+					       ? FocusFlow::Empty
+					       : lhs == FocusFlow::SelfOnly || rhs == FocusFlow::SelfOnly
+						       ? FocusFlow::SelfOnly
+						       : FocusFlow::Other;
+				break;
+			}
+			case Predicate::Kind::Difference:
+				flow = operand(0); /* Difference is a subset of its left operand. */
+				break;
+			case Predicate::Kind::Composition: {
+				const auto lhs = operand(0);
+				flow = lhs == FocusFlow::Empty
+					       ? FocusFlow::Empty
+					       : lhs == FocusFlow::SelfOnly ? operand(1) : FocusFlow::Other;
+				break;
+			}
+			case Predicate::Kind::Identity: {
+				std::vector<std::int8_t> setMemo(model_.predicates().size(), -1);
+				flow = focusMayBelong(predicate.operands[0], focus, setMemo)
+					       ? FocusFlow::SelfOnly
+					       : FocusFlow::Empty;
+				break;
+			}
+			case Predicate::Kind::Optional:
+				flow = operand(0) == FocusFlow::Other ? FocusFlow::Other
+								      : FocusFlow::SelfOnly;
+				break;
+			case Predicate::Kind::ReflexiveTransitiveClosure:
+				flow = operand(0) == FocusFlow::Other ? FocusFlow::Other
+								      : FocusFlow::SelfOnly;
+				break;
+			default:
+				flow = FocusFlow::Other;
+				break;
+			}
+		}
+		memo[id] = static_cast<std::int8_t>(flow);
+		return flow;
+	}
+
+	[[nodiscard]] auto provesFocusSink(PredicateId id, FocusKind focus,
+					 std::vector<std::int8_t> &memo) const -> bool
+	{
+		return focusFlow(id, focus, memo) == FocusFlow::Empty;
+	}
+
+	void buildPreventiveOrders()
+	{
+		for (const auto &check : model_.checks()) {
+			if (check.kind != Statement::CheckKind::Acyclic)
+				continue;
+			PreventiveOrderCertificate certificate{.order = check.predicate};
+			std::vector<std::int8_t> choiceMemo(model_.predicates().size(), -1);
+			if (!collectPreventiveSeed(check.predicate, certificate, choiceMemo))
+				continue;
+			if (certificate.rfMode == PreventiveRfMode::None &&
+			    !certificate.includesFr && !certificate.includesCo)
+				continue;
+			std::vector<std::int8_t> readMemo(model_.predicates().size(), -1);
+			std::vector<std::int8_t> writeMemo(model_.predicates().size(), -1);
+			certificate.unassignedReadSink =
+				provesFocusSink(check.predicate, FocusKind::Read, readMemo);
+			certificate.unplacedWriteSink =
+				provesFocusSink(check.predicate, FocusKind::Write, writeMemo);
+			std::vector<bool> lazyCone(model_.predicates().size());
+			std::vector<bool> lazyVisiting(model_.predicates().size());
+			certificate.lazyReachSupported =
+				collectLazyCone(check.predicate, lazyCone, lazyVisiting);
+			preventiveOrders_.push_back(certificate);
+		}
+	}
+
+	[[nodiscard]] auto collectUnionBases(PredicateId id, std::set<std::string> &bases,
+					     std::vector<bool> &visiting) const -> bool
+	{
+		if (visiting[id])
+			return false;
+		const auto &predicate = model_.predicates()[id];
+		if (predicate.kind == Predicate::Kind::Base) {
+			bases.insert(predicate.name);
+			return true;
+		}
+		if (predicate.kind != Predicate::Kind::Alias &&
+		    predicate.kind != Predicate::Kind::Union &&
+		    predicate.kind != Predicate::Kind::TransitiveClosure)
+			return false;
+		visiting[id] = true;
+		const auto result =
+			std::ranges::all_of(predicate.operands, [&](const auto operand) {
+				return collectUnionBases(operand, bases, visiting);
+			});
+		visiting[id] = false;
+		return result;
+	}
+
+	[[nodiscard]] auto isIntersectionOf(PredicateId id, std::string_view lhs,
+					    std::string_view rhs) const -> bool
+	{
+		const auto &predicate = model_.predicates()[id];
+		return predicate.kind == Predicate::Kind::Intersection &&
+		       ((isBase(predicate.operands[0], lhs) &&
+			 isBase(predicate.operands[1], rhs)) ||
+			(isBase(predicate.operands[0], rhs) && isBase(predicate.operands[1], lhs)));
+	}
+
+	[[nodiscard]] auto isPlainRmwAtomicity(PredicateId id) const -> bool
+	{
+		const auto &root = model_.predicates()[id];
+		if (root.kind != Predicate::Kind::Intersection)
+			return false;
+		const auto matches = [&](PredicateId rmw, PredicateId sequence) {
+			if (!isBase(rmw, "rmw"))
+				return false;
+			const auto &composition = model_.predicates()[sequence];
+			return composition.kind == Predicate::Kind::Composition &&
+			       isIntersectionOf(composition.operands[0], "fr", "ext") &&
+			       isIntersectionOf(composition.operands[1], "co", "ext");
+		};
+		return matches(root.operands[0], root.operands[1]) ||
+		       matches(root.operands[1], root.operands[0]);
+	}
+
+	void buildSCValueExplorationCertificate()
+	{
+		if (model_.hostProfile() != HostProfile::SC)
+			return;
+		constexpr std::array required = {"co", "fr", "po", "rf", "tc", "tj"};
+		bool foundOrder{};
+		for (const auto &check : model_.checks()) {
+			if (check.kind == Statement::CheckKind::Acyclic && !foundOrder) {
+				std::set<std::string> bases;
+				std::vector<bool> visiting(model_.predicates().size());
+				if (!collectUnionBases(check.predicate, bases, visiting) ||
+				    !std::ranges::equal(bases, required))
+					return;
+				foundOrder = true;
+				continue;
+			}
+			if (check.kind != Statement::CheckKind::Empty ||
+			    !isPlainRmwAtomicity(check.predicate))
+				return;
+		}
+		scValueExploration_ = foundOrder;
 	}
 
 	const NormalizedModel &model_;
@@ -393,6 +705,8 @@ private:
 	std::vector<bool> domainIndependent_;
 	std::vector<std::optional<PredicateId>> lazyCycleRoots_;
 	std::vector<bool> lazyCycleElided_;
+	std::vector<PreventiveOrderCertificate> preventiveOrders_;
+	bool scValueExploration_{};
 	std::vector<Diagnostic> diagnostics_;
 };
 

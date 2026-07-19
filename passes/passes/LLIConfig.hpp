@@ -56,6 +56,16 @@ struct LLIConfig {
 	bool skipGenmcStdBuild{};
 	VSet<std::string> extraInput;
 	std::string programEntryFun;
+	bool finiteSkeletonStats{};
+	bool finiteSkeletonStatsOnly{};
+	bool finiteSkeletonSolveOne{};
+	std::string finiteSkeletonFirstModel{};
+	unsigned finiteSkeletonSolveMax{1};
+	bool finiteSkeletonDisableTheoryCores{};
+	bool finiteSkeletonDisableGraphBlocking{};
+	std::string finiteSkeletonReplayOutput{};
+	bool finiteSymbolicErrors{};
+	unsigned finiteSymbolicMax{10000};
 };
 
 #endif /* GENMC_LLI_CONFIG_HPP */

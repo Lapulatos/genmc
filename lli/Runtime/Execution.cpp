@@ -3230,7 +3230,7 @@ void Interpreter::callMutexLock(Function *F, const std::vector<GenericValue> &Ar
 	Type *typ = F->getReturnType();
 	GenericValue result;
 
-	handleLock(ptr, getTypeSize(typ), &*specialDeps);
+	handleLock(ptr, getTypeSize(typ), specialDeps.get());
 
 	/*
 	 * We need to return a result anyway, because even if the current thread
@@ -3250,7 +3250,7 @@ void Interpreter::callMutexUnlock(Function *F, const std::vector<GenericValue> &
 	Type *typ = F->getReturnType();
 	GenericValue result;
 
-	handleUnlock(ptr, getTypeSize(typ), &*specialDeps);
+	handleUnlock(ptr, getTypeSize(typ), specialDeps.get());
 
 	result.IntVal = APInt(typ->getIntegerBitWidth(), 0); /* Success */
 	returnValueToCaller(F->getReturnType(), result);

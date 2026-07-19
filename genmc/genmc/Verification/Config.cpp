@@ -69,8 +69,18 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 		errors.emplace_back("--cat-fast-cycle-checks requires --model-file.");
 	if (catPreventivePruning && !modelFile)
 		errors.emplace_back("--cat-preventive-pruning requires --model-file.");
+	if (catConflictCores && !catPreventivePruning)
+		errors.emplace_back("--cat-conflict-cores requires --cat-preventive-pruning.");
+	if (catFocusReach && !catPreventivePruning)
+		errors.emplace_back("--cat-focus-reach requires --cat-preventive-pruning.");
 	if (catOracle && !modelFile)
 		errors.emplace_back("--cat-oracle requires --model-file.");
+	if (scRvfExploration && !modelFile)
+		errors.emplace_back("SC RVF exploration requires --model-file.");
+	if (scRvfDisableQuotient && !scRvfExploration)
+		errors.emplace_back("--sc-rvf-disable-quotient requires --sc-rvf-exploration.");
+	if (scRvfAnnotatedReads && !scRvfExploration)
+		errors.emplace_back("--sc-rvf-annotated-reads requires --sc-rvf-exploration.");
 
 	/* Check exploration options */
 	if (modelFile.has_value()) {
@@ -252,10 +262,68 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 		}
 	}
 	if (catPreventivePruning &&
-	    (!useCaatBackend || !caatModel || !caatModel->certifiedAdaptiveOffline() ||
-	     caatModel->certifiedCandidateProfile()))
+	    (!useCaatBackend || !caatModel || !caatAnalysis ||
+	     caatModel->certifiedCandidateProfile() || caatAnalysis->preventiveOrders().empty()))
 		errors.emplace_back(
-			"--cat-preventive-pruning requires the exact bundled recursive PSO model.");
+			"--cat-preventive-pruning requires a structurally certified acyclic "
+			"RF/FR/CO order.");
+	if (catDisableAdaptiveOffline &&
+	    (!useCaatBackend || !caatModel || !caatAnalysis ||
+	     !caatModel->certifiedAdaptiveOffline()))
+		errors.emplace_back(
+			"--cat-disable-adaptive-offline requires a CAAT model with the "
+			"adaptive-offline structural certificate.");
+	if (catPrimitiveCache &&
+	    (!useCaatBackend || !caatModel || !caatAnalysis ||
+	     !caatModel->certifiedAdaptiveOffline()))
+		errors.emplace_back(
+			"--cat-primitive-cache requires a CAAT model with the "
+			"adaptive-offline structural certificate.");
+	if (catFastPrimitiveBuild &&
+	    (!useCaatBackend || !caatModel || !caatAnalysis ||
+	     !caatModel->certifiedAdaptiveOffline()))
+		errors.emplace_back(
+			"--cat-fast-primitive-build requires a CAAT model with the "
+			"adaptive-offline structural certificate.");
+	if (catFastCoherenceBuild &&
+	    (!useCaatBackend || !caatModel || !caatAnalysis ||
+	     !caatModel->certifiedAdaptiveOffline()))
+		errors.emplace_back(
+			"--cat-fast-coherence-build requires a CAAT model with the "
+			"adaptive-offline structural certificate.");
+	if (catFastDescriptorBuild &&
+	    (!useCaatBackend || !caatModel || !caatAnalysis ||
+	     !caatModel->certifiedAdaptiveOffline()))
+		errors.emplace_back(
+			"--cat-fast-descriptor-build requires a CAAT model with the "
+			"adaptive-offline structural certificate.");
+	if (catFastDescriptorReuse &&
+	    (!useCaatBackend || !caatModel || !caatAnalysis ||
+	     !caatModel->certifiedAdaptiveOffline()))
+		errors.emplace_back(
+			"--cat-fast-descriptor-reuse requires a CAAT model with the "
+			"adaptive-offline structural certificate.");
+	if (catFastChecks && (!useCaatBackend || !caatModel || !caatAnalysis))
+		errors.emplace_back("--cat-fast-checks requires the CAAT backend.");
+	if (catFastComposition && (!useCaatBackend || !caatModel || !caatAnalysis))
+		errors.emplace_back("--cat-fast-composition requires the CAAT backend.");
+	if (catFastCycleChecks && (!useCaatBackend || !caatModel || !caatAnalysis))
+		errors.emplace_back("--cat-fast-cycle-checks requires the CAAT backend.");
+	if (scRvfExploration && (!caatAnalysis || !caatAnalysis->certifiesSCValueExploration()))
+		errors.emplace_back(
+			"SC RVF exploration requires a structurally certified plain-read/write "
+			"SC model.");
+	if (scRvfExploration && mode != ExplorationMode::verify)
+		errors.emplace_back("SC RVF exploration requires exhaustive verification mode.");
+	if (scRvfExploration && bound.has_value())
+		errors.emplace_back("SC RVF exploration does not support context or round bounds.");
+	if (scRvfExploration && checkLiveness)
+		errors.emplace_back(
+			"SC RVF exploration currently supports local safety properties only.");
+	if (scRvfExploration && catPreventivePruning)
+		errors.emplace_back(
+			"SC RVF exploration cannot be combined with CAT preventive pruning until "
+			"their completeness arguments are composed.");
 	if (LAPOR) {
 		errors.emplace_back("LAPOR is temporarily disabled.");
 	}

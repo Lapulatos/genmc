@@ -40,7 +40,10 @@ ThreadPool::ThreadPool(const LLIConfig &lliConfig, const std::shared_ptr<const C
 	auto execGraph = conf->isDepTrackingModel ? std::make_unique<DepExecutionGraph>(dummyCfg)
 						  : std::make_unique<ExecutionGraph>(dummyCfg);
 	auto exec = std::make_unique<GenMCDriver::Execution>(
-		std::move(execGraph), std::move(WorkList()), std::move(ChoiceMap()));
+		std::move(execGraph), std::move(WorkList()), std::move(ChoiceMap()),
+		conf->scRvfExploration && conf->scRvfProgramSupported
+			? std::optional<genmc::rvf::Frame>(std::in_place)
+			: std::nullopt);
 	submit(std::move(exec));
 
 	/* Spawn workers */
@@ -51,8 +54,8 @@ ThreadPool::ThreadPool(const LLIConfig &lliConfig, const std::shared_ptr<const C
 
 		auto dw = GenMCDriver::create(conf, this);
 		std::string buf;
-		auto EE = llvm::Interpreter::create(
-			std::move(newmod), std::move(newMI), &*dw, &lliConfig, &buf);
+		auto EE = llvm::Interpreter::create(std::move(newmod), std::move(newMI), &*dw,
+						    &lliConfig, &buf);
 		addWorker(i, std::move(dw), std::move(EE), threadFun);
 	}
 #endif
@@ -122,10 +125,18 @@ auto ThreadPool::tryStealOtherQueue() -> ThreadPool::TaskT
 auto ThreadPool::popTask() -> ThreadPool::TaskT
 {
 	while (true) {
-		if (auto t = tryPopPoolQueue())
+		if (shouldHalt())
+			return nullptr;
+		if (auto t = tryPopPoolQueue()) {
+			if (shouldHalt())
+				return nullptr;
 			return t;
-		if (auto t = tryStealOtherQueue())
+		}
+		if (auto t = tryStealOtherQueue()) {
+			if (shouldHalt())
+				return nullptr;
 			return t;
+		}
 
 		std::unique_lock<std::mutex> lock(stateMtx_);
 		if (shouldHalt() || getRemainingTasks() == 0)

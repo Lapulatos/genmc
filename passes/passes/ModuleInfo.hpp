@@ -65,9 +65,28 @@ template <typename K, typename V> struct AnnotationInfo {
 	using Annot = std::pair<AssumeType, value_ptr<SExpr<V>, SExprCloner<V>>>;
 	using AnnotUM = std::unordered_map<K, Annot>;
 
-	void clear() { annotMap.clear(); }
+	void clear()
+	{
+		annotMap.clear();
+		totalAssumes = 0;
+		exactlyOneSupportedPlainLoad = 0;
+		rejectedSourceShape = 0;
+		rejectedNonPlainAtomic = 0;
+		duplicateLoadConflicts = 0;
+	}
+
+	[[nodiscard]] bool allAssumesHaveOneSupportedPlainLoad() const
+	{
+		return totalAssumes == exactlyOneSupportedPlainLoad && rejectedSourceShape == 0 &&
+		       rejectedNonPlainAtomic == 0 && duplicateLoadConflicts == 0;
+	}
 
 	AnnotUM annotMap;
+	std::uint64_t totalAssumes{};
+	std::uint64_t exactlyOneSupportedPlainLoad{};
+	std::uint64_t rejectedSourceShape{};
+	std::uint64_t rejectedNonPlainAtomic{};
+	std::uint64_t duplicateLoadConflicts{};
 };
 
 enum class BarrierRetResult : std::uint8_t { Unused, Used };

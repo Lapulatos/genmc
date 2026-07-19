@@ -41,12 +41,21 @@ public:
 	/** Returns the next thread to run according to the specified policy  */
 	[[nodiscard]] auto schedule(ExecutionGraph &g, std::span<Action> runnable)
 		-> std::optional<int>;
+	/** Replay a witness, then extend writes before selecting one unprocessed read. */
+	[[nodiscard]] auto scheduleRVF(ExecutionGraph &g, std::span<Action> runnable,
+				       std::span<const Event> processedReads) -> std::optional<int>;
 
 	/** Prioritizes thread of POS */
 	void prioritize(Event pos) { threadPrios_ = {pos}; }
 
 	/** Adds LAB to the cache. Should be called before LAB is added to G. */
 	void cacheEventLabel(const ExecutionGraph &g, const EventLabel *lab);
+
+	/** Returns the number of cloned labels retained in the replay-prefix cache. */
+	[[nodiscard]] auto getCachedLabelCount() const -> std::uint64_t
+	{
+		return cachedLabelCount_;
+	}
 
 	/** Returns the next labels to add by inspecting the cache. If the execution is full,
 	 * returns nullopt. If no cached information exists, returns Some(nullptr) */
@@ -131,6 +140,9 @@ private:
 
 	/** Opt: Cached labels for optimized scheduling */
 	ValuePrefixT seenPrefixes;
+
+	/** Monotone count of label clones currently owned by `seenPrefixes`. */
+	std::uint64_t cachedLabelCount_{};
 };
 
 class ArbitraryScheduler : public Scheduler {

@@ -1,4 +1,6 @@
 set(PASSES_SOURCES
+  passes/FiniteEventSkeleton.cpp
+  passes/FiniteSkeletonReplay.cpp
   passes/InternalFunctions.cpp
   passes/LLVMModule.cpp
   passes/LLVMUtils.cpp

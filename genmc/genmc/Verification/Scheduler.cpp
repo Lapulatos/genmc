@@ -207,6 +207,30 @@ auto Scheduler::schedule(ExecutionGraph &g, std::span<Action> runnable) -> std::
 	return rescheduleReads(g);
 }
 
+auto Scheduler::scheduleRVF(ExecutionGraph &g, std::span<Action> runnable,
+			    std::span<const Event> processedReads) -> std::optional<int>
+{
+	if (auto replay = scheduleReplay(g, runnable))
+		return replay;
+	if (auto priority = schedulePrioritized(g))
+		return priority;
+	const auto eligible = [&](const Action &action) {
+		return isSchedulable(g, action.event.thread) &&
+		       (action.kind == ActionKind::NonLoad ||
+			std::ranges::find(processedReads, action.event.next()) ==
+				processedReads.end());
+	};
+	const auto nonLoad = std::ranges::find_if(runnable, [&](const auto &action) {
+		return eligible(action) && action.kind == ActionKind::NonLoad;
+	});
+	if (nonLoad != runnable.end())
+		return nonLoad->event.thread;
+	const auto read = std::ranges::find_if(runnable, eligible);
+	if (read != runnable.end())
+		return read->event.thread;
+	return rescheduleReads(g);
+}
+
 static auto extractValPrefix(const ExecutionGraph &g, Event pos)
 	-> std::pair<std::vector<SVal>, std::vector<Event>>
 {
@@ -281,6 +305,7 @@ void Scheduler::cacheEventLabel(const ExecutionGraph &g, const EventLabel *lab)
 			data = retrieveCachedSuccessors(cacheKey, seenVals);
 		}
 		data->push_back(std::move(labs[i]));
+		++cachedLabelCount_;
 	}
 }
 

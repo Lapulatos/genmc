@@ -30,6 +30,8 @@ public:
 
 	/** Returns whether this worklist is empty */
 	[[nodiscard]] auto empty() const -> bool { return wlist_.empty(); }
+	/** Returns the number of retained revisit items. */
+	[[nodiscard]] auto size() const -> std::size_t { return wlist_.size(); }
 
 	/** Adds an item to the worklist */
 	void add(auto &&item) { wlist_.emplace_back(std::move(item)); }

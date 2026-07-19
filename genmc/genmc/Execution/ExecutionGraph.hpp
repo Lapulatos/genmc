@@ -819,6 +819,14 @@ public:
 
 	/* Returns the number of threads currently in the graph */
 	auto getNumThreads() const -> unsigned int { return events.size(); };
+	/** Returns the number of labels currently retained across all threads. */
+	[[nodiscard]] auto getNumLabels() const -> std::uint64_t
+	{
+		std::uint64_t total{};
+		for (const auto &thread : events)
+			total += thread.size();
+		return total;
+	}
 
 	/* Returns the size of the thread tid */
 	auto getThreadSize(int tid) const -> unsigned int { return events[tid].size(); };

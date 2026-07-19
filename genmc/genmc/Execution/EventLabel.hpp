@@ -240,6 +240,14 @@ public:
 		revisitable = true;
 	}
 
+	/** Clear model-derived caches while preserving graph identity and semantic edges. */
+	void clearDerivedState()
+	{
+		calculatedRels.clear();
+		calculatedViews.clear();
+		prefixView = nullptr;
+	}
+
 private:
 	friend class ExecutionGraph;
 	friend class DepExecutionGraph;

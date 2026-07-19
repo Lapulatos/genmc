@@ -89,6 +89,12 @@ std::unique_ptr<ModuleInfo> ModuleInfo::clone(const llvm::Module &mod) const
 	for (auto &kv : annotInfo.annotMap)
 		info->annotInfo.annotMap[kv.first] =
 			std::make_pair(kv.second.first, kv.second.second->clone());
+	info->annotInfo.totalAssumes = annotInfo.totalAssumes;
+	info->annotInfo.exactlyOneSupportedPlainLoad =
+		annotInfo.exactlyOneSupportedPlainLoad;
+	info->annotInfo.rejectedSourceShape = annotInfo.rejectedSourceShape;
+	info->annotInfo.rejectedNonPlainAtomic = annotInfo.rejectedNonPlainAtomic;
+	info->annotInfo.duplicateLoadConflicts = annotInfo.duplicateLoadConflicts;
 
 	return info;
 }

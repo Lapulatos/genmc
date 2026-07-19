@@ -23,6 +23,23 @@
 
 namespace cat {
 
+/** RF contribution admitted by an exact generation-time acyclicity certificate. */
+enum class PreventiveRfMode : std::uint8_t { None, All, External };
+
+/** One structurally proven acyclic order whose choice edges can be reconstructed. */
+struct PreventiveOrderCertificate {
+	PredicateId order{};
+	PreventiveRfMode rfMode{PreventiveRfMode::None};
+	bool includesFr{};
+	bool includesCo{};
+	/** Fresh thread-suffix read without RF has no outgoing order edge. */
+	bool unassignedReadSink{};
+	/** Fresh thread-suffix write without a CO placement/readers has no outgoing order edge. */
+	bool unplacedWriteSink{};
+	/** The selected root is supported by the exact directional lazy interpreter. */
+	bool lazyReachSupported{};
+};
+
 /** One signed dependency from an operand predicate to its defining user. */
 struct Dependency {
 	PredicateId source{};
@@ -52,12 +69,16 @@ public:
 		      std::vector<std::vector<PredicateId>> strata,
 		      std::vector<std::uint32_t> componentOf, std::vector<bool> domainIndependent,
 		      std::vector<std::optional<PredicateId>> lazyCycleRoots,
-		      std::vector<bool> lazyCycleElided)
+		      std::vector<bool> lazyCycleElided,
+		      std::vector<PreventiveOrderCertificate> preventiveOrders,
+		      bool scValueExploration)
 		: dependencies_(std::move(dependencies)), strata_(std::move(strata)),
 		  componentOf_(std::move(componentOf)),
 		  domainIndependent_(std::move(domainIndependent)),
 		  lazyCycleRoots_(std::move(lazyCycleRoots)),
-		  lazyCycleElided_(std::move(lazyCycleElided))
+		  lazyCycleElided_(std::move(lazyCycleElided)),
+		  preventiveOrders_(std::move(preventiveOrders)),
+		  scValueExploration_(scValueExploration)
 	{}
 
 	/** Return signed edges in stable target/operand order. */
@@ -81,8 +102,7 @@ public:
 		return domainIndependent_;
 	}
 	/** Per-check root admitted for exact lazy cycle evaluation, if any. */
-	[[nodiscard]] auto lazyCycleRoots() const
-		-> const std::vector<std::optional<PredicateId>> &
+	[[nodiscard]] auto lazyCycleRoots() const -> const std::vector<std::optional<PredicateId>> &
 	{
 		return lazyCycleRoots_;
 	}
@@ -90,6 +110,17 @@ public:
 	[[nodiscard]] auto lazyCycleElided() const -> const std::vector<bool> &
 	{
 		return lazyCycleElided_;
+	}
+	/** Acyclic checked relations with exactly reconstructible RF/FR/CO deltas. */
+	[[nodiscard]] auto preventiveOrders() const
+		-> const std::vector<PreventiveOrderCertificate> &
+	{
+		return preventiveOrders_;
+	}
+	/** Whether structural axioms are exactly SC for plain reads/writes. */
+	[[nodiscard]] auto certifiesSCValueExploration() const -> bool
+	{
+		return scValueExploration_;
 	}
 
 private:
@@ -99,6 +130,8 @@ private:
 	std::vector<bool> domainIndependent_;
 	std::vector<std::optional<PredicateId>> lazyCycleRoots_;
 	std::vector<bool> lazyCycleElided_;
+	std::vector<PreventiveOrderCertificate> preventiveOrders_;
+	bool scValueExploration_{};
 };
 
 /** Result of signed dependency and CAAT admissibility analysis. */

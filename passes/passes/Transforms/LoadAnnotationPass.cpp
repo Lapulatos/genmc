@@ -149,7 +149,19 @@ auto LoadAnnotationAnalysis::run(Function &F, FunctionAnalysisManager &FAM) -> R
 	for (auto &i : instructions(F)) {
 		auto *call = llvm::dyn_cast<llvm::CallInst>(&i);
 		if (call && isAssumeFunction(getCalledFunOrStripValName(*call))) {
-			auto loads = getAnnotatableLoads(call);
+			++result_.totalAssumes;
+			auto sourceLoads = getSourceLoads(call);
+			auto loads = filterAnnotatableFromSource(call, sourceLoads);
+			if (sourceLoads.size() != 1 || loads.size() != 1) {
+				++result_.rejectedSourceShape;
+			} else if (auto *load = llvm::dyn_cast<llvm::LoadInst>(loads.front());
+				   !load || !load->isAtomic()) {
+				++result_.rejectedNonPlainAtomic;
+			} else if (result_.annotMap.contains(loads.front())) {
+				++result_.duplicateLoadConflicts;
+			} else {
+				++result_.exactlyOneSupportedPlainLoad;
+			}
 			for (auto *l : loads) {
 				auto type = AssumeType(extractAssumeArgument(call));
 				result_.annotMap[l] = std::make_pair(type, annotator.annotate(l));

@@ -71,6 +71,96 @@ add_test(
             ${CMAKE_CURRENT_SOURCE_DIR}
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
+add_test(
+    NAME finite-skeleton-error-replay
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/finite-skeleton-error-replay.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/finite-replay-smoke.ll
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME finite-skeleton-strict-admission
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/finite-skeleton-strict-admission.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/finite-unsupported-switch.ll
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/finite-unsupported-gep.ll
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME finite-skeleton-verdict-oracle
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/finite-skeleton-verdict-oracle.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/finite-replay-smoke.ll
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/finite-safe-smoke.ll
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME sc-rvf-integration
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-integration.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/correct/litmus/IRIWish/variants/IRIWish0.c
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME sc-rvf-outcomes
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-outcomes.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME sc-rvf-fallback
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-fallback.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/wrong/safety/fib_bench/variants/fib_bench0.c
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME sc-rvf-mutex-outcomes
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-mutex-outcomes.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/rvf-mutex-outcome.inc
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME sc-rvf-iriwish-outcomes
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-iriwish-outcomes.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/rvf-iriwish-outcome.inc
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME sc-rvf-mutex-iriwish-outcomes
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-iriwish-outcomes.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/rvf-iriwish-outcome.inc
+            RVF_IRIWISH_WITH_MUTEX
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME sc-rvf-reduced-outcomes
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-reduced-outcomes.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME sc-rvf-assume-outcomes
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-assume-outcomes.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
 
 # Unit tests
 add_subdirectory(unit)

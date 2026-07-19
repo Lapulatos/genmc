@@ -76,6 +76,24 @@ struct Config {
 	bool catFastCycleChecks{};
 	/** Filter exact recursive-PSO RF/CO choices by preventive reach reversal. */
 	bool catPreventivePruning{};
+	/** Replace V9 full-root preparation with certified focus-directed lazy reach. */
+	bool catFocusReach{};
+	/** Reuse bounded positive cycle cores before direct preventive-root checks. */
+	bool catConflictCores{};
+	/** Explore structurally certified SC models by reads-value-from representatives. */
+	bool scRvfExploration{};
+	/** Keep RVF setup/instrumentation but delegate every read to native RF-DPOR. */
+	bool scRvfDisableQuotient{};
+	/** Experimental: let RVF own supported annotated plain reads instead of native IPR. */
+	bool scRvfAnnotatedReads{};
+	/** Whole-program gate populated after LLVM transformation, before any exploration. */
+	bool scRvfProgramSupported{true};
+	/** Stable diagnostic when the whole task fails open to native RF-DPOR. */
+	std::string scRvfStaticFallbackReason{};
+	/** User-requested reductions retained solely for native warning/error semantics. */
+	bool scRvfNativeSymmetryReduction{};
+	/** User-requested IPR retained solely for annotation-related warning/error semantics. */
+	bool scRvfNativeIpr{};
 	/** Recompute and compare every incremental query with the Phase 2 oracle. */
 	bool catOracle{};
 	/** Whether the user also explicitly selected one of GenMC's built-in models. */

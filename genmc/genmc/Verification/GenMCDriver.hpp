@@ -20,6 +20,7 @@
 #include "genmc/Verification/ChoiceMap.hpp"
 #include "genmc/Verification/Config.hpp"
 #include "genmc/Verification/Relinche/LinearizabilityChecker.hpp"
+#include "genmc/Verification/SCReadsValueFromFrame.hpp"
 #include "genmc/Verification/Scheduler.hpp"
 #include "genmc/Verification/VerificationError.hpp"
 #include "genmc/Verification/VerificationResult.hpp"
@@ -64,7 +65,8 @@ public:
 	/** Represents the execution at a given point */
 	struct Execution {
 		Execution() = delete;
-		Execution(std::unique_ptr<ExecutionGraph> g, LocalQueueT &&w, ChoiceMap &&cm);
+		Execution(std::unique_ptr<ExecutionGraph> g, LocalQueueT &&w, ChoiceMap &&cm,
+			  std::optional<genmc::rvf::Frame> rvf = std::nullopt);
 
 		Execution(const Execution &) = delete;
 		auto operator=(const Execution &) -> Execution & = delete;
@@ -89,6 +91,7 @@ public:
 		std::unique_ptr<ExecutionGraph> graph;
 		LocalQueueT workqueue;
 		ChoiceMap choices;
+		std::optional<genmc::rvf::Frame> rvf;
 	};
 
 	/** Scheduler result type */
@@ -132,6 +135,10 @@ public:
 
 	/** Returns to the interpreter the next thread to run (nullopt if none) */
 	auto scheduleNext(std::span<Action> runnable) -> ScheduleResult;
+	/** Add one revisit and update the opt-in candidate-space census. */
+	void enqueueRevisit(std::unique_ptr<Revisit> revisit);
+	/** Emit a bounded progress record so BenchExec TIMEOUT logs retain census data. */
+	void maybeReportExplorationProgress();
 
 	/** Attemps to complete the execution by inspecting the cache.
 	 * Returns whether it succeeded. */
@@ -403,6 +410,8 @@ private:
 	HandleResult<std::monostate> handleThreadKill(std::unique_ptr<ThreadKillLabel> lab);
 	HandleResult<std::monostate> handleBlock(std::unique_ptr<BlockLabel> bLab);
 	HandleResult<SVal> handleLoad(std::unique_ptr<ReadLabel> rLab, std::optional<SVal> oldVal);
+	HandleResult<SVal> handleRVFLoad(std::unique_ptr<ReadLabel> rLab,
+					 std::optional<SVal> oldVal);
 	HandleResult<bool> handleStore(std::unique_ptr<WriteLabel> wLab,
 				       std::optional<SVal> oldVal);
 	HandleResult<std::monostate> handleFence(std::unique_ptr<FenceLabel> fLab);
@@ -732,6 +741,17 @@ private:
 
 	/** Verification result to be returned to caller */
 	VerificationResult result{};
+	/** Aggregate activity threshold for the next opt-in progress record. */
+	std::uint64_t nextExplorationProgress_ = 100000;
+	/** Observation-only phase attribution, updated only under --cat-stats. */
+	std::uint64_t rfCandidateNanoseconds_{};
+	std::uint64_t coCandidateNanoseconds_{};
+	std::uint64_t validityNanoseconds_{};
+	std::uint64_t restoreRevisitNanoseconds_{};
+	std::uint64_t backwardRestoreNanoseconds_{};
+	std::uint64_t forwardRestoreNanoseconds_{};
+	std::uint64_t validityAccepted_{};
+	std::uint64_t validityRejected_{};
 
 	/** Whether we are stopping the exploration (e.g., due to an error found) */
 	bool shouldHalt = false;

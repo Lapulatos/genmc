@@ -143,9 +143,106 @@ TEST(ConfigModelFileTest, SelectsRecursiveCaatBackend)
 	std::filesystem::remove(path);
 }
 
-/* Preventive pruning is a closed-world recursive-PSO certificate, not a host-checker
- * shortcut or a filename-based model selection. */
-TEST(ConfigModelFileTest, CertifiesPreventivePruningOnlyForRecursivePSO)
+TEST(ConfigModelFileTest, RequiresStructuralCertificateAndDefersRVFOverrides)
+{
+	const auto acceptedPath =
+		std::filesystem::path(testing::TempDir()) / "genmc-config-rvf-structural.cat";
+	{
+		std::ofstream output(acceptedPath);
+		output << "RenamedSC\nlet a = co | rf\nlet b = tj | (fr | tc)\n"
+			  "acyclic (b | po | a)\n";
+	}
+	Config accepted;
+	accepted.modelFile = acceptedPath;
+	accepted.scRvfExploration = true;
+	accepted.symmetryReduction = true;
+	accepted.instructionCaching = true;
+	accepted.disableBAM = false;
+	accepted.ipr = true;
+	accepted.estimate = true;
+	accepted.finalWrite = true;
+	std::vector<std::string> warnings;
+	auto acceptedStatus = accepted.validate(warnings);
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(acceptedStatus));
+	ASSERT_NE(accepted.caatAnalysis, nullptr);
+	EXPECT_TRUE(accepted.caatAnalysis->certifiesSCValueExploration());
+	/* Program-level certification happens after transformation. Validation must not
+	 * mutate native options before an unsupported program can fail open exactly. */
+	EXPECT_TRUE(accepted.symmetryReduction);
+	EXPECT_TRUE(accepted.instructionCaching);
+	EXPECT_FALSE(accepted.disableBAM);
+	EXPECT_TRUE(accepted.ipr);
+	EXPECT_TRUE(accepted.estimate);
+	EXPECT_TRUE(accepted.finalWrite);
+
+	Config bounded;
+	bounded.modelFile = acceptedPath;
+	bounded.scRvfExploration = true;
+	bounded.bound = 2U;
+	warnings.clear();
+	auto boundedStatus = bounded.validate(warnings);
+	EXPECT_TRUE(hasError(boundedStatus, "does not support context or round bounds"));
+
+	Config liveness;
+	liveness.modelFile = acceptedPath;
+	liveness.scRvfExploration = true;
+	liveness.checkLiveness = true;
+	warnings.clear();
+	auto livenessStatus = liveness.validate(warnings);
+	EXPECT_TRUE(hasError(livenessStatus, "local safety properties only"));
+
+	auto rejectedPath = createModelFile("genmc-config-rvf-incomplete.cat");
+	Config rejected;
+	rejected.modelFile = rejectedPath;
+	rejected.scRvfExploration = true;
+	warnings.clear();
+	auto rejectedStatus = rejected.validate(warnings);
+	EXPECT_TRUE(hasError(rejectedStatus, "structurally certified plain-read/write SC"));
+	std::filesystem::remove(acceptedPath);
+	std::filesystem::remove(rejectedPath);
+}
+
+TEST(ConfigModelFileTest, QuotientDisabledControlRequiresRVFExploration)
+{
+	Config config;
+	config.scRvfDisableQuotient = true;
+	std::vector<std::string> warnings;
+	auto status = config.validate(warnings);
+	EXPECT_TRUE(hasError(status,
+			     "--sc-rvf-disable-quotient requires --sc-rvf-exploration"));
+}
+
+TEST(ConfigModelFileTest, AnnotatedReadExperimentRequiresRVFExploration)
+{
+	Config config;
+	config.scRvfAnnotatedReads = true;
+	std::vector<std::string> warnings;
+	auto status = config.validate(warnings);
+	EXPECT_TRUE(hasError(status,
+			     "--sc-rvf-annotated-reads requires --sc-rvf-exploration"));
+}
+
+TEST(ConfigModelFileTest, ConflictCoresRequirePreventiveCertificatePath)
+{
+	Config config;
+	config.catConflictCores = true;
+	std::vector<std::string> warnings;
+	auto status = config.validate(warnings);
+	EXPECT_TRUE(hasError(status, "--cat-conflict-cores requires --cat-preventive-pruning"));
+}
+
+TEST(ConfigModelFileTest, FocusReachRequiresPreventiveCertificatePath)
+{
+	Config config;
+	config.catFocusReach = true;
+	std::vector<std::string> warnings;
+	auto status = config.validate(warnings);
+	EXPECT_TRUE(hasError(status, "--cat-focus-reach requires --cat-preventive-pruning"));
+}
+
+/* Preventive pruning requires a structural CAT proof and never routes a generated
+ * SC/TSO candidate checker as the claimed optimization. */
+TEST(ConfigModelFileTest, CertifiesPreventivePruningFromAcyclicChoiceStructure)
 {
 	const auto modelRoot =
 		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
@@ -158,14 +255,39 @@ TEST(ConfigModelFileTest, CertifiesPreventivePruningOnlyForRecursivePSO)
 	EXPECT_TRUE(pso.useCaatBackend);
 	EXPECT_TRUE(pso.caatModel->certifiedAdaptiveOffline());
 	EXPECT_EQ(pso.caatModel->certifiedCandidateProfile(), std::nullopt);
+	EXPECT_TRUE(std::ranges::any_of(
+		pso.caatAnalysis->preventiveOrders(), [](const auto &certificate) {
+			return certificate.rfMode == cat::PreventiveRfMode::External &&
+			       certificate.unassignedReadSink && certificate.unplacedWriteSink &&
+			       certificate.lazyReachSupported;
+		}));
 	auto psoChecker = ConsistencyChecker::create(&pso);
 	EXPECT_NE(dynamic_cast<CATTSOChecker *>(psoChecker.get()), nullptr);
+
+	const auto renamedPath =
+		std::filesystem::path(testing::TempDir()) / "renamed-structural-preventive.cat";
+	{
+		std::ofstream renamed(renamedPath);
+		renamed << "(* @genmc host-profile tso *)\nRenamedPreventive\n"
+			   "let fixed = po | tc\nlet com = (ext & rf) | fr | co\n"
+			   "let order = fixed | com\n"
+			   "let rec closure = order | (order ; closure)\n"
+			   "irreflexive closure\n";
+	}
+	warnings.clear();
+	Config renamed;
+	renamed.modelFile = renamedPath;
+	renamed.catPreventivePruning = true;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(renamed.validate(warnings)));
+	ASSERT_NE(renamed.caatAnalysis, nullptr);
+	EXPECT_FALSE(renamed.caatAnalysis->preventiveOrders().empty());
+	std::filesystem::remove(renamedPath);
 
 	warnings.clear();
 	Config sc;
 	sc.modelFile = modelRoot / "recursive-sc.cat";
 	sc.catPreventivePruning = true;
-	EXPECT_TRUE(hasError(sc.validate(warnings), "exact bundled recursive PSO"));
+	EXPECT_TRUE(hasError(sc.validate(warnings), "structurally certified"));
 }
 
 /* A real generic checker query drives its worker-local incremental state. */
@@ -194,6 +316,215 @@ TEST(ConfigModelFileTest, ExercisesIncrementalCaatCheckerPath)
 	EXPECT_EQ(catChecker->incrementalStatistics()->insertions, 2U);
 	EXPECT_EQ(catChecker->incrementalStatistics()->rebuilds, 0U);
 	std::filesystem::remove(path);
+}
+
+/* The diagnostic switch changes only the certified small-graph synchronization policy. */
+TEST(ConfigModelFileTest, DisablesCertifiedAdaptiveOfflineHeuristic)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	Config config;
+	config.modelFile = modelRoot / "recursive-sc.cat";
+	config.catDisableAdaptiveOffline = true;
+	std::vector<std::string> warnings;
+	ASSERT_TRUE(std::holds_alternative<std::monostate>(config.validate(warnings)));
+	auto checker = ConsistencyChecker::create(&config);
+	auto *catChecker = dynamic_cast<CATSCChecker *>(checker.get());
+	ASSERT_NE(catChecker, nullptr);
+	ASSERT_NE(catChecker->incrementalStatistics(), nullptr);
+
+	CheckerTestGraph graph{{nullptr, checker.get(), true}};
+	EXPECT_TRUE(checker->isConsistent(graph));
+	addCheckerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
+	EXPECT_TRUE(checker->isConsistent(graph));
+	EXPECT_EQ(catChecker->incrementalStatistics()->initializations, 1U);
+	EXPECT_EQ(catChecker->incrementalStatistics()->insertions, 1U);
+	EXPECT_EQ(catChecker->incrementalStatistics()->adaptiveOfflineSelections, 0U);
+}
+
+TEST(ConfigModelFileTest, AdaptiveOfflineSwitchRequiresCertifiedCaatModel)
+{
+	Config missing;
+	missing.catDisableAdaptiveOffline = true;
+	std::vector<std::string> warnings;
+	EXPECT_TRUE(hasError(missing.validate(warnings),
+			     "--cat-disable-adaptive-offline requires --model-file"));
+
+	auto path = createModelFile("genmc-config-adaptive-offline-acyclic.cat");
+	Config acyclic;
+	acyclic.modelFile = path;
+	acyclic.catDisableAdaptiveOffline = true;
+	warnings.clear();
+	EXPECT_TRUE(hasError(acyclic.validate(warnings), "adaptive-offline structural certificate"));
+	std::filesystem::remove(path);
+}
+
+TEST(ConfigModelFileTest, PrimitiveCacheRequiresCertifiedCaatModel)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	Config certified;
+	certified.modelFile = modelRoot / "recursive-sc.cat";
+	certified.catPrimitiveCache = true;
+	std::vector<std::string> warnings;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(certified.validate(warnings)));
+
+	Config missing;
+	missing.catPrimitiveCache = true;
+	EXPECT_TRUE(hasError(missing.validate(warnings), "--cat-primitive-cache requires --model-file"));
+
+	auto path = createModelFile("genmc-config-primitive-cache-acyclic.cat");
+	Config acyclic;
+	acyclic.modelFile = path;
+	acyclic.catPrimitiveCache = true;
+	warnings.clear();
+	EXPECT_TRUE(hasError(acyclic.validate(warnings), "adaptive-offline structural certificate"));
+	std::filesystem::remove(path);
+}
+
+TEST(ConfigModelFileTest, FastPrimitiveBuildRequiresCertifiedCaatModel)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	Config certified;
+	certified.modelFile = modelRoot / "recursive-sc.cat";
+	certified.catFastPrimitiveBuild = true;
+	std::vector<std::string> warnings;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(certified.validate(warnings)));
+
+	Config missing;
+	missing.catFastPrimitiveBuild = true;
+	EXPECT_TRUE(hasError(missing.validate(warnings),
+			     "--cat-fast-primitive-build requires --model-file"));
+
+	auto path = createModelFile("genmc-config-fast-primitive-build-acyclic.cat");
+	Config acyclic;
+	acyclic.modelFile = path;
+	acyclic.catFastPrimitiveBuild = true;
+	warnings.clear();
+	EXPECT_TRUE(hasError(acyclic.validate(warnings), "adaptive-offline structural certificate"));
+	std::filesystem::remove(path);
+}
+
+TEST(ConfigModelFileTest, FastCoherenceBuildRequiresCertifiedCaatModel)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	Config certified;
+	certified.modelFile = modelRoot / "recursive-sc.cat";
+	certified.catFastCoherenceBuild = true;
+	std::vector<std::string> warnings;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(certified.validate(warnings)));
+
+	Config missing;
+	missing.catFastCoherenceBuild = true;
+	EXPECT_TRUE(hasError(missing.validate(warnings),
+			     "--cat-fast-coherence-build requires --model-file"));
+
+	auto path = createModelFile("genmc-config-fast-coherence-build-acyclic.cat");
+	Config acyclic;
+	acyclic.modelFile = path;
+	acyclic.catFastCoherenceBuild = true;
+	warnings.clear();
+	EXPECT_TRUE(hasError(acyclic.validate(warnings),
+			     "adaptive-offline structural certificate"));
+	std::filesystem::remove(path);
+}
+
+TEST(ConfigModelFileTest, FastDescriptorBuildRequiresPrimitiveCacheAndCertifiedModel)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	Config certified;
+	certified.modelFile = modelRoot / "recursive-sc.cat";
+	certified.catPrimitiveCache = true;
+	certified.catFastDescriptorBuild = true;
+	std::vector<std::string> warnings;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(certified.validate(warnings)));
+
+	Config missingCache = certified;
+	missingCache.catPrimitiveCache = false;
+	EXPECT_TRUE(hasError(missingCache.validate(warnings),
+			     "--cat-fast-descriptor-build requires --cat-primitive-cache"));
+
+	Config missingModel;
+	missingModel.catPrimitiveCache = true;
+	missingModel.catFastDescriptorBuild = true;
+	EXPECT_TRUE(hasError(missingModel.validate(warnings),
+			     "--cat-fast-descriptor-build requires --model-file"));
+}
+
+TEST(ConfigModelFileTest, FastDescriptorReuseRequiresPrimitiveCacheAndCertifiedModel)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	Config certified;
+	certified.modelFile = modelRoot / "recursive-sc.cat";
+	certified.catPrimitiveCache = true;
+	certified.catFastDescriptorReuse = true;
+	std::vector<std::string> warnings;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(certified.validate(warnings)));
+
+	Config missingCache = certified;
+	missingCache.catPrimitiveCache = false;
+	EXPECT_TRUE(hasError(missingCache.validate(warnings),
+			     "--cat-fast-descriptor-reuse requires --cat-primitive-cache"));
+}
+
+TEST(ConfigModelFileTest, FastChecksRequireCaatModel)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	Config certified;
+	certified.modelFile = modelRoot / "recursive-sc.cat";
+	certified.catFastChecks = true;
+	std::vector<std::string> warnings;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(certified.validate(warnings)));
+
+	Config missing;
+	missing.catFastChecks = true;
+	EXPECT_TRUE(hasError(missing.validate(warnings), "--cat-fast-checks requires --model-file"));
+}
+
+TEST(ConfigModelFileTest, FastCompositionRequiresCaatModel)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	Config certified;
+	certified.modelFile = modelRoot / "recursive-sc.cat";
+	certified.catFastComposition = true;
+	std::vector<std::string> warnings;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(certified.validate(warnings)));
+
+	Config missing;
+	missing.catFastComposition = true;
+	EXPECT_TRUE(hasError(missing.validate(warnings),
+			     "--cat-fast-composition requires --model-file"));
+}
+
+TEST(ConfigModelFileTest, FastCycleChecksRequireCaatModel)
+{
+	const auto modelRoot =
+		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
+		"models/cat";
+	Config certified;
+	certified.modelFile = modelRoot / "recursive-tso.cat";
+	certified.catFastCycleChecks = true;
+	std::vector<std::string> warnings;
+	EXPECT_TRUE(std::holds_alternative<std::monostate>(certified.validate(warnings)));
+
+	Config missing;
+	missing.catFastCycleChecks = true;
+	EXPECT_TRUE(hasError(missing.validate(warnings),
+			     "--cat-fast-cycle-checks requires --model-file"));
 }
 
 /* A positive witnessed violation persists as the prefix grows and may prune it. */

@@ -174,6 +174,12 @@ void initializeAnnotationInfo(ModuleInfo &MI, PassModuleInfo &PI)
 				return MI.idInfo.VID.at(v);
 			}));
 	}
+	MI.annotInfo.totalAssumes = PI.annotInfo.totalAssumes;
+	MI.annotInfo.exactlyOneSupportedPlainLoad =
+		PI.annotInfo.exactlyOneSupportedPlainLoad;
+	MI.annotInfo.rejectedSourceShape = PI.annotInfo.rejectedSourceShape;
+	MI.annotInfo.rejectedNonPlainAtomic = PI.annotInfo.rejectedNonPlainAtomic;
+	MI.annotInfo.duplicateLoadConflicts = PI.annotInfo.duplicateLoadConflicts;
 }
 
 void initializeModuleInfo(ModuleInfo &MI, PassModuleInfo &PI)
