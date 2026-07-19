@@ -61,3 +61,20 @@ reachable local observations, class coverage, witness replay, and fail-open acco
 - The same-value number is an optimistic upper bound, not a count of valid RVF merges.
 - The bounded RVF outcome oracles are strong finite evidence but not a proof for arbitrary
   programs, relaxed memory, or all external effects.
+
+## Clean cumulative P1 broad gate (2026-07-20)
+
+- Unit of analysis: one paired task row; 725 rows in one simultaneous server run.
+- Common-solved cohort: 438 tasks. CPU geometric-mean ratio 0.96532 with a task-bootstrap
+  95% interval `[0.96056, 0.97017]`; RSS ratio 0.99645 with interval
+  `[0.99349, 0.99875]`. Summed CPU ratio is 0.98173 and summed RSS ratio is 0.96791.
+- Full task set: summed CPU ratio 1.00433 and summed RSS ratio 0.99286. One status changes from
+  `TIMEOUT (true)` to `true` at the time boundary; its 51,480 complete executions and semantic
+  digest agree.
+- Common TIMEOUT cohort: 229 tasks; summed CPU ratio 0.99984 and RSS ratio 0.97570.
+- Swapped-NUMA common OOM cohort: 31 tasks remain OOM in every lane. Summed CPU ratios are
+  1.15006 for the five-item candidate, 1.08186 for EventDeps alone, and 1.01396 for inline revisit
+  alone; all hit the same 12-GB limit.
+- Interpretation limit: bootstrap intervals resample tasks within one run. They do not estimate
+  machine or run-to-run variance. The OOM outcome/resource tradeoff is the promotion decision, so
+  the favorable common-solved interval cannot be generalized to the full workload.

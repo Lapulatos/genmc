@@ -29,3 +29,32 @@
 - Decision implication: work after candidate realization is structurally too late; merge
   or block choices at generation time.
 - Caveat: same-value alternatives are an upper bound and not automatically equivalent.
+
+## Figure 3: clean cumulative P1 common-solved resources
+
+- Files: `figures/figure-03-p1-clean-common-solved.pdf` and `.png`.
+- Purpose: show the paired CPU and RSS ratio distributions for all 438 tasks solved by both the
+  stable baseline and clean five-item P1 candidate.
+- Data source: strict `paired.tsv` under the accepted r3 server result root.
+- Encoding: tasks are independently sorted by their candidate/baseline ratio; the dashed line is
+  parity and the vertical axis is logarithmic.
+- Key observation: most completed tasks improve slightly in CPU and RSS, but the plot intentionally
+  excludes nonterminal resource-limit behavior.
+- Decision implication: common-solved gains are real workload evidence but are insufficient for
+  promotion without the OOM gate.
+- Caveat: one paired run measures task heterogeneity, not run-to-run machine variance.
+
+## Figure 4: P1 OOM ablation
+
+- Files: `figures/figure-04-p1-oom-ablation.pdf` and `.png`.
+- Purpose: show why the clean cumulative candidate and its main storage component are rejected.
+- Data source: the three strict 31-task swapped-NUMA OOM paired result roots listed in
+  `p1-clean-full-725-report-20260720.md`.
+- Encoding: bar height is summed candidate/baseline CPU; every row remains OOM and both lanes hit
+  the same 12-GB task limit.
+- Key observation: the cumulative candidate delays OOM by 15.0%, EventDeps alone by 8.19%, and the
+  inline-revisit-only difference is 1.40%.
+- Decision implication: do not promote P1 storage compression until it changes a memory-limited
+  outcome without increasing time.
+- Caveat: the inline-only difference is deliberately not pursued because it is below the project's
+  practical-effect threshold.

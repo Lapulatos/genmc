@@ -3170,6 +3170,9 @@ validated effective commits to `genmc-caat`.
 
 ### Phase C: P0 regional SC-RVF / generation-time quotienting
 
+- [x] Freeze the transactional region state machine, result-isolation boundary, native entry
+  snapshot, token/epoch ownership, nested revocation invariant, and implementation sequence in
+  `optimization-analysis/core-direction-review-20260718/p0-regional-rvf-transaction-design.md`.
 - [ ] Define and implement region ownership, entry/exit frontier, fail-open ledger, covered-class
   revocation, descendant withdrawal, and safe ancestor-alternative restoration.
 - [ ] Extend exhaustive oracles for future writes, nested frontiers, loop iteration identity,
@@ -3240,3 +3243,209 @@ skip); the ASan integration container exits successfully. At the user's directio
 engineering-only P1 graph/history variants and move the research mainline to the more algorithmic
 P0 regional SC-RVF direction. A final cumulative broad resource gate remains required before these
 commits can be promoted to `genmc-caat`.
+
+**P0 loop-equivalence correction (2026-07-19):** the initial regional-loop smoke compared native
+and RVF complete-execution counts and treated 2 -> 1 as a completeness failure. That criterion is
+invalid for a quotient: native RF-DPOR executions are finer than the implemented read-value/witness
+classes. The loop blocker was historically a performance gate after `fib_bench` expansion, not a
+proved semantic exclusion. Re-evaluate bounded loops by exhaustive observable outcomes, error
+reachability, n1/n2 equality, and RVF class/work counters; do not require equality with native
+complete-execution counts. The first local rebuild attempt did not reach candidate code because an
+old CMake tree mixed Clang 14 with the updated GCC 14 `<format>/<ranges>` headers; authoritative
+validation remains the established LLVM 15/GCC 13 server container.
+
+**P0 loop decision:** the corrected minimal oracle proves that 2 -> 1 was a legitimate local
+quotient, but the full two-iteration 20-shape oracle rejects loop admission for the correct reason:
+12/1,620 observable error states are lost, consistently under n1/n2. The unsafe admission and CTest
+registration are removed; the 6,480-call generator and raw counterexamples are retained as a future
+repair gate. Do not launch workload timing for this candidate.
+
+**P0 native-ancestor repair:** the loop counterexample remains real after manual unrolling and under
+five explicit seeds. Dynamic tracking of native ancestor reads plus same-address future-write
+revocation restores every lost observable error. A separate durable/speculative task-result split
+then removes the scheduling-dependent n1/n2 count drift. The corrected unrolled oracle passes
+6,480/6,480 server-Docker calls with 156 reduced cells retained, and five transaction unit tests
+pass. Aggregate RVF process time remains +10.5%/+7.5% for n1/n2, so retain this as completeness
+infrastructure on dev but do not promote it. Report:
+`optimization-analysis/core-direction-review-20260718/p0-native-ancestor-frontier-report-20260719.md`.
+
+**P0 repaired-loop gate:** regional admission now permits the statically certified combination of
+bounded loops and non-atomic accesses, whose dynamic frontiers are owned by the repaired transaction.
+The formerly decisive loop oracle passes 6,480/6,480 calls with zero violations and 156 reduced
+cells, so the historical rejection is superseded for this implementation. The prior 16-task NA
+archive accidentally ran the wrapper without `regional-rvf`; correct-mode spot checks reveal
+secondary unsupported blockers. Next run a corrected loop+NA activation census, then pair only the
+nonzero-activation actual tasks against native under identical enlarged limits.
+
+**Errors recorded:** the server build target is `unit_tests`, not `unit`; its executable is
+`build-dev-tests/bin/unit_tests`, not `tests/unit/unit_tests`; and the GoogleTest suite filter is
+`RegionalRvfTransaction.*`, not `RegionalRvfTransactionTest.*`. Each command was corrected, and all
+five intended tests ran and passed. The archived NA census omitted `GENMC_EXPERIMENT_MODE=regional-rvf`;
+it is retained only as invalid activation evidence, not silently reused.
+
+**Gate-census launch errors:** the first Docker census omitted the host cgroup mount and ran zero
+tasks; the fixed host launcher now owns `--privileged` and `/sys/fs/cgroup`. The first gate-only
+implementation read an LLVM option after `ResetAllOptionOccurrences()` and therefore continued into
+exploration; the value is now persisted in `LLIConfig`. The first 51-task paired set used host
+`/data3` paths where the tool adapter requires container `/workspace` paths; BenchExec returned zero
+despite executing zero tasks. The analyzer now separates host validation paths from emitted
+container paths, and the launcher requires exactly 51 XML `<run>` rows per lane.
+
+**Source-sync error:** the first NA-prefix adapter rerun rebuilt no GenMC object because
+`SCExecutionGraphAdapter.{hpp,cpp}` was absent from the explicit sync manifest. The remote hash
+check could only validate listed files and therefore did not detect the omission. Both files are now
+mandatory manifest entries; candidate tests from that unsynchronized binary are invalid and rerun.
+
+**Rejected NA-prefix re-entry candidate:** allowing a new regional transaction after a native
+non-atomic prefix passed the unrolled oracle but failed the full loop oracle. It produced widespread
+n1/n2 count drift and lost a real error at shape `011100`, outcome `1112`, n1. The implementation,
+counter, fixture, and adapter relaxation are removed. Do not repair or repeat this candidate; a
+future re-entry design would first require a static/dynamic suffix-ownership certificate.
+
+**Mandatory Docker/BenchExec preflight (applies to every future formal launch):** launch only via a
+versioned host script; mount `/sys/fs/cgroup` read-write with the required privilege; verify every
+explicit sync-manifest source is present and rebuilt; distinguish host `/data3/...` validation paths
+from emitted container `/workspace/...` paths; validate the task-set row count before creating the
+result directory; and accept a lane only when there is exactly one result XML whose `<run>` count
+equals the declared task count. Docker/BenchExec exit code 0 and a log archive alone are never
+evidence that tasks ran. Every new infrastructure failure must be appended here before retrying.
+
+**P2 Gate-A1 unit-fixture error:** the first `CATDecisionState` focused run exited 139 because the
+test inserted labels into thread IDs that had not been created. This was a test-graph construction
+failure, not a candidate result. The fixture now explicitly calls `addNewThread()` and uses each
+new thread's index 0 before the one permitted rerun.
+
+**P2 Gate-A1 sync-manifest error:** the first integration build failed before linking because
+`ConsistencyChecker.hpp` was modified locally but absent from the explicit server sync manifest;
+the remote `GenMCDriver.cpp` therefore compiled against the old interface. No test or experiment
+result was accepted. The header is now mandatory in the manifest and SHA-256 verification. Before
+future builds, modified-path coverage must also be checked against the manifest rather than relying
+only on hashes of the files already listed.
+
+**P2 Gate-A1 first fixed-15 evidence limitation:** the strict paired run completed with 15 XML rows
+per lane and identical 7 correct / 8 TIMEOUT classifications. All seven terminal candidate logs
+report zero installed conflicts. The eight killed processes cannot emit checker-destructor counters,
+so they do not prove zero opportunity. Backjump counters are therefore added to the existing
+100k-activity progress record before the single timeout-evidence rerun; the first run remains valid
+for terminal equivalence and launch validation, but not for the Gate-A1 opportunity decision.
+
+**P2 Gate-A1 decision:** the timeout-resilient fixed-15 rerun has zero status differences and zero
+comparable search-counter differences. Eleven tasks emit final/progress census records; all report
+zero installed conflicts, cores, mapped decisions, recurrence, non-local depth, and potential
+backjump distance. The other four stop after transformation and before this mechanism can learn or
+block anything. Combined with the existing full-725 V9/V10 zero-subtree-reduction evidence, reject
+Gate B/C, active CDCL, and another broad run. Preserve only opt-in observation infrastructure on
+dev; do not promote it. Report: `p2-backjump-gate-a1-report-20260720.md`.
+
+**P2 final CO-sidecar unit error:** the first new CO replacement test hit the invariant for an
+"unplaced" write because `ExecutionGraph::co_imm_pred()` represents the address-specific Init
+predecessor as null rather than as a `WriteLabel`. The implementation now separately verifies
+`isInCo()` and maps a null immediate predecessor to the write address. No formal run used this
+post-census test change; rerun only the focused unit gate.
+
+**P0 frozen-prefix adapter compile error:** the first server build of the observation-backed
+suffix-entry candidate referenced the dense `thread` identifier before its declaration in
+`SCExecutionGraphAdapter.cpp`. Ninja stopped before linking, so no candidate test or experiment was
+accepted. The identifier is now derived immediately after label validation, before prefix
+classification; only the build and focused unit gate are rerun.
+
+**P0 frozen-prefix oracle timeout-handler error:** the first one-shape native-prefix loop run hit
+its 20-second per-call limit, then the Python oracle raised `TypeError` because `TimeoutExpired`
+returned byte strings despite `text=True`. The partial directory contains no accepted oracle
+result. The handler now normalizes bytes to UTF-8 replacement text, the per-call budget is enlarged
+to 120 seconds, and the rerun writes a new `r2` directory.
+
+**P0 frozen-prefix decisive targeted result:** with the timeout handler repaired and the per-call
+limit raised to 120 seconds, native `shape=011100/outcome=1112` reaches the expected assertion in
+about 0.08 seconds, while frozen-prefix RVF times out before one complete execution for both one and
+two workers. This is a candidate failure, not a resource-limit ambiguity: the ratio exceeds three
+orders of magnitude and reproduces across worker counts. Do not broaden this candidate; first use a
+minimal NA-prefix/same-value-source fixture to distinguish adapter-state explosion from transaction
+livelock, then reject and revert if it does not terminate promptly.
+
+**P0 paired-725 progress-monitor error:** an ad-hoc console progress query counted both BenchExec
+`starting` rows and completed-result rows, so interim chat updates overstated progress by roughly a
+factor of two. This did not affect execution or result files. Subsequent monitoring computes
+`timestamped rows - starting rows`; acceptance remains based solely on one XML with exactly 725
+`<run>` entries per lane.
+
+**P0 exact-NA full-725 run (2026-07-20):** the paired baseline/candidate run is active under
+`p0-regional-rvf-paired-725-exact-na-20260720a`. A name-filtered `docker ps` check initially appeared
+empty because the launcher uses unnamed `docker run --rm` containers; process inspection confirmed
+both Docker/BenchExec lanes and their task processes remain live. Do not classify this as a stopped
+run. The current run keeps its original 8+8 concurrency. Future full-725 launches default to 24+24
+workers on disjoint CPU sets, with the unchanged 120-second/12-GB per-task limits and 300-GB
+per-lane container ceilings; acceptance still requires exactly 725 result rows in both lanes.
+
+**P0 exact-NA full-725 acceptance-tool errors:** the first post-run shell probe used Bash-style
+array/glob handling through the server's default remote shell and consequently passed empty paths
+to `bzcat`/`zipinfo`; it is invalid evidence. A POSIX `find`-based rerun proves exactly one archive
+and one result XML per lane, with 725 logs and 725 `<run>` rows each. The first strict analyzer run
+then rejected a compile-error task whose command retained its original `/sv-benchmarks/c/...`
+source rather than a rewritten `/experiments/...-rewrite/c/...` source. Generalize identification
+to the shared `/c/<task>.{c,i}` suffix and rerun the full set; do not skip the task.
+
+**P0 exact-NA full-725 decision:** strict analysis accepts 725 XML/log rows per lane with zero
+status differences and zero semantic-summary differences across 465 common-terminal pairs. All 51
+regional tasks have `rvf-loads-reduced=0`; 50 tasks publish 377 exact NA constraints but no durable
+RVF attempt/reduction. Regional common-terminal CPU changes 9.736 -> 21.434 seconds (+120.16%) with
+neutral summed peak RSS (+0.0012%). Reject and remove exact-NA continuation. Restore the conservative
+non-atomic reset/revocation frontier and validate it; do not interpret timeout-limited search-counter
+declines as benefit. Full report: `p0-exact-na-full-725-report-20260720.md`.
+
+**P0 exact-NA rollback gate:** the synchronized authoritative server build succeeds. Adapter and
+transaction tests pass 12/12; `sc-rvf-regional-na-load` and `sc-rvf-regional-loop` pass 2/2. The
+adapter again rejects non-atomic memory events, and the outer NA handlers reset a not-yet-open frame
+or revoke an active transaction before native replay. Do not spend another 725-task run on this
+rejected configuration; the prior valid 51-task zero-activation paired result already measures it.
+
+**P1 cumulative-725 launch error:** the first invocation referenced the server `/data3/...`
+launcher path in a local shell instead of through `ssh`; it exited 127 before touching the server or
+creating a result directory. The valid launch must explicitly execute the synchronized script on
+`server@frp-arm.com` and pass all existing cardinality/cgroup checks.
+
+**P1 cumulative-725 NUMA launch error:** valid remote run `r1` started the 24-worker baseline, but
+BenchExec rejected candidate cores `24-47` because they cross the boundary of this host's two
+28-core NUMA regions and expose asymmetric topology. The partial single-lane run was stopped and is
+invalid. Preserve its directory, switch to disjoint within-node sets `0-23` and `28-51`, and add a
+preflight that checks cardinality, disjointness, and single-NUMA membership before either lane starts.
+
+**P1 clean-candidate sync error:** the first standalone rsync omitted `-e 'ssh -p 36722'` and used
+the workstation SSH configuration's unrelated port 9322, which refused the connection. Only an
+empty remote source directory was created; configuration/build never started. Retry with the server
+port explicit in both rsync and ssh.
+
+**P1 clean-candidate configure error:** standalone CMake used generic `BUILD_TESTING=ON`, while
+GenMC gates unit targets with its own `BUILD_TESTS=ON`. Configuration succeeded but Ninja rejected
+the nonexistent `unit_tests` target before compiling. Reconfigure the same source with
+`-DBUILD_TESTS=ON`; no binary/result from the first configuration is evidence.
+
+**P1 clean-candidate test scope:** clean stable-based commit `839ac8b9` builds successfully and
+passes 162/162 unit/property tests plus the SC, TSO, PSO, recursive-CAAT and online-mutation CTests.
+The aggregate CTest command reports 168/173 because five legacy driver/relinche targets reference
+scripts, generated traces, or relinche input files absent from commit `53c667d5` itself; these are
+unavailable-fixture failures, not accepted pass evidence and not candidate diagnostics. Formal
+full-725 validation therefore still compares the clean binary directly against stable.
+
+**P1 cumulative r2 validity:** r2 is complete (725 XML/log rows per lane), but its frozen candidate
+contains older research-branch RVF/statistics code in addition to P1. The apparent search mismatches
+come from stable not emitting the new counters, while candidate does; one `fib_safe-7` regression
+and its resources cannot be attributed to P1. Preserve r2 as a contaminated-candidate diagnostic,
+not a promotion gate. Rebuild exactly the P1 patch on stable and use that binary in r3.
+
+**P1 clean cumulative r3 decision:** the strict clean stable-based run has 725 XML/log rows in each
+lane and zero launcher failures. One threshold status improves (`fib_safe-7`, `TIMEOUT (true)` to
+`true`) with identical 51,480 complete executions; 438 common-solved tasks have zero semantic or
+execution-count differences. Their CPU geometric-mean ratio is 0.96532 and RSS ratio is 0.99645,
+but all-task CPU rises 0.43%. The decisive swapped-NUMA 31-task cohort remains 31 OOM in both lanes
+and takes 15.0% more candidate CPU at the same 12-GB cap. EventDeps alone reproduces +8.19%; inline
+revisit alone is only +1.40% and is below the continuation threshold. Reject stable promotion of
+the P1 five-item bundle and stop further engineering-only layout ablations. Full report:
+`optimization-analysis/core-direction-review-20260718/p1-clean-full-725-report-20260720.md`.
+
+**P1 standalone build infrastructure errors:** the first standalone EventDeps rsync targeted a
+two-level remote directory that did not yet exist; rsync exited before copying. The corrected
+procedure creates the exact directory first. Its first test-enabled CMake configure then failed
+while FetchContent downloaded googletest from GitHub (HTTP/2 receive error). No candidate result
+used that build. A fresh `build-release` with `BUILD_TESTS=OFF` compiled the production binary;
+semantic test evidence remains the already completed cumulative GCC/ASan/differential gates.

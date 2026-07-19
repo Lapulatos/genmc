@@ -3289,3 +3289,89 @@ collected. No direction may claim them based only on missing buffered log marker
   `genmc-caat-opt-dev`, but stop adding engineering-only graph/history variants. The main research
   line now moves to P0 regional SC-RVF; P1 still requires a final cumulative broad resource gate
   before promotion to the stable branch.
+
+## P0 bounded-loop SC-RVF correction and rejection (2026-07-19)
+
+- The initial `complete executions 2 -> 1` rejection used the wrong oracle. Native RF-DPOR and
+  SC-RVF enumerate different equivalence partitions; the controlled safe fixture confirms that this
+  particular reduction is legitimate and also reduces RF offered 4 -> 1, work popped 1 -> 0, and
+  realized prefixes 1 -> 0 with identical n1/n2 results.
+- The corrected two-iteration generated oracle is decisive: four shapes pass 1,296 invocations,
+  but the full 20-shape/6,480-invocation gate loses 12 reachable error states across six shapes,
+  identically under one and two workers. Native/RVF error cells are 154/130 and RVF reports 16,988
+  reduced loads; those reductions are invalid because they remove observable errors.
+- Bounded-loop admission was removed. The generator, counterexamples, exact metrics, and raw server
+  paths are recorded in `p0-regional-loop-decision-20260719.md`. Future loop work must repair
+  repeated dynamic-read/future-write class handling and pass that oracle before workload timing.
+
+## P0 native-ancestor frontier and result split (2026-07-19)
+
+- The first loop counterexample remains incomplete after manual two-copy unrolling, so LLVM loop
+  detection and random scheduling are not the cause. Five explicit seeds reproduce native error /
+  RVF safe. The first same-value merge fails to own future backward revisits of native ancestor
+  reads; disabling that merge alone restores the error.
+- Frames now track those exact native ancestor read positions. A future same-address write revokes
+  the speculative region and replays its untouched native entry. Representative revisitable lists
+  cannot drive this frontier because the missing native branch is absent from that graph.
+- The first full unrolled run restored all errors but exposed n1/n2 result-accounting drift. Splitting
+  task results at region open into durable pre-region and speculative post-open portions fixes it.
+- The corrected 20-shape oracle passes all 6,480 server-Docker calls with zero violations and retains
+  156 reduced RVF cells. Aggregate RVF process time is nevertheless +10.5% (n1) and +7.5% (n2), so
+  this remains correctness infrastructure on dev, not an effective optimization for promotion.
+- Full evidence and rejected attempts are in
+  `p0-native-ancestor-frontier-report-20260719.md`.
+- After this repair, the formerly failing two-iteration loop oracle passes all 6,480 calls and
+  retains 156 reduced cells. Regional loop admission is restored on dev, with its CTest oracle, but
+  still requires an actual-workload resource gate.
+- The archived `regional-na-load-16` BenchExec logs did not actually pass `regional-rvf` through the
+  wrapper and therefore cannot prove zero activation. Correct-mode spot checks still fall back
+  because those programs have secondary blockers beyond NA accesses; a corrected loop+NA census is
+  required before selecting the production cohort.
+
+## P0 actual-workload activation and rejected NA-prefix re-entry (2026-07-19)
+
+- The corrected 725-task gate census produced 725 result rows and 709 readable gate records. It
+  identifies 51 regional-eligible tasks, but the strict paired run shows `rvf-loads-attempted=0`
+  and `rvf-loads-reduced=0`: the stable transaction never activates after the first native
+  non-atomic frontier. Candidate timing therefore cannot be credited as an RVF optimization.
+- The valid 51-task paired run has exactly one 51-row XML and one log archive per lane. It preserves
+  all statuses and semantic categories, but changes all-task CPU by +1.86% and common-terminal CPU
+  by +124.4%, with effectively neutral aggregate RSS (-0.047%). Because mechanism activation is
+  zero, timeout partial-progress counter differences are not optimization evidence. Do not repeat
+  this rejected configuration.
+- A later supported-atomic re-entry after a native non-atomic prefix passed the full 6,480-call
+  unrolled oracle, but failed the loop oracle with n1/n2 count drift and a real lost error at shape
+  `011100`, outcome `1112`, n1. It is fully removed. After rollback, both focused regional CTests
+  pass, and the previously decisive shape passes 324/324 server-Docker calls with zero violations.
+- Formal launch infrastructure now rejects missing cgroup setup, wrong path namespace, wrong input
+  cardinality, multiple/missing result XMLs, and mismatched `<run>` counts. BenchExec exit status 0
+  is explicitly not treated as proof that work ran.
+
+## P2 no-consistent-extension Gate A1 (2026-07-20)
+
+- A graph-matched, observation-only RF/CO `DecisionState` replaces stamp-derived pseudo-depth. It
+  follows real execution copies and vector-clock cuts and never changes exploration.
+- The strict fixed-15 recursive-PSO run preserves 7 correct terminals, 8 TIMEOUTs, every comparable
+  search counter, and effectively neutral resources (all CPU +0.0095%, common-terminal CPU
+  -0.0028%, summed RSS +0.0071%).
+- Eleven tasks provide final or timeout-progress census evidence. Installed conflicts, derived
+  cores, mapped choices, non-local conflicts, recurrence, and backjump distance are all zero. Four
+  remaining timeouts stop before the hook has any learned fact or descendant to block.
+- Together with full-725 V9/V10 evidence (zero all-sibling/parent-prefix elimination; 14,193,035
+  core hits, zero extra checks avoided, CPU +4.99%), Gate A1 rejects CDCL/subtree blocking before
+  implementation. Full report: `p2-backjump-gate-a1-report-20260720.md`.
+
+## P1 clean broad resource decision (2026-07-20)
+
+- A stable-based five-item P1 candidate completed a strict 725-by-2 server comparison. On 438
+  common-solved tasks it reduced CPU geometric mean by 3.47%, summed CPU by 1.83%, and summed RSS
+  by 3.21%, with zero semantic-summary or execution-count mismatches.
+- The full workload does not pass the no-tradeoff rule: all CPU rises 0.43%, and the 31 common OOM
+  tasks take 15.0% longer after NUMA assignment is swapped while every task still reaches the same
+  12-GB cap. This is more progress before OOM, not an improved result.
+- Canonical empty EventDeps alone delays the same OOM cohort by 8.19%; do not promote it despite
+  earlier small/common-terminal benefits. Inline revisit alone is +1.40% on OOM and had only an
+  approximately one-percent fixed-panel gain, so it is retained on dev without another broad run.
+- Figures 3 and 4, strict claim limits, raw server roots, and exact hashes are in
+  `p1-clean-full-725-report-20260720.md`. The next algorithmic direction is value-first/source-lazy
+  RVF integration in the Deagle/Yogar finite solver, not another retained-layout micro-variant.
