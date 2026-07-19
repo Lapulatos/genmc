@@ -38,7 +38,9 @@ public:
 
 	void cutToStamp(Stamp st) override;
 
-	std::unique_ptr<ExecutionGraph> getCopyUpTo(const VectorClock &v) const override;
+	auto getCopyUpTo(const VectorClock &v, ViewCopyMode mode = ViewCopyMode::Deep,
+			 CopyStatistics *statistics = nullptr) const
+		-> std::unique_ptr<ExecutionGraph> override;
 };
 
 #endif /* GENMC_DEP_EXECUTION_GRAPH_HPP */

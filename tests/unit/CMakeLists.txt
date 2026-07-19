@@ -18,6 +18,8 @@ set(RC_ENABLE_GTEST ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(rapidcheck)
 
 add_executable(unit_tests IntervalMapTest.cpp ViewTest.cpp ErrorTest.cpp CastTest.cpp
+                          EventLabelTest.cpp
+			  RevisitTest.cpp
                           ConfigTest.cpp CatFrontendTest.cpp CatModelTest.cpp
                           CatEvaluatorTest.cpp CatGraphAdapterTest.cpp ConflictCoreTest.cpp
                           FiniteSymbolicSolverTest.cpp

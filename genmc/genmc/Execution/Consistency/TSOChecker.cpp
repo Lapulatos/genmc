@@ -367,13 +367,12 @@ void TSOChecker::calculateSaved(EventLabel *lab)
 
 void TSOChecker::calculateViews(EventLabel *lab)
 {
-	lab->setViews({});
-
-	lab->addView(checkCalc71(lab));
-
-	lab->addView(checkCalc72(lab));
-if (!getConf()->collectLinSpec && !getConf()->checkLinSpec) lab->addView({}); else
-	lab->addView(checkCalc73(lab));
+	auto calc71 = checkCalc71(lab);
+	auto calc72 = checkCalc72(lab);
+	auto calc73 = (!getConf()->collectLinSpec && !getConf()->checkLinSpec)
+			      ? View{}
+			      : checkCalc73(lab);
+	lab->replaceViews(std::move(calc71), std::move(calc72), std::move(calc73));
 }
 
 void TSOChecker::updateMMViews(EventLabel *lab)

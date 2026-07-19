@@ -856,13 +856,12 @@ void IMMChecker::calculateSaved(EventLabel *lab)
 
 void IMMChecker::calculateViews(EventLabel *lab)
 {
-	lab->setViews({});
-
-	lab->addView(checkCalc75(lab));
-if (!getConf()->collectLinSpec && !getConf()->checkLinSpec) lab->addView({}); else
-	lab->addView(checkCalc76(lab));
-
-	lab->addView(checkCalc87(lab));
+	auto calc75 = checkCalc75(lab);
+	auto calc76 = (!getConf()->collectLinSpec && !getConf()->checkLinSpec)
+			      ? View{}
+			      : checkCalc76(lab);
+	auto calc87 = checkCalc87(lab);
+	lab->replaceViews(std::move(calc75), std::move(calc76), std::move(calc87));
 }
 
 void IMMChecker::updateMMViews(EventLabel *lab)

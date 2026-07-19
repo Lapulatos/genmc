@@ -15,6 +15,7 @@
 #define GENMC_REVISIT_HPP
 
 #include "genmc/Execution/EventLabel.hpp"
+#include "genmc/ADT/DepView.hpp"
 #include "genmc/Verification/VerificationError.hpp"
 
 #include <format>
@@ -184,24 +185,22 @@ private:
 class BackwardRevisit : public Revisit, public ReadRevisit {
 
 protected:
-	BackwardRevisit(Kind k, Event p, Event r, std::unique_ptr<VectorClock> view)
-		: Revisit(k, p), view(std::move(view)), ReadRevisit(k, r)
+	BackwardRevisit(Kind k, Event p, Event r)
+		: Revisit(k, p), ReadRevisit(k, r)
 	{}
 
 public:
-	BackwardRevisit(Event p, Event r, std::unique_ptr<VectorClock> view)
-		: BackwardRevisit(RV_BRev, p, r, std::move(view))
-	{}
-	BackwardRevisit(const ReadLabel *rLab, const WriteLabel *wLab,
-			std::unique_ptr<VectorClock> view)
-		: BackwardRevisit(rLab->getPos(), wLab->getPos(), std::move(view))
-	{}
+	/** Creates one allocation containing both the revisit and its concrete clock. */
+	static auto create(Event p, Event r, std::unique_ptr<VectorClock> view)
+		-> std::unique_ptr<BackwardRevisit>;
+	static auto create(const ReadLabel *rLab, const WriteLabel *wLab,
+			   std::unique_ptr<VectorClock> view) -> std::unique_ptr<BackwardRevisit>
+	{
+		return create(rLab->getPos(), wLab->getPos(), std::move(view));
+	}
 
-	/** Returns (releases) the prefix of the revisiting event */
-	std::unique_ptr<VectorClock> getViewRel() { return std::move(view); }
-
-	/** Returns (but does not release) the prefix of the revisiting event */
-	const std::unique_ptr<VectorClock> &getViewNoRel() const { return view; }
+	/** Returns the immutable saved prefix of the revisiting event. */
+	[[nodiscard]] virtual auto getViewNoRel() const -> const VectorClock * = 0;
 
 	static bool classof(const Revisit *item)
 	{
@@ -216,9 +215,34 @@ public:
 		return static_cast<BackwardRevisit *>(const_cast<ReadRevisit *>(r));
 	}
 
-private:
-	std::unique_ptr<VectorClock> view;
 };
+
+template <typename Clock> class TypedBackwardRevisit final : public BackwardRevisit {
+public:
+	TypedBackwardRevisit(Event p, Event r, Clock view)
+		: BackwardRevisit(RV_BRev, p, r), view_(std::move(view))
+	{}
+
+	[[nodiscard]] auto getViewNoRel() const -> const VectorClock * override { return &view_; }
+
+private:
+	Clock view_;
+};
+
+inline auto BackwardRevisit::create(Event p, Event r, std::unique_ptr<VectorClock> view)
+	-> std::unique_ptr<BackwardRevisit>
+{
+	VERIFY(view, "backward revisit requires a saved prefix");
+	switch (view->getKind()) {
+	case VectorClock::VC_View:
+		return std::make_unique<TypedBackwardRevisit<View>>(
+			p, r, std::move(*genmc::dyn_cast<View>(view.get())));
+	case VectorClock::VC_DepView:
+		return std::make_unique<TypedBackwardRevisit<DepView>>(
+			p, r, std::move(*genmc::dyn_cast<DepView>(view.get())));
+	}
+	UNREACHABLE();
+}
 
 /*******************************************************************************
  **                             Static methods

@@ -39,6 +39,10 @@ struct VerificationResult {
 		std::uint64_t maximumCurrentGraphLabels{};
 		std::uint64_t maximumStackGraphLabels{};
 		std::uint64_t maximumSchedulerCachedLabels{};
+		/** Same-worker backward-prefix COW sharing; cross-worker clones remain deep. */
+		std::uint64_t sharedHistoryGraphCopies{};
+		std::uint64_t sharedHistoryViewBases{};
+		std::uint64_t sharedHistoryViewLowerBoundBytes{};
 		/** Spin-loop classification decisions behind retained graph growth. */
 		std::uint64_t spinStarts{};
 		std::uint64_t spinStartsAfterLoopBegin{};
@@ -115,6 +119,9 @@ struct VerificationResult {
 				std::max(maximumStackGraphLabels, other.maximumStackGraphLabels);
 			maximumSchedulerCachedLabels = std::max(maximumSchedulerCachedLabels,
 							 other.maximumSchedulerCachedLabels);
+			sharedHistoryGraphCopies += other.sharedHistoryGraphCopies;
+			sharedHistoryViewBases += other.sharedHistoryViewBases;
+			sharedHistoryViewLowerBoundBytes += other.sharedHistoryViewLowerBoundBytes;
 			spinStarts += other.spinStarts;
 			spinStartsAfterLoopBegin += other.spinStartsAfterLoopBegin;
 			spinStartsWithSideEffects += other.spinStartsWithSideEffects;
@@ -222,6 +229,8 @@ inline auto formatExplorationStatistics(const VerificationResult::ExplorationSta
 		"backward-queued={} work-added={} work-popped={} max-retained-work={} "
 		"max-current-graph-labels={} max-stack-graph-labels={} "
 		"max-scheduler-cached-labels={} "
+		"shared-history-graph-copies={} shared-history-view-bases={} "
+		"shared-history-view-lower-bound-bytes={} "
 		"spin-starts={} spin-starts-after-loop-begin={} "
 		"spin-starts-with-side-effects={} spin-loop-blocks={} "
 		"validity-queries={} realized-revisit-prefixes={} "
@@ -247,6 +256,8 @@ inline auto formatExplorationStatistics(const VerificationResult::ExplorationSta
 		statistics.backwardQueued, statistics.workItemsAdded, statistics.workItemsPopped,
 		statistics.maximumRetainedWorkItems, statistics.maximumCurrentGraphLabels,
 		statistics.maximumStackGraphLabels, statistics.maximumSchedulerCachedLabels,
+		statistics.sharedHistoryGraphCopies, statistics.sharedHistoryViewBases,
+		statistics.sharedHistoryViewLowerBoundBytes,
 		statistics.spinStarts, statistics.spinStartsAfterLoopBegin,
 		statistics.spinStartsWithSideEffects, statistics.spinLoopBlocks,
 		statistics.candidateValidityQueries,

@@ -10,7 +10,7 @@
 #include "genmc/ADT/View.hpp"
 
 /* Models a view using a map */
-class Oracle {
+class ViewOracle {
 public:
 	void updateIdx(Event e) { map_[e.thread] = std::max(map_[e.thread], e.index); }
 
@@ -191,7 +191,7 @@ TEST(ViewUnitTest, TrailingZerosDoNotInflateSizeCheck)
 RC_GTEST_PROP(ViewPropertyTest, MatchesOracleBehavior, (const std::vector<ViewOp> &ops))
 {
 	View sut;
-	Oracle oracle;
+	ViewOracle oracle;
 
 	for (const auto &op : ops) {
 		if (op.kind == ViewOp::UpdateIdx) {

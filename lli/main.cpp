@@ -48,9 +48,26 @@
 #include <iostream>
 #include <memory>
 #include <random>
+#include <sys/resource.h>
 #include <unistd.h>
 
 namespace fs = std::filesystem;
+
+static void reportPhasePeakMemory(const Config &conf, std::string_view phase)
+{
+	if (!conf.catStats)
+		return;
+	struct rusage usage {};
+	if (getrusage(RUSAGE_SELF, &usage) != 0)
+		return;
+#ifdef __APPLE__
+	const auto peakBytes = static_cast<std::uint64_t>(usage.ru_maxrss);
+#else
+	const auto peakBytes = static_cast<std::uint64_t>(usage.ru_maxrss) * 1024;
+#endif
+	std::cerr << "Phase memory: phase=" << phase << " peak-rss-bytes=" << peakBytes << '\n'
+		  << std::flush;
+}
 
 enum class InputLanguage : std::uint8_t { clang, cargo, rust, llvmir };
 
@@ -1318,6 +1335,7 @@ auto main(int argc, char **argv) -> int
 	LLIConfig lliConfig;
 
 	parseConfig(argc, argv, *conf, lliConfig);
+	reportPhasePeakMemory(*conf, "configured");
 
 	PRINT(VerbosityLevel::Error,
 	      PACKAGE_NAME " v" PACKAGE_VERSION " (LLVM " LLVM_VERSION ")\n"
@@ -1348,6 +1366,8 @@ auto main(int argc, char **argv) -> int
 	}
 	moduleUP = LLVMModule::linkAllModules(std::move(modules));
 	PRINT(VerbosityLevel::Error, "*** Compilation complete.\n");
+	std::cout << std::flush;
+	reportPhasePeakMemory(*conf, "compiled");
 	if (conf->scRvfExploration && containsScRvfAssume(*moduleUP) &&
 	    !conf->scRvfAnnotatedReads) {
 		conf->scRvfProgramSupported = false;
@@ -1608,6 +1628,8 @@ auto main(int argc, char **argv) -> int
 			      : std::string{" reason="} + conf->scRvfStaticFallbackReason);
 	}
 	PRINT(VerbosityLevel::Error, "*** Transformation complete.\n");
+	std::cout << std::flush;
+	reportPhasePeakMemory(*conf, "transformed");
 	if (lliConfig.finiteSkeletonStatsOnly)
 		return 0;
 	VerificationResult res;
@@ -1650,6 +1672,8 @@ auto main(int argc, char **argv) -> int
 	}
 
 	PRINT(VerbosityLevel::Error, "\nTotal wall-clock time: {:.2f}s\n", getElapsedSecs(begin));
+	std::cout << std::flush;
+	reportPhasePeakMemory(*conf, "finished");
 
 	/* TODO: Check globalContext.destroy() and llvm::shutdown() */
 	return !res.status.has_value() ? 0 : EVERIFY;

@@ -130,10 +130,12 @@ void DepExecutionGraph::cutToStamp(Stamp stamp)
 	getState().clear();
 }
 
-std::unique_ptr<ExecutionGraph> DepExecutionGraph::getCopyUpTo(const VectorClock &v) const
+auto DepExecutionGraph::getCopyUpTo(const VectorClock &v, ViewCopyMode mode,
+				    CopyStatistics *statistics) const
+	-> std::unique_ptr<ExecutionGraph>
 {
 	auto og = std::make_unique<DepExecutionGraph>(ExecutionGraph::Config{
 		.consChecker = this->consChecker_, .emitNALabels = this->haveNAs_});
-	copyGraphUpTo(*og, v);
+	copyGraphUpTo(*og, v, mode, statistics);
 	return og;
 }

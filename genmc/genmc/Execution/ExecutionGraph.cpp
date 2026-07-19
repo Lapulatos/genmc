@@ -16,6 +16,7 @@
 
 #include <iostream>
 #include <memory>
+#include <unordered_set>
 
 /************************************************************
  ** Basic getter methods
@@ -322,7 +323,8 @@ void ExecutionGraph::cutToStamp(Stamp stamp)
 		lab.setStamp(nextStamp());
 }
 
-void ExecutionGraph::copyGraphUpTo(ExecutionGraph &other, const VectorClock &v) const
+void ExecutionGraph::copyGraphUpTo(ExecutionGraph &other, const VectorClock &v, ViewCopyMode mode,
+				   CopyStatistics *statistics) const
 {
 	/* We resize up to g.size() (instead of v.size()) because there might be a create
 	 * that is contained in v, but its respective begin is not.
@@ -387,11 +389,20 @@ void ExecutionGraph::copyGraphUpTo(ExecutionGraph &other, const VectorClock &v) 
 	/* Helper map to repair views in the copied graph */
 	std::unordered_map<const detail::ViewBase *, genmc::intrusive_ptr<detail::ViewBase>>
 		viewMap;
+	std::unordered_set<const detail::ViewBase *> sharedViewBases;
 
 	/* Deep-copies a view */
 	auto fixView = [&](View &view) {
+		/* Label cloning already shares copy-on-write bases. Same-worker history copies
+		 * only need to inspect them when attribution counters were requested. */
+		if (mode == ViewCopyMode::ShareWithinWorker && !statistics)
+			return;
 		if (!view.base_)
 			return;
+		if (mode == ViewCopyMode::ShareWithinWorker) {
+			sharedViewBases.insert(view.base_.get());
+			return;
+		}
 
 		/* Have we already cloned this viewbase? */
 		if (auto it = viewMap.find(view.base_.get()); it != viewMap.end()) {
@@ -495,15 +506,23 @@ void ExecutionGraph::copyGraphUpTo(ExecutionGraph &other, const VectorClock &v) 
 		if (other.containsLoc(loc))
 			other.initVals_.insert({loc, val});
 	}
+	if (statistics && mode == ViewCopyMode::ShareWithinWorker) {
+		statistics->sharedViewBases += sharedViewBases.size();
+		for (const auto *base : sharedViewBases) {
+			statistics->sharedViewLowerBoundBytes +=
+				sizeof(detail::ViewBase) + base->size() * sizeof(int);
+		}
+	}
 }
 
-auto ExecutionGraph::getCopyUpTo(const VectorClock &v) const -> std::unique_ptr<ExecutionGraph>
+auto ExecutionGraph::getCopyUpTo(const VectorClock &v, ViewCopyMode mode,
+				 CopyStatistics *statistics) const -> std::unique_ptr<ExecutionGraph>
 {
 	auto og = std::make_unique<ExecutionGraph>(
 		ExecutionGraph::Config{.execState = this->state_,
 				       .consChecker = this->consChecker_,
 				       .emitNALabels = this->haveNAs_});
-	copyGraphUpTo(*og, v);
+	copyGraphUpTo(*og, v, mode, statistics);
 	return og;
 }
 

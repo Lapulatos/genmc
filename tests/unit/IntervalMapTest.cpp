@@ -9,9 +9,9 @@
 
 /* An oracle interval-map implementation that maps every
  * point in the domain to a value. */
-class Oracle {
+class IntervalMapOracle {
 public:
-	Oracle(size_t size) : memory_(size, 0) {}
+	IntervalMapOracle(size_t size) : memory_(size, 0) {}
 
 	void add(size_t start, size_t end, int val)
 	{
@@ -102,7 +102,7 @@ RC_GTEST_PROP(IntervalMapPropertyTest, MatchesOracleBehavior, ())
 	const size_t domain_size = 50;
 
 	genmc::IntervalMap<size_t, int> sut(0);
-	Oracle oracle(domain_size);
+	IntervalMapOracle oracle(domain_size);
 
 	auto num_ops = *rc::gen::inRange(10, 50);
 	for (auto i = 0; i < num_ops; ++i) {

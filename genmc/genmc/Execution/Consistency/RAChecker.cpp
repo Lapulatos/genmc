@@ -893,13 +893,12 @@ void RAChecker::calculateSaved(EventLabel *lab)
 
 void RAChecker::calculateViews(EventLabel *lab)
 {
-	lab->setViews({});
-
-	lab->addView(checkCalc70(lab));
-
-	lab->addView(checkCalc76(lab));
-if (!getConf()->collectLinSpec && !getConf()->checkLinSpec) lab->addView({}); else
-	lab->addView(checkCalc77(lab));
+	auto calc70 = checkCalc70(lab);
+	auto calc76 = checkCalc76(lab);
+	auto calc77 = (!getConf()->collectLinSpec && !getConf()->checkLinSpec)
+			      ? View{}
+			      : checkCalc77(lab);
+	lab->replaceViews(std::move(calc70), std::move(calc76), std::move(calc77));
 }
 
 void RAChecker::updateMMViews(EventLabel *lab)

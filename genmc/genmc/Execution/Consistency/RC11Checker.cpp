@@ -856,13 +856,12 @@ void RC11Checker::calculateSaved(EventLabel *lab)
 
 void RC11Checker::calculateViews(EventLabel *lab)
 {
-	lab->setViews({});
-
-	lab->addView(checkCalc72(lab));
-
-	lab->addView(checkCalc78(lab));
-if (!getConf()->collectLinSpec && !getConf()->checkLinSpec) lab->addView({}); else
-	lab->addView(checkCalc79(lab));
+	auto calc72 = checkCalc72(lab);
+	auto calc78 = checkCalc78(lab);
+	auto calc79 = (!getConf()->collectLinSpec && !getConf()->checkLinSpec)
+			      ? View{}
+			      : checkCalc79(lab);
+	lab->replaceViews(std::move(calc72), std::move(calc78), std::move(calc79));
 }
 
 void RC11Checker::updateMMViews(EventLabel *lab)

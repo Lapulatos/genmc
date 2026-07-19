@@ -3276,7 +3276,7 @@ std::unique_ptr<VectorClock> GenMCDriver::getRevisitView(const ReadLabel *rLab,
 auto GenMCDriver::constructBackwardRevisit(const ReadLabel *rLab, const WriteLabel *sLab) const
 	-> std::unique_ptr<BackwardRevisit>
 {
-	return std::make_unique<BackwardRevisit>(rLab, sLab, getRevisitView(rLab, sLab));
+	return BackwardRevisit::create(rLab, sLab, getRevisitView(rLab, sLab));
 }
 
 bool isFixedHoleInView(const ExecutionGraph &g, const EventLabel *lab, const DepView &v)
@@ -3331,7 +3331,7 @@ bool GenMCDriver::isCoBeforeSavedPrefix(const BackwardRevisit &r, const EventLab
 		return false;
 
 	auto &g = getExec().getGraph();
-	auto &v = r.getViewNoRel();
+	auto *v = r.getViewNoRel();
 	auto rLab = genmc::dyn_cast<ReadLabel>(mLab);
 	auto wLab = g.getWriteLabel(rLab ? rLab->getRf()->getPos() : mLab->getPos());
 
@@ -3375,7 +3375,7 @@ bool GenMCDriver::isMaximalExtension(const BackwardRevisit &r)
 		return false;
 
 	auto &g = getExec().getGraph();
-	auto &v = r.getViewNoRel();
+	auto *v = r.getViewNoRel();
 
 	for (const auto &lab : g.labels()) {
 		/* Exclude events unaffected by the revisit */
@@ -3393,14 +3393,23 @@ bool GenMCDriver::isMaximalExtension(const BackwardRevisit &r)
 	return true;
 }
 
-std::unique_ptr<ExecutionGraph> GenMCDriver::copyGraph(const BackwardRevisit *br,
-						       VectorClock *v) const
+std::unique_ptr<ExecutionGraph> GenMCDriver::copyGraph(const BackwardRevisit *br, VectorClock *v)
 {
 	auto &g = getExec().getGraph();
 
 	/* Adjust the view that will be used for copying */
 	auto &prefix = getPrefixView(g.getEventLabel(br->getRev()));
-	auto og = g.getCopyUpTo(*v);
+	ExecutionGraph::CopyStatistics copyStatistics;
+	auto *copyStatisticsPtr = getConf()->catStats ? &copyStatistics : nullptr;
+	auto og = g.getCopyUpTo(*v, ExecutionGraph::ViewCopyMode::ShareWithinWorker,
+				copyStatisticsPtr);
+	if (getConf()->catStats) {
+		auto &statistics = result.explorationStatistics;
+		++statistics.sharedHistoryGraphCopies;
+		statistics.sharedHistoryViewBases += copyStatistics.sharedViewBases;
+		statistics.sharedHistoryViewLowerBoundBytes +=
+			copyStatistics.sharedViewLowerBoundBytes;
+	}
 
 	/** Ensure the prefix of the write will not be revisitable.
 	 * This is also used to check whether a write has revisited,

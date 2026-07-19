@@ -586,7 +586,7 @@ private:
 
 	/** Copies the current EG according to BR's view V.
 	 * May modify V but will not execute BR in the copy. */
-	std::unique_ptr<ExecutionGraph> copyGraph(const BackwardRevisit *br, VectorClock *v) const;
+	std::unique_ptr<ExecutionGraph> copyGraph(const BackwardRevisit *br, VectorClock *v);
 
 	/** Given a list of stores that it is consistent to read-from,
 	 * filters out options that can be skipped (according to the conf),

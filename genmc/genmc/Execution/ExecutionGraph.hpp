@@ -55,6 +55,12 @@ class ConsistencyChecker;
 class ExecutionGraph {
 
 public:
+	enum class ViewCopyMode { Deep, ShareWithinWorker };
+	struct CopyStatistics {
+		std::uint64_t sharedViewBases{};
+		std::uint64_t sharedViewLowerBoundBytes{};
+	};
+
 	/* Type definitions */
 	using Thread = std::vector<std::unique_ptr<EventLabel>>;
 	using ThreadList = std::vector<Thread>;
@@ -1045,7 +1051,9 @@ public:
 	 * 1) Copy graph structure (calculators, constant members, etc)
 	 * 2) Copy events => these should notify calculators so that calcs populate their structures
 	 */
-	virtual auto getCopyUpTo(const VectorClock &v) const -> std::unique_ptr<ExecutionGraph>;
+	virtual auto getCopyUpTo(const VectorClock &v, ViewCopyMode mode = ViewCopyMode::Deep,
+				 CopyStatistics *statistics = nullptr) const
+		-> std::unique_ptr<ExecutionGraph>;
 
 	auto clone() const -> std::unique_ptr<ExecutionGraph>
 	{
@@ -1109,7 +1117,8 @@ protected:
 	void resetStamp(Stamp val) { timestamp = val; }
 
 	void trackCoherenceAtLoc(SAddr addr);
-	void copyGraphUpTo(ExecutionGraph &other, const VectorClock &v) const;
+	void copyGraphUpTo(ExecutionGraph &other, const VectorClock &v, ViewCopyMode mode,
+			   CopyStatistics *statistics) const;
 	void addInitRfToLoc(ReadLabel *rLab) { getInitLabel()->addReader(rLab); }
 
 	void removeInitRfToLoc(ReadLabel *rLab)

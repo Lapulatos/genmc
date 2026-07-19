@@ -35,8 +35,10 @@
 
 #include <cstdint>
 #include <format>
+#include <memory>
 #include <optional>
 #include <ranges>
+#include <array>
 
 class ReadLabel;
 class MallocLabel;
@@ -88,16 +90,16 @@ public:
 
 protected:
 	EventLabel(EventLabelKind k, Event p, MemOrdering o, const EventDeps &deps = EventDeps())
-		: kind(k), position(p), ordering(o), deps(deps)
+		: kind(k), position(p), ordering(o), deps(makeDeps(deps))
 	{}
 
 public:
 	virtual ~EventLabel() = default;
 
 	/** Iterators for dependencies */
-	auto data() const { return std::views::all(deps.data); }
-	auto addr() const { return std::views::all(deps.addr); }
-	auto ctrl() const { return std::views::all(deps.ctrl); }
+	auto data() const { return std::views::all(getDeps().data); }
+	auto addr() const { return std::views::all(getDeps().addr); }
+	auto ctrl() const { return std::views::all(getDeps().ctrl); }
 
 	/** Returns the discriminator of this object */
 	EventLabelKind getKind() const { return kind; }
@@ -128,12 +130,12 @@ public:
 	void setOrdering(MemOrdering ord) { ordering = ord; }
 
 	/** Returns this label's dependencies */
-	const EventDeps &getDeps() const { return deps; }
+	const EventDeps &getDeps() const { return deps ? *deps : emptyDeps(); }
 
 	/** Sets this label's dependencies */
-	void setDeps(const EventDeps &ds) { deps = ds; }
-	void setDeps(const EventDeps *ds) { deps = *ds; }
-	void setDeps(EventDeps &&ds) { deps = std::move(ds); }
+	void setDeps(const EventDeps &ds) { deps = makeDeps(ds); }
+	void setDeps(const EventDeps *ds) { deps = makeDeps(*ds); }
+	void setDeps(EventDeps &&ds) { deps = makeDeps(std::move(ds)); }
 
 	/** Returns whether a stamp has been assigned for this label */
 	bool hasStamp() const { return stamp.has_value(); }
@@ -153,28 +155,60 @@ public:
 	VectorClock &getPrefixView() { return *prefixView; }
 	void setPrefixView(std::unique_ptr<VectorClock> v) const { prefixView = std::move(v); }
 
-	void setCalculated(std::vector<VSet<Event>> &&calc) { calculatedRels = std::move(calc); }
+	void setCalculated(std::vector<VSet<Event>> &&calc)
+	{
+		calculatedRels =
+			std::make_shared<const std::vector<VSet<Event>>>(std::move(calc));
+	}
 
-	void setViews(std::vector<View> &&views) { calculatedViews = std::move(views); }
-	void addView(View &&view) { calculatedViews.emplace_back(view); }
+	void setViews(std::vector<View> &&views)
+	{
+		clearViews();
+		for (auto &view : views)
+			addView(std::move(view));
+	}
+	void addView(View &&view)
+	{
+		VERIFY(calculatedViewCount < calculatedViewMap.size(), "too many calculated views");
+		auto physical = calculatedViews.size();
+		for (std::size_t i = 0; i < calculatedViews.size(); ++i) {
+			if (calculatedViews[i] == view) {
+				physical = i;
+				break;
+			}
+		}
+		if (physical == calculatedViews.size())
+			calculatedViews.emplace_back(std::move(view));
+		calculatedViewMap[calculatedViewCount++] = static_cast<std::uint8_t>(physical);
+	}
+
+	template <typename... Views> void replaceViews(Views &&...views)
+	{
+		clearViews();
+		(addView(std::forward<Views>(views)), ...);
+	}
 
 	/** Iterators for calculated relations */
 	auto calculated(size_t i) const
 	{
 		return (getPos().isInitializer() || getKind() == Empty)
-			       ? std::views::all(calculatedRels[0])
-			       : std::views::all(calculatedRels[i]);
+			       ? std::views::all((*calculatedRels)[0])
+			       : std::views::all((*calculatedRels)[i]);
 	}
 
 	/** Getters for calculated views */
 	const View &view(size_t i) const
 	{
-		return (getPos().isInitializer() || getKind() == Empty) ? calculatedViews[0]
-									: calculatedViews[i];
+		const auto logical = (getPos().isInitializer() || getKind() == Empty) ? 0 : i;
+		return calculatedViews[calculatedViewMap[logical]];
 	}
 
 	/** Iterator over the calculated views */
-	auto views() const { return std::views::all(calculatedViews); }
+	auto views() const
+	{
+		return std::views::iota(std::size_t{0}, calculatedViewCount) |
+		       std::views::transform([this](std::size_t i) -> const View & { return view(i); });
+	}
 
 	/** Returns true if this label corresponds to a non-atomic access */
 	bool isNotAtomic() const { return ordering == MemOrdering::NotAtomic; }
@@ -234,8 +268,8 @@ public:
 	{
 		parent = nullptr;
 		stamp = std::nullopt;
-		calculatedRels.clear();
-		calculatedViews.clear();
+		calculatedRels.reset();
+		clearViews();
 		prefixView = nullptr;
 		revisitable = true;
 	}
@@ -243,8 +277,8 @@ public:
 	/** Clear model-derived caches while preserving graph identity and semantic edges. */
 	void clearDerivedState()
 	{
-		calculatedRels.clear();
-		calculatedViews.clear();
+		calculatedRels.reset();
+		clearViews();
 		prefixView = nullptr;
 	}
 
@@ -256,6 +290,32 @@ private:
 	static inline bool returnsValue(EventLabelKind k);
 	static inline bool accessesValue(EventLabelKind k);
 	static inline bool hasLocation(EventLabelKind k);
+
+	void clearViews()
+	{
+		calculatedViews.clear();
+		calculatedViewCount = 0;
+	}
+
+	[[nodiscard]] static auto dependenciesEmpty(const EventDeps &deps) -> bool
+	{
+		return deps.addr.empty() && deps.data.empty() && deps.ctrl.empty() &&
+		       deps.addrPo.empty() && deps.cas.empty();
+	}
+
+	[[nodiscard]] static auto emptyDeps() -> const EventDeps &
+	{
+		static const EventDeps empty;
+		return empty;
+	}
+
+	template <typename Deps>
+	[[nodiscard]] static auto makeDeps(Deps &&deps) -> std::shared_ptr<const EventDeps>
+	{
+		if (dependenciesEmpty(deps))
+			return {};
+		return std::make_shared<const EventDeps>(std::forward<Deps>(deps));
+	}
 
 	void setStamp(Stamp s) { stamp = s; }
 
@@ -270,8 +330,9 @@ private:
 	/** Ordering of this access mode */
 	MemOrdering ordering;
 
-	/** Events on which this label depends */
-	EventDeps deps;
+	/** Empty dependency sets occupy no per-label payload; non-empty sets are immutable and
+	 * safely shared by graph/history clones. */
+	std::shared_ptr<const EventDeps> deps;
 
 	/** The stamp of this label in the execution graph */
 	std::optional<Stamp> stamp = std::nullopt;
@@ -279,10 +340,13 @@ private:
 	mutable value_ptr<VectorClock, VectorClockCloner> prefixView = nullptr;
 
 	/** Saved calculations */
-	std::vector<VSet<Event>> calculatedRels;
+	/** Saved relations are immutable after publication and shared by graph/history clones. */
+	std::shared_ptr<const std::vector<VSet<Event>>> calculatedRels;
 
 	/** Saved views */
 	std::vector<View> calculatedViews;
+	std::array<std::uint8_t, 4> calculatedViewMap{};
+	std::uint8_t calculatedViewCount{};
 
 	/** Revisitability status */
 	bool revisitable = true;
