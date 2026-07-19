@@ -1,0 +1,18 @@
+# Compilation failures without __VERIFIER_nondet_* in the source census.
+c/pthread-atomic/read_write_lock-1.yml
+c/pthread-divine/tls_destructor_worker.yml
+c/pthread-ext/40_barrier_vf.yml
+c/pthread-ext/18_read_write_lock.yml
+c/pthread-divine/tls_basic.yml
+c/pthread-deagle/arithmetic_prog_bad.yml
+c/pthread-deagle/arithmetic_prog_ok.yml
+c/pthread/sync01.yml
+
+# Unsupported externals without __VERIFIER_nondet_*.
+c/pthread-ext/36_stack_cas_p0_vs_concur.yml
+c/pthread-ext/37_stack_lock_p0_vs_concur.yml
+c/pthread/reorder_5.yml
+
+# Abort-as-assume tasks without __VERIFIER_nondet_*.
+c/pthread-lit/qw2004-2b.yml
+c/pthread-theta/wsc.yml

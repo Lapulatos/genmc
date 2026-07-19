@@ -1,0 +1,4 @@
+model	rf_offered	same_value_upper_bound	realized_prefixes	inconsistent_prefixes	completed_same_value_pct	timeout_same_value_pct
+SC	67978223	12868426	22090308	207	24.30	29.67
+TSO	57718147	9775191	16927328	207	17.71	29.55
+PSO	23005964	2787706	5243489	67	21.39	28.47

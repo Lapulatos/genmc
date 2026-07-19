@@ -1,0 +1,200 @@
+[
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__chl-chromosome-opt-symm.wvr.log",
+    "rewrite_rules": [
+      "preprocessed-malloc",
+      "abort-assume-definition",
+      "manual-pthread-calls",
+      "manual-atomic-runtime"
+    ],
+    "seconds": 0.09731790894875303,
+    "source": "c/weaver/chl-chromosome-opt-symm.wvr.c",
+    "task": "c/weaver/chl-chromosome-opt-symm.wvr.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": false,
+    "has_nondet": true,
+    "log": "pthread-ext__39_rand_lock_p0_vs.log",
+    "rewrite_rules": [
+      "internalize-inline-definition"
+    ],
+    "seconds": 0.0971519750310108,
+    "source": "c/pthread-ext/39_rand_lock_p0_vs.c",
+    "task": "c/pthread-ext/39_rand_lock_p0_vs.yml"
+  },
+  {
+    "classification": "unsupported-external",
+    "exit_code": 17,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-ext__08_rand_cas.log",
+    "rewrite_rules": [
+      "internalize-inline-definition",
+      "abort-assume-definition",
+      "svcomp-atomic-function"
+    ],
+    "seconds": 0.08127709297696128,
+    "source": "c/pthread-ext/08_rand_cas.c",
+    "task": "c/pthread-ext/08_rand_cas.yml"
+  },
+  {
+    "classification": "timeout",
+    "exit_code": null,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-ext__26_stack_cas.log",
+    "rewrite_rules": [
+      "internalize-inline-definition",
+      "abort-assume-definition",
+      "svcomp-atomic-function"
+    ],
+    "seconds": 5.011000040976796,
+    "source": "c/pthread-ext/26_stack_cas.c",
+    "task": "c/pthread-ext/26_stack_cas.yml"
+  },
+  {
+    "classification": "timeout",
+    "exit_code": null,
+    "has_abort_assume": false,
+    "has_nondet": true,
+    "log": "pthread-ext__25_stack.log",
+    "rewrite_rules": [
+      "internalize-inline-definition",
+      "svcomp-atomic-function"
+    ],
+    "seconds": 5.010775322967675,
+    "source": "c/pthread-ext/25_stack.c",
+    "task": "c/pthread-ext/25_stack.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": false,
+    "has_nondet": true,
+    "log": "pthread-ext__04_incdec_cas.log",
+    "rewrite_rules": [
+      "internalize-inline-definition",
+      "svcomp-atomic-function"
+    ],
+    "seconds": 0.0856436180183664,
+    "source": "c/pthread-ext/04_incdec_cas.c",
+    "task": "c/pthread-ext/04_incdec_cas.yml"
+  },
+  {
+    "classification": "unsupported-external",
+    "exit_code": 17,
+    "has_abort_assume": false,
+    "has_nondet": true,
+    "log": "pthread-ext__35_double_lock_p3_vs.log",
+    "rewrite_rules": [],
+    "seconds": 0.07945047604152933,
+    "source": "c/pthread-ext/35_double_lock_p3_vs.c",
+    "task": "c/pthread-ext/35_double_lock_p3_vs.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": false,
+    "has_nondet": true,
+    "log": "pthread-C-DAC__pthread-finding-k-matches.log",
+    "rewrite_rules": [
+      "joinable-thread-attributes",
+      "cdac-diagnostic-output"
+    ],
+    "seconds": 0.15119619597680867,
+    "source": "c/pthread-C-DAC/pthread-finding-k-matches.c",
+    "task": "c/pthread-C-DAC/pthread-finding-k-matches.yml"
+  },
+  {
+    "classification": "timeout",
+    "exit_code": null,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread-C-DAC__pthread-demo-datarace-1.log",
+    "rewrite_rules": [
+      "cdac-diagnostic-output",
+      "cdac-main-return"
+    ],
+    "seconds": 5.00831989897415,
+    "source": "c/pthread-C-DAC/pthread-demo-datarace-1.c",
+    "task": "c/pthread-C-DAC/pthread-demo-datarace-1.yml"
+  },
+  {
+    "classification": "signal-6",
+    "exit_code": -6,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-C-DAC__pthread-numerical-integration.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "cdac-diagnostic-output"
+    ],
+    "seconds": 0.22699683398241177,
+    "source": "c/pthread-C-DAC/pthread-numerical-integration.c",
+    "task": "c/pthread-C-DAC/pthread-numerical-integration.yml"
+  },
+  {
+    "classification": "timeout",
+    "exit_code": null,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "goblint-regression__28-race_reach_27-funptr_racing.log",
+    "rewrite_rules": [
+      "finite-function-pointer-dispatch",
+      "abort-assume-definition"
+    ],
+    "seconds": 5.04585119895637,
+    "source": "c/goblint-regression/28-race_reach_27-funptr_racing.c",
+    "task": "c/goblint-regression/28-race_reach_27-funptr_racing.yml"
+  },
+  {
+    "classification": "timeout",
+    "exit_code": null,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "goblint-regression__28-race_reach_28-funptr_racefree.log",
+    "rewrite_rules": [
+      "finite-function-pointer-dispatch",
+      "abort-assume-definition"
+    ],
+    "seconds": 5.044090774026699,
+    "source": "c/goblint-regression/28-race_reach_28-funptr_racefree.c",
+    "task": "c/goblint-regression/28-race_reach_28-funptr_racefree.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-driver-races__char_generic_nvram_read_nvram_nvram_unlocked_ioctl.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "preprocessed-malloc",
+      "abort-assume-definition"
+    ],
+    "seconds": 0.16957653500139713,
+    "source": "c/pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.i",
+    "task": "c/pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.yml"
+  },
+  {
+    "classification": "timeout",
+    "exit_code": null,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "ldv-linux-3.14-races__linux-3.14--drivers--spi--spi-tegra20-slink.ko.cil.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "fixed-seed-nondet-cast"
+    ],
+    "seconds": 5.009452004975174,
+    "source": "c/ldv-linux-3.14-races/linux-3.14--drivers--spi--spi-tegra20-slink.ko.cil.c",
+    "task": "c/ldv-linux-3.14-races/linux-3.14--drivers--spi--spi-tegra20-slink.ko.cil.yml"
+  }
+]

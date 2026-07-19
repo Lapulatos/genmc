@@ -1,0 +1,726 @@
+backend	task_yaml	property	expected_verdict	status	category	cputime_seconds	walltime_seconds	memory_bytes	returnvalue	exitsignal	starttime
+genmc-sc	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.037281	0.0392147118691355	25911296	0		2026-07-14T17:51:52.185028+08:00
+genmc-sc	c/goblint-regression/13-privatized_04-priv_multi_true.yml	unreach-call	true	ERROR (unsupported external)	error	0.056144	0.07226814096793532	26165248	17		2026-07-14T17:57:55.409756+08:00
+genmc-sc	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.034669	0.05286020692437887	25923584	0		2026-07-14T17:51:52.003758+08:00
+genmc-sc	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.034766	0.0360961661208421	25927680	42		2026-07-14T17:51:51.847461+08:00
+genmc-sc	c/goblint-regression/13-privatized_18-first-reads_unknown_1_pos.yml	unreach-call	false	true	wrong	0.034246	0.04630369087681174	25911296	0		2026-07-14T17:51:51.834475+08:00
+genmc-sc	c/goblint-regression/13-privatized_18-first-reads_unknown_2_neg.yml	unreach-call	false	true	wrong	0.034737	0.05495183798484504	25931776	0		2026-07-14T17:51:52.001569+08:00
+genmc-sc	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.032801	0.036198881920427084	25923584	42		2026-07-14T17:51:51.847401+08:00
+genmc-sc	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.036241	0.039573309011757374	25948160	0		2026-07-14T17:51:52.188199+08:00
+genmc-sc	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.036293	0.0378568209707737	25923584	42		2026-07-14T17:51:52.192261+08:00
+genmc-sc	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.032766	0.04799561994150281	25931776	42		2026-07-14T17:51:52.008560+08:00
+genmc-sc	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.038054	0.03949611308053136	25923584	42		2026-07-14T17:51:52.184805+08:00
+genmc-sc	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.038796	0.05361703899689019	25931776	42		2026-07-14T17:51:52.164900+08:00
+genmc-sc	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.035239	0.03800814785063267	25919488	0		2026-07-14T17:51:52.347031+08:00
+genmc-sc	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.036236	0.039121903013437986	25972736	0		2026-07-14T17:51:52.504845+08:00
+genmc-sc	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.037165	0.03881199099123478	25927680	0		2026-07-14T17:51:52.336816+08:00
+genmc-sc	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.038172	0.0510814709123224	26017792	0		2026-07-14T17:51:53.215976+08:00
+genmc-sc	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.036675	0.03775068209506571	25968640	0		2026-07-14T17:51:52.501466+08:00
+genmc-sc	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.036365	0.04633756307885051	25935872	0		2026-07-14T17:51:52.469640+08:00
+genmc-sc	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.036831	0.03891569608822465	25935872	0		2026-07-14T17:51:52.342778+08:00
+genmc-sc	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.03576	0.04812874901108444	25944064	0		2026-07-14T17:51:52.484942+08:00
+genmc-sc	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.039748	0.046390505973249674	25899008	0		2026-07-14T17:51:52.321003+08:00
+genmc-sc	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.03551	0.04610924702137709	25931776	0		2026-07-14T17:51:52.486898+08:00
+genmc-sc	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.034155	0.05003604688681662	25894912	0		2026-07-14T17:51:52.006725+08:00
+genmc-sc	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.034447	0.05177885899320245	25886720	0		2026-07-14T17:51:52.004884+08:00
+genmc-sc	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.032702	0.04891441483050585	25886720	0		2026-07-14T17:51:52.007558+08:00
+genmc-sc	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.032646	0.047297090059146285	25886720	0		2026-07-14T17:51:52.009287+08:00
+genmc-sc	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.034281	0.048752963077276945	25882624	0		2026-07-14T17:51:51.831932+08:00
+genmc-sc	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.034192	0.04818712407723069	25894912	42		2026-07-14T17:51:51.832775+08:00
+genmc-sc	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.034836	0.05230952613055706	25882624	42		2026-07-14T17:51:51.828262+08:00
+genmc-sc	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.037434	0.038813686929643154	25894912	0		2026-07-14T17:51:52.183558+08:00
+genmc-sc	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.034028	0.044669284019619226	25890816	0		2026-07-14T17:51:51.835860+08:00
+genmc-sc	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.03696	0.038333202013745904	25903104	0		2026-07-14T17:51:52.188135+08:00
+genmc-sc	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.033897	0.03552785492502153	25866240	0		2026-07-14T17:51:51.684291+08:00
+genmc-sc	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.034586	0.03645106800831854	25894912	0		2026-07-14T17:51:51.680997+08:00
+genmc-sc	c/goblint-regression/13-privatized_52-refine-protected-loop2-small_true.yml	unreach-call	true	TIMEOUT	error	10.997781	11.02694580797106	89133056		9	2026-07-14T17:51:52.000027+08:00
+genmc-sc	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.035594	0.0374343260191381	25874432	0		2026-07-14T17:51:51.679989+08:00
+genmc-sc	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.033816	0.043750328943133354	25870336	0		2026-07-14T17:51:51.836712+08:00
+genmc-sc	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.035309	0.05531218694522977	25812992	0		2026-07-14T17:51:51.657700+08:00
+genmc-sc	c/goblint-regression/13-privatized_67-pthread_cond_wait_true.yml	unreach-call	false	ERROR (compilation)	error	0.052945	0.07742520608007908	25874432	5		2026-07-14T17:57:56.434097+08:00
+genmc-sc	c/goblint-regression/13-privatized_67-pthread_cond_wait_unknown_1_neg.yml	unreach-call	false	ERROR (compilation)	error	0.045444	0.061542337061837316	25710592	5		2026-07-14T17:57:56.776589+08:00
+genmc-sc	c/goblint-regression/13-privatized_67-pthread_cond_wait_unknown_1_pos.yml	unreach-call	false	ERROR (compilation)	error	0.046425	0.05664355494081974	25890816	5		2026-07-14T17:57:56.616446+08:00
+genmc-sc	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.035509	0.04409376299008727	26013696	0		2026-07-14T17:51:52.489135+08:00
+genmc-sc	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.035892	0.038965960033237934	25980928	0		2026-07-14T17:51:52.336792+08:00
+genmc-sc	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	false(unreach-call)	correct	2.206302	2.2219262418802828	76750848	42		2026-07-14T17:52:10.553125+08:00
+genmc-sc	c/goblint-regression/28-race_reach_02-simple_racefree.yml	unreach-call	true	TIMEOUT	error	11.087012	11.10589695116505	2209030144		9	2026-07-14T17:52:12.883170+08:00
+genmc-sc	c/goblint-regression/28-race_reach_03-munge_racing.yml	unreach-call	false	TIMEOUT	error	11.006881	11.01551760500297	73879552		9	2026-07-14T17:52:31.864780+08:00
+genmc-sc	c/goblint-regression/28-race_reach_04-munge_racefree.yml	unreach-call	true	TIMEOUT	error	11.00556	11.01967876101844	76234752		9	2026-07-14T17:52:32.666319+08:00
+genmc-sc	c/goblint-regression/28-race_reach_05-lockfuns_racefree.yml	unreach-call	true	TIMEOUT	error	11.087212	11.111392132006586	2336034816		9	2026-07-14T17:52:09.015227+08:00
+genmc-sc	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	false(unreach-call)	correct	1.808123	1.829676009947434	76750848	42		2026-07-14T17:57:26.845251+08:00
+genmc-sc	c/goblint-regression/28-race_reach_07-cond_racing2.yml	unreach-call	false	TIMEOUT	error	11.075893	11.091004553018138	2807525376		9	2026-07-14T17:57:28.782036+08:00
+genmc-sc	c/goblint-regression/28-race_reach_08-cond_racefree.yml	unreach-call	true	TIMEOUT	error	11.093403	11.110438070027158	2975526912		9	2026-07-14T17:57:27.847139+08:00
+genmc-sc	c/goblint-regression/28-race_reach_09-ptrmunge_racing.yml	unreach-call	false	TIMEOUT	error	11.002316	11.016786789055914	75702272		9	2026-07-14T17:52:32.883439+08:00
+genmc-sc	c/goblint-regression/28-race_reach_10-ptrmunge_racefree.yml	unreach-call	true	TIMEOUT	error	11.014452	11.028932798886672	538382336		9	2026-07-14T17:52:35.209537+08:00
+genmc-sc	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	false(unreach-call)	correct	2.649304	2.661901142913848	76746752	42		2026-07-14T17:52:13.952240+08:00
+genmc-sc	c/goblint-regression/28-race_reach_12-ptr_racefree.yml	unreach-call	true	TIMEOUT	error	11.083179	11.108634229982272	2082947072		9	2026-07-14T17:52:14.391993+08:00
+genmc-sc	c/goblint-regression/28-race_reach_19-callback_racing.yml	unreach-call	false	TIMEOUT	error	11.067874	11.083742557093501	1545990144		9	2026-07-14T17:52:30.871789+08:00
+genmc-sc	c/goblint-regression/28-race_reach_20-callback_racefree.yml	unreach-call	true	TIMEOUT	error	11.091137	11.103108164155856	1517760512		9	2026-07-14T17:52:31.356511+08:00
+genmc-sc	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	1.944546	1.957691022194922	56139776	42		2026-07-14T17:52:04.877827+08:00
+genmc-sc	c/goblint-regression/28-race_reach_22-deref_read_racefree.yml	unreach-call	true	false(unreach-call)	wrong	2.051442	2.0718133030459285	56098816	42		2026-07-14T17:52:06.948867+08:00
+genmc-sc	c/goblint-regression/28-race_reach_23-sound_unlock_racing.yml	unreach-call	false	ERROR (unsupported external)	error	1.130449	1.1463167800102383	26009600	17		2026-07-14T17:52:31.632010+08:00
+genmc-sc	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	false(unreach-call)	correct	2.646461	2.664100051857531	76742656	42		2026-07-14T17:52:27.410133+08:00
+genmc-sc	c/goblint-regression/28-race_reach_27-funptr_racing.yml	unreach-call	false	SEGMENTATION FAULT	error	1.535046	8.031837257090956	68624384		11	2026-07-14T17:57:16.657175+08:00
+genmc-sc	c/goblint-regression/28-race_reach_28-funptr_racefree.yml	unreach-call	true	SEGMENTATION FAULT	error	1.653872	9.073328962083906	68620288		11	2026-07-14T17:57:17.660666+08:00
+genmc-sc	c/goblint-regression/28-race_reach_36-indirect_racefree.yml	unreach-call	true	TIMEOUT	error	11.081784	11.104099008021876	2343231488		9	2026-07-14T17:52:09.144869+08:00
+genmc-sc	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	false(unreach-call)	correct	2.124692	2.1378075890243053	76750848	42		2026-07-14T17:52:07.052667+08:00
+genmc-sc	c/goblint-regression/28-race_reach_40-trylock_racing.yml	unreach-call	false	ERROR (unsupported external)	error	1.104858	1.1208605729043484	26009600	17		2026-07-14T17:52:27.339660+08:00
+genmc-sc	c/goblint-regression/28-race_reach_41-trylock_racefree.yml	unreach-call	true	TIMEOUT	error	11.088357	11.107140970882028	2223480832		9	2026-07-14T17:52:08.546762+08:00
+genmc-sc	c/goblint-regression/28-race_reach_42-trylock2_racefree.yml	unreach-call	true	TIMEOUT	error	11.004823	11.017770400037989	132866048		9	2026-07-14T17:52:43.675305+08:00
+genmc-sc	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.036115	0.04767050291411579	25939968	42		2026-07-14T17:52:07.931019+08:00
+genmc-sc	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.038279	0.047161322785541415	25923584	0		2026-07-14T17:52:08.082709+08:00
+genmc-sc	c/goblint-regression/28-race_reach_51-mutexptr_racefree.yml	unreach-call	true	TIMEOUT	error	11.103039	11.118261919822544	1903108096		9	2026-07-14T17:52:28.565119+08:00
+genmc-sc	c/goblint-regression/28-race_reach_60-invariant_racefree.yml	unreach-call	true	TIMEOUT	error	11.073946	11.083923977799714	2476154880		9	2026-07-14T17:52:39.789635+08:00
+genmc-sc	c/goblint-regression/28-race_reach_61-invariant_racing.yml	unreach-call	false	TIMEOUT	error	11.057699	11.082240214105695	1863008256		9	2026-07-14T17:52:36.727970+08:00
+genmc-sc	c/goblint-regression/28-race_reach_70-funloop_racefree.yml	unreach-call	true	TIMEOUT	error	11.00995	11.022762280888855	323170304		9	2026-07-14T17:57:28.866068+08:00
+genmc-sc	c/goblint-regression/28-race_reach_71-funloop_racing.yml	unreach-call	false	TIMEOUT	error	11.009694	11.021947374101728	323186688		9	2026-07-14T17:57:30.897027+08:00
+genmc-sc	c/goblint-regression/28-race_reach_72-funloop_hard_racing.yml	unreach-call	false	TIMEOUT	error	11.008457	11.023313323967159	280809472		9	2026-07-14T17:57:34.989594+08:00
+genmc-sc	c/goblint-regression/28-race_reach_73-funloop_hard_racefree.yml	unreach-call	true	TIMEOUT	error	11.011305	11.0370462089777	344629248		9	2026-07-14T17:57:36.010752+08:00
+genmc-sc	c/goblint-regression/28-race_reach_74-tricky_address1_racefree.yml	unreach-call	true	ABORTED	error	0.787476	4.062851983122528	26083328		6	2026-07-14T17:57:30.824151+08:00
+genmc-sc	c/goblint-regression/28-race_reach_75-tricky_address2_racefree.yml	unreach-call	true	ABORTED	error	0.836798	3.9860436369199306	26066944		6	2026-07-14T17:57:31.919803+08:00
+genmc-sc	c/goblint-regression/28-race_reach_76-tricky_address3_racefree.yml	unreach-call	true	ABORTED	error	0.795388	3.984907873906195	26071040		6	2026-07-14T17:57:32.946064+08:00
+genmc-sc	c/goblint-regression/28-race_reach_77-tricky_address4_racing.yml	unreach-call	false	ABORTED	error	0.807783	3.972503622993827	26071040		6	2026-07-14T17:57:33.974147+08:00
+genmc-sc	c/goblint-regression/28-race_reach_78-equ_racing.yml	unreach-call	false	TIMEOUT	error	11.09389	11.115380177972838	1863290880		9	2026-07-14T17:57:43.268835+08:00
+genmc-sc	c/goblint-regression/28-race_reach_79-equ_racefree.yml	unreach-call	true	TIMEOUT	error	11.08722	11.10282000200823	1861160960		9	2026-07-14T17:57:43.965342+08:00
+genmc-sc	c/goblint-regression/28-race_reach_81-list_racing.yml	unreach-call	false	TIMEOUT	error	11.004905	11.02297605900094	79384576		9	2026-07-14T17:57:44.283124+08:00
+genmc-sc	c/goblint-regression/28-race_reach_82-list_racefree.yml	unreach-call	false	TIMEOUT	error	11.005806	11.016559457872063	79380480		9	2026-07-14T17:57:45.312701+08:00
+genmc-sc	c/goblint-regression/28-race_reach_83-list2_racing1.yml	unreach-call	false	TIMEOUT	error	11.004135	11.019847541116178	74444800		9	2026-07-14T17:57:53.750007+08:00
+genmc-sc	c/goblint-regression/28-race_reach_84-list2_racing2.yml	unreach-call	false	TIMEOUT	error	11.00225	11.01830777595751	74448896		9	2026-07-14T17:57:55.178876+08:00
+genmc-sc	c/goblint-regression/28-race_reach_85-list2_racefree.yml	unreach-call	true	TIMEOUT	error	10.99539	11.019774798071012	76533760		9	2026-07-14T17:57:54.490786+08:00
+genmc-sc	c/goblint-regression/28-race_reach_86-lists_racing.yml	unreach-call	false	ABORTED	error	9.710456	11.417386138811707	83517440		6	2026-07-14T17:57:47.150728+08:00
+genmc-sc	c/goblint-regression/28-race_reach_87-lists_racefree.yml	unreach-call	true	TIMEOUT	error	10.882084	11.014903578907251	83374080		9	2026-07-14T17:57:46.115577+08:00
+genmc-sc	c/goblint-regression/28-race_reach_90-arrayloop2_racing.yml	unreach-call	false	TIMEOUT	error	11.00482	11.017585995839909	80203776		9	2026-07-14T17:57:55.533184+08:00
+genmc-sc	c/goblint-regression/28-race_reach_91-arrayloop2_racefree.yml	unreach-call	true	ABORTED	error	2.301726	3.4998353449627757	48984064		6	2026-07-14T17:57:46.339584+08:00
+genmc-sc	c/goblint-regression/28-race_reach_92-evilcollapse_racing.yml	unreach-call	false	ABORTED	error	1.52624	2.998561708955094	26185728		6	2026-07-14T17:57:50.614849+08:00
+genmc-sc	c/goblint-regression/28-race_reach_93-evilcollapse_racefree.yml	unreach-call	true	ABORTED	error	1.40351	2.5718346398789436	26210304		6	2026-07-14T17:57:52.856211+08:00
+genmc-sc	c/goblint-regression/28-race_reach_94-alloc_region_racing.yml	unreach-call	false	OUT OF MEMORY	error	9.364602	9.376590468920767	3999997952		9	2026-07-14T17:57:57.232935+08:00
+genmc-sc	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.036073	0.03846432198770344	25886720	0		2026-07-14T17:51:51.681172+08:00
+genmc-sc	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.035007	0.04997885203920305	25833472	0		2026-07-14T17:51:51.663072+08:00
+genmc-sc	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.035684	0.03895053290762007	25915392	42		2026-07-14T17:51:52.342689+08:00
+genmc-sc	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_pos.yml	unreach-call	false	true	wrong	0.03705	0.03884649113751948	25915392	0		2026-07-14T17:51:52.336736+08:00
+genmc-sc	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.037214	0.0389482150785625	26001408	0		2026-07-14T17:51:52.648082+08:00
+genmc-sc	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.039313	0.054971677949652076	25972736	0		2026-07-14T17:51:52.765943+08:00
+genmc-sc	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_neg.yml	unreach-call	false	true	wrong	0.035032	0.05237334012053907	25829376	0		2026-07-14T17:51:51.660586+08:00
+genmc-sc	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.035121	0.05278294812887907	25821184	42		2026-07-14T17:51:51.660382+08:00
+genmc-sc	c/ldv-linux-3.14-races/linux-3.14--drivers--media--platform--marvell-ccic--cafe_ccic.ko.cil-1.yml	unreach-call	true	SEGMENTATION FAULT	error	0.874453	2.546595152001828	44576768		11	2026-07-14T17:58:06.614036+08:00
+genmc-sc	c/ldv-linux-3.14-races/linux-3.14--drivers--media--platform--marvell-ccic--cafe_ccic.ko.cil-2.yml	unreach-call	false	SEGMENTATION FAULT	error	0.859009	3.515395350055769	44552192		11	2026-07-14T17:58:06.656078+08:00
+genmc-sc	c/ldv-linux-3.14-races/linux-3.14--drivers--net--irda--nsc-ircc.ko.cil.yml	unreach-call	false	TIMEOUT	error	11.001468	11.010098573984578	51834880		9	2026-07-14T17:58:06.602516+08:00
+genmc-sc	c/ldv-linux-3.14-races/linux-3.14--drivers--net--irda--w83977af_ir.ko.cil.yml	unreach-call	false	ABORTED	error	0.516004	1.6330209211446345	35950592		6	2026-07-14T17:58:06.513843+08:00
+genmc-sc	c/ldv-linux-3.14-races/linux-3.14--drivers--spi--spi-tegra20-slink.ko.cil.yml	unreach-call	false	TIMEOUT	error	11.002529	11.013837386853993	32628736		9	2026-07-14T17:58:00.516754+08:00
+genmc-sc	c/ldv-linux-3.14-races/linux-3.14--drivers--usb--misc--adutux.ko.cil.yml	unreach-call	false	ABORTED	error	0.656638	1.8614802970550954	33443840		6	2026-07-14T17:58:04.764621+08:00
+genmc-sc	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.086472	0.09930177102796733	26144768	0		2026-07-14T17:57:58.867877+08:00
+genmc-sc	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.060072	0.0755592929199338	26161152	42		2026-07-14T17:57:59.935199+08:00
+genmc-sc	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.059832	0.07705418695695698	26152960	42		2026-07-14T17:57:59.752440+08:00
+genmc-sc	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.065065	0.08278365316800773	26222592	0		2026-07-14T17:58:00.821073+08:00
+genmc-sc	c/ldv-races/race-2_2-container_of.yml	unreach-call	false	true	wrong	0.063179	0.07055976614356041	26238976	0		2026-07-14T17:58:01.190276+08:00
+genmc-sc	c/ldv-races/race-2_3-container_of.yml	unreach-call	false	true	wrong	0.068413	0.0840896109584719	26275840	0		2026-07-14T17:58:01.919141+08:00
+genmc-sc	c/ldv-races/race-2_4-container_of.yml	unreach-call	false	true	wrong	0.067151	0.08300036680884659	26259456	0		2026-07-14T17:58:01.731961+08:00
+genmc-sc	c/ldv-races/race-2_5-container_of.yml	unreach-call	false	true	wrong	0.065119	0.07343207602389157	26275840	0		2026-07-14T17:58:01.554385+08:00
+genmc-sc	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.064091	0.07759418897330761	26214400	0		2026-07-14T17:58:01.008283+08:00
+genmc-sc	c/ldv-races/race-3_2-container_of-global.yml	unreach-call	false	true	wrong	0.063731	0.0853963359259069	26263552	0		2026-07-14T17:58:01.365021+08:00
+genmc-sc	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.064209	0.08177396096289158	26230784	0		2026-07-14T17:58:00.116727+08:00
+genmc-sc	c/libvsync/arraylock.yml	unreach-call	true	ERROR (unsupported external)	error	0.095099	0.11504001100547612	26972160	17		2026-07-14T17:58:03.198856+08:00
+genmc-sc	c/libvsync/bounded_mpmc_check_full.yml	unreach-call	true	ERROR (unsupported external)	error	0.097667	0.10954812006093562	26968064	17		2026-07-14T17:58:02.983856+08:00
+genmc-sc	c/libvsync/cnalock.yml	unreach-call	true	ERROR (unsupported external)	error	0.107713	0.12683343701064587	27127808	17		2026-07-14T17:58:03.864550+08:00
+genmc-sc	c/libvsync/hclhlock.yml	unreach-call	true	ERROR (unsupported external)	error	0.108105	0.12096910201944411	27193344	17		2026-07-14T17:58:04.313961+08:00
+genmc-sc	c/libvsync/hmcslock.yml	unreach-call	true	ERROR (unsupported external)	error	0.106769	0.11834503710269928	27365376	17		2026-07-14T17:58:04.540261+08:00
+genmc-sc	c/libvsync/mcslock.yml	unreach-call	true	ERROR (unsupported external)	error	0.103462	0.11926376610063016	27033600	17		2026-07-14T17:58:02.758898+08:00
+genmc-sc	c/libvsync/rec_mcslock.yml	unreach-call	true	ERROR (unsupported external)	error	0.096939	0.11180374003015459	27099136	17		2026-07-14T17:58:04.096830+08:00
+genmc-sc	c/libvsync/rec_ticketlock.yml	unreach-call	true	ERROR (unsupported external)	error	0.103907	0.11505965911783278	27062272	17		2026-07-14T17:58:03.419674+08:00
+genmc-sc	c/libvsync/rwlock.yml	unreach-call	true	ERROR (unsupported external)	error	0.10325	0.11876019206829369	27086848	17		2026-07-14T17:58:03.640248+08:00
+genmc-sc	c/libvsync/semaphore.yml	unreach-call	true	ERROR (unsupported external)	error	0.098775	0.10848300415091217	26951680	17		2026-07-14T17:58:02.540991+08:00
+genmc-sc	c/libvsync/ticketlock.yml	unreach-call	true	ERROR (unsupported external)	error	0.09568	0.11079295491799712	26980352	17		2026-07-14T17:58:02.324608+08:00
+genmc-sc	c/libvsync/ttaslock.yml	unreach-call	true	ERROR (unsupported external)	error	0.09347	0.11028236686252058	26918912	17		2026-07-14T17:58:02.108826+08:00
+genmc-sc	c/pthread-C-DAC/pthread-demo-datarace-1.yml	unreach-call	true	SEGMENTATION FAULT	error	0.056855	1.203385922126472	25968640		11	2026-07-14T17:57:56.301892+08:00
+genmc-sc	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.069142	0.08944545104168355	25980928	42		2026-07-14T17:57:56.941332+08:00
+genmc-sc	c/pthread-C-DAC/pthread-finding-k-matches.yml	unreach-call	true	ERROR (unsupported external)	error	0.054247	0.06431105313822627	26185728	17		2026-07-14T17:57:57.795546+08:00
+genmc-sc	c/pthread-C-DAC/pthread-numerical-integration.yml	unreach-call	true	ABORTED	error	0.044261	1.6821501250378788	26157056		6	2026-07-14T17:57:57.964266+08:00
+genmc-sc	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.047264	0.0603968040086329	25964544	0		2026-07-14T17:53:15.795448+08:00
+genmc-sc	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.034865	0.05310798203572631	25976832	0		2026-07-14T17:53:15.634396+08:00
+genmc-sc	c/pthread-atomic/lamport.yml	unreach-call	true	false(unreach-call)	wrong	0.044429	0.06543245003558695	25968640	42		2026-07-14T17:53:13.585599+08:00
+genmc-sc	c/pthread-atomic/peterson.yml	unreach-call	true	false(unreach-call)	wrong	0.033012	0.04203457897529006	25939968	42		2026-07-14T17:52:49.106507+08:00
+genmc-sc	c/pthread-atomic/read_write_lock-1.yml	unreach-call	true	ERROR (compilation)	error	0.028942	0.03648312878794968	25432064	5		2026-07-14T17:52:02.244407+08:00
+genmc-sc	c/pthread-atomic/read_write_lock-2.yml	unreach-call	false	true	wrong	0.060395	0.07248633890412748	26013696	0		2026-07-14T17:52:42.059577+08:00
+genmc-sc	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.044739	0.055877204053103924	25956352	0		2026-07-14T17:53:09.496418+08:00
+genmc-sc	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.033895	0.0352219941560179	25997312	0		2026-07-14T17:52:02.562265+08:00
+genmc-sc	c/pthread-complex/bounded_buffer.yml	unreach-call	false	ERROR (compilation)	error	0.057106	0.0677333390340209	25800704	5		2026-07-14T17:57:58.693091+08:00
+genmc-sc	c/pthread-complex/elimination_backoff_stack.yml	unreach-call	false	ABORTED	error	0.116177	2.0436396829318255	26431488		6	2026-07-14T17:57:58.672533+08:00
+genmc-sc	c/pthread-complex/safestack_relacy.yml	unreach-call	false	TIMEOUT	error	11.001378	11.018935004016384	26185728		9	2026-07-14T17:57:59.073957+08:00
+genmc-sc	c/pthread-complex/workstealqueue_mutex-2.yml	unreach-call	true	false(unreach-call)	wrong	0.089023	0.10331345186568797	26472448	42		2026-07-14T17:58:00.304422+08:00
+genmc-sc	c/pthread-deagle/arithmetic_prog_bad.yml	unreach-call	false	ERROR (compilation)	error	0.028883	0.04298703093081713	25432064	5		2026-07-14T17:56:53.181566+08:00
+genmc-sc	c/pthread-deagle/arithmetic_prog_ok.yml	unreach-call	true	ERROR (compilation)	error	0.042814	0.05393464001826942	25407488	5		2026-07-14T17:56:53.332499+08:00
+genmc-sc	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.041503	0.048412547213956714	26042368	42		2026-07-14T17:52:14.631711+08:00
+genmc-sc	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	true	correct	1.22614	1.239814753876999	26034176	0		2026-07-14T17:52:30.521028+08:00
+genmc-sc	c/pthread-divine/tls_basic.yml	unreach-call	true	ERROR (compilation)	error	0.038011	0.050118712009862065	25645056	5		2026-07-14T17:52:14.478523+08:00
+genmc-sc	c/pthread-divine/tls_destructor_worker.yml	unreach-call	false	ERROR (compilation)	error	0.028917	0.030785800889134407	25661440	5		2026-07-14T17:52:02.415700+08:00
+genmc-sc	c/pthread-driver-races/char_generic_nvram_nvram_unlocked_ioctl_write_nvram.yml	unreach-call	true	ERROR (compilation)	error	0.049597	0.0619188379496336	25726976	5		2026-07-14T17:58:05.050291+08:00
+genmc-sc	c/pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.yml	unreach-call	true	ERROR (compilation)	error	0.050534	0.06245822994969785	25726976	5		2026-07-14T17:58:04.883758+08:00
+genmc-sc	c/pthread-driver-races/char_generic_nvram_read_nvram_write_nvram.yml	unreach-call	false	ERROR (compilation)	error	0.049421	0.06130151799879968	25743360	5		2026-07-14T17:58:05.222828+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_configure.yml	unreach-call	true	ERROR (compilation)	error	0.037002	0.048396483063697815	25722880	5		2026-07-14T17:58:06.205179+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_current.yml	unreach-call	false	ERROR (compilation)	error	0.040867	0.04301009909249842	25767936	5		2026-07-14T17:58:06.459486+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_get.yml	unreach-call	true	ERROR (compilation)	error	0.043437	0.05917525105178356	25722880	5		2026-07-14T17:58:05.882925+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_set.yml	unreach-call	false	ERROR (compilation)	error	0.03816	0.0522076990455389	25759744	5		2026-07-14T17:58:06.356543+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_configure_pc8736x_gpio_current.yml	unreach-call	true	ERROR (compilation)	error	0.038815	0.05451667797751725	25735168	5		2026-07-14T17:58:06.290022+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_configure_pc8736x_gpio_get.yml	unreach-call	true	ERROR (compilation)	error	0.039433	0.041419266955927014	25722880	5		2026-07-14T17:58:06.308579+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_configure_pc8736x_gpio_set.yml	unreach-call	true	ERROR (compilation)	error	0.042453	0.06589822308160365	25722880	5		2026-07-14T17:58:05.949209+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_current_pc8736x_gpio_get.yml	unreach-call	true	ERROR (compilation)	error	0.043714	0.06540569919161499	25731072	5		2026-07-14T17:58:06.119992+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_current_pc8736x_gpio_set.yml	unreach-call	false	ERROR (compilation)	error	0.040757	0.04895096900872886	25767936	5		2026-07-14T17:58:06.448527+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_get_pc8736x_gpio_set.yml	unreach-call	true	ERROR (compilation)	error	0.044618	0.06324298400431871	25731072	5		2026-07-14T17:58:05.616031+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_change.yml	unreach-call	true	ERROR (compilation)	error	0.042975	0.06124393199570477	25718784	5		2026-07-14T17:58:05.552314+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_configure.yml	unreach-call	true	ERROR (compilation)	error	0.042331	0.056345443008467555	25731072	5		2026-07-14T17:58:06.045633+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_current.yml	unreach-call	true	ERROR (compilation)	error	0.044727	0.061300338013097644	25722880	5		2026-07-14T17:58:05.718080+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_get.yml	unreach-call	true	ERROR (compilation)	error	0.043479	0.059860992012545466	25722880	5		2026-07-14T17:58:05.784287+08:00
+genmc-sc	c/pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_set.yml	unreach-call	true	ERROR (compilation)	error	0.04829	0.06066772504709661	25731072	5		2026-07-14T17:58:05.388260+08:00
+genmc-sc	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.03353	0.04103286284953356	25915392	0		2026-07-14T17:52:02.686523+08:00
+genmc-sc	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.03279	0.040523971896618605	25903104	0		2026-07-14T17:52:04.655923+08:00
+genmc-sc	c/pthread-ext/03_incdec.yml	unreach-call	true	ERROR (unsupported external)	error	0.041944	0.059272062964737415	25837568	17		2026-07-14T17:52:30.191258+08:00
+genmc-sc	c/pthread-ext/04_incdec_cas.yml	unreach-call	true	ERROR (unsupported external)	error	0.040862	0.0503915399312973	25931776	17		2026-07-14T17:52:31.477077+08:00
+genmc-sc	c/pthread-ext/08_rand_cas.yml	unreach-call	true	ERROR (unsupported external)	error	0.052197	0.06481463694944978	25923584	17		2026-07-14T17:52:43.591993+08:00
+genmc-sc	c/pthread-ext/09_fmaxsym-zero.yml	unreach-call	true	ABORTED	error	0.032579	2.951491435058415	25833472		6	2026-07-14T17:52:02.838545+08:00
+genmc-sc	c/pthread-ext/09_fmaxsym.yml	unreach-call	true	ABORTED	error	0.036241	1.9330837109591812	25845760		6	2026-07-14T17:52:05.893915+08:00
+genmc-sc	c/pthread-ext/11_fmaxsymopt-zero.yml	unreach-call	true	ABORTED	error	0.033479	1.7050496300216764	25837568		6	2026-07-14T17:52:05.099967+08:00
+genmc-sc	c/pthread-ext/11_fmaxsymopt.yml	unreach-call	true	ABORTED	error	0.032052	1.151183256879449	25858048		6	2026-07-14T17:52:09.297848+08:00
+genmc-sc	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.030288	0.0378133759368211	25862144	0		2026-07-14T17:52:02.244455+08:00
+genmc-sc	c/pthread-ext/18_read_write_lock.yml	unreach-call	true	ERROR (compilation)	error	0.031205	0.04733387706801295	25456640	5		2026-07-14T17:52:04.943463+08:00
+genmc-sc	c/pthread-ext/25_stack.yml	unreach-call	true	ERROR (unsupported external)	error	0.050952	0.06737580616027117	25915392	17		2026-07-14T17:52:43.157243+08:00
+genmc-sc	c/pthread-ext/25_stack_longer-1.yml	unreach-call	false	ERROR (unsupported external)	error	0.054676	0.07564237993210554	25911296	17		2026-07-14T17:52:43.495844+08:00
+genmc-sc	c/pthread-ext/25_stack_longer-2.yml	unreach-call	true	ERROR (unsupported external)	error	0.055263	0.06312395399436355	25915392	17		2026-07-14T17:52:43.328819+08:00
+genmc-sc	c/pthread-ext/25_stack_longest-1.yml	unreach-call	true	ERROR (unsupported external)	error	0.084525	0.08718642615713179	25911296	17		2026-07-14T17:52:43.338963+08:00
+genmc-sc	c/pthread-ext/25_stack_longest-2.yml	unreach-call	false	ERROR (unsupported external)	error	0.084555	0.09834746690467	25915392	17		2026-07-14T17:52:43.532943+08:00
+genmc-sc	c/pthread-ext/26_stack_cas.yml	unreach-call	true	ERROR (unsupported external)	error	0.056171	0.0647087930701673	25944064	17		2026-07-14T17:52:42.566164+08:00
+genmc-sc	c/pthread-ext/26_stack_cas_longer-1.yml	unreach-call	false	ERROR (unsupported external)	error	0.056361	0.06663456000387669	25952256	17		2026-07-14T17:52:42.986426+08:00
+genmc-sc	c/pthread-ext/26_stack_cas_longer-2.yml	unreach-call	true	ERROR (unsupported external)	error	0.058828	0.07941554300487041	25944064	17		2026-07-14T17:52:42.737108+08:00
+genmc-sc	c/pthread-ext/26_stack_cas_longest-1.yml	unreach-call	false	ERROR (unsupported external)	error	0.084959	0.09889019397087395	25948160	17		2026-07-14T17:52:43.127749+08:00
+genmc-sc	c/pthread-ext/26_stack_cas_longest-2.yml	unreach-call	true	ERROR (unsupported external)	error	0.084204	0.09933404694311321	25931776	17		2026-07-14T17:52:42.922582+08:00
+genmc-sc	c/pthread-ext/28_buggy_simple_loop1_vf.yml	unreach-call	false	ERROR (unsupported external)	error	0.030677	0.044011137913912535	25870336	17		2026-07-14T17:52:02.150196+08:00
+genmc-sc	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.031608	0.04688166198320687	25874432	0		2026-07-14T17:52:02.266304+08:00
+genmc-sc	c/pthread-ext/31_simple_loop5_vs.yml	unreach-call	true	OUT OF MEMORY	error	6.451168	6.4667218590620905	3999997952		9	2026-07-14T17:52:02.444659+08:00
+genmc-sc	c/pthread-ext/35_double_lock_p3_vs.yml	unreach-call	true	ERROR (unsupported external)	error	0.03114	0.04552593198604882	25899008	17		2026-07-14T17:52:03.129267+08:00
+genmc-sc	c/pthread-ext/36_stack_cas_p0_vs_concur.yml	unreach-call	true	ERROR (unsupported external)	error	0.0332	0.04195398208685219	25948160	17		2026-07-14T17:52:04.798917+08:00
+genmc-sc	c/pthread-ext/37_stack_lock_p0_vs_concur.yml	unreach-call	true	ERROR (unsupported external)	error	0.040766	0.05570573592558503	25919488	17		2026-07-14T17:52:08.386789+08:00
+genmc-sc	c/pthread-ext/39_rand_lock_p0_vs.yml	unreach-call	true	ERROR (unsupported external)	error	0.038373	0.048943734960630536	25882624	17		2026-07-14T17:52:08.234087+08:00
+genmc-sc	c/pthread-ext/40_barrier_vf.yml	unreach-call	false	ERROR (compilation)	error	0.029542	0.03705384093336761	25632768	5		2026-07-14T17:52:02.686478+08:00
+genmc-sc	c/pthread-ext/43_NetBSD_sysmon_power_sliced-pthread.yml	unreach-call	true	ERROR (compilation)	error	0.026936	0.03852866613306105	25640960	5		2026-07-14T17:53:20.705977+08:00
+genmc-sc	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.029904	0.04198871599510312	25874432	0		2026-07-14T17:53:22.730526+08:00
+genmc-sc	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.03061	0.03172441991046071	25886720	0		2026-07-14T17:52:02.405373+08:00
+genmc-sc	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.032492	0.052573163993656635	25886720	0		2026-07-14T17:52:02.384460+08:00
+genmc-sc	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.030811	0.04574711387977004	25927680	0		2026-07-14T17:52:02.296599+08:00
+genmc-sc	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.033624	0.04059434402734041	25939968	0		2026-07-14T17:52:06.907620+08:00
+genmc-sc	c/pthread-lit/qw2004-2b.yml	unreach-call	false	ABORTED	error	0.061852	1.2521859821863472	25948160		6	2026-07-14T17:52:42.236215+08:00
+genmc-sc	c/pthread-lit/sssc12.yml	unreach-call	true	ABORTED	error	0.033675	3.1882717788685113	25993216		6	2026-07-14T17:57:42.021394+08:00
+genmc-sc	c/pthread-lit/sssc12_variant.yml	unreach-call	true	ABORTED	error	0.03285	3.9840941159054637	25989120		6	2026-07-14T17:57:42.251298+08:00
+genmc-sc	c/pthread-race-challenges/thread-local-pthread-value.yml	unreach-call	true	ERROR (compilation)	error	0.052355	0.07442035991698503	25477120	5		2026-07-14T17:57:52.675627+08:00
+genmc-sc	c/pthread-race-challenges/thread-local-value-dynamic.yml	unreach-call	true	ABORTED	error	0.061239	1.2610550401732326	25997312		6	2026-07-14T17:57:51.308565+08:00
+genmc-sc	c/pthread-race-challenges/thread-local-value.yml	unreach-call	true	ABORTED	error	0.057795	1.2558355319779366	25964544		6	2026-07-14T17:57:49.945742+08:00
+genmc-sc	c/pthread-theta/exponential-4.yml	unreach-call	true	false(unreach-call)	wrong	0.032139	0.04064612416550517	25985024	42		2026-07-14T17:53:18.965036+08:00
+genmc-sc	c/pthread-theta/exponential-64.yml	unreach-call	true	false(unreach-call)	wrong	0.075333	0.09298656811006367	33972224	42		2026-07-14T17:53:19.107932+08:00
+genmc-sc	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.030826	0.04257864295504987	25997312	0		2026-07-14T17:53:19.692978+08:00
+genmc-sc	c/pthread-theta/unwind1-1.yml	unreach-call	false	true	wrong	0.033849	0.03586122300475836	26009600	0		2026-07-14T17:53:18.684193+08:00
+genmc-sc	c/pthread-theta/unwind1-100.yml	unreach-call	false	true	wrong	0.030401	0.04062448791228235	26009600	0		2026-07-14T17:53:18.822310+08:00
+genmc-sc	c/pthread-theta/unwind1-nondet.yml	unreach-call	false	ABORTED	error	0.030048	6.3632594319060445	26005504		6	2026-07-14T17:53:19.303158+08:00
+genmc-sc	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.030571	0.043457896914333105	26013696	42		2026-07-14T17:53:19.837776+08:00
+genmc-sc	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.029997	0.04413318098522723	26021888	42		2026-07-14T17:53:19.983520+08:00
+genmc-sc	c/pthread-theta/unwind2-nondet.yml	unreach-call	false	ABORTED	error	0.031277	6.549142451025546	26034176		6	2026-07-14T17:53:20.129901+08:00
+genmc-sc	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.034215	0.0435412279330194	25993216	42		2026-07-14T17:53:16.663314+08:00
+genmc-sc	c/pthread-theta/unwind3-100.yml	unreach-call	false	TIMEOUT	error	10.992002	11.01727679790929	25985024		9	2026-07-14T17:53:16.815159+08:00
+genmc-sc	c/pthread-theta/unwind3-nondet.yml	unreach-call	false	ABORTED	error	0.03063	6.984169717878103	25997312		6	2026-07-14T17:53:17.669402+08:00
+genmc-sc	c/pthread-theta/wsc.yml	unreach-call	true	ABORTED	error	0.031618	5.972859524888918	26066944		6	2026-07-14T17:53:21.717871+08:00
+genmc-sc	c/pthread-wmm/mix000.oepc.yml	unreach-call	false	ABORTED	error	0.041536	8.062772467033938	26361856		6	2026-07-14T17:55:32.412518+08:00
+genmc-sc	c/pthread-wmm/mix000.opt.yml	unreach-call	false	ABORTED	error	0.042922	8.055043512023985	26296320		6	2026-07-14T17:55:07.881875+08:00
+genmc-sc	c/pthread-wmm/mix001.oepc.yml	unreach-call	false	ABORTED	error	0.055281	8.052404741058126	26468352		6	2026-07-14T17:56:46.010352+08:00
+genmc-sc	c/pthread-wmm/mix001.opt.yml	unreach-call	false	ABORTED	error	0.041515	8.070061047095805	26357760		6	2026-07-14T17:55:51.817180+08:00
+genmc-sc	c/pthread-wmm/mix002.oepc.yml	unreach-call	false	ABORTED	error	0.040798	8.059499897062778	26324992		6	2026-07-14T17:55:18.091146+08:00
+genmc-sc	c/pthread-wmm/mix002.opt.yml	unreach-call	false	ABORTED	error	0.041143	8.052369480021298	26341376		6	2026-07-14T17:56:02.044172+08:00
+genmc-sc	c/pthread-wmm/mix003.oepc.yml	unreach-call	false	ABORTED	error	0.037893	8.053381073987111	26308608		6	2026-07-14T17:54:56.660584+08:00
+genmc-sc	c/pthread-wmm/mix003_power.opt_pso.opt_rmo.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.04147	8.067986939102411	26353664		6	2026-07-14T17:55:40.583372+08:00
+genmc-sc	c/pthread-wmm/mix004.oepc.yml	unreach-call	false	ABORTED	error	0.04164	8.067855050088838	26406912		6	2026-07-14T17:56:22.504395+08:00
+genmc-sc	c/pthread-wmm/mix004.opt.yml	unreach-call	false	ABORTED	error	0.041212	8.080107614863664	26419200		6	2026-07-14T17:56:30.679253+08:00
+genmc-sc	c/pthread-wmm/mix005.opt.yml	unreach-call	false	ABORTED	error	0.050533	8.073510856134817	26406912		6	2026-07-14T17:56:27.616784+08:00
+genmc-sc	c/pthread-wmm/mix005_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.041251	8.080122509971261	26394624		6	2026-07-14T17:56:18.394170+08:00
+genmc-sc	c/pthread-wmm/mix005_tso.oepc.yml	unreach-call	false	ABORTED	error	0.041103	8.102973994100466	26431488		6	2026-07-14T17:56:15.310754+08:00
+genmc-sc	c/pthread-wmm/mix006.opt.yml	unreach-call	false	ABORTED	error	0.041488	8.077249045018107	26353664		6	2026-07-14T17:55:31.381835+08:00
+genmc-sc	c/pthread-wmm/mix006_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.041073	8.068428821861744	26292224		6	2026-07-14T17:54:51.557520+08:00
+genmc-sc	c/pthread-wmm/mix006_tso.oepc.yml	unreach-call	false	ABORTED	error	0.049161	2.0507108690217137	26816512		6	2026-07-14T17:57:40.098188+08:00
+genmc-sc	c/pthread-wmm/mix007.oepc.yml	unreach-call	false	ABORTED	error	0.041223	8.088704629102722	26386432		6	2026-07-14T17:56:13.273645+08:00
+genmc-sc	c/pthread-wmm/mix007.opt.yml	unreach-call	false	ABORTED	error	0.041805	8.086286996956915	26402816		6	2026-07-14T17:56:28.633412+08:00
+genmc-sc	c/pthread-wmm/mix008.opt.yml	unreach-call	false	ABORTED	error	0.051099	8.092419569846243	26423296		6	2026-07-14T17:56:25.552594+08:00
+genmc-sc	c/pthread-wmm/mix008_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.041469	8.063509474042803	26374144		6	2026-07-14T17:56:07.135704+08:00
+genmc-sc	c/pthread-wmm/mix008_tso.oepc.yml	unreach-call	false	ABORTED	error	0.051127	3.022838825825602	26853376		6	2026-07-14T17:57:40.142078+08:00
+genmc-sc	c/pthread-wmm/mix009.oepc.yml	unreach-call	false	ABORTED	error	0.03919	8.059556343127042	26243072		6	2026-07-14T17:53:48.196247+08:00
+genmc-sc	c/pthread-wmm/mix009.opt.yml	unreach-call	false	ABORTED	error	0.04123	8.079763052985072	26296320		6	2026-07-14T17:55:15.017969+08:00
+genmc-sc	c/pthread-wmm/mix010.oepc.yml	unreach-call	false	ABORTED	error	0.043545	8.054155469872057	26324992		6	2026-07-14T17:55:04.822305+08:00
+genmc-sc	c/pthread-wmm/mix010.opt.yml	unreach-call	false	ABORTED	error	0.041707	8.053058553021401	26349568		6	2026-07-14T17:55:43.657740+08:00
+genmc-sc	c/pthread-wmm/mix011.opt.yml	unreach-call	false	ABORTED	error	0.040882	8.064241935964674	26341376		6	2026-07-14T17:55:37.522000+08:00
+genmc-sc	c/pthread-wmm/mix011_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.049774	8.031114334939048	26312704		6	2026-07-14T17:55:00.758782+08:00
+genmc-sc	c/pthread-wmm/mix011_tso.oepc.yml	unreach-call	false	ABORTED	error	0.041006	8.055952640017495	26345472		6	2026-07-14T17:54:58.701460+08:00
+genmc-sc	c/pthread-wmm/mix012_power.oepc_power.opt_pso.oepc_rmo.oepc_rmo.opt_tso.oepc.yml	unreach-call	false	ABORTED	error	0.047573	8.073147143004462	26243072		6	2026-07-14T17:53:43.078900+08:00
+genmc-sc	c/pthread-wmm/mix012_pso.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.038322	8.049563443986699	26312704		6	2026-07-14T17:54:55.648583+08:00
+genmc-sc	c/pthread-wmm/mix013.oepc.yml	unreach-call	false	ABORTED	error	0.041062	8.065922891022637	26386432		6	2026-07-14T17:56:23.521813+08:00
+genmc-sc	c/pthread-wmm/mix013.opt.yml	unreach-call	false	ABORTED	error	0.0416	8.08125691395253	26411008		6	2026-07-14T17:56:31.694354+08:00
+genmc-sc	c/pthread-wmm/mix014.opt.yml	unreach-call	false	ABORTED	error	0.05432	8.093572146026418	26423296		6	2026-07-14T17:56:29.650394+08:00
+genmc-sc	c/pthread-wmm/mix014_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.050258	8.082758610136807	26402816		6	2026-07-14T17:56:19.426061+08:00
+genmc-sc	c/pthread-wmm/mix014_tso.oepc.yml	unreach-call	false	ABORTED	error	0.050368	1.1413679150864482	26804224		6	2026-07-14T17:57:39.992547+08:00
+genmc-sc	c/pthread-wmm/mix015.oepc.yml	unreach-call	false	ABORTED	error	0.049731	8.046690905001014	26312704		6	2026-07-14T17:55:05.846778+08:00
+genmc-sc	c/pthread-wmm/mix015.opt.yml	unreach-call	false	ABORTED	error	0.052653	8.064716248074546	26341376		6	2026-07-14T17:55:44.675291+08:00
+genmc-sc	c/pthread-wmm/mix016.oepc.yml	unreach-call	false	ABORTED	error	0.039615	8.070479655871168	26292224		6	2026-07-14T17:54:44.408327+08:00
+genmc-sc	c/pthread-wmm/mix016_power.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039167	9.074301556916907	26275840		6	2026-07-14T17:54:10.683266+08:00
+genmc-sc	c/pthread-wmm/mix016_pso.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.046178	8.085681908996776	26353664		6	2026-07-14T17:55:28.313034+08:00
+genmc-sc	c/pthread-wmm/mix017.oepc.yml	unreach-call	false	ABORTED	error	0.045649	8.050498255062848	26365952		6	2026-07-14T17:56:04.087412+08:00
+genmc-sc	c/pthread-wmm/mix017_power.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.040462	8.062444458948448	26308608		6	2026-07-14T17:54:54.619511+08:00
+genmc-sc	c/pthread-wmm/mix017_pso.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.041303	8.09130466892384	26411008		6	2026-07-14T17:56:26.582200+08:00
+genmc-sc	c/pthread-wmm/mix018.opt.yml	unreach-call	false	ABORTED	error	0.04183	8.071956143015996	26406912		6	2026-07-14T17:56:20.453431+08:00
+genmc-sc	c/pthread-wmm/mix018_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.041118	8.062021099962294	26357760		6	2026-07-14T17:55:57.949607+08:00
+genmc-sc	c/pthread-wmm/mix018_tso.oepc.yml	unreach-call	false	ABORTED	error	0.041219	8.0834341829177	26365952		6	2026-07-14T17:55:55.895834+08:00
+genmc-sc	c/pthread-wmm/mix019.opt.yml	unreach-call	false	ABORTED	error	0.041582	8.076355719938874	26353664		6	2026-07-14T17:55:27.286899+08:00
+genmc-sc	c/pthread-wmm/mix019_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.039799	8.101271719904616	26296320		6	2026-07-14T17:54:38.250595+08:00
+genmc-sc	c/pthread-wmm/mix019_tso.oepc.yml	unreach-call	false	ABORTED	error	0.052867	8.104691968066618	26324992		6	2026-07-14T17:54:36.195484+08:00
+genmc-sc	c/pthread-wmm/mix020.oepc.yml	unreach-call	false	ABORTED	error	0.045226	8.043693260056898	26361856		6	2026-07-14T17:55:52.859105+08:00
+genmc-sc	c/pthread-wmm/mix020.opt.yml	unreach-call	false	ABORTED	error	0.041388	8.073662595124915	26411008		6	2026-07-14T17:56:21.470366+08:00
+genmc-sc	c/pthread-wmm/mix021.opt.yml	unreach-call	false	ABORTED	error	0.050977	8.091388578992337	26406912		6	2026-07-14T17:56:09.166659+08:00
+genmc-sc	c/pthread-wmm/mix021_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.051974	8.051537711173296	26353664		6	2026-07-14T17:55:46.719441+08:00
+genmc-sc	c/pthread-wmm/mix021_tso.oepc.yml	unreach-call	false	ABORTED	error	0.053185	8.07090397994034	26349568		6	2026-07-14T17:55:20.135216+08:00
+genmc-sc	c/pthread-wmm/mix022_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.03621	8.043842377141118	26226688		6	2026-07-14T17:53:32.895821+08:00
+genmc-sc	c/pthread-wmm/mix022_tso.yml	unreach-call	false	ABORTED	error	0.051142	8.056753031909466	26415104		6	2026-07-14T17:55:22.189882+08:00
+genmc-sc	c/pthread-wmm/mix023_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.041118	8.07002462609671	26365952		6	2026-07-14T17:56:08.150869+08:00
+genmc-sc	c/pthread-wmm/mix023_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.040159	8.064278058009222	26288128		6	2026-07-14T17:54:53.601583+08:00
+genmc-sc	c/pthread-wmm/mix023_tso.yml	unreach-call	false	ABORTED	error	0.048756	2.9440520049538463	26943488		6	2026-07-14T17:57:41.236356+08:00
+genmc-sc	c/pthread-wmm/mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.040862	8.032343263970688	26320896		6	2026-07-14T17:55:01.774714+08:00
+genmc-sc	c/pthread-wmm/mix024_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.051223	8.075726203154773	26296320		6	2026-07-14T17:54:22.912325+08:00
+genmc-sc	c/pthread-wmm/mix025_power.oepc_power.opt_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.040054	8.077962272102013	26292224		6	2026-07-14T17:54:40.306570+08:00
+genmc-sc	c/pthread-wmm/mix025_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.045032	8.0682494698558	26275840		6	2026-07-14T17:54:02.508336+08:00
+genmc-sc	c/pthread-wmm/mix026.oepc.yml	unreach-call	false	ABORTED	error	0.041728	8.07536802510731	26357760		6	2026-07-14T17:55:53.862017+08:00
+genmc-sc	c/pthread-wmm/mix026_power.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.040833	8.0887163921725	26312704		6	2026-07-14T17:55:26.258978+08:00
+genmc-sc	c/pthread-wmm/mix026_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.048679	8.067821081960574	26296320		6	2026-07-14T17:54:49.509238+08:00
+genmc-sc	c/pthread-wmm/mix027_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.04127	8.043118553003296	26370048		6	2026-07-14T17:55:47.744819+08:00
+genmc-sc	c/pthread-wmm/mix027_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.048538	8.091884983936325	26308608		6	2026-07-14T17:54:39.277420+08:00
+genmc-sc	c/pthread-wmm/mix027_tso.yml	unreach-call	false	ABORTED	error	0.041591	8.055542819201946	26370048		6	2026-07-14T17:55:42.629169+08:00
+genmc-sc	c/pthread-wmm/mix028_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.039998	8.104690975043923	26300416		6	2026-07-14T17:54:35.166972+08:00
+genmc-sc	c/pthread-wmm/mix028_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.041322	8.115099905990064	26324992		6	2026-07-14T17:54:34.141510+08:00
+genmc-sc	c/pthread-wmm/mix028_tso.yml	unreach-call	false	ABORTED	error	0.040969	8.078149108914658	26411008		6	2026-07-14T17:55:50.792673+08:00
+genmc-sc	c/pthread-wmm/mix029_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.045434	8.060981711139902	26361856		6	2026-07-14T17:55:49.780667+08:00
+genmc-sc	c/pthread-wmm/mix029_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.040775	8.060180535074323	26353664		6	2026-07-14T17:55:21.162786+08:00
+genmc-sc	c/pthread-wmm/mix030_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.05273	8.061530533013865	26353664		6	2026-07-14T17:55:38.550037+08:00
+genmc-sc	c/pthread-wmm/mix030_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.053247	8.081883270991966	26357760		6	2026-07-14T17:55:13.999985+08:00
+genmc-sc	c/pthread-wmm/mix030_tso.yml	unreach-call	false	ABORTED	error	0.042144	8.058888738974929	26480640		6	2026-07-14T17:56:34.781779+08:00
+genmc-sc	c/pthread-wmm/mix031.oepc.yml	unreach-call	false	ABORTED	error	0.039755	8.05844206106849	26247168		6	2026-07-14T17:53:50.242778+08:00
+genmc-sc	c/pthread-wmm/mix031.opt.yml	unreach-call	false	ABORTED	error	0.039138	8.042118429904804	26202112		6	2026-07-14T17:53:29.850111+08:00
+genmc-sc	c/pthread-wmm/mix032.oepc.yml	unreach-call	false	ABORTED	error	0.040466	8.070972291054204	26329088		6	2026-07-14T17:55:12.983690+08:00
+genmc-sc	c/pthread-wmm/mix032.opt.yml	unreach-call	false	ABORTED	error	0.039833	8.080210138112307	26259456		6	2026-07-14T17:53:55.335260+08:00
+genmc-sc	c/pthread-wmm/mix033.opt.yml	unreach-call	false	ABORTED	error	0.045766	8.05436834297143	26234880		6	2026-07-14T17:53:51.263628+08:00
+genmc-sc	c/pthread-wmm/mix033_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.041459	8.04659221903421	26304512		6	2026-07-14T17:55:06.865285+08:00
+genmc-sc	c/pthread-wmm/mix033_tso.oepc.yml	unreach-call	false	ABORTED	error	0.052339	8.04084490495734	26333184		6	2026-07-14T17:55:03.806260+08:00
+genmc-sc	c/pthread-wmm/mix034_power.oepc_power.opt_pso.oepc_rmo.oepc_rmo.opt_tso.oepc.yml	unreach-call	false	ABORTED	error	0.052262	8.049308869987726	26222592		6	2026-07-14T17:53:45.136227+08:00
+genmc-sc	c/pthread-wmm/mix034_pso.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.034671	5.991865080082789	26218496		6	2026-07-14T17:53:23.743449+08:00
+genmc-sc	c/pthread-wmm/mix035.oepc.yml	unreach-call	false	ABORTED	error	0.040172	8.050612482940778	26296320		6	2026-07-14T17:54:50.542743+08:00
+genmc-sc	c/pthread-wmm/mix035_power.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.048428	8.065630814991891	26271744		6	2026-07-14T17:54:16.792246+08:00
+genmc-sc	c/pthread-wmm/mix035_pso.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.050651	8.047583148116246	26238976		6	2026-07-14T17:53:46.163711+08:00
+genmc-sc	c/pthread-wmm/mix036.oepc.yml	unreach-call	false	ABORTED	error	0.041143	8.10126437409781	26406912		6	2026-07-14T17:56:16.328257+08:00
+genmc-sc	c/pthread-wmm/mix036_power.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.052906	8.042870603967458	26304512		6	2026-07-14T17:55:02.788709+08:00
+genmc-sc	c/pthread-wmm/mix036_pso.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.039635	8.054034126922488	26259456		6	2026-07-14T17:54:20.879288+08:00
+genmc-sc	c/pthread-wmm/mix037.opt.yml	unreach-call	false	ABORTED	error	0.038906	9.060550634982064	26275840		6	2026-07-14T17:54:12.727103+08:00
+genmc-sc	c/pthread-wmm/mix037_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.040385	8.079160872846842	26361856		6	2026-07-14T17:56:10.208137+08:00
+genmc-sc	c/pthread-wmm/mix037_tso.oepc.yml	unreach-call	false	ABORTED	error	0.051239	8.041900231037289	26378240		6	2026-07-14T17:56:03.072075+08:00
+genmc-sc	c/pthread-wmm/mix038.opt.yml	unreach-call	false	ABORTED	error	0.039648	8.063999122940004	26251264		6	2026-07-14T17:53:44.105730+08:00
+genmc-sc	c/pthread-wmm/mix038_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.040455	8.050539687043056	26292224		6	2026-07-14T17:54:46.460627+08:00
+genmc-sc	c/pthread-wmm/mix038_tso.oepc.yml	unreach-call	false	ABORTED	error	0.040159	8.051572769181803	26333184		6	2026-07-14T17:54:45.443303+08:00
+genmc-sc	c/pthread-wmm/mix039.oepc.yml	unreach-call	false	ABORTED	error	0.041213	8.061988348839805	26386432		6	2026-07-14T17:56:05.103677+08:00
+genmc-sc	c/pthread-wmm/mix039.opt.yml	unreach-call	false	ABORTED	error	0.048565	9.059764304896817	26275840		6	2026-07-14T17:54:13.745711+08:00
+genmc-sc	c/pthread-wmm/mix040.opt.yml	unreach-call	false	ABORTED	error	0.053033	9.048669677926227	26267648		6	2026-07-14T17:54:08.652715+08:00
+genmc-sc	c/pthread-wmm/mix040_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.040575	8.048754835966974	26349568		6	2026-07-14T17:55:58.978799+08:00
+genmc-sc	c/pthread-wmm/mix040_tso.oepc.yml	unreach-call	false	ABORTED	error	0.040929	8.088433766970411	26390528		6	2026-07-14T17:55:25.243211+08:00
+genmc-sc	c/pthread-wmm/mix041_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.047799	8.05809992691502	26230784		6	2026-07-14T17:53:37.998683+08:00
+genmc-sc	c/pthread-wmm/mix041_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.048719	8.061933788936585	26259456		6	2026-07-14T17:53:41.054656+08:00
+genmc-sc	c/pthread-wmm/mix042.oepc.yml	unreach-call	false	ABORTED	error	0.041124	8.071040275041014	26296320		6	2026-07-14T17:54:43.379728+08:00
+genmc-sc	c/pthread-wmm/mix042.opt.yml	unreach-call	false	ABORTED	error	0.043363	9.07774242782034	26296320		6	2026-07-14T17:54:06.592492+08:00
+genmc-sc	c/pthread-wmm/mix043.oepc.yml	unreach-call	false	ABORTED	error	0.041866	8.06306420196779	26361856		6	2026-07-14T17:56:06.119627+08:00
+genmc-sc	c/pthread-wmm/mix043.opt.yml	unreach-call	false	ABORTED	error	0.036648	8.038884471170604	26320896		6	2026-07-14T17:54:52.611563+08:00
+genmc-sc	c/pthread-wmm/mix044.opt.yml	unreach-call	false	ABORTED	error	0.052863	8.070661815116182	26324992		6	2026-07-14T17:54:47.475576+08:00
+genmc-sc	c/pthread-wmm/mix044_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.040902	8.047563862986863	26361856		6	2026-07-14T17:55:59.995368+08:00
+genmc-sc	c/pthread-wmm/mix044_tso.oepc.yml	unreach-call	false	ABORTED	error	0.041025	8.076423279941082	26382336		6	2026-07-14T17:55:56.919267+08:00
+genmc-sc	c/pthread-wmm/mix045_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.039988	8.11470888601616	26279936		6	2026-07-14T17:54:37.221448+08:00
+genmc-sc	c/pthread-wmm/mix045_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.044605	8.08347928407602	26329088		6	2026-07-14T17:54:01.476885+08:00
+genmc-sc	c/pthread-wmm/mix046.oepc.yml	unreach-call	false	ABORTED	error	0.048341	8.08111193194054	26378240		6	2026-07-14T17:55:54.882335+08:00
+genmc-sc	c/pthread-wmm/mix046.opt.yml	unreach-call	false	ABORTED	error	0.038216	8.07133289705962	26333184		6	2026-07-14T17:54:48.487001+08:00
+genmc-sc	c/pthread-wmm/mix047_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.041512	8.054856945993379	26345472		6	2026-07-14T17:55:48.758079+08:00
+genmc-sc	c/pthread-wmm/mix047_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.041742	8.064189706929028	26312704		6	2026-07-14T17:54:41.336704+08:00
+genmc-sc	c/pthread-wmm/mix048_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt-podwr000_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.04067	8.030040891841054	26226688		6	2026-07-14T17:53:34.940555+08:00
+genmc-sc	c/pthread-wmm/mix049_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt-podwr001_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.040979	8.071543596917763	26304512		6	2026-07-14T17:54:42.363476+08:00
+genmc-sc	c/pthread-wmm/mix050.yml	unreach-call	false	ABORTED	error	0.04049	8.062593874987215	26353664		6	2026-07-14T17:55:45.693003+08:00
+genmc-sc	c/pthread-wmm/mix051_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.041287	8.050581519957632	26333184		6	2026-07-14T17:55:41.618000+08:00
+genmc-sc	c/pthread-wmm/mix051_pso.opt_rmo.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.041138	8.074451725929976	26263552		6	2026-07-14T17:53:56.364010+08:00
+genmc-sc	c/pthread-wmm/mix051_tso.oepc.yml	unreach-call	false	ABORTED	error	0.042814	8.070567746879533	26386432		6	2026-07-14T17:55:39.565890+08:00
+genmc-sc	c/pthread-wmm/mix052_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.040047	8.08849719981663	26284032		6	2026-07-14T17:54:32.111263+08:00
+genmc-sc	c/pthread-wmm/mix052_pso.opt_rmo.opt_tso.opt.yml	unreach-call	false	ABORTED	error	0.035621	8.037067364901304	26226688		6	2026-07-14T17:53:30.871704+08:00
+genmc-sc	c/pthread-wmm/mix052_tso.oepc.yml	unreach-call	false	ABORTED	error	0.040839	8.0546793860849	26345472		6	2026-07-14T17:54:25.980227+08:00
+genmc-sc	c/pthread-wmm/mix053.opt.yml	unreach-call	false	ABORTED	error	0.039989	8.076511017046869	26275840		6	2026-07-14T17:53:53.293783+08:00
+genmc-sc	c/pthread-wmm/mix053_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.041404	8.078993762144819	26353664		6	2026-07-14T17:55:35.470005+08:00
+genmc-sc	c/pthread-wmm/mix053_tso.oepc.yml	unreach-call	false	ABORTED	error	0.041209	8.056000204989687	26349568		6	2026-07-14T17:55:08.898027+08:00
+genmc-sc	c/pthread-wmm/mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.04752	7.923942913999781	26222592		6	2026-07-14T17:53:27.938950+08:00
+genmc-sc	c/pthread-wmm/mix054_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.035063	7.040723959216848	26259456		6	2026-07-14T17:53:27.792897+08:00
+genmc-sc	c/pthread-wmm/mix055.opt.yml	unreach-call	false	ABORTED	error	0.040075	8.072945513064042	26324992		6	2026-07-14T17:54:30.068150+08:00
+genmc-sc	c/pthread-wmm/mix055_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.04108	8.062100262846798	26357760		6	2026-07-14T17:55:36.506636+08:00
+genmc-sc	c/pthread-wmm/mix055_tso.oepc.yml	unreach-call	false	ABORTED	error	0.041494	8.071360394125804	26411008		6	2026-07-14T17:55:33.439721+08:00
+genmc-sc	c/pthread-wmm/mix056_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.040097	8.051522105932236	26279936		6	2026-07-14T17:54:18.837866+08:00
+genmc-sc	c/pthread-wmm/mix056_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.052379	8.06285166903399	26304512		6	2026-07-14T17:53:49.222814+08:00
+genmc-sc	c/pthread-wmm/mix057_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.053925	8.088519210927188	26349568		6	2026-07-14T17:55:30.354890+08:00
+genmc-sc	c/pthread-wmm/mix057_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.040482	8.077118089888245	26329088		6	2026-07-14T17:54:23.927163+08:00
+genmc-sc	c/pthread-wmm/rfi000_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.054566	8.078024834860116	26570752		6	2026-07-14T17:56:52.119461+08:00
+genmc-sc	c/pthread-wmm/rfi000_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.035632	8.049526452086866	26259456		6	2026-07-14T17:53:36.978151+08:00
+genmc-sc	c/pthread-wmm/rfi000_tso.yml	unreach-call	true	ABORTED	error	0.055766	8.056400726083666	26537984		6	2026-07-14T17:56:51.108455+08:00
+genmc-sc	c/pthread-wmm/rfi001_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.039185	8.055389799876139	26247168		6	2026-07-14T17:53:39.016879+08:00
+genmc-sc	c/pthread-wmm/rfi001_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.040153	8.07467712694779	26267648		6	2026-07-14T17:53:42.061760+08:00
+genmc-sc	c/pthread-wmm/rfi002_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	true	ABORTED	error	0.043623	8.065229085972533	26558464		6	2026-07-14T17:57:04.398644+08:00
+genmc-sc	c/pthread-wmm/rfi002_tso.yml	unreach-call	true	ABORTED	error	0.050917	1.944592593004927	26759168		6	2026-07-14T17:57:38.050302+08:00
+genmc-sc	c/pthread-wmm/rfi003_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.035377	7.025120035978034	26210304		6	2026-07-14T17:53:26.781346+08:00
+genmc-sc	c/pthread-wmm/rfi003_tso.yml	unreach-call	true	ABORTED	error	0.04437	8.073218511184677	26583040		6	2026-07-14T17:57:01.330607+08:00
+genmc-sc	c/pthread-wmm/rfi004.yml	unreach-call	false	ABORTED	error	0.034354	6.724839469883591	26218496		6	2026-07-14T17:53:24.040681+08:00
+genmc-sc	c/pthread-wmm/rfi005.yml	unreach-call	false	ABORTED	error	0.049331	8.05955269606784	26509312		6	2026-07-14T17:56:50.089489+08:00
+genmc-sc	c/pthread-wmm/rfi006_power.oepc.yml	unreach-call	false	ABORTED	error	0.042941	8.065608679084107	26468352		6	2026-07-14T17:56:47.026273+08:00
+genmc-sc	c/pthread-wmm/rfi006_power.opt.yml	unreach-call	false	ABORTED	error	0.05552	7.731739628128707	26476544		6	2026-07-14T17:56:53.492593+08:00
+genmc-sc	c/pthread-wmm/rfi006_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.042005	8.057159000076354	26488832		6	2026-07-14T17:56:35.798337+08:00
+genmc-sc	c/pthread-wmm/rfi006_rmo.yml	unreach-call	false	ABORTED	error	0.041221	8.100808650022373	26353664		6	2026-07-14T17:56:12.246220+08:00
+genmc-sc	c/pthread-wmm/rfi007_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.038027	8.045509443851188	26218496		6	2026-07-14T17:53:33.909462+08:00
+genmc-sc	c/pthread-wmm/rfi007_tso.yml	unreach-call	false	ABORTED	error	0.041666	8.08092113188468	26394624		6	2026-07-14T17:55:24.223690+08:00
+genmc-sc	c/pthread-wmm/rfi008.oepc.yml	unreach-call	false	ABORTED	error	0.048205	8.067376262973994	26361856		6	2026-07-14T17:55:34.455731+08:00
+genmc-sc	c/pthread-wmm/rfi008.opt.yml	unreach-call	false	ABORTED	error	0.040388	8.058531729038805	26304512		6	2026-07-14T17:55:10.940139+08:00
+genmc-sc	c/pthread-wmm/rfi009_power.oepc.yml	unreach-call	false	ABORTED	error	0.042621	8.055228400975466	26505216		6	2026-07-14T17:56:49.070050+08:00
+genmc-sc	c/pthread-wmm/rfi009_power.opt_pso.oepc_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	false	ABORTED	error	0.053027	8.07986659114249	26406912		6	2026-07-14T17:56:17.366259+08:00
+genmc-sc	c/pthread-wmm/rfi009_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.040465	8.078293787082657	26374144		6	2026-07-14T17:56:24.538060+08:00
+genmc-sc	c/pthread-wmm/rfi010.yml	unreach-call	false	ABORTED	error	0.040988	8.039564789040014	26312704		6	2026-07-14T17:54:59.734291+08:00
+genmc-sc	c/pthread-wmm/safe000_power.oepc.yml	unreach-call	false	ABORTED	error	0.044183	8.031842678086832	26636288		6	2026-07-14T17:57:22.762698+08:00
+genmc-sc	c/pthread-wmm/safe000_power.opt.yml	unreach-call	false	ABORTED	error	0.041404	8.0607376601547	26451968		6	2026-07-14T17:56:39.882492+08:00
+genmc-sc	c/pthread-wmm/safe000_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.044748	8.03197055007331	25976832		6	2026-07-14T17:53:02.372779+08:00
+genmc-sc	c/pthread-wmm/safe000_rmo.yml	unreach-call	false	ABORTED	error	0.044417	8.052160259103402	26615808		6	2026-07-14T17:57:10.525773+08:00
+genmc-sc	c/pthread-wmm/safe001_power.oepc.yml	unreach-call	false	ABORTED	error	0.043832	8.033056472893804	26660864		6	2026-07-14T17:57:20.730694+08:00
+genmc-sc	c/pthread-wmm/safe001_power.opt_pso.oepc_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039816	8.073837025789544	26316800		6	2026-07-14T17:54:29.041275+08:00
+genmc-sc	c/pthread-wmm/safe001_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.043315	8.059988548979163	26591232		6	2026-07-14T17:57:07.469989+08:00
+genmc-sc	c/pthread-wmm/safe001_tso.yml	unreach-call	true	ABORTED	error	0.032806	6.171338714892045	25972736		6	2026-07-14T17:52:50.975840+08:00
+genmc-sc	c/pthread-wmm/safe002_power.oepc.yml	unreach-call	false	ABORTED	error	0.04459	8.033757488941774	26628096		6	2026-07-14T17:57:23.777763+08:00
+genmc-sc	c/pthread-wmm/safe002_power.opt_pso.oepc_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.049435	8.08836311311461	26267648		6	2026-07-14T17:53:59.425967+08:00
+genmc-sc	c/pthread-wmm/safe002_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.043027	8.052963403053582	26583040		6	2026-07-14T17:57:12.570583+08:00
+genmc-sc	c/pthread-wmm/safe002_tso.yml	unreach-call	true	ABORTED	error	0.04672	8.07122157793492	25985024		6	2026-07-14T17:52:57.254171+08:00
+genmc-sc	c/pthread-wmm/safe003_power.oepc_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.055231	8.059568383963779	26578944		6	2026-07-14T17:57:06.454373+08:00
+genmc-sc	c/pthread-wmm/safe003_power.opt.yml	unreach-call	false	ABORTED	error	0.04182	8.058965557953343	26443776		6	2026-07-14T17:56:40.902990+08:00
+genmc-sc	c/pthread-wmm/safe003_tso.yml	unreach-call	true	ABORTED	error	0.043302	8.07177390391007	25972736		6	2026-07-14T17:52:58.269143+08:00
+genmc-sc	c/pthread-wmm/safe004_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.043912	8.069072043057531	26595328		6	2026-07-14T17:57:05.429253+08:00
+genmc-sc	c/pthread-wmm/safe004_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.04006	8.06272060610354	26316800		6	2026-07-14T17:54:26.996174+08:00
+genmc-sc	c/pthread-wmm/safe004_tso.yml	unreach-call	true	ABORTED	error	0.03295	7.024465767899528	25972736		6	2026-07-14T17:52:51.138429+08:00
+genmc-sc	c/pthread-wmm/safe005_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.043812	8.081029545050114	26271744		6	2026-07-14T17:54:03.523432+08:00
+genmc-sc	c/pthread-wmm/safe005_tso.yml	unreach-call	true	ABORTED	error	0.045085	8.04388725408353	25985024		6	2026-07-14T17:53:05.433660+08:00
+genmc-sc	c/pthread-wmm/safe006_power.oepc-thin000_power.oepc.yml	unreach-call	false	ABORTED	error	0.047923	8.055787357036024	26279936		6	2026-07-14T17:54:24.964228+08:00
+genmc-sc	c/pthread-wmm/safe006_power.opt-thin000_power.opt.yml	unreach-call	false	ABORTED	error	0.040998	8.069240220123902	26345472		6	2026-07-14T17:55:23.205969+08:00
+genmc-sc	c/pthread-wmm/safe006_pso.oepc_pso.opt_tso.oepc_tso.opt-thin000_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.038144	3.9617414141539484	25939968		6	2026-07-14T17:52:45.041656+08:00
+genmc-sc	c/pthread-wmm/safe006_rmo.oepc_rmo.opt-thin000_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.035337	8.031884751049802	26234880		6	2026-07-14T17:53:35.967115+08:00
+genmc-sc	c/pthread-wmm/safe007_power.oepc-thin001_power.oepc.yml	unreach-call	false	ABORTED	error	0.040627	8.074790604878217	26353664		6	2026-07-14T17:55:19.105083+08:00
+genmc-sc	c/pthread-wmm/safe007_power.opt-thin001_power.opt.yml	unreach-call	false	ABORTED	error	0.040418	8.107247259002179	26378240		6	2026-07-14T17:56:14.290691+08:00
+genmc-sc	c/pthread-wmm/safe007_pso.oepc_pso.opt_tso.oepc_tso.opt-thin001_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.035275	8.077264714986086	26001408		6	2026-07-14T17:53:08.479327+08:00
+genmc-sc	c/pthread-wmm/safe007_rmo.oepc_rmo.opt-thin001_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039386	9.06266712793149	26267648		6	2026-07-14T17:54:09.667151+08:00
+genmc-sc	c/pthread-wmm/safe008_power.oepc_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.049889	8.096707586897537	26320896		6	2026-07-14T17:54:33.131207+08:00
+genmc-sc	c/pthread-wmm/safe008_power.opt.yml	unreach-call	false	ABORTED	error	0.042379	8.049636658048257	26439680		6	2026-07-14T17:56:37.851999+08:00
+genmc-sc	c/pthread-wmm/safe008_tso.yml	unreach-call	true	ABORTED	error	0.033224	7.0203939019702375	25985024		6	2026-07-14T17:52:52.158510+08:00
+genmc-sc	c/pthread-wmm/safe009_power.oepc.yml	unreach-call	false	ABORTED	error	0.043396	8.069274164037779	26550272		6	2026-07-14T17:56:54.170807+08:00
+genmc-sc	c/pthread-wmm/safe009_power.opt.yml	unreach-call	false	ABORTED	error	0.041343	8.068183914059773	26427392		6	2026-07-14T17:56:32.723373+08:00
+genmc-sc	c/pthread-wmm/safe009_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.03328	5.8524939708877355	25972736		6	2026-07-14T17:52:49.251576+08:00
+genmc-sc	c/pthread-wmm/safe009_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.053599	8.059915286954492	26451968		6	2026-07-14T17:56:33.751365+08:00
+genmc-sc	c/pthread-wmm/safe009_rmo.opt.yml	unreach-call	false	ABORTED	error	0.040128	8.069424002896994	26300416		6	2026-07-14T17:55:09.913847+08:00
+genmc-sc	c/pthread-wmm/safe010_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039074	8.049265026114881	26275840		6	2026-07-14T17:53:28.826584+08:00
+genmc-sc	c/pthread-wmm/safe010_tso.yml	unreach-call	true	ABORTED	error	0.049438	2.1949214059859514	25952256		6	2026-07-14T17:52:43.761267+08:00
+genmc-sc	c/pthread-wmm/safe011_power.oepc_pso.oepc_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.041828	8.041539122117683	26324992		6	2026-07-14T17:54:19.864301+08:00
+genmc-sc	c/pthread-wmm/safe011_power.opt_pso.opt.yml	unreach-call	false	ABORTED	error	0.04032	8.065515357069671	26316800		6	2026-07-14T17:54:17.808247+08:00
+genmc-sc	c/pthread-wmm/safe011_tso.yml	unreach-call	true	ABORTED	error	0.03502	5.147764091845602	25968640		6	2026-07-14T17:52:47.912624+08:00
+genmc-sc	c/pthread-wmm/safe012_power.oepc.yml	unreach-call	false	ABORTED	error	0.040817	8.072518242988735	26329088		6	2026-07-14T17:55:17.062172+08:00
+genmc-sc	c/pthread-wmm/safe012_power.opt.yml	unreach-call	false	ABORTED	error	0.049132	8.097204925026745	26386432		6	2026-07-14T17:56:11.220415+08:00
+genmc-sc	c/pthread-wmm/safe012_pso.oepc_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039285	8.07473358977586	26263552		6	2026-07-14T17:53:58.409144+08:00
+genmc-sc	c/pthread-wmm/safe012_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.048003	9.062519425991923	26255360		6	2026-07-14T17:54:07.623161+08:00
+genmc-sc	c/pthread-wmm/safe012_tso.yml	unreach-call	true	ABORTED	error	0.034926	8.070861771004274	25985024		6	2026-07-14T17:52:59.286109+08:00
+genmc-sc	c/pthread-wmm/safe013_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.05162	8.061349387047812	26263552		6	2026-07-14T17:53:57.393547+08:00
+genmc-sc	c/pthread-wmm/safe013_tso.yml	unreach-call	true	ABORTED	error	0.034367	8.082260519033298	25993216		6	2026-07-14T17:52:55.211666+08:00
+genmc-sc	c/pthread-wmm/safe014_power.oepc.yml	unreach-call	false	ABORTED	error	0.040649	8.070327315945178	26349568		6	2026-07-14T17:55:16.044643+08:00
+genmc-sc	c/pthread-wmm/safe014_power.opt.yml	unreach-call	false	ABORTED	error	0.040802	8.083628263091668	26316800		6	2026-07-14T17:55:29.331265+08:00
+genmc-sc	c/pthread-wmm/safe014_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.034694	8.028645009966567	25972736		6	2026-07-14T17:53:03.402682+08:00
+genmc-sc	c/pthread-wmm/safe014_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.051628	8.076635142089799	26255360		6	2026-07-14T17:54:05.561114+08:00
+genmc-sc	c/pthread-wmm/safe014_rmo.opt.yml	unreach-call	false	ABORTED	error	0.043172	8.035131673095748	26595328		6	2026-07-14T17:57:11.559895+08:00
+genmc-sc	c/pthread-wmm/safe015_power.oepc.yml	unreach-call	false	ABORTED	error	0.054039	7.890993356937543	26660864		6	2026-07-14T17:57:24.952447+08:00
+genmc-sc	c/pthread-wmm/safe015_power.opt.yml	unreach-call	false	ABORTED	error	0.045045	8.02852191310376	26640384		6	2026-07-14T17:57:21.751252+08:00
+genmc-sc	c/pthread-wmm/safe015_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.035348	8.07659572083503	25976832		6	2026-07-14T17:52:56.232637+08:00
+genmc-sc	c/pthread-wmm/safe015_rmo.yml	unreach-call	false	ABORTED	error	0.043559	8.046448200009763	26583040		6	2026-07-14T17:57:09.511872+08:00
+genmc-sc	c/pthread-wmm/safe016_power.oepc.yml	unreach-call	false	ABORTED	error	0.049284	8.0813004670199	26566656		6	2026-07-14T17:57:00.306113+08:00
+genmc-sc	c/pthread-wmm/safe016_power.opt.yml	unreach-call	false	ABORTED	error	0.043924	8.034899817081168	26624000		6	2026-07-14T17:57:15.636600+08:00
+genmc-sc	c/pthread-wmm/safe016_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.035174	8.04923233599402	25993216		6	2026-07-14T17:53:12.554513+08:00
+genmc-sc	c/pthread-wmm/safe016_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.054957	8.053667826810852	26501120		6	2026-07-14T17:56:44.993201+08:00
+genmc-sc	c/pthread-wmm/safe016_rmo.opt.yml	unreach-call	false	ABORTED	error	0.043296	8.071434204932302	26566656		6	2026-07-14T17:57:02.348179+08:00
+genmc-sc	c/pthread-wmm/safe017_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039415	8.04288233187981	26320896		6	2026-07-14T17:54:15.777126+08:00
+genmc-sc	c/pthread-wmm/safe017_tso.yml	unreach-call	true	ABORTED	error	0.036023	4.970665643922985	25960448		6	2026-07-14T17:52:47.075481+08:00
+genmc-sc	c/pthread-wmm/safe018_power.oepc.yml	unreach-call	false	ABORTED	error	0.045506	8.072953117080033	26308608		6	2026-07-14T17:55:11.953683+08:00
+genmc-sc	c/pthread-wmm/safe018_power.opt.yml	unreach-call	false	ABORTED	error	0.054397	8.088517205091193	26525696		6	2026-07-14T17:56:58.257314+08:00
+genmc-sc	c/pthread-wmm/safe018_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.042653	7.464374479139224	25993216		6	2026-07-14T17:52:54.800442+08:00
+genmc-sc	c/pthread-wmm/safe018_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.039648	8.101252054097131	26263552		6	2026-07-14T17:54:00.443527+08:00
+genmc-sc	c/pthread-wmm/safe018_rmo.opt.yml	unreach-call	false	ABORTED	error	0.041371	8.050404426176101	26443776		6	2026-07-14T17:56:38.867288+08:00
+genmc-sc	c/pthread-wmm/safe019_power.oepc.yml	unreach-call	false	ABORTED	error	0.043117	8.063787510851398	26587136		6	2026-07-14T17:57:03.384623+08:00
+genmc-sc	c/pthread-wmm/safe019_power.opt.yml	unreach-call	false	ABORTED	error	0.051921	8.03407551185228	26611712		6	2026-07-14T17:57:14.622139+08:00
+genmc-sc	c/pthread-wmm/safe019_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.045002	7.856612542876974	26005504		6	2026-07-14T17:53:13.759070+08:00
+genmc-sc	c/pthread-wmm/safe019_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.042384	8.057279684115201	26517504		6	2026-07-14T17:56:48.051565+08:00
+genmc-sc	c/pthread-wmm/safe019_rmo.opt.yml	unreach-call	false	ABORTED	error	0.041979	8.074944464024156	26517504		6	2026-07-14T17:56:56.216833+08:00
+genmc-sc	c/pthread-wmm/safe020_power.yml	unreach-call	false	ABORTED	error	0.043098	8.087988276965916	26517504		6	2026-07-14T17:56:57.233230+08:00
+genmc-sc	c/pthread-wmm/safe020_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.033921	7.059536554850638	25960448		6	2026-07-14T17:52:54.177018+08:00
+genmc-sc	c/pthread-wmm/safe020_rmo.yml	unreach-call	false	ABORTED	error	0.041815	8.058326232014224	26435584		6	2026-07-14T17:56:36.826449+08:00
+genmc-sc	c/pthread-wmm/safe021_power.oepc_pso.oepc_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.05025	8.076587599003688	26304512		6	2026-07-14T17:54:31.094334+08:00
+genmc-sc	c/pthread-wmm/safe021_power.opt_pso.opt.yml	unreach-call	false	ABORTED	error	0.040162	8.075242758961394	26316800		6	2026-07-14T17:54:28.012311+08:00
+genmc-sc	c/pthread-wmm/safe021_tso.yml	unreach-call	true	ABORTED	error	0.032759	7.049061025027186	25985024		6	2026-07-14T17:52:53.162819+08:00
+genmc-sc	c/pthread-wmm/safe022_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039883	8.037927591009066	26230784		6	2026-07-14T17:53:31.885007+08:00
+genmc-sc	c/pthread-wmm/safe022_tso.yml	unreach-call	true	ABORTED	error	0.042434	3.984314813045785	25952256		6	2026-07-14T17:52:44.004576+08:00
+genmc-sc	c/pthread-wmm/safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.041795	7.035478153964505	26624000		6	2026-07-14T17:57:18.680261+08:00
+genmc-sc	c/pthread-wmm/safe023_tso.yml	unreach-call	true	ABORTED	error	0.035282	8.052860592026263	25972736		6	2026-07-14T17:53:06.449173+08:00
+genmc-sc	c/pthread-wmm/safe024_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039437	8.073866338003427	26263552		6	2026-07-14T17:54:04.546341+08:00
+genmc-sc	c/pthread-wmm/safe024_tso.yml	unreach-call	true	ABORTED	error	0.035309	8.062241653213277	25968640		6	2026-07-14T17:53:07.465362+08:00
+genmc-sc	c/pthread-wmm/safe025_power.yml	unreach-call	false	ABORTED	error	0.04546	8.046575762098655	26677248		6	2026-07-14T17:57:25.823769+08:00
+genmc-sc	c/pthread-wmm/safe025_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.047501	7.906916110077873	25976832		6	2026-07-14T17:53:09.660325+08:00
+genmc-sc	c/pthread-wmm/safe025_rmo.yml	unreach-call	false	ABORTED	error	0.043905	8.033451239112765	26591232		6	2026-07-14T17:57:13.606317+08:00
+genmc-sc	c/pthread-wmm/safe026_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039304	8.063986629014835	26320896		6	2026-07-14T17:54:21.895543+08:00
+genmc-sc	c/pthread-wmm/safe026_tso.yml	unreach-call	true	ABORTED	error	0.033023	5.983280935091898	25964544		6	2026-07-14T17:52:48.091307+08:00
+genmc-sc	c/pthread-wmm/safe027_power.oepc.yml	unreach-call	false	ABORTED	error	0.042826	8.076550408033654	26509312		6	2026-07-14T17:56:55.200077+08:00
+genmc-sc	c/pthread-wmm/safe027_power.opt.yml	unreach-call	false	ABORTED	error	0.044036	8.041744410060346	26607616		6	2026-07-14T17:57:19.703006+08:00
+genmc-sc	c/pthread-wmm/safe027_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.035643	8.017857308033854	26005504		6	2026-07-14T17:53:14.610251+08:00
+genmc-sc	c/pthread-wmm/safe027_rmo.yml	unreach-call	false	ABORTED	error	0.041212	8.046591266989708	26443776		6	2026-07-14T17:56:42.949940+08:00
+genmc-sc	c/pthread-wmm/safe028_power.yml	unreach-call	false	ABORTED	error	0.043325	8.088996623875573	26537984		6	2026-07-14T17:56:59.272953+08:00
+genmc-sc	c/pthread-wmm/safe028_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.034971	8.052909542107955	25968640		6	2026-07-14T17:53:00.320170+08:00
+genmc-sc	c/pthread-wmm/safe028_rmo.yml	unreach-call	false	ABORTED	error	0.04901	8.061398820020258	26435584		6	2026-07-14T17:56:41.919310+08:00
+genmc-sc	c/pthread-wmm/safe029_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.038481	7.024016920942813	26255360		6	2026-07-14T17:53:25.769522+08:00
+genmc-sc	c/pthread-wmm/safe029_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.035603	7.024631347041577	26238976		6	2026-07-14T17:53:24.756738+08:00
+genmc-sc	c/pthread-wmm/safe029_tso.yml	unreach-call	true	ABORTED	error	0.048863	1.2013247690629214	25939968		6	2026-07-14T17:52:43.736521+08:00
+genmc-sc	c/pthread-wmm/safe030_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.03856	9.060898090014234	26324992		6	2026-07-14T17:54:11.712246+08:00
+genmc-sc	c/pthread-wmm/safe030_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.039579	8.046382947824895	26296320		6	2026-07-14T17:53:47.180603+08:00
+genmc-sc	c/pthread-wmm/safe030_tso.yml	unreach-call	true	ABORTED	error	0.035676	4.691499582026154	25993216		6	2026-07-14T17:52:46.341124+08:00
+genmc-sc	c/pthread-wmm/safe031_power.oepc_pso.oepc_rmo.oepc.yml	unreach-call	false	ABORTED	error	0.039833	8.080481480807066	26279936		6	2026-07-14T17:53:54.319258+08:00
+genmc-sc	c/pthread-wmm/safe031_power.opt_pso.opt_rmo.opt.yml	unreach-call	false	ABORTED	error	0.051265	8.045227507129312	26296320		6	2026-07-14T17:53:52.289754+08:00
+genmc-sc	c/pthread-wmm/safe031_tso.yml	unreach-call	true	ABORTED	error	0.034823	6.002917745150626	25980928		6	2026-07-14T17:52:50.121283+08:00
+genmc-sc	c/pthread-wmm/safe032_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.042254	8.04998780391179	26599424		6	2026-07-14T17:57:08.495653+08:00
+genmc-sc	c/pthread-wmm/safe032_tso.yml	unreach-call	true	ABORTED	error	0.037956	8.045430557103828	25989120		6	2026-07-14T17:53:01.344224+08:00
+genmc-sc	c/pthread-wmm/safe033_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.034295	5.844391389982775	26181632		6	2026-07-14T17:53:22.874624+08:00
+genmc-sc	c/pthread-wmm/safe033_tso.yml	unreach-call	true	ABORTED	error	0.050391	3.179068027995527	25935872		6	2026-07-14T17:52:43.793063+08:00
+genmc-sc	c/pthread-wmm/safe034_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	unreach-call	false	ABORTED	error	0.051567	8.057258212007582	26226688		6	2026-07-14T17:53:40.030803+08:00
+genmc-sc	c/pthread-wmm/safe034_tso.yml	unreach-call	true	ABORTED	error	0.035053	8.030246884096414	25985024		6	2026-07-14T17:53:04.417209+08:00
+genmc-sc	c/pthread-wmm/safe035_power.yml	unreach-call	true	ABORTED	error	0.052494	1.9447297549340874	26787840		6	2026-07-14T17:57:37.033851+08:00
+genmc-sc	c/pthread-wmm/safe035_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.034623	8.050683803856373	25989120		6	2026-07-14T17:53:11.539944+08:00
+genmc-sc	c/pthread-wmm/safe036.yml	unreach-call	true	ABORTED	error	0.03657	3.960005455184728	25952256		6	2026-07-14T17:52:46.058811+08:00
+genmc-sc	c/pthread-wmm/safe037.yml	unreach-call	true	ABORTED	error	0.043857	8.066244507906958	25976832		6	2026-07-14T17:53:10.512622+08:00
+genmc-sc	c/pthread-wmm/thin002_power.oepc.yml	unreach-call	false	ABORTED	error	0.049973	8.049329562112689	26357760		6	2026-07-14T17:56:01.009154+08:00
+genmc-sc	c/pthread-wmm/thin002_power.opt.yml	unreach-call	false	ABORTED	error	0.053606	8.046016531996429	26443776		6	2026-07-14T17:56:43.965556+08:00
+genmc-sc	c/pthread-wmm/thin002_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	unreach-call	true	ABORTED	error	0.048247	7.677456984994933	25989120		6	2026-07-14T17:53:15.963737+08:00
+genmc-sc	c/pthread-wmm/thin002_rmo.yml	unreach-call	false	ABORTED	error	0.048397	8.052649379009381	26284032		6	2026-07-14T17:54:57.685894+08:00
+genmc-sc	c/pthread/bigshot_s.yml	unreach-call	true	ERROR (unsupported external)	error	0.05553	0.07482094899751246	25980928	17		2026-07-14T17:57:55.761525+08:00
+genmc-sc	c/pthread/bigshot_s2.yml	unreach-call	true	ERROR (unsupported external)	error	0.054355	0.07113278796896338	25980928	17		2026-07-14T17:57:55.586099+08:00
+genmc-sc	c/pthread/butterfly.yml	unreach-call	true	true	correct	3.083637	3.0919530298560858	26107904	0		2026-07-14T17:53:20.846472+08:00
+genmc-sc	c/pthread/fib_safe-10.yml	unreach-call	true	TIMEOUT	error	11.001422	11.011608997127041	25956352		9	2026-07-14T17:52:19.756946+08:00
+genmc-sc	c/pthread/fib_safe-11.yml	unreach-call	true	TIMEOUT	error	10.999772	11.020737501094118	25968640		9	2026-07-14T17:52:20.231361+08:00
+genmc-sc	c/pthread/fib_safe-12.yml	unreach-call	true	TIMEOUT	error	10.999779	11.018633770057932	25952256		9	2026-07-14T17:52:20.354042+08:00
+genmc-sc	c/pthread/fib_safe-5.yml	unreach-call	true	true	correct	1.303334	1.3231204729527235	25956352	0		2026-07-14T17:52:14.782904+08:00
+genmc-sc	c/pthread/fib_safe-6.yml	unreach-call	true	true	correct	6.429043	6.4507644169498235	25952256	0		2026-07-14T17:52:14.982517+08:00
+genmc-sc	c/pthread/fib_safe-7.yml	unreach-call	true	TIMEOUT	error	11.000708	11.012259047944099	25948160		9	2026-07-14T17:52:16.216494+08:00
+genmc-sc	c/pthread/fib_unsafe-10.yml	unreach-call	false	TIMEOUT	error	11.001277	11.016739286016673	25956352		9	2026-07-14T17:52:21.537785+08:00
+genmc-sc	c/pthread/fib_unsafe-11.yml	unreach-call	false	TIMEOUT	error	11.00024	11.013199822977185	25956352		9	2026-07-14T17:52:24.092103+08:00
+genmc-sc	c/pthread/fib_unsafe-12.yml	unreach-call	false	TIMEOUT	error	10.99843	11.019940002821386	25960448		9	2026-07-14T17:52:25.603674+08:00
+genmc-sc	c/pthread/fib_unsafe-5.yml	unreach-call	false	false(unreach-call)	correct	0.358211	0.3722583050839603	25944064	42		2026-07-14T17:52:16.731628+08:00
+genmc-sc	c/pthread/fib_unsafe-6.yml	unreach-call	false	false(unreach-call)	correct	1.653828	1.6699233429972082	25960448	42		2026-07-14T17:52:17.208619+08:00
+genmc-sc	c/pthread/fib_unsafe-7.yml	unreach-call	false	false(unreach-call)	correct	8.314054	8.324069184018299	25956352	42		2026-07-14T17:52:18.982042+08:00
+genmc-sc	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.044693	0.06097930110991001	25997312	42		2026-07-14T17:52:30.355282+08:00
+genmc-sc	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	0.047861	0.06197232590056956	26120192	42		2026-07-14T17:57:39.975593+08:00
+genmc-sc	c/pthread/queue_longer.yml	unreach-call	false	false(unreach-call)	correct	4.580731	4.5924142429139465	1041215488	42		2026-07-14T17:57:39.270126+08:00
+genmc-sc	c/pthread/queue_longest.yml	unreach-call	false	TIMEOUT	error	11.044621	11.057677738834172	1005666304		9	2026-07-14T17:57:39.453201+08:00
+genmc-sc	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.041761	0.04998896108008921	26099712	0		2026-07-14T17:57:39.060408+08:00
+genmc-sc	c/pthread/queue_ok_longer.yml	unreach-call	true	true	correct	0.071599	0.08554174611344934	26112000	0		2026-07-14T17:57:39.081648+08:00
+genmc-sc	c/pthread/queue_ok_longest.yml	unreach-call	true	true	correct	0.116753	0.13724970701150596	26116096	0		2026-07-14T17:57:39.213177+08:00
+genmc-sc	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	0.067781	0.0817517819814384	26095616	42		2026-07-14T17:57:57.609595+08:00
+genmc-sc	c/pthread/reorder_5.yml	unreach-call	false	ERROR (unsupported external)	error	1.246369	1.2653322261758149	26087424	17		2026-07-14T17:57:57.133719+08:00
+genmc-sc	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.058948	0.07208433793857694	26161152	42		2026-07-14T17:57:55.942525+08:00
+genmc-sc	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.05822	0.07522259815596044	26152960	0		2026-07-14T17:57:56.120702+08:00
+genmc-sc	c/pthread/stack-1.yml	unreach-call	true	ERROR (unsupported external)	error	0.036961	0.048736668890342116	26046464	17		2026-07-14T17:57:29.882784+08:00
+genmc-sc	c/pthread/stack-2.yml	unreach-call	false	ERROR (unsupported external)	error	0.04656	0.0548094289842993	26058752	17		2026-07-14T17:57:30.357440+08:00
+genmc-sc	c/pthread/stack_longer-1.yml	unreach-call	false	ERROR (unsupported external)	error	0.036195	0.05292808008380234	26058752	17		2026-07-14T17:57:30.514869+08:00
+genmc-sc	c/pthread/stack_longer-2.yml	unreach-call	true	ERROR (unsupported external)	error	0.038881	0.05903052305802703	26046464	17		2026-07-14T17:57:30.034473+08:00
+genmc-sc	c/pthread/stack_longest-1.yml	unreach-call	false	ERROR (unsupported external)	error	0.040072	0.051369916182011366	26042368	17		2026-07-14T17:57:30.670261+08:00
+genmc-sc	c/pthread/stack_longest-2.yml	unreach-call	true	ERROR (unsupported external)	error	0.042686	0.057908867951482534	26058752	17		2026-07-14T17:57:30.196408+08:00
+genmc-sc	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.033517	0.041269403882324696	25980928	42		2026-07-14T17:52:02.541203+08:00
+genmc-sc	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.03335	0.04116098117083311	26005504	0		2026-07-14T17:52:02.541251+08:00
+genmc-sc	c/pthread/sync01.yml	unreach-call	true	ERROR (compilation)	error	0.038507	0.048338999040424824	25452544	5		2026-07-14T17:57:24.795771+08:00
+genmc-sc	c/pthread/triangular-1.yml	unreach-call	true	true	correct	1.85155	1.8532526521012187	25985024	0		2026-07-14T17:52:02.699936+08:00
+genmc-sc	c/pthread/triangular-2.yml	unreach-call	false	false(unreach-call)	correct	0.425521	0.43518019816838205	25976832	42		2026-07-14T17:52:02.825945+08:00
+genmc-sc	c/pthread/triangular-longer-1.yml	unreach-call	true	TIMEOUT	error	11.001273	11.003896716982126	25993216		9	2026-07-14T17:52:02.844154+08:00
+genmc-sc	c/pthread/triangular-longer-2.yml	unreach-call	false	TIMEOUT	error	11.001317	11.011734208092093	25980928		9	2026-07-14T17:52:03.363561+08:00
+genmc-sc	c/pthread/triangular-longest-1.yml	unreach-call	true	TIMEOUT	error	10.998553	11.012027573073283	25985024		9	2026-07-14T17:52:03.277120+08:00
+genmc-sc	c/pthread/triangular-longest-2.yml	unreach-call	false	TIMEOUT	error	11.001629	11.014314705040306	25980928		9	2026-07-14T17:52:03.863996+08:00
+genmc-sc	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.067394	0.08291064901277423	26238976	42		2026-07-14T17:57:58.503161+08:00
+genmc-sc	c/weaver/array-eq-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.033049	0.035066501004621387	25468928	5		2026-07-14T17:51:53.829831+08:00
+genmc-sc	c/weaver/array-eq-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026985	0.03561389213427901	25456640	5		2026-07-14T17:51:56.600908+08:00
+genmc-sc	c/weaver/bench-exp1x3.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.032617	0.03343784506432712	25178112	17		2026-07-14T17:51:52.640786+08:00
+genmc-sc	c/weaver/bench-exp2x3.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.02865	0.034415833884850144	25202688	17		2026-07-14T17:51:53.379045+08:00
+genmc-sc	c/weaver/bench-exp2x4.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.028824	0.03159770299680531	25227264	17		2026-07-14T17:51:53.539884+08:00
+genmc-sc	c/weaver/bench-exp2x6.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.031224	0.032189009943977	25235456	17		2026-07-14T17:51:53.684891+08:00
+genmc-sc	c/weaver/bench-exp2x9.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.028926	0.03053778992034495	25264128	17		2026-07-14T17:51:54.013080+08:00
+genmc-sc	c/weaver/bench-exp3x3-opt.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027377	0.035947140073403716	25452544	5		2026-07-14T17:51:55.140034+08:00
+genmc-sc	c/weaver/bench-exp3x3.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.02937	0.044834080850705504	25247744	17		2026-07-14T17:51:53.990770+08:00
+genmc-sc	c/weaver/chl-array-int-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02709	0.03676050389185548	25460736	5		2026-07-14T17:51:58.190909+08:00
+genmc-sc	c/weaver/chl-array-int-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026875	0.03606830397620797	25452544	5		2026-07-14T17:51:55.458424+08:00
+genmc-sc	c/weaver/chl-array-int-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028702	0.029734569136053324	25460736	5		2026-07-14T17:51:57.468554+08:00
+genmc-sc	c/weaver/chl-chromosome-opt-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028511	0.029850287130102515	25464832	5		2026-07-14T17:51:54.715256+08:00
+genmc-sc	c/weaver/chl-chromosome-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027806	0.040574791142717004	25452544	5		2026-07-14T17:51:59.879808+08:00
+genmc-sc	c/weaver/chl-chromosome-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029131	0.04279511421918869	25468928	5		2026-07-14T17:51:57.156945+08:00
+genmc-sc	c/weaver/chl-chromosome-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02755	0.043502909829840064	25452544	5		2026-07-14T17:51:59.800597+08:00
+genmc-sc	c/weaver/chl-collitem-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027202	0.03556181211024523	25448448	5		2026-07-14T17:52:00.303164+08:00
+genmc-sc	c/weaver/chl-collitem-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027279	0.038859404157847166	25456640	5		2026-07-14T17:51:57.043048+08:00
+genmc-sc	c/weaver/chl-collitem-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027349	0.035380583023652434	25452544	5		2026-07-14T17:52:00.165534+08:00
+genmc-sc	c/weaver/chl-exp-term-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027184	0.034845611080527306	25460736	5		2026-07-14T17:51:58.053864+08:00
+genmc-sc	c/weaver/chl-exp-term-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.030396	0.03142657200805843	25452544	5		2026-07-14T17:51:54.428521+08:00
+genmc-sc	c/weaver/chl-file-item-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027506	0.03775229584425688	25456640	5		2026-07-14T17:51:57.328500+08:00
+genmc-sc	c/weaver/chl-file-item-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.030318	0.0313941880594939	25440256	5		2026-07-14T17:51:53.972501+08:00
+genmc-sc	c/weaver/chl-file-item-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027576	0.029103955952450633	25460736	5		2026-07-14T17:51:55.890000+08:00
+genmc-sc	c/weaver/chl-match-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027838	0.03968786704353988	25460736	5		2026-07-14T17:51:57.448720+08:00
+genmc-sc	c/weaver/chl-match-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.030952	0.0323970690369606	25452544	5		2026-07-14T17:51:54.147114+08:00
+genmc-sc	c/weaver/chl-match-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027414	0.03615389880724251	25464832	5		2026-07-14T17:51:57.016853+08:00
+genmc-sc	c/weaver/chl-name-comparator-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027421	0.028324184007942677	25468928	5		2026-07-14T17:52:01.821623+08:00
+genmc-sc	c/weaver/chl-name-comparator-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027637	0.038518469082191586	25477120	5		2026-07-14T17:52:00.862673+08:00
+genmc-sc	c/weaver/chl-name-comparator-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028798	0.03755785897374153	25481216	5		2026-07-14T17:52:01.810838+08:00
+genmc-sc	c/weaver/chl-node-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027958	0.041357744950801134	25481216	5		2026-07-14T17:52:01.374612+08:00
+genmc-sc	c/weaver/chl-node-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028057	0.040327957132831216	25485312	5		2026-07-14T17:52:00.660297+08:00
+genmc-sc	c/weaver/chl-node-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027886	0.04776558605954051	25481216	5		2026-07-14T17:52:01.223055+08:00
+genmc-sc	c/weaver/chl-nzb-file-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028361	0.03898721421137452	25489408	5		2026-07-14T17:52:02.008953+08:00
+genmc-sc	c/weaver/chl-nzb-file-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02922	0.03853829507716	25477120	5		2026-07-14T17:52:01.841286+08:00
+genmc-sc	c/weaver/chl-nzb-file-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02812	0.03643799084238708	25497600	5		2026-07-14T17:52:01.954672+08:00
+genmc-sc	c/weaver/chl-poker-hand-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.031044	0.03250628709793091	25600000	5		2026-07-14T17:52:02.122115+08:00
+genmc-sc	c/weaver/chl-poker-hand-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029644	0.04553882498294115	25591808	5		2026-07-14T17:52:02.094940+08:00
+genmc-sc	c/weaver/chl-poker-hand-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02958	0.044188879895955324	25604096	5		2026-07-14T17:52:02.096420+08:00
+genmc-sc	c/weaver/chl-simpl-str-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.031578	0.0479225420858711	25448448	5		2026-07-14T17:51:54.257222+08:00
+genmc-sc	c/weaver/chl-simpl-str-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.032583	0.04168221610598266	25448448	5		2026-07-14T17:51:53.667677+08:00
+genmc-sc	c/weaver/chl-simpl-str-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029157	0.04632311500608921	25468928	5		2026-07-14T17:51:53.989175+08:00
+genmc-sc	c/weaver/chl-sre-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.030414	0.03192726196721196	25464832	5		2026-07-14T17:51:53.537448+08:00
+genmc-sc	c/weaver/chl-sre-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029735	0.03302529687061906	25456640	5		2026-07-14T17:51:53.092463+08:00
+genmc-sc	c/weaver/chl-sre-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028996	0.03225711500272155	25460736	5		2026-07-14T17:51:53.381687+08:00
+genmc-sc	c/weaver/chl-time-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027436	0.03726439899764955	25485312	5		2026-07-14T17:51:56.738743+08:00
+genmc-sc	c/weaver/chl-time-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028756	0.0414613620378077	25460736	5		2026-07-14T17:51:53.957896+08:00
+genmc-sc	c/weaver/chl-time-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026984	0.04447870305739343	25464832	5		2026-07-14T17:51:56.310075+08:00
+genmc-sc	c/weaver/chl-word-subst.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027671	0.03839352889917791	25473024	5		2026-07-14T17:52:00.229828+08:00
+genmc-sc	c/weaver/chl-word-symm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027497	0.04176303604617715	25481216	5		2026-07-14T17:51:57.184287+08:00
+genmc-sc	c/weaver/chl-word-trans.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027459	0.03955208300612867	25460736	5		2026-07-14T17:51:59.946435+08:00
+genmc-sc	c/weaver/clever.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.030995	0.031951926881447434	25223168	17		2026-07-14T17:51:53.092745+08:00
+genmc-sc	c/weaver/fibonacci.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.031795	0.0331732330378145	25468928	5		2026-07-14T17:51:53.833581+08:00
+genmc-sc	c/weaver/loop-tiling-eq.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027615	0.036222571041435	25460736	5		2026-07-14T17:51:55.430022+08:00
+genmc-sc	c/weaver/mult-comm.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.03446	0.03520122496411204	25448448	5		2026-07-14T17:51:52.787863+08:00
+genmc-sc	c/weaver/mult-dist.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.030862	0.03278932999819517	25477120	5		2026-07-14T17:51:53.089924+08:00
+genmc-sc	c/weaver/mult-flipped-dist.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.031096	0.03218709211796522	25374720	5		2026-07-14T17:51:53.234830+08:00
+genmc-sc	c/weaver/parallel-bakery-2.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.031072	0.04423001385293901	25260032	17		2026-07-14T17:51:53.811509+08:00
+genmc-sc	c/weaver/parallel-bakery-3.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.028639	0.038054582895711064	25337856	17		2026-07-14T17:52:00.025126+08:00
+genmc-sc	c/weaver/parallel-bakery-4.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.031719	0.043620060896500945	25464832	17		2026-07-14T17:52:01.668930+08:00
+genmc-sc	c/weaver/parallel-barrier-loop.wvr.yml	unreach-call	false	ERROR (unsupported external)	error	0.028504	0.04077084409072995	25284608	17		2026-07-14T17:52:00.517290+08:00
+genmc-sc	c/weaver/parallel-barrier.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.027733	0.04549163207411766	25284608	17		2026-07-14T17:51:59.171816+08:00
+genmc-sc	c/weaver/parallel-bluetooth.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.031539	0.03273256286047399	25202688	17		2026-07-14T17:51:53.681359+08:00
+genmc-sc	c/weaver/parallel-lamport.wvr.yml	unreach-call	true	ABORTED	error	0.028574	5.987249392084777	25288704		6	2026-07-14T17:51:58.787001+08:00
+genmc-sc	c/weaver/parallel-min-max-1.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.028347	0.04328335798345506	25255936	17		2026-07-14T17:51:55.312683+08:00
+genmc-sc	c/weaver/parallel-misc-1.wvr.yml	unreach-call	true	ABORTED	error	0.028873	6.030806781025603	25272320		6	2026-07-14T17:51:57.729565+08:00
+genmc-sc	c/weaver/parallel-misc-2-unrolled-atomic.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029307	0.03645142284221947	25456640	5		2026-07-14T17:51:53.377342+08:00
+genmc-sc	c/weaver/parallel-misc-2-unrolled.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.031392	0.03229818097315729	25178112	17		2026-07-14T17:51:52.943658+08:00
+genmc-sc	c/weaver/parallel-misc-2.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.029097	0.038437251932919025	25202688	17		2026-07-14T17:51:53.375179+08:00
+genmc-sc	c/weaver/parallel-misc-3-extended.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.02973	0.03149531711824238	25214976	17		2026-07-14T17:51:53.539957+08:00
+genmc-sc	c/weaver/parallel-misc-3.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.028224	0.03039524215273559	25190400	17		2026-07-14T17:51:52.948465+08:00
+genmc-sc	c/weaver/parallel-misc-4.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.028523	0.03329190704971552	25210880	17		2026-07-14T17:51:53.380021+08:00
+genmc-sc	c/weaver/parallel-misc-5.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027102	0.04194374103099108	25448448	5		2026-07-14T17:51:56.456780+08:00
+genmc-sc	c/weaver/parallel-parallel-sum-1-dsl.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027766	0.03862571716308594	25473024	5		2026-07-14T17:52:01.580679+08:00
+genmc-sc	c/weaver/parallel-parallel-sum-1.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027747	0.03903632890433073	25464832	5		2026-07-14T17:52:00.721303+08:00
+genmc-sc	c/weaver/parallel-parallel-sum-2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028402	0.044821880059316754	25477120	5		2026-07-14T17:52:01.291147+08:00
+genmc-sc	c/weaver/parallel-parallel-sum-equiv.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028347	0.03693787404336035	25452544	5		2026-07-14T17:52:00.802987+08:00
+genmc-sc	c/weaver/parallel-simple-equiv.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.029428	0.03113975515589118	25169920	17		2026-07-14T17:51:52.947501+08:00
+genmc-sc	c/weaver/parallel-ticket-2.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.030196	0.04238231317140162	25182208	17		2026-07-14T17:51:53.071437+08:00
+genmc-sc	c/weaver/parallel-ticket-3.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.031578	0.04620826500467956	25223168	17		2026-07-14T17:51:53.519295+08:00
+genmc-sc	c/weaver/parallel-ticket-4.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.026188	0.04182929219678044	25243648	17		2026-07-14T17:51:53.719959+08:00
+genmc-sc	c/weaver/parallel-ticket-5.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.029484	0.03163829701952636	25264128	17		2026-07-14T17:51:54.283383+08:00
+genmc-sc	c/weaver/parallel-ticket-6.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.027844	0.03612083615735173	25255936	17		2026-07-14T17:51:55.852614+08:00
+genmc-sc	c/weaver/parallel-ticket-7.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.028605	0.036498297937214375	25260032	17		2026-07-14T17:51:57.590693+08:00
+genmc-sc	c/weaver/parallel-ticket-8.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.027993	0.0365334281232208	25300992	17		2026-07-14T17:51:59.741014+08:00
+genmc-sc	c/weaver/popl20-bad-buffer-mult-alt.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02826	0.041502143954858184	25477120	5		2026-07-14T17:52:01.374568+08:00
+genmc-sc	c/weaver/popl20-bad-buffer-mult-alt2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028604	0.03683524904772639	25468928	5		2026-07-14T17:52:01.082316+08:00
+genmc-sc	c/weaver/popl20-bad-buffer-mult-alt3.wvr.yml	unreach-call	false	ERROR (compilation)	error	0.027778	0.04015845712274313	25473024	5		2026-07-14T17:52:01.438211+08:00
+genmc-sc	c/weaver/popl20-bad-commit-1.wvr-bad.yml	unreach-call	true	ERROR (compilation)	error	0.02805	0.037477926118299365	25468928	5		2026-07-14T17:52:01.869168+08:00
+genmc-sc	c/weaver/popl20-bad-commit-2.wvr-bad.yml	unreach-call	true	ERROR (compilation)	error	0.029092	0.036313793854787946	25493504	5		2026-07-14T17:52:01.982352+08:00
+genmc-sc	c/weaver/popl20-bad-counter-queue.wvr.yml	unreach-call	false	ABORTED	error	0.030973	2.546905294060707	25251840		6	2026-07-14T17:51:54.110499+08:00
+genmc-sc	c/weaver/popl20-bad-counter-queue2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027613	0.040203748969361186	25452544	5		2026-07-14T17:51:54.989927+08:00
+genmc-sc	c/weaver/popl20-bad-dot-product-alt.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02801	0.0394131769426167	25460736	5		2026-07-14T17:52:00.088158+08:00
+genmc-sc	c/weaver/popl20-bad-dot-product.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027624	0.04443318000994623	25489408	5		2026-07-14T17:51:58.887785+08:00
+genmc-sc	c/weaver/popl20-bad-ring-nondet.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026861	0.02853989601135254	25485312	5		2026-07-14T17:52:00.952825+08:00
+genmc-sc	c/weaver/popl20-bad-ring.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026784	0.028296993114054203	25477120	5		2026-07-14T17:52:00.813990+08:00
+genmc-sc	c/weaver/popl20-bad-threaded-sum-2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029583	0.031032337807118893	25456640	5		2026-07-14T17:51:53.686074+08:00
+genmc-sc	c/weaver/popl20-bad-three-array-sum-alt.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026841	0.04108910704962909	25456640	5		2026-07-14T17:51:55.023334+08:00
+genmc-sc	c/weaver/popl20-channel-sum.wvr.yml	unreach-call	true	ABORTED	error	0.029598	1.651544411899522	25255936		6	2026-07-14T17:51:53.992330+08:00
+genmc-sc	c/weaver/popl20-commit-1.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027559	0.03953953180462122	25485312	5		2026-07-14T17:52:01.668973+08:00
+genmc-sc	c/weaver/popl20-commit-2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028205	0.03639199794270098	25485312	5		2026-07-14T17:52:01.954629+08:00
+genmc-sc	c/weaver/popl20-counter-determinism.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.029046	0.030200074892491102	25202688	17		2026-07-14T17:51:53.238379+08:00
+genmc-sc	c/weaver/popl20-counter-fun.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028679	0.03698679804801941	25464832	5		2026-07-14T17:51:55.879328+08:00
+genmc-sc	c/weaver/popl20-difference-det.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.030711	0.031430759001523256	25214976	17		2026-07-14T17:51:53.236953+08:00
+genmc-sc	c/weaver/popl20-figure1-alt.wvr.yml	unreach-call	true	ABORTED	error	0.03188	1.8435879310127348	25190400		6	2026-07-14T17:51:52.786066+08:00
+genmc-sc	c/weaver/popl20-figure1.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.031962	0.04526623198762536	25178112	17		2026-07-14T17:51:52.618366+08:00
+genmc-sc	c/weaver/popl20-figure3.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.032008	0.03371217311359942	25198592	17		2026-07-14T17:51:52.791946+08:00
+genmc-sc	c/weaver/popl20-horseshoe.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027343	0.03995733498595655	25473024	5		2026-07-14T17:52:00.440962+08:00
+genmc-sc	c/weaver/popl20-min-max-dec.wvr.yml	unreach-call	true	ABORTED	error	0.028871	5.588706333888695	25276416		6	2026-07-14T17:51:56.136141+08:00
+genmc-sc	c/weaver/popl20-min-max-inc-dec.wvr.yml	unreach-call	true	ABORTED	error	0.029462	5.13913679192774	25288704		6	2026-07-14T17:51:57.601079+08:00
+genmc-sc	c/weaver/popl20-min-max-inc.wvr.yml	unreach-call	true	ABORTED	error	0.029018	4.684759779134765	25296896		6	2026-07-14T17:51:56.026463+08:00
+genmc-sc	c/weaver/popl20-more-array-sum-alt.wvr.yml	unreach-call	false	ABORTED	error	0.02828	3.240483202971518	25276416		6	2026-07-14T17:51:54.430655+08:00
+genmc-sc	c/weaver/popl20-more-array-sum-alt2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027983	0.03700349503196776	25460736	5		2026-07-14T17:51:55.991653+08:00
+genmc-sc	c/weaver/popl20-more-array-sum.wvr.yml	unreach-call	false	ABORTED	error	0.030275	4.993102570995688	25264128		6	2026-07-14T17:51:54.705114+08:00
+genmc-sc	c/weaver/popl20-more-array-sum2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027965	0.03633707296103239	25456640	5		2026-07-14T17:51:56.878207+08:00
+genmc-sc	c/weaver/popl20-more-buffer-mult.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026681	0.027950801886618137	25481216	5		2026-07-14T17:52:01.091247+08:00
+genmc-sc	c/weaver/popl20-more-buffer-mult2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02755	0.03575297398492694	25468928	5		2026-07-14T17:52:01.003411+08:00
+genmc-sc	c/weaver/popl20-more-buffer-mult3.wvr.yml	unreach-call	false	ERROR (compilation)	error	0.028246	0.04753681109286845	25456640	5		2026-07-14T17:52:01.141354+08:00
+genmc-sc	c/weaver/popl20-more-buffer-series.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028148	0.04511778894811869	25477120	5		2026-07-14T17:52:01.520024+08:00
+genmc-sc	c/weaver/popl20-more-buffer-series2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027981	0.04785726615227759	25481216	5		2026-07-14T17:52:01.223012+08:00
+genmc-sc	c/weaver/popl20-more-buffer-series3.wvr.yml	unreach-call	false	ERROR (compilation)	error	0.028327	0.04511735215783119	25477120	5		2026-07-14T17:52:01.519981+08:00
+genmc-sc	c/weaver/popl20-more-dec-subseq.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028544	0.04069118294864893	25481216	5		2026-07-14T17:51:57.773471+08:00
+genmc-sc	c/weaver/popl20-more-inc-subseq.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026959	0.03520272090099752	25370624	5		2026-07-14T17:51:57.916359+08:00
+genmc-sc	c/weaver/popl20-more-max-array-hom.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026687	0.04347293893806636	25456640	5		2026-07-14T17:51:55.166801+08:00
+genmc-sc	c/weaver/popl20-more-max-array.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027683	0.04082687688060105	25468928	5		2026-07-14T17:51:54.732253+08:00
+genmc-sc	c/weaver/popl20-more-min-array-hom.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02782	0.036486485973000526	25456640	5		2026-07-14T17:51:55.285917+08:00
+genmc-sc	c/weaver/popl20-more-min-array.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027275	0.03598697506822646	25448448	5		2026-07-14T17:51:54.847887+08:00
+genmc-sc	c/weaver/popl20-more-min-le-max.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028325	0.04618115001358092	25460736	5		2026-07-14T17:51:54.556707+08:00
+genmc-sc	c/weaver/popl20-more-mts.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028138	0.043763888999819756	25456640	5		2026-07-14T17:51:56.163932+08:00
+genmc-sc	c/weaver/popl20-more-multiply-verify.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026912	0.03894188697449863	25452544	5		2026-07-14T17:51:59.319553+08:00
+genmc-sc	c/weaver/popl20-more-nonblocking-counter-alt2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.032393	0.03354906802996993	25473024	5		2026-07-14T17:51:53.233416+08:00
+genmc-sc	c/weaver/popl20-more-queue-add-2-nl.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027902	0.044477395014837384	25452544	5		2026-07-14T17:51:57.301977+08:00
+genmc-sc	c/weaver/popl20-more-queue-add-3-nl.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027537	0.035893474938347936	25464832	5		2026-07-14T17:52:00.583176+08:00
+genmc-sc	c/weaver/popl20-more-sorted.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028949	0.031304556876420975	25468928	5		2026-07-14T17:51:54.277544+08:00
+genmc-sc	c/weaver/popl20-more-sum-array-hom.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.03	0.031295933993533254	25460736	5		2026-07-14T17:51:54.277499+08:00
+genmc-sc	c/weaver/popl20-more-vector-add.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028227	0.03632157202810049	25460736	5		2026-07-14T17:51:55.740525+08:00
+genmc-sc	c/weaver/popl20-mult-4.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.0281	0.04528914298862219	25456640	5		2026-07-14T17:51:53.865362+08:00
+genmc-sc	c/weaver/popl20-mult-equiv.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.031477	0.03313264204189181	25477120	5		2026-07-14T17:51:53.831305+08:00
+genmc-sc	c/weaver/popl20-nonblocking-cntr-alt.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.031881	0.03362505394034088	25452544	5		2026-07-14T17:51:53.089053+08:00
+genmc-sc	c/weaver/popl20-nonblocking-cntr.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029865	0.03147206688299775	25436160	5		2026-07-14T17:51:52.945011+08:00
+genmc-sc	c/weaver/popl20-prod-cons-eq.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.028086	0.0450441800057888	25473024	5		2026-07-14T17:52:01.721661+08:00
+genmc-sc	c/weaver/popl20-prod-cons.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026839	0.03485957789234817	25473024	5		2026-07-14T17:51:59.034551+08:00
+genmc-sc	c/weaver/popl20-prod-cons3.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029251	0.037595648085698485	25464832	5		2026-07-14T17:52:00.942219+08:00
+genmc-sc	c/weaver/popl20-proofs-counter-add-4-semi-Q67.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029318	0.031494383001700044	25477120	5		2026-07-14T17:51:53.835395+08:00
+genmc-sc	c/weaver/popl20-queue-add-2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027579	0.0369316500145942	25477120	5		2026-07-14T17:51:56.024551+08:00
+genmc-sc	c/weaver/popl20-queue-add-3.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027514	0.044609759002923965	25477120	5		2026-07-14T17:52:00.370409+08:00
+genmc-sc	c/weaver/popl20-send-receive-alt.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027589	0.03621177887544036	25456640	5		2026-07-14T17:51:55.713006+08:00
+genmc-sc	c/weaver/popl20-send-receive.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027112	0.03972782101482153	25468928	5		2026-07-14T17:51:59.598960+08:00
+genmc-sc	c/weaver/popl20-simple-array-sum.wvr.yml	unreach-call	true	ABORTED	error	0.029023	4.2536593759432435	25260032		6	2026-07-14T17:51:54.430570+08:00
+genmc-sc	c/weaver/popl20-simple-queue.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.031293	0.03321467596106231	25452544	5		2026-07-14T17:51:54.139912+08:00
+genmc-sc	c/weaver/popl20-threaded-sum-3.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027633	0.02905570506118238	25456640	5		2026-07-14T17:51:55.751112+08:00
+genmc-sc	c/weaver/popl20-three-array-max.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027299	0.03472992801107466	25485312	5		2026-07-14T17:51:58.750176+08:00
+genmc-sc	c/weaver/popl20-three-array-min.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02719	0.03576416498981416	25460736	5		2026-07-14T17:51:58.473993+08:00
+genmc-sc	c/weaver/popl20-three-array-sum.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027129	0.04202193487435579	25468928	5		2026-07-14T17:51:56.759730+08:00
+genmc-sc	c/weaver/popl20-two-queue.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027305	0.0358951878733933	25464832	5		2026-07-14T17:51:58.611981+08:00
+genmc-sc	c/weaver/security.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.032109	0.033996279118582606	25456640	5		2026-07-14T17:51:52.795633+08:00
+genmc-sc	c/weaver/spaghetti.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.031007	0.032428891863673925	25206784	17		2026-07-14T17:51:53.536424+08:00
+genmc-sc	c/weaver/test-context1.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.030255	0.03329884191043675	25460736	5		2026-07-14T17:51:54.139872+08:00
+genmc-sc	c/weaver/test-easy1.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.030511	0.03183316299691796	25456640	5		2026-07-14T17:51:52.652221+08:00
+genmc-sc	c/weaver/test-easy10.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.030352	0.03157363412901759	25243648	17		2026-07-14T17:51:53.688223+08:00
+genmc-sc	c/weaver/test-easy11.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.0323	0.03307880903594196	25169920	17		2026-07-14T17:51:52.638934+08:00
+genmc-sc	c/weaver/test-easy6.wvr.yml	unreach-call	true	ERROR (unsupported external)	error	0.030461	0.04617468803189695	25182208	17		2026-07-14T17:51:52.923052+08:00
+genmc-sc	c/weaver/test-easy7.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.032063	0.03460946190170944	25440256	5		2026-07-14T17:51:52.644273+08:00
+genmc-sc	c/weaver/test-easy8.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.03091	0.03255838481709361	25448448	5		2026-07-14T17:51:52.797827+08:00
+genmc-sc	c/weaver/test-hard1.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027052	0.03587208595126867	25464832	5		2026-07-14T17:51:59.460776+08:00
+genmc-sc	c/weaver/test-semi1.wvr.yml	unreach-call	true	ABORTED	error	0.02931	1.1097890329547226	25182208		6	2026-07-14T17:51:52.506897+08:00
+genmc-sc	c/weaver/unroll-2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029664	0.04431422590278089	25456640	5		2026-07-14T17:51:54.110541+08:00
+genmc-sc	c/weaver/unroll-3.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027377	0.028482112800702453	25452544	5		2026-07-14T17:51:54.576413+08:00
+genmc-sc	c/weaver/unroll-4.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.026925	0.03905442403629422	25456640	5		2026-07-14T17:51:54.875464+08:00
+genmc-sc	c/weaver/unroll-5.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027535	0.041161368135362864	25448448	5		2026-07-14T17:51:55.596965+08:00
+genmc-sc	c/weaver/unroll-cond-2.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.029571	0.04702369892038405	25460736	5		2026-07-14T17:51:54.407432+08:00
+genmc-sc	c/weaver/unroll-cond-3.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027398	0.03608401189558208	25456640	5		2026-07-14T17:51:55.569940+08:00
+genmc-sc	c/weaver/unroll-cond-4.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.027074	0.03646990284323692	25464832	5		2026-07-14T17:51:56.904150+08:00
+genmc-sc	c/weaver/unroll-cond-5.wvr.yml	unreach-call	true	ERROR (compilation)	error	0.02717	0.041624975856393576	25468928	5		2026-07-14T17:51:58.330080+08:00

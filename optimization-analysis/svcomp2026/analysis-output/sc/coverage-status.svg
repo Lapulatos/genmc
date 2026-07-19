@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="287" viewBox="0 0 820 287">
+<rect width="100%" height="100%" fill="white"/>
+<text x="16" y="28" font-size="16" font-weight="bold">Run coverage and failure modes</text>
+<rect x="150" y="38" width="13" height="13" fill="#009E73"/>
+<text x="168" y="49" font-size="11">solved</text>
+<rect x="242" y="38" width="13" height="13" fill="#E69F00"/>
+<text x="260" y="49" font-size="11">timeout</text>
+<rect x="334" y="38" width="13" height="13" fill="#D55E00"/>
+<text x="352" y="49" font-size="11">OOM</text>
+<rect x="426" y="38" width="13" height="13" fill="#777777"/>
+<text x="444" y="49" font-size="11">other</text>
+<text x="140" y="89" text-anchor="end" font-size="12">caat-sc</text>
+<rect x="150.00" y="70" width="598.12" height="25" fill="#009E73"><title>solved: 450/480</title></rect>
+<text x="449.06" y="87" text-anchor="middle" font-size="10" fill="white">450</text>
+<rect x="748.12" y="70" width="6.65" height="25" fill="#E69F00"><title>timeout: 5/480</title></rect>
+<rect x="754.77" y="70" width="33.23" height="25" fill="#D55E00"><title>OOM: 25/480</title></rect>
+<text x="796" y="89" font-size="11">n=480</text>
+<text x="140" y="143" text-anchor="end" font-size="12">cat-sc</text>
+<rect x="150.00" y="124" width="564.90" height="25" fill="#009E73"><title>solved: 425/480</title></rect>
+<text x="432.45" y="141" text-anchor="middle" font-size="10" fill="white">425</text>
+<rect x="714.90" y="124" width="39.88" height="25" fill="#E69F00"><title>timeout: 30/480</title></rect>
+<text x="734.83" y="141" text-anchor="middle" font-size="10" fill="white">30</text>
+<rect x="754.77" y="124" width="33.23" height="25" fill="#D55E00"><title>OOM: 25/480</title></rect>
+<text x="796" y="143" font-size="11">n=480</text>
+<text x="140" y="197" text-anchor="end" font-size="12">genmc-sc</text>
+<rect x="150.00" y="178" width="638.00" height="25" fill="#009E73"><title>solved: 480/480</title></rect>
+<text x="469.00" y="195" text-anchor="middle" font-size="10" fill="white">480</text>
+<text x="796" y="197" font-size="11">n=480</text>
+<text x="469.0" y="269" text-anchor="middle" font-size="12">Fraction of repeated runs</text>
+</svg>

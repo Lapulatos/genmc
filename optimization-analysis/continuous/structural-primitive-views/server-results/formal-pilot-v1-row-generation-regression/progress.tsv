@@ -1,0 +1,4 @@
+repetition	model	before_cores	after_cores	before_status	after_status	started	finished
+1	sc	0-7	8-15	0	0	2026-07-16T02:10:47+00:00	2026-07-16T02:12:54+00:00
+1	tso	16-23	24-31	0	0	2026-07-16T02:10:47+00:00	2026-07-16T02:12:54+00:00
+1	pso	32-39	40-47	0	0	2026-07-16T02:10:47+00:00	2026-07-16T02:12:54+00:00

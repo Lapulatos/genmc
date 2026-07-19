@@ -1,0 +1,17 @@
+{
+  "logs": 725,
+  "gate_counts": {
+    "native-fallback reason=modeled call to __VERIFIER_mutex_lock": 326,
+    "not-recorded": 276,
+    "native-fallback reason=external call to __assert_fail": 61,
+    "native-fallback reason=non-atomic load instruction": 16,
+    "native-fallback reason=control-flow loop outside the current RVF performance gate": 14,
+    "native-fallback reason=assume depends on an annotated load requiring native IPR": 13,
+    "native-fallback reason=non-atomic store instruction": 11,
+    "native-fallback reason=modeled call to __VERIFIER_malloc": 5,
+    "enabled": 2,
+    "native-fallback reason=atomic read-modify-write instruction": 1
+  },
+  "enabled_with_quotient_opportunity": 0,
+  "quotient_disabled_loads_on_enabled_tasks": 0
+}

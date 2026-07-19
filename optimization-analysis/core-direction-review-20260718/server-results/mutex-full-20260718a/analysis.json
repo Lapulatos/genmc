@@ -1,0 +1,200 @@
+{
+  "baseline_control_search_counter_differences": [
+    "goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos"
+  ],
+  "baseline_vs_control": {
+    "category_differences": [],
+    "common_correct": 398,
+    "complete_differences_observed_not_correctness_oracle": [],
+    "resources": {
+      "cputime": {
+        "ci95": [
+          0.9947706195449436,
+          1.0014614683686205
+        ],
+        "n": 398,
+        "ratio": 0.998110202704986
+      },
+      "memory": {
+        "ci95": [
+          0.9997813681142252,
+          1.0001427598622081
+        ],
+        "n": 398,
+        "ratio": 0.9999777697512086
+      },
+      "walltime": {
+        "ci95": [
+          0.9931349649014514,
+          1.0002794574925393
+        ],
+        "n": 398,
+        "ratio": 0.996671042309955
+      }
+    },
+    "status_differences": [
+      "goblint-regression/28-race_reach_40-trylock_racing",
+      "goblint-regression/28-race_reach_73-funloop_hard_racefree"
+    ],
+    "tasks": 725
+  },
+  "baseline_vs_rvf": {
+    "category_differences": [],
+    "common_correct": 398,
+    "complete_differences_observed_not_correctness_oracle": [],
+    "resources": {
+      "cputime": {
+        "ci95": [
+          0.9966539018798507,
+          1.0046101208216747
+        ],
+        "n": 398,
+        "ratio": 1.0005618820107844
+      },
+      "memory": {
+        "ci95": [
+          0.999911075356164,
+          1.0003799851660753
+        ],
+        "n": 398,
+        "ratio": 1.0000992093747716
+      },
+      "walltime": {
+        "ci95": [
+          0.9950958358687787,
+          1.0044749958794943
+        ],
+        "n": 398,
+        "ratio": 0.9997104043789281
+      }
+    },
+    "status_differences": [
+      "goblint-regression/28-race_reach_40-trylock_racing",
+      "goblint-regression/28-race_reach_73-funloop_hard_racefree"
+    ],
+    "tasks": 725
+  },
+  "category_counts": {
+    "baseline": {
+      "correct": 398,
+      "error": 297,
+      "wrong": 30
+    },
+    "control": {
+      "correct": 398,
+      "error": 297,
+      "wrong": 30
+    },
+    "rvf": {
+      "correct": 398,
+      "error": 297,
+      "wrong": 30
+    }
+  },
+  "control_rvf_search_counter_differences": [],
+  "control_vs_rvf": {
+    "category_differences": [],
+    "common_correct": 398,
+    "complete_differences_observed_not_correctness_oracle": [],
+    "resources": {
+      "cputime": {
+        "ci95": [
+          0.998827574670797,
+          1.0064201890460516
+        ],
+        "n": 398,
+        "ratio": 1.002456321255062
+      },
+      "memory": {
+        "ci95": [
+          0.9998483964924144,
+          1.0005702514328558
+        ],
+        "n": 398,
+        "ratio": 1.0001214423232558
+      },
+      "walltime": {
+        "ci95": [
+          0.9991656722252941,
+          1.007182551746602
+        ],
+        "n": 398,
+        "ratio": 1.0030495137712931
+      }
+    },
+    "status_differences": [],
+    "tasks": 725
+  },
+  "row_counts": {
+    "baseline": 725,
+    "control": 725,
+    "rvf": 725
+  },
+  "rvf_enabled_tasks": [
+    "goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_neg",
+    "goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos"
+  ],
+  "rvf_gate_counts": {
+    "enabled": 2,
+    "native-fallback reason=assume/load-annotation semantics require native IPR": 513,
+    "native-fallback reason=atomic read-modify-write instruction": 1,
+    "native-fallback reason=control-flow loop outside the current RVF performance gate": 32,
+    "native-fallback reason=modeled call to __VERIFIER_malloc": 4,
+    "native-fallback reason=non-atomic load instruction": 32,
+    "native-fallback reason=non-atomic store instruction": 57,
+    "not-recorded": 84
+  },
+  "rvf_reduced_tasks": [],
+  "rvf_totals": {
+    "rvf-fail-open": 0,
+    "rvf-loads-attempted": 0,
+    "rvf-loads-reduced": 0,
+    "rvf-native-reads-synthesized": 0,
+    "rvf-parent-continuations-queued": 0,
+    "rvf-quotient-disabled-loads": 0,
+    "rvf-representatives-queued": 0,
+    "rvf-singleton-bypass": 0,
+    "rvf-value-groups": 0,
+    "rvf-verify-calls": 0,
+    "rvf-verify-states-expanded": 0,
+    "rvf-visible-sources": 0
+  },
+  "status_counts": {
+    "baseline": {
+      "ABORTED": 2,
+      "ERROR (compilation)": 14,
+      "ERROR (unsupported external)": 1,
+      "ERROR (unsupported property: invalid memory access)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "OUT OF MEMORY": 32,
+      "SEGMENTATION FAULT": 1,
+      "TIMEOUT": 239,
+      "false(unreach-call)": 130,
+      "true": 298
+    },
+    "control": {
+      "ABORTED": 2,
+      "ERROR (compilation)": 13,
+      "ERROR (unsupported external)": 2,
+      "ERROR (unsupported property: invalid memory access)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "OUT OF MEMORY": 33,
+      "SEGMENTATION FAULT": 1,
+      "TIMEOUT": 238,
+      "false(unreach-call)": 130,
+      "true": 298
+    },
+    "rvf": {
+      "ABORTED": 2,
+      "ERROR (compilation)": 13,
+      "ERROR (unsupported external)": 2,
+      "ERROR (unsupported property: invalid memory access)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "OUT OF MEMORY": 33,
+      "SEGMENTATION FAULT": 1,
+      "TIMEOUT": 238,
+      "false(unreach-call)": 130,
+      "true": 298
+    }
+  }
+}

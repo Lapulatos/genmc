@@ -1,0 +1,7 @@
+source_line_bin	backend	tasks	all_repetitions_solved	paired_with_baseline	wall_ratio_geomean
+0001-0050	caat-pso	32	32	32	1.00476
+0001-0050	cat-pso	32	32	32	1
+0051-0100	caat-pso	10	10	10	1.24003
+0051-0100	cat-pso	10	10	10	1
+0501-plus	caat-pso	54	37	37	1.09611
+0501-plus	cat-pso	54	40	40	1

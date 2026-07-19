@@ -1,0 +1,7 @@
+numerator	denominator	same_verdict_terminal_tasks	both_terminal_different_verdict	cpu_ratio_geomean	cpu_ci_low	cpu_ci_high	cpu_numerator_better	cpu_denominator_better	wall_ratio_geomean	wall_ci_low	wall_ci_high	wall_numerator_better	wall_denominator_better	rss_ratio_geomean	rss_ci_low	rss_ci_high	rss_numerator_better	rss_denominator_better
+GenMC	Deagle	375	24	0.171327	0.132324	0.22447	312	63	0.195917	0.152933	0.250489	310	65	0.987891	0.893088	1.08997	158	217
+GenMC+CAAT-SC	Deagle	367	24	0.159379	0.121254	0.210235	304	63	0.180484	0.139971	0.23353	305	62	0.979084	0.882976	1.08267	157	210
+GenMC+CAAT-TSO	Deagle	359	24	0.144266	0.110853	0.188813	298	61	0.163391	0.127094	0.209314	301	58	0.966747	0.868852	1.07093	157	202
+GenMC+CAAT-PSO	Deagle	330	24	0.122751	0.0933579	0.162152	284	46	0.141773	0.111078	0.183567	284	46	0.918423	0.821525	1.02393	152	178
+Latest GenMC+CAAT-SC	Previous GenMC+CAAT-SC	418	0	0.915446	0.894591	0.934561	285	133	0.985597	0.949612	1.02079	202	216	0.994343	0.986828	1.00024	179	222
+Current GenMC	Previous GenMC	439	0	0.982636	0.976761	0.988256	247	192	1.18359	1.15757	1.21035	99	340	1.00017	0.999979	1.00035	213	208

@@ -1,0 +1,25 @@
+model	method	threads	common_solved	wall_speedup_gmean	cpu_efficiency_gmean	rss_inverse_ratio_gmean
+sc	caat	2	445	0.9688988439059881	0.8386719094371111	0.9990111610876508
+sc	caat	4	434	1.0463230980332086	0.8295434708613079	0.9962163412499613
+sc	caat	8	0			
+sc	cat	2	417	1.0062148552136583	0.8893166220665916	0.9964245795671607
+sc	cat	4	404	0.9913148055490926	0.8324122280336551	0.9941314806906862
+sc	cat	8	0			
+sc	genmc	2	471	0.9491116153071558	0.8203235346997061	0.9654790626367318
+sc	genmc	4	460	0.9996393458123292	0.7829779379996792	0.9291658210577415
+sc	genmc	8	0			
+tso	caat	2	0			
+tso	caat	4	0			
+tso	caat	8	0			
+tso	cat	2	0			
+tso	cat	4	0			
+tso	cat	8	0			
+tso	genmc	2	0			
+tso	genmc	4	0			
+tso	genmc	8	0			
+pso	caat	2	0			
+pso	caat	4	0			
+pso	caat	8	0			
+pso	cat	2	0			
+pso	cat	4	0			
+pso	cat	8	0			

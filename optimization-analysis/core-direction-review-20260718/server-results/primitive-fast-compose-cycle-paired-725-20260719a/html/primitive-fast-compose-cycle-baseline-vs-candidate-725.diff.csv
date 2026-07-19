@@ -1,0 +1,31 @@
+tool		GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)
+run set		baseline.unreach-call	baseline.unreach-call	baseline.unreach-call	baseline.unreach-call	baseline.unreach-call	baseline.unreach-call	baseline.unreach-call	baseline.unreach-call
+/workspace/svcomp2026-caat/sv-benchmarks/c/		status	cputime (s)	walltime (s)	memory (MB)	status	cputime (s)	walltime (s)	memory (MB)
+goblint-regression/28-race_reach_41-trylock_racefree.yml	true	TIMEOUT	61.229700384	61.24732333701104	3968.196608	OUT OF MEMORY	45.924687162	45.93912004798767	3999.997952
+goblint-regression/28-race_reach_36-indirect_racefree.yml	true	TIMEOUT	61.226777314	61.247572111999034	3968.339968	OUT OF MEMORY	45.845331982	45.856865662004566	3999.997952
+goblint-regression/28-race_reach_51-mutexptr_racefree.yml	true	TIMEOUT	61.244297908	61.2559226739977	3969.064960	OUT OF MEMORY	46.129280972	46.14107726200018	3999.997952
+goblint-regression/28-race_reach_19-callback_racing.yml	false	TIMEOUT	61.208651536	61.24236451499746	3983.769600	OUT OF MEMORY	39.250471144	39.27677804000268	3999.997952
+goblint-regression/28-race_reach_61-invariant_racing.yml	false	TIMEOUT	61.244832784	61.26422668300802	3958.484992	OUT OF MEMORY	46.276384684	46.29292159999022	3999.997952
+pthread-wmm/mix045_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.945421693	61.01045212899044	26.394624	false(unreach-call)	38.688225845	38.70071422500769	26.415104
+pthread-wmm/mix042.oepc.yml	false	TIMEOUT	60.833881535	61.01495362899732	26.398720	false(unreach-call)	39.424315986	39.436432943999534	26.451968
+pthread-wmm/mix006_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	61.003104211	61.01422625599662	26.398720	false(unreach-call)	51.869526508	51.88133929899777	26.394624
+pthread-wmm/safe009_rmo.opt.yml	false	TIMEOUT	61.004499385	61.01576501100499	26.390528	false(unreach-call)	56.125087913	56.13432652800111	26.435584
+pthread-wmm/mix002.oepc.yml	false	TIMEOUT	60.995563841	61.012142300009145	26.394624	false(unreach-call)	55.419061559	55.43323756101017	26.370048
+goblint-regression/28-race_reach_27-funptr_racing.yml	false	TIMEOUT	61.22233036	61.23568040700047	3958.591488	OUT OF MEMORY	46.607979444	46.71757118900132	3999.997952
+goblint-regression/28-race_reach_08-cond_racefree.yml	true	TIMEOUT	61.232347148	61.245600139009184	3964.461056	OUT OF MEMORY	46.988034808	47.311585755000124	3999.997952
+goblint-regression/28-race_reach_70-funloop_racefree.yml	true	TIMEOUT	61.22613831	61.24674489200697	3988.152320	OUT OF MEMORY	42.826021562	42.835024879008415	3999.997952
+goblint-regression/28-race_reach_71-funloop_racing.yml	false	TIMEOUT	61.245016886	61.26311179800541	3995.275264	OUT OF MEMORY	42.916239081	42.92358307998802	3999.997952
+goblint-regression/28-race_reach_72-funloop_hard_racing.yml	false	TIMEOUT	61.228550726	61.25174994400004	3995.598848	OUT OF MEMORY	43.151388679	43.16157294700679	3999.997952
+goblint-regression/28-race_reach_78-equ_racing.yml	false	TIMEOUT	61.264800578	61.28760573199543	3968.385024	OUT OF MEMORY	46.473836633	46.484604269004194	3999.997952
+goblint-regression/28-race_reach_05-lockfuns_racefree.yml	true	TIMEOUT	61.254612252	61.27067781498772	3964.616704	OUT OF MEMORY	46.778690665	46.80217215001176	3999.997952
+goblint-regression/28-race_reach_02-simple_racefree.yml	true	TIMEOUT	61.075567586	61.264363198002684	3964.620800	OUT OF MEMORY	47.010711433	47.043259929996566	3999.997952
+goblint-regression/28-race_reach_12-ptr_racefree.yml	true	TIMEOUT	61.245005449	61.27466606799862	3964.436480	OUT OF MEMORY	47.248524338	47.27986488600436	3999.997952
+goblint-regression/28-race_reach_20-callback_racefree.yml	true	TIMEOUT	61.129229739	61.26201785400917	3983.249408	OUT OF MEMORY	40.023659761	40.07165580599394	3999.997952
+goblint-regression/28-race_reach_60-invariant_racefree.yml	true	TIMEOUT	61.290868473	61.308798501995625	3963.576320	OUT OF MEMORY	46.847396459	46.86319470300805	3999.997952
+pthread-wmm/mix038_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.990412938	61.01070806798816	26.431488	false(unreach-call)	39.392601445	39.404397076999885	26.460160
+pthread-wmm/mix035.oepc.yml	false	TIMEOUT	60.98332242	61.012839726987295	26.402816	false(unreach-call)	39.350098281	39.35600119900482	26.497024
+pthread-wmm/mix003.oepc.yml	false	TIMEOUT	60.99616092	61.011972891996265	26.394624	false(unreach-call)	52.045352549	52.53344150001067	26.460160
+goblint-regression/28-race_reach_28-funptr_racefree.yml	true	TIMEOUT	61.218275669	61.23039706199779	3958.579200	OUT OF MEMORY	46.003118207	46.01624120899942	3999.997952
+goblint-regression/28-race_reach_07-cond_racing2.yml	false	TIMEOUT	61.231050215	61.244411134000984	3964.481536	OUT OF MEMORY	46.521551416	46.55503521299397	3999.997952
+goblint-regression/28-race_reach_73-funloop_hard_racefree.yml	true	TIMEOUT	61.243020844	61.25453350499447	3995.602944	OUT OF MEMORY	42.051386576	42.0605822869984	3999.997952
+goblint-regression/28-race_reach_79-equ_racefree.yml	true	TIMEOUT	61.236565051	61.24368193699047	3968.114688	OUT OF MEMORY	44.941215229	44.95148794200213	3999.997952

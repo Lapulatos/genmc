@@ -1,0 +1,17 @@
+baseline_runtime_bin	backend	tasks	all_repetitions_solved	wall_ratio_geomean	memory_ratio_geomean
+lt-0.1s	Deagle	261	250	16.7682	1.21727
+lt-0.1s	GenMC	261	261	1	1
+lt-0.1s	GenMC+CAAT	261	261	1.09295	1.004
+lt-0.1s	GenMC+CAT	261	261	1.21111	1.00388
+0.1-1s	Deagle	80	73	3.08216	0.860572
+0.1-1s	GenMC	80	80	1	1
+0.1-1s	GenMC+CAAT	80	80	1.40814	1.09413
+0.1-1s	GenMC+CAT	80	80	4.87778	1.09482
+1-10s	Deagle	45	29	0.118285	0.581345
+1-10s	GenMC	45	45	1	1
+1-10s	GenMC+CAAT	45	39	2.57818	1.01362
+1-10s	GenMC+CAT	45	10	1.89768	1.00248
+ge-10s	Deagle	29	23	0.0127289	0.511479
+ge-10s	GenMC	29	29	1	1
+ge-10s	GenMC+CAAT	29	14	2.25612	1.0035
+ge-10s	GenMC+CAT	29	4	1.21396	1.00112

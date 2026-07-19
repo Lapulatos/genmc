@@ -1,0 +1,25 @@
+model	task	baseline_status	candidate_status	baseline_cpu	candidate_cpu	cpu_ratio	common_terminal
+sc	butterfly	true	true	12.239795806	12.036745875	0.9834106765980144	True
+sc	circular_buffer_bad	false(unreach-call)	false(unreach-call)	0.063114405	0.065592438	1.0392625582067994	True
+sc	fib_safe-5	true	true	3.178313189	3.169722919	0.9972972235619414	True
+sc	fib_unsafe-5	false(unreach-call)	false(unreach-call)	0.873664598	0.880166805	1.0074424521891867	True
+sc	queue	false(unreach-call)	false(unreach-call)	0.080443343	0.086292681	1.0727137607893793	True
+sc	reorder_2	false(unreach-call)	false(unreach-call)	0.128007192	0.12924334	1.0096568636549736	True
+sc	szymanski	true	true	0.061275189	0.066213612	1.0805941700155344	True
+sc	triangular-2	false(unreach-call)	false(unreach-call)	1.344182404	1.316963913	0.979750894730504	True
+tso	butterfly	true	true	17.400707683	16.611670931	0.9546549044800707	True
+tso	circular_buffer_bad	false(unreach-call)	false(unreach-call)	0.077929323	0.074570661	0.9569011782637968	True
+tso	fib_safe-5	true	true	5.895146537	5.827274827	0.9884868493812643	True
+tso	fib_unsafe-5	false(unreach-call)	false(unreach-call)	1.613877569	1.64724434	1.0206749084570739	True
+tso	queue	false(unreach-call)	false(unreach-call)	0.11058649	0.111182663	1.005391011144309	True
+tso	reorder_2	false(unreach-call)	false(unreach-call)	0.181707868	0.181263516	0.9975545803002874	True
+tso	szymanski	true	true	0.074727735	0.074808023	1.0010744069788813	True
+tso	triangular-2	false(unreach-call)	false(unreach-call)	1.731120656	1.770395469	1.0226875075771726	True
+pso	butterfly	true	true	26.674929067	21.876080514	0.8200989198154331	True
+pso	circular_buffer_bad	false(unreach-call)	false(unreach-call)	0.103472747	0.105725803	1.0217743905069032	True
+pso	fib_safe-5	TIMEOUT (true)	true	60.493905769	42.773242695	0.707066970652093	False
+pso	fib_unsafe-5	false(unreach-call)	false(unreach-call)	14.198963745	11.456338111	0.8068432539687423	True
+pso	queue	false(unreach-call)	false(unreach-call)	1.183079647	1.188645259	1.0047043426147284	True
+pso	reorder_2	false(unreach-call)	false(unreach-call)	0.676128932	0.497372372	0.7356176440028454	True
+pso	szymanski	true	true	0.090035199	0.090227995	1.0021413402995867	True
+pso	triangular-2	false(unreach-call)	false(unreach-call)	20.449263028	12.761902113	0.6240763833653008	True

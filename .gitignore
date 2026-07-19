@@ -51,3 +51,26 @@ Testing/
 
 scripts/*.log
 coverage_report*
+
+# Local optimization-development state and regenerable experiment artifacts.
+.DS_Store
+.claude/
+.codex-build-*/
+**/__pycache__/
+*.pyc
+*.i
+*.log
+*.zip
+*.err
+*.summary
+*.verdict
+**/.cache/
+optimization-analysis/binaries/
+experiment-analysis/**/sv-benchmarks/
+
+# Generated BenchExec presentation files. Compact XML/CSV/TSV evidence remains trackable.
+experiment-analysis/**/*.html
+optimization-analysis/**/*.html
+
+# Contains machine-specific access notes and must remain local.
+GENMC_CAAT_OPTIMIZATION_HANDOFF_20260719.md

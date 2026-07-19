@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="20 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/>
+  <option name="--disable-mm-detector"/>
+  <column title="model status">Finite skeleton first model:.*status=([0-9]+)</column>
+  <column title="model">Finite skeleton first model:.*assignment=(true|false)</column>
+  <column title="build us">build-us=([0-9]+)</column>
+  <column title="check us">check-us=([0-9]+)</column>
+  <column title="completion status">Finite skeleton SC completion: status=([0-9]+)</column>
+  <column title="completed">Finite skeleton SC completion:.*assignment=(true|false)</column>
+  <column title="completion us">complete-us=([0-9]+)</column>
+  <column title="states">states-discovered=([0-9]+)</column>
+  <column title="expanded">states-expanded=([0-9]+)</column>
+  <column title="transitions">transitions=([0-9]+)</column>
+  <column title="duplicates">duplicates=([0-9]+)</column>
+  <column title="max worklist">max-worklist=([0-9]+)</column>
+  <column title="first core">core-size=([0-9]+)</column>
+  <column title="first core checks">core-checks=([0-9]+)</column>
+  <column title="search candidates">Finite skeleton SC search: candidates=([0-9]+)</column>
+  <column title="search completed">Finite skeleton SC search:.*completed=([0-9]+)</column>
+  <column title="search rejected">Finite skeleton SC search:.*no-witness=([0-9]+)</column>
+  <column title="search check us">Finite skeleton SC search:.*check-us=([0-9]+)</column>
+  <column title="search completion us">Finite skeleton SC search:.*complete-us=([0-9]+)</column>
+
+  <rundefinition name="abstract-cardinality-sc">
+    <option name="--svcomp-backend=caat-sc"/>
+    <option name="--finite-skeleton-first-model=abstract-cardinality-sc"/>
+    <option name="--finite-skeleton-solve-max=1000"/>
+    <tasks name="panel">
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/rfi005.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe029_power.oepc_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe029_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe010_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe004_power.oepc_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix035.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/rfi002_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe017_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe035_power.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix023_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix014_tso.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix008_tso.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml</include>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

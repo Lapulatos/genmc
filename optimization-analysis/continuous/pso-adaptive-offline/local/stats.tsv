@@ -1,0 +1,10 @@
+stage	model	program	status	initialize	unchanged	insert	rollback	rollback_insert	rebuild	evicted	oracle	eval_ops	value_changes	queue_pushes	offline_evals	adapter_ns	sync_ns	offline_ns	copy_ns	worklist_ns	checkpoint_ns	rollback_ns	materialize_ns	equality_ns	insert_attempt_ns	history_ns	rebuild_ns	profiled_queries
+pso-after	sc	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	0	0	0	0	0	0	0	0	0	5	0	539957	313000	0	0	876	0	207958	1042	0	0	313625	5
+pso-after	sc	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	0	0	0	0	0	0	0	0	0	12	0	1206999	754792	0	0	2042	0	414666	2458	0	0	756000	13
+pso-after	sc	correct/data-structures/fcombiner-async/variants/main0.c	0	1	8	0	0	0	0	0	0	0	0	0	35	0	16363836	10981457	0	0	5252	0	5114584	27626	0	0	10983749	43
+pso-after	tso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	0	0	0	0	0	0	0	0	0	5	0	806292	565333	0	0	1333	0	217665	334	0	0	566000	5
+pso-after	tso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	0	0	0	0	0	0	0	0	0	12	0	2042707	1427834	0	0	3168	0	568999	2831	0	0	1428710	13
+pso-after	tso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	0	0	0	0	0	0	0	0	0	4	0	2190167	1615957	0	0	1542	0	534708	4292	0	0	1616583	6
+pso-after	pso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	0	0	0	0	0	0	0	0	0	22	0	3375043	2545791	0	0	3918	0	759832	4416	0	0	2547250	22
+pso-after	pso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	0	0	0	0	0	0	0	0	0	34	0	13762501	11805879	0	0	11335	0	1640499	133834	0	0	11820086	35
+pso-after	pso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	0	0	0	0	0	0	0	0	0	8	0	4454917	3343959	0	0	4333	0	1040874	5292	0	0	3345124	10

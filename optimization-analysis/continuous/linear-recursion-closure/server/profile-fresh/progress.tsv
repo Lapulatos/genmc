@@ -1,0 +1,4 @@
+model	repetition	before_cores	after_cores	before_status	after_status	started	finished
+sc	1	0-23	28-51	0	0	2026-07-15T18:41:16+00:00	2026-07-15T18:42:19+00:00
+tso	1	0-23	28-51	0	0	2026-07-15T18:42:19+00:00	2026-07-15T18:43:22+00:00
+pso	1	0-23	28-51	0	0	2026-07-15T18:43:22+00:00	2026-07-15T18:44:26+00:00

@@ -1,0 +1,177 @@
+{
+  "cells": 1152,
+  "cells_with_statistics": 1076,
+  "cells_without_statistics": 76,
+  "status_counts": {
+    "false(unreach-call)": 360,
+    "true": 716,
+    "TIMEOUT": 76
+  },
+  "by_model": {
+    "sc": {
+      "cells_with_statistics": 380,
+      "category_counts": {
+        "initialize/unchanged-only": 372,
+        "rebuild-only": 8
+      },
+      "transition_totals": {
+        "initialize": 260,
+        "unchanged": 319352,
+        "insert": 0,
+        "rollback": 0,
+        "rollback-insert": 0,
+        "replace": 0,
+        "rebuild": 8,
+        "evicted": 0
+      },
+      "lazy_checks": 0,
+      "lazy_candidates": 0,
+      "incremental_cell_upper_bound_check_fraction": null,
+      "incremental_cell_upper_bound_candidate_fraction": null,
+      "category_work": {
+        "incremental-only": {
+          "cells": 0,
+          "lazy_checks": 0,
+          "lazy_checks_fraction": null,
+          "lazy_candidates": 0,
+          "lazy_candidates_fraction": null,
+          "cpu_s": 0
+        },
+        "incremental+rebuild": {
+          "cells": 0,
+          "lazy_checks": 0,
+          "lazy_checks_fraction": null,
+          "lazy_candidates": 0,
+          "lazy_candidates_fraction": null,
+          "cpu_s": 0
+        },
+        "rebuild-only": {
+          "cells": 8,
+          "lazy_checks": 0,
+          "lazy_checks_fraction": null,
+          "lazy_candidates": 0,
+          "lazy_candidates_fraction": null,
+          "cpu_s": 8.060373091999999
+        },
+        "initialize/unchanged-only": {
+          "cells": 372,
+          "lazy_checks": 0,
+          "lazy_checks_fraction": null,
+          "lazy_candidates": 0,
+          "lazy_candidates_fraction": null,
+          "cpu_s": 597.6631200730001
+        }
+      }
+    },
+    "tso": {
+      "cells_with_statistics": 360,
+      "category_counts": {
+        "initialize/unchanged-only": 352,
+        "rebuild-only": 8
+      },
+      "transition_totals": {
+        "initialize": 240,
+        "unchanged": 319352,
+        "insert": 0,
+        "rollback": 0,
+        "rollback-insert": 0,
+        "replace": 0,
+        "rebuild": 8,
+        "evicted": 0
+      },
+      "lazy_checks": 1787856,
+      "lazy_candidates": 4340521592,
+      "incremental_cell_upper_bound_check_fraction": 0.0,
+      "incremental_cell_upper_bound_candidate_fraction": 0.0,
+      "category_work": {
+        "incremental-only": {
+          "cells": 0,
+          "lazy_checks": 0,
+          "lazy_checks_fraction": 0.0,
+          "lazy_candidates": 0,
+          "lazy_candidates_fraction": 0.0,
+          "cpu_s": 0
+        },
+        "incremental+rebuild": {
+          "cells": 0,
+          "lazy_checks": 0,
+          "lazy_checks_fraction": 0.0,
+          "lazy_candidates": 0,
+          "lazy_candidates_fraction": 0.0,
+          "cpu_s": 0
+        },
+        "rebuild-only": {
+          "cells": 8,
+          "lazy_checks": 32,
+          "lazy_checks_fraction": 1.7898533215203013e-05,
+          "lazy_candidates": 308954936,
+          "lazy_candidates_fraction": 0.07117921877624886,
+          "cpu_s": 23.033582426
+        },
+        "initialize/unchanged-only": {
+          "cells": 352,
+          "lazy_checks": 1787824,
+          "lazy_checks_fraction": 0.9999821014667848,
+          "lazy_candidates": 4031566656,
+          "lazy_candidates_fraction": 0.9288207812237511,
+          "cpu_s": 560.0564371510001
+        }
+      }
+    },
+    "pso": {
+      "cells_with_statistics": 336,
+      "category_counts": {
+        "initialize/unchanged-only": 328,
+        "rebuild-only": 8
+      },
+      "transition_totals": {
+        "initialize": 272,
+        "unchanged": 189768,
+        "insert": 0,
+        "rollback": 0,
+        "rollback-insert": 0,
+        "replace": 0,
+        "rebuild": 128,
+        "evicted": 0
+      },
+      "lazy_checks": 5246664,
+      "lazy_candidates": 1354414792,
+      "incremental_cell_upper_bound_check_fraction": 0.0,
+      "incremental_cell_upper_bound_candidate_fraction": 0.0,
+      "category_work": {
+        "incremental-only": {
+          "cells": 0,
+          "lazy_checks": 0,
+          "lazy_checks_fraction": 0.0,
+          "lazy_candidates": 0,
+          "lazy_candidates_fraction": 0.0,
+          "cpu_s": 0
+        },
+        "incremental+rebuild": {
+          "cells": 0,
+          "lazy_checks": 0,
+          "lazy_checks_fraction": 0.0,
+          "lazy_candidates": 0,
+          "lazy_candidates_fraction": 0.0,
+          "cpu_s": 0
+        },
+        "rebuild-only": {
+          "cells": 8,
+          "lazy_checks": 272,
+          "lazy_checks_fraction": 5.1842465993629476e-05,
+          "lazy_candidates": 1012802148,
+          "lazy_candidates_fraction": 0.7477784161707531,
+          "cpu_s": 95.04505939999999
+        },
+        "initialize/unchanged-only": {
+          "cells": 328,
+          "lazy_checks": 5246392,
+          "lazy_checks_fraction": 0.9999481575340063,
+          "lazy_candidates": 341612644,
+          "lazy_candidates_fraction": 0.2522215838292469,
+          "cpu_s": 293.6289154209998
+        }
+      }
+    }
+  }
+}

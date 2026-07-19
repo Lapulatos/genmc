@@ -1,0 +1,73 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /work/parallel-scaling/definitions/parallel-oracle-pso-t4.xml
+name:                    parallel-oracle-pso-t4
+run sets:                caat-pso.t4.r01.unreach-call
+date:                    Tue, 2026-07-14 23:48:08 UTC
+tool:                    GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /work/build/genmc-caat-llvm15noble/bin/genmc
+options:                 --disable-estimation --disable-mm-detector --nthreads=4 --v1
+parallel runs:           6
+resource limits:
+- memory:                16000.0 MB
+- time:                  240 s
+- cpu cores:             4
+hardware requirements:
+- cpu cores:             4
+- memory:                16000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    a432e3073d0a
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.7450880001 MB
+------------------------------------------------------------
+
+
+
+caat-pso.t4.r01.unreach-call
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --nthreads=4 --v1 --svcomp-backend=caat-pso --cat-oracle --cat-stats' and propertyfile 'None'
+
+inputfile                                                                      status                       cpu time   wall time        host  executions   blocked  oracle-checks
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+goblint-regression/13-privatized_01-priv_nr_true.yml                           true                             0.07        0.07        None           2      None              0
+goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml              false(unreach-call)              0.07        0.07        None           0         1              0
+goblint-regression/13-privatized_19-publish-precision_true.yml                 true                             0.07        0.07        None           3      None              0
+goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml        false(unreach-call)              0.06        0.06        None           1      None              0
+goblint-regression/13-privatized_25-struct_nr_true.yml                         true                             0.06        0.06        None           2      None              0
+goblint-regression/13-privatized_35-traces-ex-2_true.yml                       true                             0.06        0.06        None           2         2              0
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml              false(unreach-call)              0.07        0.07        None           0      None              0
+goblint-regression/13-privatized_46-refine-protected1_true.yml                 true                             0.06        0.06        None           1      None              0
+goblint-regression/13-privatized_66-mine-W-init_true.yml                       true                             0.05        0.06        None           1      None              0
+goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml    true                             0.06        0.06        None           0         1              0
+goblint-regression/28-race_reach_01-simple_racing.yml                          TIMEOUT                        121.52       61.75        None        None      None           None
+goblint-regression/28-race_reach_37-indirect_racing.yml                        TIMEOUT                        121.59       61.77        None        None      None           None
+goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml             false(unreach-call)              0.07        0.07        None           0      None              0
+ldv-races/race-1_2-join.yml                                                    false(unreach-call)              0.07        0.07        None           1         1              0
+pthread/fib_unsafe-7.yml                                                       TIMEOUT                        243.80       61.01        None        None      None           None
+pthread/lazy01.yml                                                             false(unreach-call)              0.06        0.06        None           1         2              9
+pthread/queue_longer.yml                                                       TIMEOUT                        157.21       61.02        None        None      None           None
+pthread/queue_ok_longer.yml                                                    TIMEOUT                        133.98       61.12        None        None      None           None
+pthread-atomic/szymanski.yml                                                   true                             0.18        0.11        None           6        25            188
+pthread-deagle/circular_buffer_ok.yml                                          TIMEOUT                        243.55       61.01        None        None      None           None
+pthread-ext/43_NetBSD_sysmon_power_sliced.yml                                  true                             0.07        0.07        None           0         1              0
+pthread-theta/exponential-nondet.yml                                           true                             0.06        0.06        None           1      None              0
+pthread-theta/unwind2-100.yml                                                  false(unreach-call)              0.07        0.07        None           2      None              0
+pthread-theta/unwind3-1.yml                                                    false(unreach-call)              0.06        0.06        None           1      None              0
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                                      done                          1022.99       62.26           -
+
+Statistics:             24 Files
+  correct:              18
+    correct true:       10
+    correct false:       8
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:               6
+  Score:                28 (max: 36)

@@ -1,0 +1,10 @@
+{
+  "backends": [
+    "genmc-sc",
+    "cat-sc",
+    "caat-sc"
+  ],
+  "common_solved_task_repetitions": 425,
+  "missing_execution_counts": 0,
+  "verdict_execution_blocked_mismatches": 0
+}

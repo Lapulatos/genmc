@@ -1,0 +1,277 @@
+{
+  "baseline_vs_control": {
+    "category_differences": [],
+    "common_solved": 90,
+    "complete_differences": [],
+    "status_differences": [],
+    "tasks": 725,
+    "timing": {
+      "cputime": {
+        "ci95": [
+          0.9980950016386354,
+          1.016243643175051
+        ],
+        "n": 90,
+        "ratio": 1.0064413406374502
+      },
+      "memory": {
+        "ci95": [
+          0.9983903758472397,
+          1.0000279421969087
+        ],
+        "n": 90,
+        "ratio": 0.9993345752527141
+      },
+      "walltime": {
+        "ci95": [
+          0.9908002864985888,
+          1.0532152823674876
+        ],
+        "n": 90,
+        "ratio": 1.014453825191314
+      }
+    }
+  },
+  "baseline_vs_rvf": {
+    "category_differences": [],
+    "common_solved": 90,
+    "complete_differences": [],
+    "status_differences": [],
+    "tasks": 725,
+    "timing": {
+      "cputime": {
+        "ci95": [
+          0.9964992820573924,
+          1.0086378913774425
+        ],
+        "n": 90,
+        "ratio": 1.0028099863633662
+      },
+      "memory": {
+        "ci95": [
+          0.9985609928374929,
+          1.0002104523618136
+        ],
+        "n": 90,
+        "ratio": 0.9995098503026985
+      },
+      "walltime": {
+        "ci95": [
+          0.9631370456954131,
+          1.0188361624746922
+        ],
+        "n": 90,
+        "ratio": 0.9955566187539602
+      }
+    }
+  },
+  "complete_totals": {
+    "baseline": 120187,
+    "control": 120187,
+    "pso-v9": 94937,
+    "rvf": 120187,
+    "tso": 120187
+  },
+  "control_search_counter_mismatches": [],
+  "row_counts": {
+    "baseline": 725,
+    "control": 725,
+    "pso-v9": 725,
+    "rvf": 725,
+    "tso": 725
+  },
+  "rvf_gate_counts": {
+    "native-fallback reason=control-flow loop outside the current RVF performance gate": 4,
+    "native-fallback reason=external call to abort": 53,
+    "native-fallback reason=modeled call to __VERIFIER_mutex_lock": 40,
+    "native-fallback reason=non-atomic load instruction": 1,
+    "native-fallback reason=non-atomic store instruction": 8,
+    "not-recorded": 8
+  },
+  "rvf_totals": {
+    "baseline": {
+      "rvf-fail-open": 0,
+      "rvf-loads-attempted": 0,
+      "rvf-loads-reduced": 0,
+      "rvf-native-reads-synthesized": 0,
+      "rvf-parent-continuations-queued": 0,
+      "rvf-quotient-disabled-loads": 0,
+      "rvf-representatives-queued": 0,
+      "rvf-singleton-bypass": 0,
+      "rvf-value-groups": 0,
+      "rvf-verify-calls": 0,
+      "rvf-verify-states-expanded": 0,
+      "rvf-visible-sources": 0
+    },
+    "control": {
+      "rvf-fail-open": 0,
+      "rvf-loads-attempted": 0,
+      "rvf-loads-reduced": 0,
+      "rvf-native-reads-synthesized": 0,
+      "rvf-parent-continuations-queued": 0,
+      "rvf-quotient-disabled-loads": 0,
+      "rvf-representatives-queued": 0,
+      "rvf-singleton-bypass": 0,
+      "rvf-value-groups": 0,
+      "rvf-verify-calls": 0,
+      "rvf-verify-states-expanded": 0,
+      "rvf-visible-sources": 0
+    },
+    "pso-v9": {
+      "rvf-fail-open": 0,
+      "rvf-loads-attempted": 0,
+      "rvf-loads-reduced": 0,
+      "rvf-native-reads-synthesized": 0,
+      "rvf-parent-continuations-queued": 0,
+      "rvf-quotient-disabled-loads": 0,
+      "rvf-representatives-queued": 0,
+      "rvf-singleton-bypass": 0,
+      "rvf-value-groups": 0,
+      "rvf-verify-calls": 0,
+      "rvf-verify-states-expanded": 0,
+      "rvf-visible-sources": 0
+    },
+    "rvf": {
+      "rvf-fail-open": 0,
+      "rvf-loads-attempted": 0,
+      "rvf-loads-reduced": 0,
+      "rvf-native-reads-synthesized": 0,
+      "rvf-parent-continuations-queued": 0,
+      "rvf-quotient-disabled-loads": 0,
+      "rvf-representatives-queued": 0,
+      "rvf-singleton-bypass": 0,
+      "rvf-value-groups": 0,
+      "rvf-verify-calls": 0,
+      "rvf-verify-states-expanded": 0,
+      "rvf-visible-sources": 0
+    },
+    "tso": {
+      "rvf-fail-open": 0,
+      "rvf-loads-attempted": 0,
+      "rvf-loads-reduced": 0,
+      "rvf-native-reads-synthesized": 0,
+      "rvf-parent-continuations-queued": 0,
+      "rvf-quotient-disabled-loads": 0,
+      "rvf-representatives-queued": 0,
+      "rvf-singleton-bypass": 0,
+      "rvf-value-groups": 0,
+      "rvf-verify-calls": 0,
+      "rvf-verify-states-expanded": 0,
+      "rvf-visible-sources": 0
+    }
+  },
+  "search_totals": {
+    "baseline": {
+      "backward-offered": 499668,
+      "backward-queued": 465848,
+      "co-offered": 3903313,
+      "co-queued": 999,
+      "inconsistent-revisit-prefixes": 161,
+      "max-retained-work": 300699,
+      "realized-revisit-prefixes": 881693,
+      "rf-offered": 2814144,
+      "rf-queued": 821036,
+      "validity-queries": 1323387,
+      "work-added": 1287915,
+      "work-popped": 987875
+    },
+    "control": {
+      "backward-offered": 499668,
+      "backward-queued": 465848,
+      "co-offered": 3903313,
+      "co-queued": 999,
+      "inconsistent-revisit-prefixes": 161,
+      "max-retained-work": 300699,
+      "realized-revisit-prefixes": 881693,
+      "rf-offered": 2814144,
+      "rf-queued": 821036,
+      "validity-queries": 1323387,
+      "work-added": 1287915,
+      "work-popped": 987875
+    },
+    "pso-v9": {
+      "backward-offered": 108345,
+      "backward-queued": 85255,
+      "co-offered": 428269,
+      "co-queued": 904,
+      "inconsistent-revisit-prefixes": 66,
+      "max-retained-work": 1087,
+      "realized-revisit-prefixes": 203844,
+      "rf-offered": 471621,
+      "rf-queued": 142253,
+      "validity-queries": 348716,
+      "work-added": 228443,
+      "work-popped": 227783
+    },
+    "rvf": {
+      "backward-offered": 499668,
+      "backward-queued": 465848,
+      "co-offered": 3903313,
+      "co-queued": 999,
+      "inconsistent-revisit-prefixes": 161,
+      "max-retained-work": 300699,
+      "realized-revisit-prefixes": 881693,
+      "rf-offered": 2814144,
+      "rf-queued": 821036,
+      "validity-queries": 1323387,
+      "work-added": 1287915,
+      "work-popped": 987875
+    },
+    "tso": {
+      "backward-offered": 342536,
+      "backward-queued": 309639,
+      "co-offered": 2505731,
+      "co-queued": 999,
+      "inconsistent-revisit-prefixes": 161,
+      "max-retained-work": 151045,
+      "realized-revisit-prefixes": 606181,
+      "rf-offered": 1856860,
+      "rf-queued": 515946,
+      "validity-queries": 947041,
+      "work-added": 826616,
+      "work-popped": 676218
+    }
+  },
+  "status_counts": {
+    "baseline": {
+      "ERROR (compilation)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "SKIPPED": 611,
+      "TIMEOUT": 16,
+      "false(unreach-call)": 23,
+      "true": 67
+    },
+    "control": {
+      "ERROR (compilation)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "SKIPPED": 611,
+      "TIMEOUT": 16,
+      "false(unreach-call)": 23,
+      "true": 67
+    },
+    "pso-v9": {
+      "ERROR (compilation)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "SKIPPED": 611,
+      "TIMEOUT": 18,
+      "false(unreach-call)": 22,
+      "true": 66
+    },
+    "rvf": {
+      "ERROR (compilation)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "SKIPPED": 611,
+      "TIMEOUT": 16,
+      "false(unreach-call)": 23,
+      "true": 67
+    },
+    "tso": {
+      "ERROR (compilation)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "SKIPPED": 611,
+      "TIMEOUT": 16,
+      "false(unreach-call)": 23,
+      "true": 67
+    }
+  }
+}

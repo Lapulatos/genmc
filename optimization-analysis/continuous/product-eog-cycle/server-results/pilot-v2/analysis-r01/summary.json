@@ -1,0 +1,67 @@
+{
+  "cells": 6,
+  "status_mismatches": 1,
+  "category_mismatches": 1,
+  "cells_by_model_task": {
+    "pso/fib_unsafe-7.yml": {
+      "cpu_ratios": [
+        1.000679577973687
+      ],
+      "rss_ratios": [
+        0.9962317475270843
+      ],
+      "cpu_median": 1.000679577973687,
+      "rss_median": 0.9962317475270843
+    },
+    "pso/queue_ok_longer.yml": {
+      "cpu_ratios": [
+        1.166640169308558
+      ],
+      "rss_ratios": [
+        0.9978785208394529
+      ],
+      "cpu_median": 1.166640169308558,
+      "rss_median": 0.9978785208394529
+    },
+    "sc/fib_unsafe-7.yml": {
+      "cpu_ratios": [
+        0.9953911488413077
+      ],
+      "rss_ratios": [
+        1.0052339413164155
+      ],
+      "cpu_median": 0.9953911488413077,
+      "rss_median": 1.0052339413164155
+    },
+    "sc/queue_ok_longer.yml": {
+      "cpu_ratios": [
+        0.9651976620101018
+      ],
+      "rss_ratios": [
+        1.0004129884879458
+      ],
+      "cpu_median": 0.9651976620101018,
+      "rss_median": 1.0004129884879458
+    },
+    "tso/fib_unsafe-7.yml": {
+      "cpu_ratios": [
+        1.2777522864276418
+      ],
+      "rss_ratios": [
+        1.0048911328494794
+      ],
+      "cpu_median": 1.2777522864276418,
+      "rss_median": 1.0048911328494794
+    },
+    "tso/queue_ok_longer.yml": {
+      "cpu_ratios": [
+        1.329783059577237
+      ],
+      "rss_ratios": [
+        0.9864396786793426
+      ],
+      "cpu_median": 1.329783059577237,
+      "rss_median": 0.9864396786793426
+    }
+  }
+}

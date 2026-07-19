@@ -1,0 +1,276 @@
+{
+  "coverage": [
+    {
+      "method": "GenMC",
+      "tasks": 725,
+      "correct": 408,
+      "wrong": 31,
+      "solved_status": 439,
+      "timeout": 210,
+      "oom": 50,
+      "other_unknown": 26,
+      "median_cpu_s_solved": "0.073943612",
+      "median_rss_bytes_solved": "25788416"
+    },
+    {
+      "method": "GenMC+CAAT-SC",
+      "tasks": 725,
+      "correct": 398,
+      "wrong": 30,
+      "solved_status": 428,
+      "timeout": 240,
+      "oom": 31,
+      "other_unknown": 26,
+      "median_cpu_s_solved": "0.0681523875",
+      "median_rss_bytes_solved": "25899008"
+    },
+    {
+      "method": "GenMC+CAAT-TSO",
+      "tasks": 725,
+      "correct": 385,
+      "wrong": 30,
+      "solved_status": 415,
+      "timeout": 253,
+      "oom": 31,
+      "other_unknown": 26,
+      "median_cpu_s_solved": "0.066671635",
+      "median_rss_bytes_solved": "26025984"
+    },
+    {
+      "method": "GenMC+CAAT-PSO",
+      "tasks": 725,
+      "correct": 355,
+      "wrong": 29,
+      "solved_status": 384,
+      "timeout": 274,
+      "oom": 41,
+      "other_unknown": 26,
+      "median_cpu_s_solved": "0.066920907",
+      "median_rss_bytes_solved": "26023936"
+    },
+    {
+      "method": "Deagle",
+      "tasks": 725,
+      "correct": 615,
+      "wrong": 3,
+      "solved_status": 618,
+      "timeout": 16,
+      "oom": 10,
+      "other_unknown": 81,
+      "median_cpu_s_solved": "0.290030015",
+      "median_rss_bytes_solved": "12935168"
+    },
+    {
+      "method": "Previous GenMC+CAAT-SC",
+      "tasks": 725,
+      "correct": 388,
+      "wrong": 30,
+      "solved_status": 418,
+      "timeout": 224,
+      "oom": 57,
+      "other_unknown": 26,
+      "median_cpu_s_solved": "0.071316754",
+      "median_rss_bytes_solved": "25833472"
+    }
+  ],
+  "pairwise": [
+    {
+      "numerator": "GenMC",
+      "denominator": "Deagle",
+      "same_verdict_terminal_tasks": 375,
+      "both_terminal_different_verdict": 24,
+      "cpu_ratio_geomean": "0.171327",
+      "cpu_ci_low": "0.132324",
+      "cpu_ci_high": "0.22447",
+      "cpu_numerator_better": 312,
+      "cpu_denominator_better": 63,
+      "wall_ratio_geomean": "0.195917",
+      "wall_ci_low": "0.152933",
+      "wall_ci_high": "0.250489",
+      "wall_numerator_better": 310,
+      "wall_denominator_better": 65,
+      "rss_ratio_geomean": "0.987891",
+      "rss_ci_low": "0.893088",
+      "rss_ci_high": "1.08997",
+      "rss_numerator_better": 158,
+      "rss_denominator_better": 217
+    },
+    {
+      "numerator": "GenMC+CAAT-SC",
+      "denominator": "Deagle",
+      "same_verdict_terminal_tasks": 367,
+      "both_terminal_different_verdict": 24,
+      "cpu_ratio_geomean": "0.159379",
+      "cpu_ci_low": "0.121254",
+      "cpu_ci_high": "0.210235",
+      "cpu_numerator_better": 304,
+      "cpu_denominator_better": 63,
+      "wall_ratio_geomean": "0.180484",
+      "wall_ci_low": "0.139971",
+      "wall_ci_high": "0.23353",
+      "wall_numerator_better": 305,
+      "wall_denominator_better": 62,
+      "rss_ratio_geomean": "0.979084",
+      "rss_ci_low": "0.882976",
+      "rss_ci_high": "1.08267",
+      "rss_numerator_better": 157,
+      "rss_denominator_better": 210
+    },
+    {
+      "numerator": "GenMC+CAAT-TSO",
+      "denominator": "Deagle",
+      "same_verdict_terminal_tasks": 359,
+      "both_terminal_different_verdict": 24,
+      "cpu_ratio_geomean": "0.144266",
+      "cpu_ci_low": "0.110853",
+      "cpu_ci_high": "0.188813",
+      "cpu_numerator_better": 298,
+      "cpu_denominator_better": 61,
+      "wall_ratio_geomean": "0.163391",
+      "wall_ci_low": "0.127094",
+      "wall_ci_high": "0.209314",
+      "wall_numerator_better": 301,
+      "wall_denominator_better": 58,
+      "rss_ratio_geomean": "0.966747",
+      "rss_ci_low": "0.868852",
+      "rss_ci_high": "1.07093",
+      "rss_numerator_better": 157,
+      "rss_denominator_better": 202
+    },
+    {
+      "numerator": "GenMC+CAAT-PSO",
+      "denominator": "Deagle",
+      "same_verdict_terminal_tasks": 330,
+      "both_terminal_different_verdict": 24,
+      "cpu_ratio_geomean": "0.122751",
+      "cpu_ci_low": "0.0933579",
+      "cpu_ci_high": "0.162152",
+      "cpu_numerator_better": 284,
+      "cpu_denominator_better": 46,
+      "wall_ratio_geomean": "0.141773",
+      "wall_ci_low": "0.111078",
+      "wall_ci_high": "0.183567",
+      "wall_numerator_better": 284,
+      "wall_denominator_better": 46,
+      "rss_ratio_geomean": "0.918423",
+      "rss_ci_low": "0.821525",
+      "rss_ci_high": "1.02393",
+      "rss_numerator_better": 152,
+      "rss_denominator_better": 178
+    },
+    {
+      "numerator": "Latest GenMC+CAAT-SC",
+      "denominator": "Previous GenMC+CAAT-SC",
+      "same_verdict_terminal_tasks": 418,
+      "both_terminal_different_verdict": 0,
+      "cpu_ratio_geomean": "0.915446",
+      "cpu_ci_low": "0.894591",
+      "cpu_ci_high": "0.934561",
+      "cpu_numerator_better": 285,
+      "cpu_denominator_better": 133,
+      "wall_ratio_geomean": "0.985597",
+      "wall_ci_low": "0.949612",
+      "wall_ci_high": "1.02079",
+      "wall_numerator_better": 202,
+      "wall_denominator_better": 216,
+      "rss_ratio_geomean": "0.994343",
+      "rss_ci_low": "0.986828",
+      "rss_ci_high": "1.00024",
+      "rss_numerator_better": 179,
+      "rss_denominator_better": 222
+    },
+    {
+      "numerator": "Current GenMC",
+      "denominator": "Previous GenMC",
+      "same_verdict_terminal_tasks": 439,
+      "both_terminal_different_verdict": 0,
+      "cpu_ratio_geomean": "0.982636",
+      "cpu_ci_low": "0.976761",
+      "cpu_ci_high": "0.988256",
+      "cpu_numerator_better": 247,
+      "cpu_denominator_better": 192,
+      "wall_ratio_geomean": "1.18359",
+      "wall_ci_low": "1.15757",
+      "wall_ci_high": "1.21035",
+      "wall_numerator_better": 99,
+      "wall_denominator_better": 340,
+      "rss_ratio_geomean": "1.00017",
+      "rss_ci_low": "0.999979",
+      "rss_ci_high": "1.00035",
+      "rss_numerator_better": 213,
+      "rss_denominator_better": 208
+    }
+  ],
+  "transitions": [
+    {
+      "before": "ABORTED",
+      "after": "ABORTED",
+      "tasks": 2
+    },
+    {
+      "before": "ERROR (compilation)",
+      "after": "ERROR (compilation)",
+      "tasks": 13
+    },
+    {
+      "before": "ERROR (unsupported external)",
+      "after": "ERROR (unsupported external)",
+      "tasks": 2
+    },
+    {
+      "before": "ERROR (unsupported property: invalid memory access)",
+      "after": "ERROR (unsupported property: invalid memory access)",
+      "tasks": 7
+    },
+    {
+      "before": "ERROR (unsupported property: uninitialized memory)",
+      "after": "ERROR (unsupported property: uninitialized memory)",
+      "tasks": 1
+    },
+    {
+      "before": "OOM",
+      "after": "OOM",
+      "tasks": 31
+    },
+    {
+      "before": "OOM",
+      "after": "TIMEOUT",
+      "tasks": 21
+    },
+    {
+      "before": "OOM",
+      "after": "false(unreach-call)",
+      "tasks": 5
+    },
+    {
+      "before": "SEGMENTATION FAULT",
+      "after": "SEGMENTATION FAULT",
+      "tasks": 1
+    },
+    {
+      "before": "TIMEOUT",
+      "after": "TIMEOUT",
+      "tasks": 219
+    },
+    {
+      "before": "TIMEOUT",
+      "after": "false(unreach-call)",
+      "tasks": 4
+    },
+    {
+      "before": "TIMEOUT",
+      "after": "true",
+      "tasks": 1
+    },
+    {
+      "before": "false(unreach-call)",
+      "after": "false(unreach-call)",
+      "tasks": 121
+    },
+    {
+      "before": "true",
+      "after": "true",
+      "tasks": 297
+    }
+  ]
+}

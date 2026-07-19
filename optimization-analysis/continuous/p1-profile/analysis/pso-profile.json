@@ -1,0 +1,734 @@
+{
+  "archives": [
+    "profile-caat-pso.2026-07-15_07-20-33.logfiles.zip"
+  ],
+  "distributions": {
+    "adapter_ns": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "adaptive_offline": {
+      "max": 6345,
+      "median": 9,
+      "min": 0,
+      "p90": 87,
+      "p95": 425,
+      "p99": 6345,
+      "sum": 13052
+    },
+    "base_facts_added": {
+      "max": 688084,
+      "median": 388,
+      "min": 0,
+      "p90": 18999,
+      "p95": 88559,
+      "p99": 688084,
+      "sum": 1768559
+    },
+    "base_facts_removed": {
+      "max": 672819,
+      "median": 385,
+      "min": 0,
+      "p90": 10834,
+      "p95": 78149,
+      "p99": 672819,
+      "sum": 1615276
+    },
+    "checkpoint_ns": {
+      "max": 2931044,
+      "median": 3057,
+      "min": 0,
+      "p90": 57443,
+      "p95": 103006,
+      "p99": 2931044,
+      "sum": 5840338
+    },
+    "copy_ns": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "equality_ns": {
+      "max": 7353864,
+      "median": 2780,
+      "min": 0,
+      "p90": 59709,
+      "p95": 157044,
+      "p99": 7353864,
+      "sum": 12569234
+    },
+    "eval_ops": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "evicted": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "history_ns": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "initialize": {
+      "max": 1,
+      "median": 1,
+      "min": 0,
+      "p90": 1,
+      "p95": 1,
+      "p99": 1,
+      "sum": 63
+    },
+    "insert": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "insert_attempt_ns": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "materialize_ns": {
+      "max": 712870117,
+      "median": 96978,
+      "min": 0,
+      "p90": 6410280,
+      "p95": 13534681,
+      "p99": 712870117,
+      "sum": 1183903122
+    },
+    "max_active_events": {
+      "max": 432,
+      "median": 21,
+      "min": 0,
+      "p90": 56,
+      "p95": 99,
+      "p99": 432,
+      "sum": 2473
+    },
+    "max_base_relation_density_ppm": {
+      "max": 852352,
+      "median": 614958,
+      "min": 0,
+      "p90": 740740,
+      "p95": 783081,
+      "p99": 852352,
+      "sum": 40855079
+    },
+    "max_base_relation_pairs": {
+      "max": 113314,
+      "median": 230,
+      "min": 0,
+      "p90": 1798,
+      "p95": 7528,
+      "p99": 113314,
+      "sum": 216897
+    },
+    "max_changed_primitives": {
+      "max": 10,
+      "median": 9,
+      "min": 0,
+      "p90": 10,
+      "p95": 10,
+      "p99": 10,
+      "sum": 476
+    },
+    "max_current_base_bytes": {
+      "max": 218456,
+      "median": 1544,
+      "min": 0,
+      "p90": 4136,
+      "p95": 14608,
+      "p99": 218456,
+      "sum": 512360
+    },
+    "max_history_base_bytes": {
+      "max": 218456,
+      "median": 1544,
+      "min": 0,
+      "p90": 4136,
+      "p95": 14608,
+      "p99": 218456,
+      "sum": 512360
+    },
+    "max_inactive_events": {
+      "max": 210,
+      "median": 9,
+      "min": 0,
+      "p90": 25,
+      "p95": 46,
+      "p99": 210,
+      "sum": 1067
+    },
+    "max_stable_events": {
+      "max": 433,
+      "median": 21,
+      "min": 0,
+      "p90": 57,
+      "p95": 101,
+      "p99": 433,
+      "sum": 2548
+    },
+    "monotone_primitive_queries": {
+      "max": 23,
+      "median": 0,
+      "min": 0,
+      "p90": 3,
+      "p95": 6,
+      "p99": 23,
+      "sum": 78
+    },
+    "offline_evals": {
+      "max": 6346,
+      "median": 10,
+      "min": 0,
+      "p90": 88,
+      "p95": 426,
+      "p99": 6346,
+      "sum": 13115
+    },
+    "offline_ns": {
+      "max": 3037024227,
+      "median": 302404,
+      "min": 0,
+      "p90": 22780764,
+      "p95": 47955276,
+      "p99": 3037024227,
+      "sum": 4876394191
+    },
+    "oracle": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "peak_snapshot_equivalent_bytes": {
+      "max": 1431576,
+      "median": 10424,
+      "min": 0,
+      "p90": 27416,
+      "p95": 95928,
+      "p99": 1431576,
+      "sum": 3375640
+    },
+    "peak_undo_bytes": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "primitive_change_queries": {
+      "max": 6345,
+      "median": 9,
+      "min": 0,
+      "p90": 87,
+      "p95": 425,
+      "p99": 6345,
+      "sum": 13052
+    },
+    "profiled_queries": {
+      "max": 6452,
+      "median": 10,
+      "min": 0,
+      "p90": 91,
+      "p95": 432,
+      "p99": 6452,
+      "sum": 13293
+    },
+    "queue_pushes": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "rebuild": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "rebuild_ns": {
+      "max": 3038196172,
+      "median": 310562,
+      "min": 0,
+      "p90": 22811506,
+      "p95": 48020225,
+      "p99": 3038196172,
+      "sum": 4879980509
+    },
+    "replace": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "retained_snapshot_equivalent_bytes": {
+      "max": 1431576,
+      "median": 10424,
+      "min": 0,
+      "p90": 27416,
+      "p95": 95928,
+      "p99": 1431576,
+      "sum": 3375640
+    },
+    "retained_undo_bytes": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "retracting_primitive_queries": {
+      "max": 6322,
+      "median": 8,
+      "min": 0,
+      "p90": 85,
+      "p95": 422,
+      "p99": 6322,
+      "sum": 12974
+    },
+    "rollback": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "rollback_insert": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "rollback_ns": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "sync_ns": {
+      "max": 10794504495,
+      "median": 674666,
+      "min": 0,
+      "p90": 74958952,
+      "p95": 168968208,
+      "p99": 10794504495,
+      "sum": 16611410449
+    },
+    "unchanged": {
+      "max": 106,
+      "median": 0,
+      "min": 0,
+      "p90": 3,
+      "p95": 5,
+      "p99": 106,
+      "sum": 178
+    },
+    "value_changes": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "worklist_ns": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    }
+  },
+  "logs": 96,
+  "logs_with_stats": 79,
+  "logs_without_stats": 17,
+  "timing_share_of_sync": {
+    "adapter_ns": 0.0,
+    "checkpoint_ns": 0.00035158591848241194,
+    "copy_ns": 0.0,
+    "equality_ns": 0.0007566626589951404,
+    "history_ns": 0.0,
+    "insert_attempt_ns": 0.0,
+    "materialize_ns": 0.07127047553456067,
+    "offline_ns": 0.2935569021048154,
+    "rebuild_ns": 0.29377279695679137,
+    "rollback_ns": 0.0,
+    "worklist_ns": 0.0
+  },
+  "timing_totals_ns": {
+    "adapter_ns": 0,
+    "checkpoint_ns": 5840338,
+    "copy_ns": 0,
+    "equality_ns": 12569234,
+    "history_ns": 0,
+    "insert_attempt_ns": 0,
+    "materialize_ns": 1183903122,
+    "offline_ns": 4876394191,
+    "rebuild_ns": 4879980509,
+    "rollback_ns": 0,
+    "sync_ns": 16611410449,
+    "worklist_ns": 0
+  },
+  "top_tasks": {
+    "checkpoint_ns": [
+      {
+        "log": "caat-pso.profile.reorder_2.yml.log",
+        "value": 2931044
+      },
+      {
+        "log": "caat-pso.profile.queue.yml.log",
+        "value": 1488692
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 597898
+      },
+      {
+        "log": "caat-pso.profile.circular_buffer_bad.yml.log",
+        "value": 103006
+      },
+      {
+        "log": "caat-pso.profile.szymanski.yml.log",
+        "value": 100207
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 96930
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_38-traces-ex-4-switch_true.yml.log",
+        "value": 90169
+      },
+      {
+        "log": "caat-pso.profile.stateful01-2.yml.log",
+        "value": 57443
+      },
+      {
+        "log": "caat-pso.profile.36-apron_21-traces-cluster-based_true.yml.log",
+        "value": 42904
+      },
+      {
+        "log": "caat-pso.profile.twostage_3.yml.log",
+        "value": 32653
+      }
+    ],
+    "copy_ns": [],
+    "history_ns": [],
+    "max_active_events": [
+      {
+        "log": "caat-pso.profile.queue_ok.yml.log",
+        "value": 432
+      },
+      {
+        "log": "caat-pso.profile.pthread-demo-datarace-3.yml.log",
+        "value": 262
+      },
+      {
+        "log": "caat-pso.profile.queue.yml.log",
+        "value": 202
+      },
+      {
+        "log": "caat-pso.profile.twostage_3.yml.log",
+        "value": 99
+      },
+      {
+        "log": "caat-pso.profile.circular_buffer_bad.yml.log",
+        "value": 86
+      },
+      {
+        "log": "caat-pso.profile.reorder_2.yml.log",
+        "value": 80
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 59
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 56
+      },
+      {
+        "log": "caat-pso.profile.singleton.yml.log",
+        "value": 45
+      },
+      {
+        "log": "caat-pso.profile.singleton_with-uninit-problems.yml.log",
+        "value": 45
+      }
+    ],
+    "max_history_base_bytes": [
+      {
+        "log": "caat-pso.profile.queue_ok.yml.log",
+        "value": 218456
+      },
+      {
+        "log": "caat-pso.profile.pthread-demo-datarace-3.yml.log",
+        "value": 94480
+      },
+      {
+        "log": "caat-pso.profile.queue.yml.log",
+        "value": 59168
+      },
+      {
+        "log": "caat-pso.profile.twostage_3.yml.log",
+        "value": 14608
+      },
+      {
+        "log": "caat-pso.profile.circular_buffer_bad.yml.log",
+        "value": 12880
+      },
+      {
+        "log": "caat-pso.profile.reorder_2.yml.log",
+        "value": 11872
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 4424
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 4136
+      },
+      {
+        "log": "caat-pso.profile.singleton_with-uninit-problems.yml.log",
+        "value": 3488
+      },
+      {
+        "log": "caat-pso.profile.singleton.yml.log",
+        "value": 3416
+      }
+    ],
+    "offline_ns": [
+      {
+        "log": "caat-pso.profile.queue.yml.log",
+        "value": 3037024227
+      },
+      {
+        "log": "caat-pso.profile.reorder_2.yml.log",
+        "value": 1362273773
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 192957490
+      },
+      {
+        "log": "caat-pso.profile.circular_buffer_bad.yml.log",
+        "value": 47955276
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 46146369
+      },
+      {
+        "log": "caat-pso.profile.queue_ok.yml.log",
+        "value": 45506860
+      },
+      {
+        "log": "caat-pso.profile.pthread-demo-datarace-3.yml.log",
+        "value": 43965809
+      },
+      {
+        "log": "caat-pso.profile.twostage_3.yml.log",
+        "value": 22780764
+      },
+      {
+        "log": "caat-pso.profile.szymanski.yml.log",
+        "value": 17675870
+      },
+      {
+        "log": "caat-pso.profile.stateful01-2.yml.log",
+        "value": 9534174
+      }
+    ],
+    "peak_snapshot_equivalent_bytes": [
+      {
+        "log": "caat-pso.profile.queue_ok.yml.log",
+        "value": 1431576
+      },
+      {
+        "log": "caat-pso.profile.pthread-demo-datarace-3.yml.log",
+        "value": 619120
+      },
+      {
+        "log": "caat-pso.profile.queue.yml.log",
+        "value": 387768
+      },
+      {
+        "log": "caat-pso.profile.twostage_3.yml.log",
+        "value": 95928
+      },
+      {
+        "log": "caat-pso.profile.circular_buffer_bad.yml.log",
+        "value": 84600
+      },
+      {
+        "log": "caat-pso.profile.reorder_2.yml.log",
+        "value": 77992
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 29304
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 27416
+      },
+      {
+        "log": "caat-pso.profile.singleton_with-uninit-problems.yml.log",
+        "value": 23168
+      },
+      {
+        "log": "caat-pso.profile.singleton.yml.log",
+        "value": 22696
+      }
+    ],
+    "peak_undo_bytes": [],
+    "rebuild_ns": [
+      {
+        "log": "caat-pso.profile.queue.yml.log",
+        "value": 3038196172
+      },
+      {
+        "log": "caat-pso.profile.reorder_2.yml.log",
+        "value": 1363681130
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 193420989
+      },
+      {
+        "log": "caat-pso.profile.circular_buffer_bad.yml.log",
+        "value": 48020225
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 46195866
+      },
+      {
+        "log": "caat-pso.profile.queue_ok.yml.log",
+        "value": 45516808
+      },
+      {
+        "log": "caat-pso.profile.pthread-demo-datarace-3.yml.log",
+        "value": 43981331
+      },
+      {
+        "log": "caat-pso.profile.twostage_3.yml.log",
+        "value": 22811506
+      },
+      {
+        "log": "caat-pso.profile.szymanski.yml.log",
+        "value": 17743803
+      },
+      {
+        "log": "caat-pso.profile.stateful01-2.yml.log",
+        "value": 9574582
+      }
+    ],
+    "rollback_ns": [],
+    "sync_ns": [
+      {
+        "log": "caat-pso.profile.queue.yml.log",
+        "value": 10794504495
+      },
+      {
+        "log": "caat-pso.profile.reorder_2.yml.log",
+        "value": 4312406104
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 609794059
+      },
+      {
+        "log": "caat-pso.profile.circular_buffer_bad.yml.log",
+        "value": 168968208
+      },
+      {
+        "log": "caat-pso.profile.queue_ok.yml.log",
+        "value": 153843078
+      },
+      {
+        "log": "caat-pso.profile.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 145442284
+      },
+      {
+        "log": "caat-pso.profile.pthread-demo-datarace-3.yml.log",
+        "value": 142870276
+      },
+      {
+        "log": "caat-pso.profile.twostage_3.yml.log",
+        "value": 74958952
+      },
+      {
+        "log": "caat-pso.profile.szymanski.yml.log",
+        "value": 46491622
+      },
+      {
+        "log": "caat-pso.profile.stateful01-2.yml.log",
+        "value": 26898540
+      }
+    ],
+    "worklist_ns": []
+  }
+}

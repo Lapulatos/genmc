@@ -1,0 +1,44 @@
+{
+  "by_data_model": {
+    "ILP32": 3520
+  },
+  "by_expected_verdict": {
+    "": 341,
+    "false": 633,
+    "true": 2546
+  },
+  "by_family": {
+    "goblint-regression": 645,
+    "ldv-linux-3.14-races": 24,
+    "ldv-races": 60,
+    "libvsync": 52,
+    "pthread": 204,
+    "pthread-C-DAC": 19,
+    "pthread-atomic": 41,
+    "pthread-complex": 21,
+    "pthread-deagle": 36,
+    "pthread-divine": 22,
+    "pthread-driver-races": 84,
+    "pthread-ext": 174,
+    "pthread-lit": 28,
+    "pthread-memsafety": 6,
+    "pthread-nondet": 12,
+    "pthread-race-challenges": 130,
+    "pthread-theta": 57,
+    "pthread-wmm": 1132,
+    "weaver": 773
+  },
+  "by_property": {
+    "coverage-branches": 315,
+    "coverage-error-call": 26,
+    "def-behavior": 3,
+    "no-data-race": 1030,
+    "no-overflow": 669,
+    "unreach-call": 725,
+    "valid-memsafety": 752
+  },
+  "parse_error_count": 0,
+  "parse_errors": [],
+  "property_tasks": 3520,
+  "yaml_files": 1060
+}

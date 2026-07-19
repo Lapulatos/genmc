@@ -1,0 +1,18 @@
+task_yaml	expected_verdict	caat-pso	cat-pso
+c/goblint-regression/28-race_reach_01-simple_racing.yml	false	OUT OF MEMORY:5	OUT OF MEMORY:5
+c/goblint-regression/28-race_reach_06-cond_racing1.yml	false	OUT OF MEMORY:5	OUT OF MEMORY:5
+c/goblint-regression/28-race_reach_11-ptr_racing.yml	false	OUT OF MEMORY:5	OUT OF MEMORY:5
+c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	false	OUT OF MEMORY:5	OUT OF MEMORY:5
+c/goblint-regression/28-race_reach_37-indirect_racing.yml	false	OUT OF MEMORY:5	OUT OF MEMORY:5
+c/pthread-deagle/circular_buffer_ok.yml	true	TIMEOUT:5	TIMEOUT:5
+c/pthread/butterfly.yml	true	TIMEOUT:5	true:5
+c/pthread/fib_safe-5.yml	true	TIMEOUT:5	TIMEOUT:5
+c/pthread/fib_safe-6.yml	true	TIMEOUT:5	TIMEOUT:5
+c/pthread/fib_unsafe-5.yml	false	TIMEOUT:5	TIMEOUT:5
+c/pthread/fib_unsafe-6.yml	false	TIMEOUT:5	TIMEOUT:5
+c/pthread/fib_unsafe-7.yml	false	TIMEOUT:5	TIMEOUT:5
+c/pthread/queue_longer.yml	false	TIMEOUT:5	TIMEOUT:5
+c/pthread/queue_ok_longer.yml	true	TIMEOUT:5	true:5
+c/pthread/queue_ok_longest.yml	true	TIMEOUT:5	TIMEOUT:5
+c/pthread/triangular-1.yml	true	TIMEOUT:5	TIMEOUT:5
+c/pthread/triangular-2.yml	false	TIMEOUT:5	false(unreach-call):5

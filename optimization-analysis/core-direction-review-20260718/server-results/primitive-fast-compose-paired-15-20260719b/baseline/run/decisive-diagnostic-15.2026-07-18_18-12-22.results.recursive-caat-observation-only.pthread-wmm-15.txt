@@ -1,0 +1,64 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/svcomp2026-caat/source/genmc/optimization-analysis/core-direction-review-20260718/decisive-diagnostic-15.xml
+name:                    decisive-diagnostic-15
+run sets:                recursive-caat-observation-only.pthread-wmm-15
+date:                    Sat, 2026-07-18 18:12:22 UTC
+tool:                    GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/svcomp2026-caat/source/genmc/optimization-analysis/continuous/candidate-equivalence-quotient/formal-wrapper.sh
+options:                 --disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --cat-stats
+parallel runs:           4
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    ab254de8184e
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.736896 MB
+------------------------------------------------------------
+
+
+
+recursive-caat-observation-only.pthread-wmm-15
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --cat-stats' and propertyfile 'None'
+
+inputfile                                                             status                       cpu time   wall time        host
+-----------------------------------------------------------------------------------------------------------------------------------
+rfi005.yml                                                            false(unreach-call)              0.09        0.10        None
+safe029_power.oepc_pso.oepc_rmo.oepc.yml                              false(unreach-call)              0.12        0.13        None
+mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml                     false(unreach-call)              0.13        0.13        None
+safe029_tso.yml                                                       true                             0.21        0.21        None
+safe010_tso.yml                                                       true                             0.22        0.23        None
+safe004_power.oepc_pso.oepc_rmo.oepc.yml                              false(unreach-call)             15.63       15.64        None
+mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml              false(unreach-call)             31.02       31.03        None
+mix035.oepc.yml                                                       false(unreach-call)             57.85       57.87        None
+rfi002_tso.yml                                                        true                            11.62       11.63        None
+safe017_tso.yml                                                       true                            49.38       49.41        None
+safe035_power.yml                                                     TIMEOUT                         61.00       61.01        None
+mix023_tso.yml                                                        TIMEOUT                         61.00       61.01        None
+mix014_tso.oepc.yml                                                   TIMEOUT                         60.99       61.01        None
+mix008_tso.oepc.yml                                                   TIMEOUT                         60.97       61.01        None
+safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml    TIMEOUT                         61.00       61.01        None
+-----------------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                             done                           471.26      138.39           -
+
+Statistics:             15 Files
+  correct:              10
+    correct true:        4
+    correct false:       6
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:               5
+  Score:                14 (max: 20)

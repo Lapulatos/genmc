@@ -1,0 +1,9 @@
+baseline_runtime_bin	backend	tasks	all_repetitions_solved	wall_ratio_geomean	memory_ratio_geomean
+lt-0.1s	caat-pso	74	74	1.03505	1.00127
+lt-0.1s	cat-pso	74	74	1	1
+0.1-1s	caat-pso	3	3	2.09265	1.0013
+0.1-1s	cat-pso	3	3	1	1
+1-10s	caat-pso	2	2	1.59523	0.998399
+1-10s	cat-pso	2	2	1	1
+ge-10s	caat-pso	3	0		
+ge-10s	cat-pso	3	3	1	1

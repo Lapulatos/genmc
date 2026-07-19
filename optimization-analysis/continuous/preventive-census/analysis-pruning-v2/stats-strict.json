@@ -1,0 +1,191 @@
+{
+  "counters": {
+    "all-pruned-fallbacks": 0,
+    "co-candidates": 9487796,
+    "co-pruned": 9062444,
+    "lookup-ns": 7832797976,
+    "prefix-inconsistent": 0,
+    "prefix-queries": 1231328,
+    "prune_rate": 0.7856473265114268,
+    "records_with_final_stats": 348,
+    "rf-candidates": 8570108,
+    "rf-pruned": 5124700
+  },
+  "design": {
+    "cells": 768,
+    "repetitions": 4,
+    "tasks": 96
+  },
+  "metrics": {
+    "cpu": {
+      "bootstrap_95ci": [
+        0.875266210299485,
+        1.0427364840121336
+      ],
+      "faster": 36,
+      "geomean_ratio": 0.9536871238424361,
+      "median_ratio": 1.0031299580259523,
+      "slower": 46,
+      "tasks": 82
+    },
+    "rss": {
+      "bootstrap_95ci": [
+        0.9995780213107834,
+        1.0004240239133952
+      ],
+      "faster": 37,
+      "geomean_ratio": 1.0000435423628367,
+      "median_ratio": 1.0001571839325851,
+      "slower": 42,
+      "tasks": 82
+    },
+    "wall": {
+      "bootstrap_95ci": [
+        0.8714967613012383,
+        1.0366738071396715
+      ],
+      "faster": 44,
+      "geomean_ratio": 0.9500589073489186,
+      "median_ratio": 0.9916623924697452,
+      "slower": 38,
+      "tasks": 82
+    }
+  },
+  "safe_execution_count_mismatches": [],
+  "status_counts": {
+    "baseline": {
+      "OUT OF MEMORY": 20,
+      "TIMEOUT": 36,
+      "false(unreach-call)": 104,
+      "true": 224
+    },
+    "pruning": {
+      "OUT OF MEMORY": 20,
+      "TIMEOUT": 16,
+      "false(unreach-call)": 112,
+      "true": 236
+    }
+  },
+  "status_mismatches": [
+    [
+      "01",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "01",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "01",
+      "pthread/fib_unsafe-5.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "01",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "01",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "02",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "02",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "02",
+      "pthread/fib_unsafe-5.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "02",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "02",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "03",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "03",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "03",
+      "pthread/fib_unsafe-5.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "03",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "03",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "04",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "04",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "04",
+      "pthread/fib_unsafe-5.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "04",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "04",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ]
+  ]
+}

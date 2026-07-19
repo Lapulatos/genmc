@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="60 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/><option name="--disable-mm-detector"/><option name="--nthreads=1"/><option name="--v1"/><option name="--cat-stats"/>
+  <column title="executions">Number of complete executions explored: (.*)</column>
+  <column title="finite assignments">finite-assignments=([0-9]+)</column>
+  <column title="finite rejected">finite-cat-rejected=([0-9]+)</column>
+  <column title="finite consistent">finite-cat-consistent=([0-9]+)</column>
+  <column title="replay attempts">finite-replay-attempts=([0-9]+)</column>
+  <column title="replay confirmed">finite-replay-confirmed=([0-9]+)</column>
+  <column title="finite fail open">finite-fail-open=([0-9]+)</column>
+  <rundefinition name="baseline"><option name="--svcomp-backend=caat-sc"/><tasks name="unreach-call"><include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/*.yml</include><propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile></tasks></rundefinition>
+  <rundefinition name="finite-symbolic"><option name="--svcomp-backend=caat-sc"/><option name="--finite-symbolic-errors"/><option name="--finite-symbolic-max=10000"/><tasks name="unreach-call"><include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/*.yml</include><propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile></tasks></rundefinition>
+</benchmark>

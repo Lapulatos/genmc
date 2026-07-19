@@ -1,0 +1,16 @@
+{
+  "canonical_shapes": 4,
+  "states_per_shape": 81,
+  "state_cells": 324,
+  "invocations": 648,
+  "worker_counts": [
+    1
+  ],
+  "reduced_rvf_cells": 324,
+  "violations": [
+    "shape=000001/outcome=1112/n1: status mismatch",
+    "shape=000001/outcome=1112/n1: error-category mismatch",
+    "shape=000011/outcome=1012/n1: status mismatch",
+    "shape=000011/outcome=1012/n1: error-category mismatch"
+  ]
+}

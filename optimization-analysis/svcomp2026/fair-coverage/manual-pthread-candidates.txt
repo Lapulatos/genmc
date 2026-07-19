@@ -1,0 +1,13 @@
+c/libvsync/arraylock.yml
+c/libvsync/bounded_mpmc_check_full.yml
+c/libvsync/cnalock.yml
+c/libvsync/hclhlock.yml
+c/libvsync/hmcslock.yml
+c/libvsync/mcslock.yml
+c/libvsync/rec_mcslock.yml
+c/libvsync/rec_ticketlock.yml
+c/libvsync/rwlock.yml
+c/libvsync/semaphore.yml
+c/libvsync/ticketlock.yml
+c/libvsync/ttaslock.yml
+c/weaver/test-easy6.wvr.yml

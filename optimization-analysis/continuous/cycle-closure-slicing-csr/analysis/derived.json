@@ -1,0 +1,157 @@
+{
+  "common_terminal_execution_mismatches": [],
+  "large_current_base": {
+    "all": {
+      "after_over_before_geomean": 1.0,
+      "four_repetition_model_tasks": 5,
+      "median_ratio": 1.0,
+      "task_bootstrap_95ci": [
+        1.0,
+        1.0
+      ]
+    },
+    "pso": {
+      "after_over_before_geomean": 1.0,
+      "four_repetition_model_tasks": 1,
+      "median_ratio": 1.0,
+      "task_bootstrap_95ci": [
+        1.0,
+        1.0
+      ]
+    },
+    "sc": {
+      "after_over_before_geomean": 1.0,
+      "four_repetition_model_tasks": 2,
+      "median_ratio": 1.0,
+      "task_bootstrap_95ci": [
+        1.0,
+        1.0
+      ]
+    },
+    "tso": {
+      "after_over_before_geomean": 1.0,
+      "four_repetition_model_tasks": 2,
+      "median_ratio": 1.0,
+      "task_bootstrap_95ci": [
+        1.0,
+        1.0
+      ]
+    }
+  },
+  "large_materialization": {
+    "all": {
+      "after_over_before_geomean": 1.168979430471715,
+      "four_repetition_model_tasks": 5,
+      "median_ratio": 1.0525917364704604,
+      "task_bootstrap_95ci": [
+        0.9675372703484412,
+        1.53862520442578
+      ]
+    },
+    "pso": {
+      "after_over_before_geomean": 1.007944236349486,
+      "four_repetition_model_tasks": 1,
+      "median_ratio": 1.007944236349486,
+      "task_bootstrap_95ci": [
+        1.007944236349486,
+        1.007944236349486
+      ]
+    },
+    "sc": {
+      "after_over_before_geomean": 1.5118749999329053,
+      "four_repetition_model_tasks": 2,
+      "median_ratio": 1.567578195727871,
+      "task_bootstrap_95ci": [
+        1.153409891412675,
+        1.9817465000430672
+      ]
+    },
+    "tso": {
+      "after_over_before_geomean": 0.9733813809661708,
+      "four_repetition_model_tasks": 2,
+      "median_ratio": 0.976361776974292,
+      "task_bootstrap_95ci": [
+        0.9001318174781237,
+        1.0525917364704604
+      ]
+    }
+  },
+  "large_offline": {
+    "all": {
+      "after_over_before_geomean": 0.48196955761192,
+      "four_repetition_model_tasks": 5,
+      "median_ratio": 0.7034980938492703,
+      "task_bootstrap_95ci": [
+        0.24931458372004298,
+        0.8260039966690123
+      ]
+    },
+    "pso": {
+      "after_over_before_geomean": 0.7034980938492703,
+      "four_repetition_model_tasks": 1,
+      "median_ratio": 0.7034980938492703,
+      "task_bootstrap_95ci": [
+        0.7034980938492703,
+        0.7034980938492703
+      ]
+    },
+    "sc": {
+      "after_over_before_geomean": 0.22361740475873385,
+      "four_repetition_model_tasks": 2,
+      "median_ratio": 0.24106067723888144,
+      "task_bootstrap_95ci": [
+        0.15103009132588868,
+        0.3310912631518742
+      ]
+    },
+    "tso": {
+      "after_over_before_geomean": 0.8598287343907121,
+      "four_repetition_model_tasks": 2,
+      "median_ratio": 0.8599678313494352,
+      "task_bootstrap_95ci": [
+        0.8445011422429396,
+        0.8754345204559307
+      ]
+    }
+  },
+  "large_peak_snapshot": {
+    "all": {
+      "after_over_before_geomean": 0.9533792380580097,
+      "four_repetition_model_tasks": 5,
+      "median_ratio": 0.9748290497480168,
+      "task_bootstrap_95ci": [
+        0.931895301734985,
+        0.97527088592668
+      ]
+    },
+    "pso": {
+      "after_over_before_geomean": 0.9758748751029686,
+      "four_repetition_model_tasks": 1,
+      "median_ratio": 0.9758748751029686,
+      "task_bootstrap_95ci": [
+        0.9758748751029686,
+        0.9758748751029686
+      ]
+    },
+    "sc": {
+      "after_over_before_geomean": 0.9215640710897048,
+      "four_repetition_model_tasks": 2,
+      "median_ratio": 0.9215641010029882,
+      "task_bootstrap_95ci": [
+        0.92132929466713,
+        0.9217989073388466
+      ]
+    },
+    "tso": {
+      "after_over_before_geomean": 0.9748585879143347,
+      "four_repetition_model_tasks": 2,
+      "median_ratio": 0.9748585883618508,
+      "task_bootstrap_95ci": [
+        0.9748290497480168,
+        0.9748881269756847
+      ]
+    }
+  },
+  "profiles": 2304,
+  "profiles_with_statistics": 2124
+}

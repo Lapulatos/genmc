@@ -1,0 +1,2 @@
+baseline	backend	paired_tasks	wall_ratio_geomean	bootstrap_95ci_low	bootstrap_95ci_high	cpu_ratio_geomean	cpu_95ci_low	cpu_95ci_high	memory_ratio_geomean	memory_95ci_low	memory_95ci_high	backend_faster	baseline_faster	ties	exact_sign_p	holm_p
+cat-pso	caat-pso	79	1.0748	1.02843	1.13215	1.09134	1.04457	1.15301	1.00119	1.00102	1.0013	32	47	0	0.11466	0.11466

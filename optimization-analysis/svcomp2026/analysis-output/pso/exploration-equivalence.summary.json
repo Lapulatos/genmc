@@ -1,0 +1,9 @@
+{
+  "backends": [
+    "cat-pso",
+    "caat-pso"
+  ],
+  "common_solved_task_repetitions": 395,
+  "missing_execution_counts": 0,
+  "verdict_execution_blocked_mismatches": 0
+}

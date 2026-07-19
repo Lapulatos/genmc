@@ -1,0 +1,72 @@
+{
+  "cell_sizes": {
+    "r01/v10": 96,
+    "r01/v9": 96,
+    "r02/v10": 96,
+    "r02/v9": 96,
+    "r03/v10": 96,
+    "r03/v9": 96,
+    "r04/v10": 96,
+    "r04/v9": 96
+  },
+  "metrics": {
+    "cputime": {
+      "bootstrap_95ci": [
+        1.04041303840774,
+        1.1663833131756065
+      ],
+      "geomean_ratio": 1.093645805815283,
+      "median_ratio": 1.0307523643151746,
+      "tasks": 88
+    },
+    "memory": {
+      "bootstrap_95ci": [
+        0.9997962471949463,
+        1.001899597892767
+      ],
+      "geomean_ratio": 1.0007009700747145,
+      "median_ratio": 1.0,
+      "tasks": 88
+    },
+    "walltime": {
+      "bootstrap_95ci": [
+        1.0359345900480392,
+        1.1625788772158585
+      ],
+      "geomean_ratio": 1.0896369145877298,
+      "median_ratio": 1.0326078390370568,
+      "tasks": 88
+    }
+  },
+  "mismatches": [],
+  "rows": 768,
+  "status_counts": {
+    "v10": {
+      "TIMEOUT": 32,
+      "false(unreach-call)": 112,
+      "true": 240
+    },
+    "v9": {
+      "TIMEOUT": 32,
+      "false(unreach-call)": 112,
+      "true": 240
+    }
+  },
+  "v10_activated_rows": 204,
+  "v10_core_totals": {
+    "conflict-core-co-pruned": 9028904,
+    "conflict-core-direct-checks-avoided": 0,
+    "conflict-core-duplicate-subsumed": 25928,
+    "conflict-core-evicted": 28448,
+    "conflict-core-hits": 13923496,
+    "conflict-core-learn-attempts": 263708,
+    "conflict-core-learned": 95676,
+    "conflict-core-literal-checks": 11310388708,
+    "conflict-core-match-queries": 18058008,
+    "conflict-core-max-bytes": 38712640,
+    "conflict-core-max-clauses": 67228,
+    "conflict-core-max-literals": 2419540,
+    "conflict-core-rf-pruned": 4894592,
+    "conflict-core-unsupported": 142104
+  }
+}

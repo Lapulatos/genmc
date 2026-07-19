@@ -1,0 +1,25 @@
+Server image: genmc15noble:sujie, GCC 13, C++23
+Baseline headers: retained d963c49 source
+Candidate headers: P0.8a source
+
+before
+FixedPointStatistics=48
+CaatEvaluationResult=144
+IncrementalStatistics=184
+IncrementalCaatEvaluator=496
+LazyCycleStatistics=24
+
+after
+FixedPointStatistics=48
+CaatEvaluationResult=144
+IncrementalStatistics=184
+IncrementalCaatEvaluator=504
+LazyCycleStatistics=24
+LazyTopologicalOrder=24
+OptionalLazyTopologicalOrder=32
+
+Interpretation: the only probed lifetime-object growth is one 8-byte unique_ptr in
+IncrementalCaatEvaluator. When lazy checking is enabled, its heap payload is a vector of
+32-byte optional certificate objects plus one uint32_t rank per stable event for each
+populated lazy check. No certificate bytes enter CaatEvaluationResult, statistics,
+undo deltas, or checkpoint-equivalent accounting.

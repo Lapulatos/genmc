@@ -1,0 +1,4 @@
+c/pthread-atomic/read_write_lock-2.yml
+c/pthread-theta/exponential-4.yml
+c/pthread-theta/exponential-64.yml
+c/pthread-complex/workstealqueue_mutex-2.yml

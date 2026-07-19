@@ -1,0 +1,61 @@
+{
+  "cells": 768,
+  "metrics": {
+    "baseline_cputime": {
+      "bootstrap_95ci": [
+        0.9906200096045802,
+        1.0062103550965291
+      ],
+      "geomean_ratio": 0.9984808170242083,
+      "median_ratio": 0.9969905335221623,
+      "tasks": 84
+    },
+    "baseline_memory": {
+      "bootstrap_95ci": [
+        0.9992643876587137,
+        1.001391281265593
+      ],
+      "geomean_ratio": 1.0001576959068375,
+      "median_ratio": 0.999765609892235,
+      "tasks": 84
+    },
+    "baseline_walltime": {
+      "bootstrap_95ci": [
+        0.9926690349459403,
+        1.0085437365748007
+      ],
+      "geomean_ratio": 1.0007333563320708,
+      "median_ratio": 1.000368892399774,
+      "tasks": 84
+    },
+    "pruning_cputime": {
+      "bootstrap_95ci": [
+        0.9385404940149935,
+        0.9813007851627937
+      ],
+      "geomean_ratio": 0.9610499784738352,
+      "median_ratio": 0.9874022375045095,
+      "tasks": 88
+    },
+    "pruning_memory": {
+      "bootstrap_95ci": [
+        0.9577211813921072,
+        1.0005245372450149
+      ],
+      "geomean_ratio": 0.9832619919601961,
+      "median_ratio": 1.0003909381789438,
+      "tasks": 88
+    },
+    "pruning_walltime": {
+      "bootstrap_95ci": [
+        0.9353493910237941,
+        0.9765017450180873
+      ],
+      "geomean_ratio": 0.9569780838435772,
+      "median_ratio": 0.9818814497152804,
+      "tasks": 88
+    }
+  },
+  "pruning_counter_mismatches": [],
+  "status_mismatches": []
+}

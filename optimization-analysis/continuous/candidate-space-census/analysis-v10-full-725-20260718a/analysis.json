@@ -1,0 +1,7309 @@
+{
+  "metrics": {
+    "cputime": {
+      "bootstrap_95ci": [
+        1.0327437738936827,
+        1.0838920030259112
+      ],
+      "geomean_ratio": 1.0566482142607743,
+      "median_ratio": 0.9955549057949411,
+      "tasks": 368
+    },
+    "memory": {
+      "bootstrap_95ci": [
+        0.9999083560511686,
+        1.0005899818715458
+      ],
+      "geomean_ratio": 1.000223509787693,
+      "median_ratio": 1.0001455837689512,
+      "tasks": 368
+    },
+    "walltime": {
+      "bootstrap_95ci": [
+        1.0324607338573928,
+        1.0834119694270845
+      ],
+      "geomean_ratio": 1.056562238216928,
+      "median_ratio": 1.003082725294563,
+      "tasks": 368
+    }
+  },
+  "mismatches": [
+    {
+      "differences": {
+        "backward-offered": [
+          null,
+          0
+        ],
+        "backward-queued": [
+          null,
+          0
+        ],
+        "category": [
+          "error",
+          "wrong"
+        ],
+        "co-offered": [
+          null,
+          0
+        ],
+        "co-queued": [
+          null,
+          0
+        ],
+        "inconsistent-revisit-prefixes": [
+          null,
+          0
+        ],
+        "max-retained-work": [
+          null,
+          0
+        ],
+        "realized-revisit-prefixes": [
+          null,
+          0
+        ],
+        "rf-offered": [
+          null,
+          0
+        ],
+        "rf-queued": [
+          null,
+          0
+        ],
+        "status": [
+          "ERROR (17)",
+          "true"
+        ],
+        "validity-queries": [
+          null,
+          0
+        ],
+        "work-added": [
+          null,
+          0
+        ],
+        "work-popped": [
+          null,
+          0
+        ]
+      },
+      "task": "popl20-more-array-sum-alt.wvr"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          11753,
+          5879
+        ],
+        "backward-queued": [
+          11753,
+          5879
+        ],
+        "co-offered": [
+          86635,
+          43311
+        ],
+        "max-retained-work": [
+          62,
+          61
+        ],
+        "realized-revisit-prefixes": [
+          21383,
+          10691
+        ],
+        "rf-offered": [
+          49216,
+          24616
+        ],
+        "rf-queued": [
+          11768,
+          5893
+        ],
+        "validity-queries": [
+          28903,
+          14449
+        ],
+        "work-added": [
+          23521,
+          11772
+        ],
+        "work-popped": [
+          23493,
+          11745
+        ]
+      },
+      "task": "triangular-longer-1"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          42845,
+          21355
+        ],
+        "backward-queued": [
+          42845,
+          21354
+        ],
+        "co-offered": [
+          240076,
+          120120
+        ],
+        "max-retained-work": [
+          45,
+          41
+        ],
+        "realized-revisit-prefixes": [
+          72814,
+          36374
+        ],
+        "rf-offered": [
+          141481,
+          70756
+        ],
+        "rf-queued": [
+          42861,
+          21367
+        ],
+        "validity-queries": [
+          89916,
+          45072
+        ],
+        "work-added": [
+          85706,
+          42721
+        ],
+        "work-popped": [
+          85682,
+          42697
+        ]
+      },
+      "task": "safe030_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          42845,
+          14092
+        ],
+        "backward-queued": [
+          42845,
+          14092
+        ],
+        "co-offered": [
+          240076,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          72814,
+          24134
+        ],
+        "rf-offered": [
+          141481,
+          47248
+        ],
+        "rf-queued": [
+          42861,
+          14112
+        ],
+        "validity-queries": [
+          89916,
+          30138
+        ],
+        "work-added": [
+          85706,
+          28204
+        ],
+        "work-popped": [
+          85682,
+          28172
+        ]
+      },
+      "task": "safe011_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80349
+        ],
+        "max-retained-work": [
+          46,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          60584,
+          24134
+        ],
+        "rf-offered": [
+          118010,
+          47248
+        ],
+        "rf-queued": [
+          35764,
+          14113
+        ],
+        "validity-queries": [
+          74497,
+          30139
+        ],
+        "work-added": [
+          71519,
+          28205
+        ],
+        "work-popped": [
+          71501,
+          28172
+        ]
+      },
+      "task": "safe031_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe004_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe021_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          43340,
+          21387
+        ],
+        "backward-queued": [
+          43340,
+          21387
+        ],
+        "co-offered": [
+          239366,
+          119612
+        ],
+        "max-retained-work": [
+          45,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          73085,
+          36622
+        ],
+        "rf-offered": [
+          141376,
+          70522
+        ],
+        "rf-queued": [
+          43359,
+          21404
+        ],
+        "validity-queries": [
+          89245,
+          45714
+        ],
+        "work-added": [
+          86699,
+          42791
+        ],
+        "work-popped": [
+          86673,
+          42765
+        ]
+      },
+      "task": "safe018_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80349
+        ],
+        "max-retained-work": [
+          46,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          60584,
+          24134
+        ],
+        "rf-offered": [
+          118010,
+          47248
+        ],
+        "rf-queued": [
+          35764,
+          14113
+        ],
+        "validity-queries": [
+          74497,
+          30139
+        ],
+        "work-added": [
+          71519,
+          28205
+        ],
+        "work-popped": [
+          71501,
+          28172
+        ]
+      },
+      "task": "safe015_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe003_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35959,
+          14241
+        ],
+        "backward-queued": [
+          35959,
+          14241
+        ],
+        "co-offered": [
+          199308,
+          79676
+        ],
+        "max-retained-work": [
+          42,
+          39
+        ],
+        "realized-revisit-prefixes": [
+          61010,
+          24449
+        ],
+        "rf-offered": [
+          117662,
+          46976
+        ],
+        "rf-queued": [
+          35982,
+          14252
+        ],
+        "validity-queries": [
+          75164,
+          30634
+        ],
+        "work-added": [
+          71941,
+          28493
+        ],
+        "work-popped": [
+          71907,
+          28473
+        ]
+      },
+      "task": "safe028_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe000_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35360,
+          13999
+        ],
+        "backward-queued": [
+          35360,
+          13999
+        ],
+        "co-offered": [
+          202166,
+          82060
+        ],
+        "max-retained-work": [
+          45,
+          44
+        ],
+        "realized-revisit-prefixes": [
+          59684,
+          23299
+        ],
+        "rf-offered": [
+          118782,
+          48043
+        ],
+        "rf-queued": [
+          35374,
+          14006
+        ],
+        "validity-queries": [
+          72982,
+          27912
+        ],
+        "work-added": [
+          70734,
+          28005
+        ],
+        "work-popped": [
+          70710,
+          27986
+        ]
+      },
+      "task": "safe034_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80349
+        ],
+        "max-retained-work": [
+          46,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          60584,
+          24134
+        ],
+        "rf-offered": [
+          118010,
+          47248
+        ],
+        "rf-queued": [
+          35764,
+          14113
+        ],
+        "validity-queries": [
+          74497,
+          30139
+        ],
+        "work-added": [
+          71519,
+          28205
+        ],
+        "work-popped": [
+          71501,
+          28172
+        ]
+      },
+      "task": "safe023_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe007_pso.oepc_pso.opt_tso.oepc_tso.opt-thin001_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80349
+        ],
+        "max-retained-work": [
+          46,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          60584,
+          24134
+        ],
+        "rf-offered": [
+          118010,
+          47248
+        ],
+        "rf-queued": [
+          35764,
+          14113
+        ],
+        "validity-queries": [
+          74497,
+          30139
+        ],
+        "work-added": [
+          71519,
+          28205
+        ],
+        "work-popped": [
+          71501,
+          28172
+        ]
+      },
+      "task": "safe025_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          27806,
+          6740
+        ],
+        "backward-queued": [
+          27806,
+          6739
+        ],
+        "co-offered": [
+          163694,
+          41664
+        ],
+        "max-retained-work": [
+          47,
+          41
+        ],
+        "realized-revisit-prefixes": [
+          46842,
+          11370
+        ],
+        "rf-offered": [
+          95780,
+          24224
+        ],
+        "rf-queued": [
+          27830,
+          6754
+        ],
+        "validity-queries": [
+          57120,
+          13908
+        ],
+        "work-added": [
+          55636,
+          13493
+        ],
+        "work-popped": [
+          55600,
+          13464
+        ]
+      },
+      "task": "safe035_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          29011,
+          14358
+        ],
+        "backward-queued": [
+          29011,
+          14358
+        ],
+        "co-offered": [
+          159859,
+          80056
+        ],
+        "max-retained-work": [
+          45,
+          41
+        ],
+        "realized-revisit-prefixes": [
+          48561,
+          24240
+        ],
+        "rf-offered": [
+          94458,
+          47224
+        ],
+        "rf-queued": [
+          29029,
+          14369
+        ],
+        "validity-queries": [
+          58659,
+          29658
+        ],
+        "work-added": [
+          58040,
+          28727
+        ],
+        "work-popped": [
+          58013,
+          28704
+        ]
+      },
+      "task": "safe027_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "mix052_pso.opt_rmo.opt_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe030_power.opt_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "mix056_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13478,
+          null
+        ],
+        "backward-queued": [
+          13477,
+          null
+        ],
+        "co-offered": [
+          85206,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          53,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          21810,
+          null
+        ],
+        "rf-offered": [
+          49362,
+          null
+        ],
+        "rf-queued": [
+          13491,
+          null
+        ],
+        "validity-queries": [
+          25012,
+          null
+        ],
+        "work-added": [
+          26968,
+          null
+        ],
+        "work-popped": [
+          26942,
+          null
+        ]
+      },
+      "task": "mix033.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14093,
+          6997
+        ],
+        "backward-queued": [
+          14093,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30137,
+          14676
+        ],
+        "work-added": [
+          28205,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "mix053.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6728,
+          null
+        ],
+        "backward-queued": [
+          6728,
+          null
+        ],
+        "co-offered": [
+          42257,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          47,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11077,
+          null
+        ],
+        "rf-offered": [
+          24512,
+          null
+        ],
+        "rf-queued": [
+          6742,
+          null
+        ],
+        "validity-queries": [
+          13058,
+          null
+        ],
+        "work-added": [
+          13470,
+          null
+        ],
+        "work-popped": [
+          13445,
+          null
+        ]
+      },
+      "task": "mix032.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80349,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14113,
+          7004
+        ],
+        "validity-queries": [
+          30139,
+          14676
+        ],
+        "work-added": [
+          28205,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe013_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe002_power.opt_pso.oepc_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13366,
+          6527
+        ],
+        "backward-queued": [
+          13366,
+          6527
+        ],
+        "co-offered": [
+          82290,
+          41664
+        ],
+        "max-retained-work": [
+          43,
+          39
+        ],
+        "realized-revisit-prefixes": [
+          23285,
+          11408
+        ],
+        "rf-offered": [
+          47854,
+          24112
+        ],
+        "rf-queued": [
+          13386,
+          6537
+        ],
+        "validity-queries": [
+          29769,
+          14656
+        ],
+        "work-added": [
+          26752,
+          13064
+        ],
+        "work-popped": [
+          26721,
+          13041
+        ]
+      },
+      "task": "mix045_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80349,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14113,
+          7004
+        ],
+        "validity-queries": [
+          30139,
+          14676
+        ],
+        "work-added": [
+          28205,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe005_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix039.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          9932,
+          6997
+        ],
+        "backward-queued": [
+          9932,
+          6997
+        ],
+        "category": [
+          "correct",
+          "error"
+        ],
+        "co-offered": [
+          57318,
+          40555
+        ],
+        "complete": [
+          1054,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          16999,
+          11885
+        ],
+        "rf-offered": [
+          33643,
+          23790
+        ],
+        "rf-queued": [
+          9944,
+          7004
+        ],
+        "status": [
+          "false(unreach-call)",
+          "TIMEOUT"
+        ],
+        "validity-queries": [
+          21210,
+          14676
+        ],
+        "work-added": [
+          19877,
+          14001
+        ],
+        "work-popped": [
+          19853,
+          13982
+        ]
+      },
+      "task": "mix056_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix036_pso.opt_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe004_power.opt_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe001_power.opt_pso.oepc_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          9932,
+          6997
+        ],
+        "backward-queued": [
+          9932,
+          6997
+        ],
+        "category": [
+          "correct",
+          "error"
+        ],
+        "co-offered": [
+          57318,
+          40555
+        ],
+        "complete": [
+          1054,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          16999,
+          11885
+        ],
+        "rf-offered": [
+          33643,
+          23790
+        ],
+        "rf-queued": [
+          9944,
+          7004
+        ],
+        "status": [
+          "false(unreach-call)",
+          "TIMEOUT"
+        ],
+        "validity-queries": [
+          21210,
+          14676
+        ],
+        "work-added": [
+          19877,
+          14001
+        ],
+        "work-popped": [
+          19853,
+          13982
+        ]
+      },
+      "task": "safe021_power.oepc_pso.oepc_rmo.oepc_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix027_power.opt_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13368,
+          null
+        ],
+        "backward-queued": [
+          13367,
+          null
+        ],
+        "co-offered": [
+          82287,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          47,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          23284,
+          null
+        ],
+        "rf-offered": [
+          47859,
+          null
+        ],
+        "rf-queued": [
+          13390,
+          null
+        ],
+        "validity-queries": [
+          29769,
+          null
+        ],
+        "work-added": [
+          26757,
+          null
+        ],
+        "work-popped": [
+          26717,
+          null
+        ]
+      },
+      "task": "mix047_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13366,
+          6527
+        ],
+        "backward-queued": [
+          13366,
+          6527
+        ],
+        "co-offered": [
+          82290,
+          41664
+        ],
+        "max-retained-work": [
+          43,
+          39
+        ],
+        "realized-revisit-prefixes": [
+          23285,
+          11408
+        ],
+        "rf-offered": [
+          47854,
+          24112
+        ],
+        "rf-queued": [
+          13386,
+          6537
+        ],
+        "validity-queries": [
+          29769,
+          14656
+        ],
+        "work-added": [
+          26752,
+          13064
+        ],
+        "work-popped": [
+          26721,
+          13041
+        ]
+      },
+      "task": "mix038_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13368,
+          null
+        ],
+        "backward-queued": [
+          13367,
+          null
+        ],
+        "co-offered": [
+          82287,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          47,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          23284,
+          null
+        ],
+        "rf-offered": [
+          47859,
+          null
+        ],
+        "rf-queued": [
+          13390,
+          null
+        ],
+        "validity-queries": [
+          29769,
+          null
+        ],
+        "work-added": [
+          26757,
+          null
+        ],
+        "work-popped": [
+          26717,
+          null
+        ]
+      },
+      "task": "mix044.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix026_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix023_power.opt_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13478,
+          6728
+        ],
+        "backward-queued": [
+          13477,
+          6728
+        ],
+        "co-offered": [
+          85206,
+          42257
+        ],
+        "max-retained-work": [
+          53,
+          47
+        ],
+        "realized-revisit-prefixes": [
+          21810,
+          11077
+        ],
+        "rf-offered": [
+          49362,
+          24512
+        ],
+        "rf-queued": [
+          13491,
+          6742
+        ],
+        "validity-queries": [
+          25012,
+          13058
+        ],
+        "work-added": [
+          26968,
+          13470
+        ],
+        "work-popped": [
+          26942,
+          13445
+        ]
+      },
+      "task": "mix033_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14357,
+          7159
+        ],
+        "backward-queued": [
+          14357,
+          7159
+        ],
+        "co-offered": [
+          80057,
+          39976
+        ],
+        "max-retained-work": [
+          38,
+          35
+        ],
+        "realized-revisit-prefixes": [
+          24240,
+          12145
+        ],
+        "rf-offered": [
+          47223,
+          23589
+        ],
+        "rf-queued": [
+          14368,
+          7177
+        ],
+        "validity-queries": [
+          29659,
+          14965
+        ],
+        "work-added": [
+          28725,
+          14336
+        ],
+        "work-popped": [
+          28704,
+          14311
+        ]
+      },
+      "task": "safe009_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6739,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6754,
+          null
+        ],
+        "validity-queries": [
+          13908,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix002.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix026_power.opt_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6997,
+          null
+        ],
+        "backward-queued": [
+          6997,
+          null
+        ],
+        "co-offered": [
+          40555,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          41,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11885,
+          null
+        ],
+        "rf-offered": [
+          23790,
+          null
+        ],
+        "rf-queued": [
+          7004,
+          null
+        ],
+        "validity-queries": [
+          14676,
+          null
+        ],
+        "work-added": [
+          14001,
+          null
+        ],
+        "work-popped": [
+          13982,
+          null
+        ]
+      },
+      "task": "mix057_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6997,
+          null
+        ],
+        "backward-queued": [
+          6997,
+          null
+        ],
+        "co-offered": [
+          40555,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          41,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11885,
+          null
+        ],
+        "rf-offered": [
+          23790,
+          null
+        ],
+        "rf-queued": [
+          7004,
+          null
+        ],
+        "validity-queries": [
+          14676,
+          null
+        ],
+        "work-added": [
+          14001,
+          null
+        ],
+        "work-popped": [
+          13982,
+          null
+        ]
+      },
+      "task": "mix055_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix030_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix027_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix021_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix047_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix020.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix046.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix044_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix040_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix037_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix039.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6740,
+          null
+        ],
+        "co-offered": [
+          41666,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          44,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6753,
+          null
+        ],
+        "validity-queries": [
+          13906,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix008_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix021.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6740,
+          null
+        ],
+        "co-offered": [
+          41666,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          44,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6753,
+          null
+        ],
+        "validity-queries": [
+          13906,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix007.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6740,
+          null
+        ],
+        "co-offered": [
+          41666,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          44,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6753,
+          null
+        ],
+        "validity-queries": [
+          13906,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix005_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix014_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix020.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix013.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6740,
+          null
+        ],
+        "co-offered": [
+          41666,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          44,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6753,
+          null
+        ],
+        "validity-queries": [
+          13906,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix008.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6740,
+          null
+        ],
+        "co-offered": [
+          41666,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          44,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6753,
+          null
+        ],
+        "validity-queries": [
+          13906,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix005.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix014.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix013.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6997,
+          null
+        ],
+        "backward-queued": [
+          6997,
+          null
+        ],
+        "co-offered": [
+          40555,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          41,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11885,
+          null
+        ],
+        "rf-offered": [
+          23790,
+          null
+        ],
+        "rf-queued": [
+          7004,
+          null
+        ],
+        "validity-queries": [
+          14676,
+          null
+        ],
+        "work-added": [
+          14001,
+          null
+        ],
+        "work-popped": [
+          13982,
+          null
+        ]
+      },
+      "task": "thin002_power.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6739,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          41,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6754,
+          null
+        ],
+        "validity-queries": [
+          13908,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix001.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6986,
+          null
+        ],
+        "backward-queued": [
+          6986,
+          null
+        ],
+        "co-offered": [
+          40798,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          39,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11763,
+          null
+        ],
+        "rf-offered": [
+          23913,
+          null
+        ],
+        "rf-queued": [
+          7002,
+          null
+        ],
+        "validity-queries": [
+          14341,
+          null
+        ],
+        "work-added": [
+          13988,
+          null
+        ],
+        "work-popped": [
+          13962,
+          null
+        ]
+      },
+      "task": "safe032_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          7160,
+          null
+        ],
+        "backward-queued": [
+          7159,
+          null
+        ],
+        "co-offered": [
+          39976,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          38,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          12143,
+          null
+        ],
+        "rf-offered": [
+          23593,
+          null
+        ],
+        "rf-queued": [
+          7179,
+          null
+        ],
+        "validity-queries": [
+          14963,
+          null
+        ],
+        "work-added": [
+          14338,
+          null
+        ],
+        "work-popped": [
+          14308,
+          null
+        ]
+      },
+      "task": "safe019_power.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6997,
+          null
+        ],
+        "backward-queued": [
+          6997,
+          null
+        ],
+        "co-offered": [
+          40555,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          38,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11885,
+          null
+        ],
+        "rf-offered": [
+          23790,
+          null
+        ],
+        "rf-queued": [
+          7004,
+          null
+        ],
+        "validity-queries": [
+          14676,
+          null
+        ],
+        "work-added": [
+          14001,
+          null
+        ],
+        "work-popped": [
+          13982,
+          null
+        ]
+      },
+      "task": "safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          53592,
+          30630
+        ],
+        "backward-queued": [
+          53592,
+          30630
+        ],
+        "co-offered": [
+          63631,
+          36347
+        ],
+        "realized-revisit-prefixes": [
+          99351,
+          56754
+        ],
+        "rf-offered": [
+          384074,
+          219515
+        ],
+        "rf-queued": [
+          53592,
+          30633
+        ],
+        "validity-queries": [
+          91523,
+          52254
+        ],
+        "work-added": [
+          107184,
+          61263
+        ],
+        "work-popped": [
+          107180,
+          61254
+        ]
+      },
+      "task": "elimination_backoff_stack"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          11753,
+          5879
+        ],
+        "backward-queued": [
+          11753,
+          5879
+        ],
+        "co-offered": [
+          86635,
+          43311
+        ],
+        "max-retained-work": [
+          62,
+          61
+        ],
+        "realized-revisit-prefixes": [
+          21383,
+          10691
+        ],
+        "rf-offered": [
+          49216,
+          24616
+        ],
+        "rf-queued": [
+          11768,
+          5893
+        ],
+        "validity-queries": [
+          28903,
+          14449
+        ],
+        "work-added": [
+          23521,
+          11772
+        ],
+        "work-popped": [
+          23493,
+          11745
+        ]
+      },
+      "task": "triangular-longer-2"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          43340,
+          21387
+        ],
+        "backward-queued": [
+          43340,
+          21387
+        ],
+        "co-offered": [
+          239366,
+          119612
+        ],
+        "max-retained-work": [
+          45,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          73085,
+          36622
+        ],
+        "rf-offered": [
+          141376,
+          70522
+        ],
+        "rf-queued": [
+          43359,
+          21404
+        ],
+        "validity-queries": [
+          89245,
+          45714
+        ],
+        "work-added": [
+          86699,
+          42791
+        ],
+        "work-popped": [
+          86673,
+          42765
+        ]
+      },
+      "task": "safe017_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          43340,
+          21387
+        ],
+        "backward-queued": [
+          43340,
+          21387
+        ],
+        "co-offered": [
+          239366,
+          119612
+        ],
+        "max-retained-work": [
+          45,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          73085,
+          36622
+        ],
+        "rf-offered": [
+          141376,
+          70522
+        ],
+        "rf-queued": [
+          43359,
+          21404
+        ],
+        "validity-queries": [
+          89245,
+          45714
+        ],
+        "work-added": [
+          86699,
+          42791
+        ],
+        "work-popped": [
+          86673,
+          42765
+        ]
+      },
+      "task": "safe026_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          43616,
+          21626
+        ],
+        "backward-queued": [
+          43616,
+          21626
+        ],
+        "co-offered": [
+          240088,
+          119801
+        ],
+        "max-retained-work": [
+          44,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          72678,
+          36486
+        ],
+        "rf-offered": [
+          141878,
+          70741
+        ],
+        "rf-queued": [
+          43637,
+          21649
+        ],
+        "validity-queries": [
+          87192,
+          44589
+        ],
+        "work-added": [
+          87253,
+          43275
+        ],
+        "work-popped": [
+          87226,
+          43243
+        ]
+      },
+      "task": "safe009_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe001_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe008_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          43340,
+          21387
+        ],
+        "backward-queued": [
+          43340,
+          21387
+        ],
+        "co-offered": [
+          239367,
+          119612
+        ],
+        "max-retained-work": [
+          46,
+          39
+        ],
+        "realized-revisit-prefixes": [
+          73085,
+          36622
+        ],
+        "rf-offered": [
+          141378,
+          70523
+        ],
+        "rf-queued": [
+          43360,
+          21403
+        ],
+        "validity-queries": [
+          89244,
+          45714
+        ],
+        "work-added": [
+          86700,
+          42790
+        ],
+        "work-popped": [
+          86671,
+          42765
+        ]
+      },
+      "task": "safe020_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80349
+        ],
+        "max-retained-work": [
+          46,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          60584,
+          24134
+        ],
+        "rf-offered": [
+          118010,
+          47248
+        ],
+        "rf-queued": [
+          35764,
+          14113
+        ],
+        "validity-queries": [
+          74497,
+          30139
+        ],
+        "work-added": [
+          71519,
+          28205
+        ],
+        "work-popped": [
+          71501,
+          28172
+        ]
+      },
+      "task": "safe013_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe002_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe012_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35360,
+          13999
+        ],
+        "backward-queued": [
+          35360,
+          13999
+        ],
+        "co-offered": [
+          202166,
+          82060
+        ],
+        "max-retained-work": [
+          45,
+          44
+        ],
+        "realized-revisit-prefixes": [
+          59684,
+          23299
+        ],
+        "rf-offered": [
+          118782,
+          48043
+        ],
+        "rf-queued": [
+          35374,
+          14006
+        ],
+        "validity-queries": [
+          72982,
+          27912
+        ],
+        "work-added": [
+          70734,
+          28005
+        ],
+        "work-popped": [
+          70710,
+          27986
+        ]
+      },
+      "task": "safe032_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80350
+        ],
+        "max-retained-work": [
+          45,
+          37
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          24134
+        ],
+        "rf-offered": [
+          118008,
+          47248
+        ],
+        "rf-queued": [
+          35763,
+          14112
+        ],
+        "validity-queries": [
+          74498,
+          30138
+        ],
+        "work-added": [
+          71518,
+          28204
+        ],
+        "work-popped": [
+          71502,
+          28172
+        ]
+      },
+      "task": "safe014_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80349
+        ],
+        "max-retained-work": [
+          46,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          60584,
+          24134
+        ],
+        "rf-offered": [
+          118010,
+          47248
+        ],
+        "rf-queued": [
+          35764,
+          14113
+        ],
+        "validity-queries": [
+          74497,
+          30139
+        ],
+        "work-added": [
+          71519,
+          28205
+        ],
+        "work-popped": [
+          71501,
+          28172
+        ]
+      },
+      "task": "safe005_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          14092
+        ],
+        "backward-queued": [
+          35755,
+          14092
+        ],
+        "co-offered": [
+          200237,
+          80349
+        ],
+        "max-retained-work": [
+          46,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          60584,
+          24134
+        ],
+        "rf-offered": [
+          118010,
+          47248
+        ],
+        "rf-queued": [
+          35764,
+          14113
+        ],
+        "validity-queries": [
+          74497,
+          30139
+        ],
+        "work-added": [
+          71519,
+          28205
+        ],
+        "work-popped": [
+          71501,
+          28172
+        ]
+      },
+      "task": "safe024_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          27806,
+          6740
+        ],
+        "backward-queued": [
+          27806,
+          6739
+        ],
+        "co-offered": [
+          163694,
+          41664
+        ],
+        "max-retained-work": [
+          47,
+          41
+        ],
+        "realized-revisit-prefixes": [
+          46842,
+          11370
+        ],
+        "rf-offered": [
+          95780,
+          24224
+        ],
+        "rf-queued": [
+          27830,
+          6754
+        ],
+        "validity-queries": [
+          57120,
+          13908
+        ],
+        "work-added": [
+          55636,
+          13493
+        ],
+        "work-popped": [
+          55600,
+          13464
+        ]
+      },
+      "task": "safe037"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          29011,
+          14358
+        ],
+        "backward-queued": [
+          29011,
+          14358
+        ],
+        "co-offered": [
+          159859,
+          80056
+        ],
+        "max-retained-work": [
+          45,
+          41
+        ],
+        "realized-revisit-prefixes": [
+          48561,
+          24240
+        ],
+        "rf-offered": [
+          94458,
+          47224
+        ],
+        "rf-queued": [
+          29029,
+          14369
+        ],
+        "validity-queries": [
+          58659,
+          29658
+        ],
+        "work-added": [
+          58040,
+          28727
+        ],
+        "work-popped": [
+          58013,
+          28704
+        ]
+      },
+      "task": "safe016_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          29011,
+          14358
+        ],
+        "backward-queued": [
+          29011,
+          14358
+        ],
+        "co-offered": [
+          159859,
+          80056
+        ],
+        "max-retained-work": [
+          45,
+          41
+        ],
+        "realized-revisit-prefixes": [
+          48561,
+          24240
+        ],
+        "rf-offered": [
+          94458,
+          47224
+        ],
+        "rf-queued": [
+          29029,
+          14369
+        ],
+        "validity-queries": [
+          58659,
+          29658
+        ],
+        "work-added": [
+          58040,
+          28727
+        ],
+        "work-popped": [
+          58013,
+          28704
+        ]
+      },
+      "task": "safe019_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          28581,
+          6997
+        ],
+        "backward-queued": [
+          28581,
+          6997
+        ],
+        "co-offered": [
+          159976,
+          40555
+        ],
+        "max-retained-work": [
+          46,
+          41
+        ],
+        "realized-revisit-prefixes": [
+          48577,
+          11885
+        ],
+        "rf-offered": [
+          94293,
+          23790
+        ],
+        "rf-queued": [
+          28589,
+          7004
+        ],
+        "validity-queries": [
+          60001,
+          14676
+        ],
+        "work-added": [
+          57170,
+          14001
+        ],
+        "work-popped": [
+          57149,
+          13982
+        ]
+      },
+      "task": "thin002_pso.oepc_pso.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          2362695,
+          2167371
+        ],
+        "backward-queued": [
+          11153,
+          10266
+        ],
+        "co-offered": [
+          420522,
+          387608
+        ],
+        "co-queued": [
+          322765,
+          297520
+        ],
+        "realized-revisit-prefixes": [
+          409634,
+          377574
+        ],
+        "rf-offered": [
+          86640,
+          79850
+        ],
+        "rf-queued": [
+          75759,
+          69821
+        ],
+        "validity-queries": [
+          420509,
+          387597
+        ],
+        "work-added": [
+          409678,
+          377608
+        ],
+        "work-popped": [
+          409635,
+          377574
+        ]
+      },
+      "task": "exponential-4"
+    },
+    {
+      "differences": {
+        "category": [
+          "correct",
+          "error"
+        ],
+        "status": [
+          "false(unreach-call)",
+          "TIMEOUT (false(unreach-call))"
+        ]
+      },
+      "task": "mix031.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13999,
+          6986
+        ],
+        "backward-queued": [
+          13999,
+          6986
+        ],
+        "co-offered": [
+          82060,
+          40798
+        ],
+        "max-retained-work": [
+          44,
+          39
+        ],
+        "realized-revisit-prefixes": [
+          23299,
+          11763
+        ],
+        "rf-offered": [
+          48043,
+          23913
+        ],
+        "rf-queued": [
+          14006,
+          7002
+        ],
+        "validity-queries": [
+          27912,
+          14341
+        ],
+        "work-added": [
+          28005,
+          13988
+        ],
+        "work-popped": [
+          27986,
+          13962
+        ]
+      },
+      "task": "safe034_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13366,
+          6527
+        ],
+        "backward-queued": [
+          13366,
+          6527
+        ],
+        "co-offered": [
+          82290,
+          41664
+        ],
+        "max-retained-work": [
+          43,
+          39
+        ],
+        "realized-revisit-prefixes": [
+          23285,
+          11408
+        ],
+        "rf-offered": [
+          47854,
+          24112
+        ],
+        "rf-queued": [
+          13386,
+          6537
+        ],
+        "validity-queries": [
+          29769,
+          14656
+        ],
+        "work-added": [
+          26752,
+          13064
+        ],
+        "work-popped": [
+          26721,
+          13041
+        ]
+      },
+      "task": "mix038.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13366,
+          6527
+        ],
+        "backward-queued": [
+          13366,
+          6527
+        ],
+        "co-offered": [
+          82290,
+          41664
+        ],
+        "max-retained-work": [
+          43,
+          39
+        ],
+        "realized-revisit-prefixes": [
+          23285,
+          11408
+        ],
+        "rf-offered": [
+          47854,
+          24112
+        ],
+        "rf-queued": [
+          13386,
+          6537
+        ],
+        "validity-queries": [
+          29769,
+          14656
+        ],
+        "work-added": [
+          26752,
+          13064
+        ],
+        "work-popped": [
+          26721,
+          13041
+        ]
+      },
+      "task": "mix035_pso.opt_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80349,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14113,
+          7004
+        ],
+        "validity-queries": [
+          30139,
+          14676
+        ],
+        "work-added": [
+          28205,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe031_power.opt_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80349,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14113,
+          7004
+        ],
+        "validity-queries": [
+          30139,
+          14676
+        ],
+        "work-added": [
+          28205,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe031_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14093,
+          6997
+        ],
+        "backward-queued": [
+          14093,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30137,
+          14676
+        ],
+        "work-added": [
+          28205,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "mix051_pso.opt_rmo.opt_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe012_pso.oepc_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13879,
+          6841
+        ],
+        "backward-queued": [
+          13879,
+          6841
+        ],
+        "co-offered": [
+          81325,
+          40740
+        ],
+        "max-retained-work": [
+          43,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          23688,
+          11820
+        ],
+        "rf-offered": [
+          47611,
+          23800
+        ],
+        "rf-queued": [
+          13882,
+          6846
+        ],
+        "validity-queries": [
+          29437,
+          14946
+        ],
+        "work-added": [
+          27761,
+          13687
+        ],
+        "work-popped": [
+          27748,
+          13673
+        ]
+      },
+      "task": "mix025_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80349,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14113,
+          7004
+        ],
+        "validity-queries": [
+          30139,
+          14676
+        ],
+        "work-added": [
+          28205,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe024_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13366,
+          6527
+        ],
+        "backward-queued": [
+          13366,
+          6527
+        ],
+        "co-offered": [
+          82290,
+          41664
+        ],
+        "max-retained-work": [
+          43,
+          39
+        ],
+        "realized-revisit-prefixes": [
+          23285,
+          11408
+        ],
+        "rf-offered": [
+          47854,
+          24112
+        ],
+        "rf-queued": [
+          13386,
+          6537
+        ],
+        "validity-queries": [
+          29769,
+          14656
+        ],
+        "work-added": [
+          26752,
+          13064
+        ],
+        "work-popped": [
+          26721,
+          13041
+        ]
+      },
+      "task": "mix042.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix040.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13879,
+          6841
+        ],
+        "backward-queued": [
+          13879,
+          6841
+        ],
+        "co-offered": [
+          81325,
+          40740
+        ],
+        "max-retained-work": [
+          43,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          23688,
+          11820
+        ],
+        "rf-offered": [
+          47611,
+          23800
+        ],
+        "rf-queued": [
+          13882,
+          6846
+        ],
+        "validity-queries": [
+          29437,
+          14946
+        ],
+        "work-added": [
+          27761,
+          13687
+        ],
+        "work-popped": [
+          27748,
+          13673
+        ]
+      },
+      "task": "mix016_power.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix037.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe011_power.opt_pso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14093,
+          6997
+        ],
+        "backward-queued": [
+          14093,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30137,
+          14676
+        ],
+        "work-added": [
+          28205,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "mix057_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "mix052_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14092,
+          6997
+        ],
+        "backward-queued": [
+          14092,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30138,
+          14676
+        ],
+        "work-added": [
+          28204,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "safe021_power.opt_pso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          14093,
+          6997
+        ],
+        "backward-queued": [
+          14093,
+          6997
+        ],
+        "co-offered": [
+          80350,
+          40555
+        ],
+        "realized-revisit-prefixes": [
+          24134,
+          11885
+        ],
+        "rf-offered": [
+          47248,
+          23790
+        ],
+        "rf-queued": [
+          14112,
+          7004
+        ],
+        "validity-queries": [
+          30137,
+          14676
+        ],
+        "work-added": [
+          28205,
+          14001
+        ],
+        "work-popped": [
+          28172,
+          13982
+        ]
+      },
+      "task": "mix055.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          9932,
+          6997
+        ],
+        "backward-queued": [
+          9932,
+          6997
+        ],
+        "category": [
+          "correct",
+          "error"
+        ],
+        "co-offered": [
+          57318,
+          40555
+        ],
+        "complete": [
+          1054,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          16999,
+          11885
+        ],
+        "rf-offered": [
+          33643,
+          23790
+        ],
+        "rf-queued": [
+          9944,
+          7004
+        ],
+        "status": [
+          "false(unreach-call)",
+          "TIMEOUT"
+        ],
+        "validity-queries": [
+          21210,
+          14676
+        ],
+        "work-added": [
+          19877,
+          14001
+        ],
+        "work-popped": [
+          19853,
+          13982
+        ]
+      },
+      "task": "mix052_power.oepc_power.opt_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13879,
+          6841
+        ],
+        "backward-queued": [
+          13879,
+          6841
+        ],
+        "co-offered": [
+          81325,
+          40740
+        ],
+        "max-retained-work": [
+          43,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          23688,
+          11820
+        ],
+        "rf-offered": [
+          47611,
+          23800
+        ],
+        "rf-queued": [
+          13882,
+          6846
+        ],
+        "validity-queries": [
+          29437,
+          14946
+        ],
+        "work-added": [
+          27761,
+          13687
+        ],
+        "work-popped": [
+          27748,
+          13673
+        ]
+      },
+      "task": "mix028_power.opt_pso.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13879,
+          6841
+        ],
+        "backward-queued": [
+          13879,
+          6841
+        ],
+        "co-offered": [
+          81325,
+          40740
+        ],
+        "max-retained-work": [
+          43,
+          38
+        ],
+        "realized-revisit-prefixes": [
+          23688,
+          11820
+        ],
+        "rf-offered": [
+          47611,
+          23800
+        ],
+        "rf-queued": [
+          13882,
+          6846
+        ],
+        "validity-queries": [
+          29437,
+          14946
+        ],
+        "work-added": [
+          27761,
+          13687
+        ],
+        "work-popped": [
+          27748,
+          13673
+        ]
+      },
+      "task": "mix019_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          9932,
+          6997
+        ],
+        "backward-queued": [
+          9932,
+          6997
+        ],
+        "category": [
+          "correct",
+          "error"
+        ],
+        "co-offered": [
+          57318,
+          40555
+        ],
+        "complete": [
+          1054,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          16999,
+          11885
+        ],
+        "rf-offered": [
+          33643,
+          23790
+        ],
+        "rf-queued": [
+          9944,
+          7004
+        ],
+        "status": [
+          "false(unreach-call)",
+          "TIMEOUT"
+        ],
+        "validity-queries": [
+          21210,
+          14676
+        ],
+        "work-added": [
+          19877,
+          14001
+        ],
+        "work-popped": [
+          19853,
+          13982
+        ]
+      },
+      "task": "mix049_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt-podwr001_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13368,
+          null
+        ],
+        "backward-queued": [
+          13367,
+          null
+        ],
+        "co-offered": [
+          82287,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          47,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          23284,
+          null
+        ],
+        "rf-offered": [
+          47859,
+          null
+        ],
+        "rf-queued": [
+          13390,
+          null
+        ],
+        "validity-queries": [
+          29769,
+          null
+        ],
+        "work-added": [
+          26757,
+          null
+        ],
+        "work-popped": [
+          26717,
+          null
+        ]
+      },
+      "task": "mix046.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13368,
+          null
+        ],
+        "backward-queued": [
+          13367,
+          null
+        ],
+        "co-offered": [
+          82287,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          47,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          23284,
+          null
+        ],
+        "rf-offered": [
+          47859,
+          null
+        ],
+        "rf-queued": [
+          13390,
+          null
+        ],
+        "validity-queries": [
+          29769,
+          null
+        ],
+        "work-added": [
+          26757,
+          null
+        ],
+        "work-popped": [
+          26717,
+          null
+        ]
+      },
+      "task": "mix043.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix017_power.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          13587,
+          6799
+        ],
+        "backward-queued": [
+          13587,
+          6799
+        ],
+        "co-offered": [
+          83937,
+          42675
+        ],
+        "realized-revisit-prefixes": [
+          22427,
+          10860
+        ],
+        "rf-offered": [
+          48784,
+          24745
+        ],
+        "rf-queued": [
+          13600,
+          6802
+        ],
+        "validity-queries": [
+          26530,
+          12193
+        ],
+        "work-added": [
+          27187,
+          13601
+        ],
+        "work-popped": [
+          27164,
+          13588
+        ]
+      },
+      "task": "mix011_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix036_power.opt_rmo.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6728,
+          null
+        ],
+        "backward-queued": [
+          6728,
+          null
+        ],
+        "co-offered": [
+          42257,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          47,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11077,
+          null
+        ],
+        "rf-offered": [
+          24512,
+          null
+        ],
+        "rf-queued": [
+          6742,
+          null
+        ],
+        "validity-queries": [
+          13058,
+          null
+        ],
+        "work-added": [
+          13470,
+          null
+        ],
+        "work-popped": [
+          13445,
+          null
+        ]
+      },
+      "task": "mix033_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6728,
+          null
+        ],
+        "backward-queued": [
+          6728,
+          null
+        ],
+        "co-offered": [
+          42257,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          47,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11077,
+          null
+        ],
+        "rf-offered": [
+          24512,
+          null
+        ],
+        "rf-queued": [
+          6742,
+          null
+        ],
+        "validity-queries": [
+          13058,
+          null
+        ],
+        "work-added": [
+          13470,
+          null
+        ],
+        "work-popped": [
+          13445,
+          null
+        ]
+      },
+      "task": "mix032.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix040_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6997,
+          null
+        ],
+        "backward-queued": [
+          6997,
+          null
+        ],
+        "co-offered": [
+          40555,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          41,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11885,
+          null
+        ],
+        "rf-offered": [
+          23790,
+          null
+        ],
+        "rf-queued": [
+          7004,
+          null
+        ],
+        "validity-queries": [
+          14676,
+          null
+        ],
+        "work-added": [
+          14001,
+          null
+        ],
+        "work-popped": [
+          13982,
+          null
+        ]
+      },
+      "task": "mix053_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6799,
+          null
+        ],
+        "backward-queued": [
+          6799,
+          null
+        ],
+        "co-offered": [
+          42675,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          46,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          10860,
+          null
+        ],
+        "rf-offered": [
+          24745,
+          null
+        ],
+        "rf-queued": [
+          6802,
+          null
+        ],
+        "validity-queries": [
+          12193,
+          null
+        ],
+        "work-added": [
+          13601,
+          null
+        ],
+        "work-popped": [
+          13588,
+          null
+        ]
+      },
+      "task": "mix011.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6997,
+          null
+        ],
+        "backward-queued": [
+          6997,
+          null
+        ],
+        "co-offered": [
+          40555,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          41,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11885,
+          null
+        ],
+        "rf-offered": [
+          23790,
+          null
+        ],
+        "rf-queued": [
+          7004,
+          null
+        ],
+        "validity-queries": [
+          14676,
+          null
+        ],
+        "work-added": [
+          14001,
+          null
+        ],
+        "work-popped": [
+          13982,
+          null
+        ]
+      },
+      "task": "mix051_power.oepc_power.opt_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6799,
+          null
+        ],
+        "backward-queued": [
+          6799,
+          null
+        ],
+        "co-offered": [
+          42675,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          46,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          10860,
+          null
+        ],
+        "rf-offered": [
+          24745,
+          null
+        ],
+        "rf-queued": [
+          6802,
+          null
+        ],
+        "validity-queries": [
+          12193,
+          null
+        ],
+        "work-added": [
+          13601,
+          null
+        ],
+        "work-popped": [
+          13588,
+          null
+        ]
+      },
+      "task": "mix010.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6997,
+          null
+        ],
+        "backward-queued": [
+          6997,
+          null
+        ],
+        "co-offered": [
+          40555,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          41,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11885,
+          null
+        ],
+        "rf-offered": [
+          23790,
+          null
+        ],
+        "rf-queued": [
+          7004,
+          null
+        ],
+        "validity-queries": [
+          14676,
+          null
+        ],
+        "work-added": [
+          14001,
+          null
+        ],
+        "work-popped": [
+          13982,
+          null
+        ]
+      },
+      "task": "mix050"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix027_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix029_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6739,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          41,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6754,
+          null
+        ],
+        "validity-queries": [
+          13908,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix001.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix026.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix018_tso.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix018_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix044_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6739,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6754,
+          null
+        ],
+        "validity-queries": [
+          13908,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix002.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix017.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix043.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix023_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix037_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6528,
+          null
+        ],
+        "backward-queued": [
+          6527,
+          null
+        ],
+        "co-offered": [
+          41664,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          43,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11406,
+          null
+        ],
+        "rf-offered": [
+          24116,
+          null
+        ],
+        "rf-queued": [
+          6539,
+          null
+        ],
+        "validity-queries": [
+          14654,
+          null
+        ],
+        "work-added": [
+          13066,
+          null
+        ],
+        "work-popped": [
+          13038,
+          null
+        ]
+      },
+      "task": "mix036.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6740,
+          null
+        ],
+        "co-offered": [
+          41666,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          44,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6753,
+          null
+        ],
+        "validity-queries": [
+          13906,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix005_power.oepc_pso.oepc_rmo.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix018.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6740,
+          null
+        ],
+        "co-offered": [
+          41666,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          44,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6753,
+          null
+        ],
+        "validity-queries": [
+          13906,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix004.oepc"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix017_pso.opt_tso.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6740,
+          null
+        ],
+        "co-offered": [
+          41666,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          44,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6753,
+          null
+        ],
+        "validity-queries": [
+          13906,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix007.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6740,
+          null
+        ],
+        "backward-queued": [
+          6740,
+          null
+        ],
+        "co-offered": [
+          41666,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          44,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11370,
+          null
+        ],
+        "rf-offered": [
+          24224,
+          null
+        ],
+        "rf-queued": [
+          6753,
+          null
+        ],
+        "validity-queries": [
+          13906,
+          null
+        ],
+        "work-added": [
+          13493,
+          null
+        ],
+        "work-popped": [
+          13464,
+          null
+        ]
+      },
+      "task": "mix004.opt"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          6843,
+          null
+        ],
+        "backward-queued": [
+          6842,
+          null
+        ],
+        "co-offered": [
+          40740,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          42,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          11818,
+          null
+        ],
+        "rf-offered": [
+          23804,
+          null
+        ],
+        "rf-queued": [
+          6848,
+          null
+        ],
+        "validity-queries": [
+          14942,
+          null
+        ],
+        "work-added": [
+          13690,
+          null
+        ],
+        "work-popped": [
+          13671,
+          null
+        ]
+      },
+      "task": "mix030_tso"
+    },
+    {
+      "differences": {
+        "backward-offered": [
+          7160,
+          null
+        ],
+        "backward-queued": [
+          7159,
+          null
+        ],
+        "co-offered": [
+          39976,
+          null
+        ],
+        "co-queued": [
+          0,
+          null
+        ],
+        "inconsistent-revisit-prefixes": [
+          0,
+          null
+        ],
+        "max-retained-work": [
+          38,
+          null
+        ],
+        "realized-revisit-prefixes": [
+          12143,
+          null
+        ],
+        "rf-offered": [
+          23593,
+          null
+        ],
+        "rf-queued": [
+          7179,
+          null
+        ],
+        "validity-queries": [
+          14963,
+          null
+        ],
+        "work-added": [
+          14338,
+          null
+        ],
+        "work-popped": [
+          14308,
+          null
+        ]
+      },
+      "task": "safe027_power.opt"
+    }
+  ],
+  "rows": 1450,
+  "status_counts": {
+    "v10": {
+      "ABORTED": 2,
+      "ERROR (compilation)": 13,
+      "ERROR (unsupported external)": 2,
+      "ERROR (unsupported property: invalid memory access)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "OUT OF MEMORY": 22,
+      "SEGMENTATION FAULT": 1,
+      "TIMEOUT": 280,
+      "TIMEOUT (false(unreach-call))": 1,
+      "false(unreach-call)": 107,
+      "true": 289
+    },
+    "v9": {
+      "ABORTED": 2,
+      "ERROR (17)": 1,
+      "ERROR (compilation)": 13,
+      "ERROR (unsupported external)": 2,
+      "ERROR (unsupported property: invalid memory access)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "OUT OF MEMORY": 22,
+      "SEGMENTATION FAULT": 1,
+      "TIMEOUT": 276,
+      "false(unreach-call)": 112,
+      "true": 288
+    }
+  },
+  "tasks": 725,
+  "v10_activated_tasks": 158,
+  "v10_core_totals": {
+    "conflict-core-co-pruned": 9809691,
+    "conflict-core-direct-checks-avoided": 0,
+    "conflict-core-duplicate-subsumed": 21555,
+    "conflict-core-evicted": 7112,
+    "conflict-core-hits": 14193035,
+    "conflict-core-learn-attempts": 259523,
+    "conflict-core-learned": 68812,
+    "conflict-core-literal-checks": 8600686460,
+    "conflict-core-match-queries": 18299835,
+    "conflict-core-max-bytes": 31371968,
+    "conflict-core-max-clauses": 61700,
+    "conflict-core-max-literals": 1960748,
+    "conflict-core-rf-pruned": 4383344,
+    "conflict-core-unsupported": 169156
+  }
+}

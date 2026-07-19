@@ -1,0 +1,215 @@
+{
+  "counters": {
+    "all-pruned-fallbacks": 0,
+    "co-candidates": 9487900,
+    "co-pruned": 9062444,
+    "lookup-ns": 7789954757,
+    "prefix-inconsistent": 0,
+    "prefix-queries": 1255180,
+    "prune_rate": 0.784610963669679,
+    "records_with_final_stats": 344,
+    "rf-candidates": 8593856,
+    "rf-pruned": 5124700
+  },
+  "design": {
+    "cells": 768,
+    "repetitions": 4,
+    "tasks": 96
+  },
+  "metrics": {
+    "cpu": {
+      "bootstrap_95ci": [
+        0.8760932280657531,
+        1.0507798547277847
+      ],
+      "faster": 35,
+      "geomean_ratio": 0.9584099932871877,
+      "median_ratio": 1.0082717309428046,
+      "slower": 46,
+      "tasks": 81
+    },
+    "rss": {
+      "bootstrap_95ci": [
+        0.9999367745721905,
+        1.0005889412538473
+      ],
+      "faster": 38,
+      "geomean_ratio": 1.0002670003335696,
+      "median_ratio": 1.000235423369693,
+      "slower": 43,
+      "tasks": 81
+    },
+    "wall": {
+      "bootstrap_95ci": [
+        0.8774126265047469,
+        1.0511840015483709
+      ],
+      "faster": 31,
+      "geomean_ratio": 0.9595564910816289,
+      "median_ratio": 1.012890033798983,
+      "slower": 50,
+      "tasks": 81
+    }
+  },
+  "safe_execution_count_mismatches": [],
+  "status_counts": {
+    "baseline": {
+      "OUT OF MEMORY": 20,
+      "TIMEOUT": 36,
+      "false(unreach-call)": 104,
+      "true": 224
+    },
+    "pruning": {
+      "OUT OF MEMORY": 24,
+      "TIMEOUT": 16,
+      "false(unreach-call)": 108,
+      "true": 236
+    }
+  },
+  "status_mismatches": [
+    [
+      "01",
+      "goblint-regression/28-race_reach_21-deref_read_racing.yml",
+      "false(unreach-call)",
+      "OUT OF MEMORY"
+    ],
+    [
+      "01",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "01",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "01",
+      "pthread/fib_unsafe-5.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "01",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "01",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "02",
+      "goblint-regression/28-race_reach_21-deref_read_racing.yml",
+      "false(unreach-call)",
+      "OUT OF MEMORY"
+    ],
+    [
+      "02",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "02",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "02",
+      "pthread/fib_unsafe-5.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "02",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "02",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "03",
+      "goblint-regression/28-race_reach_21-deref_read_racing.yml",
+      "false(unreach-call)",
+      "OUT OF MEMORY"
+    ],
+    [
+      "03",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "03",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "03",
+      "pthread/fib_unsafe-5.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "03",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "03",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "04",
+      "goblint-regression/28-race_reach_21-deref_read_racing.yml",
+      "false(unreach-call)",
+      "OUT OF MEMORY"
+    ],
+    [
+      "04",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "04",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "04",
+      "pthread/fib_unsafe-5.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "04",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "04",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ]
+  ]
+}

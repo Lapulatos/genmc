@@ -1,0 +1,64 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/experiments/caat-optimization/sc-rvf-exploration/source/optimization-analysis/core-direction-review-20260718/finite-sc-completion-panel.xml
+name:                    finite-sc-completion-panel
+run sets:                abstract-cardinality-sc.panel
+date:                    Sat, 2026-07-18 09:33:51 UTC
+tool:                    GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/sc-rvf-exploration/source/optimization-analysis/continuous/candidate-equivalence-quotient/formal-wrapper.sh
+options:                 --disable-estimation --disable-mm-detector
+parallel runs:           15
+resource limits:
+- memory:                4000.0 MB
+- time:                  20 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    dde7b6d8eb22
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.736896 MB
+------------------------------------------------------------
+
+
+
+abstract-cardinality-sc.panel
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --finite-skeleton-first-model=abstract-cardinality-sc --finite-skeleton-solve-max=1000' and propertyfile 'None'
+
+inputfile                                                             status                       cpu time   wall time        host
+-----------------------------------------------------------------------------------------------------------------------------------
+rfi005.yml                                                            TIMEOUT                         21.02       21.04        None
+safe029_power.oepc_pso.oepc_rmo.oepc.yml                              TIMEOUT                         21.03       21.04        None
+mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml                     TIMEOUT                         21.06       21.07        None
+safe029_tso.yml                                                       ERROR                            0.59        0.60        None
+safe010_tso.yml                                                       ERROR                            1.46        1.47        None
+safe004_power.oepc_pso.oepc_rmo.oepc.yml                              TIMEOUT                         21.02       21.03        None
+mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml              TIMEOUT                         21.07       21.07        None
+mix035.oepc.yml                                                       TIMEOUT                         21.06       21.06        None
+rfi002_tso.yml                                                        TIMEOUT                         21.01       21.02        None
+safe017_tso.yml                                                       TIMEOUT                         21.01       21.02        None
+safe035_power.yml                                                     TIMEOUT                         21.02       21.03        None
+mix023_tso.yml                                                        TIMEOUT                         21.01       21.02        None
+mix014_tso.oepc.yml                                                   TIMEOUT                         21.01       21.02        None
+mix008_tso.oepc.yml                                                   TIMEOUT                         21.01       21.02        None
+safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml    TIMEOUT                         21.00       21.01        None
+-----------------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                             done                           275.41       21.31           -
+
+Statistics:             15 Files
+  correct:               0
+    correct true:        0
+    correct false:       0
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:              15
+  Score:                 0 (max: 20)

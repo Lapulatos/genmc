@@ -1,0 +1,77 @@
+{
+  "by_backend": {
+    "caat-pso": {
+      "category": {
+        "correct": 79,
+        "error": 17
+      },
+      "completed": 79,
+      "runs": 96,
+      "status": {
+        "TIMEOUT": 17,
+        "false(unreach-call)": 25,
+        "true": 54
+      }
+    },
+    "caat-sc": {
+      "category": {
+        "correct": 90,
+        "error": 6
+      },
+      "completed": 90,
+      "runs": 96,
+      "status": {
+        "OUT OF MEMORY": 2,
+        "TIMEOUT": 4,
+        "false(unreach-call)": 29,
+        "true": 61
+      }
+    },
+    "caat-tso": {
+      "category": {
+        "correct": 89,
+        "error": 7
+      },
+      "completed": 89,
+      "runs": 96,
+      "status": {
+        "OUT OF MEMORY": 2,
+        "TIMEOUT": 5,
+        "false(unreach-call)": 28,
+        "true": 61
+      }
+    }
+  },
+  "metadata": [
+    {
+      "backend": "caat-pso",
+      "date": "2026-07-15 04:47:41 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/v2-micro-after/psoperf-after-pso.2026-07-15_04-47-41.results.caat-pso.r01.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r01",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-sc",
+      "date": "2026-07-15 04:45:31 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/v2-micro-after/scperf-after-sc.2026-07-15_04-45-31.results.caat-sc.r01.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r01",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-tso",
+      "date": "2026-07-15 04:46:37 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/v2-micro-after/tsoperf-after-tso.2026-07-15_04-46-37.results.caat-tso.r01.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r01",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "baseline_memory_p90_bytes": 26230784.0,
+  "baseline_nonterminal_candidate_terminal": 4,
+  "by_model": {
+    "pso": {
+      "cpu_geomean_of_task_medians": 1.0050414331094188,
+      "task_model_count": 84
+    },
+    "sc": {
+      "cpu_geomean_of_task_medians": 1.0071937680179879,
+      "task_model_count": 95
+    },
+    "tso": {
+      "cpu_geomean_of_task_medians": 1.0225203777508893,
+      "task_model_count": 90
+    }
+  },
+  "candidate_learned_task_repetitions": 28,
+  "candidate_memory_p90_bytes": 26288128.0,
+  "candidate_nonterminal_baseline_terminal": 0,
+  "candidate_stat_logs": 1080,
+  "candidate_stats": {
+    "lazy-cycle-checks": 3735072,
+    "nogood-explanation-warmup-skips": 35992,
+    "nogood-hits": 2497872,
+    "nogood-learn-attempts": 228,
+    "nogood-learned": 220,
+    "nogood-literal-checks": 42245576,
+    "nogood-match-queries": 6094568,
+    "nogood-maximum-bytes": 87400,
+    "provenance-materialization-ns": 106028443,
+    "provenance-materialization-ops": 8952,
+    "provenance-materializations": 224,
+    "reasoner-calls": 228,
+    "reasoner-composition-middles": 525746880,
+    "reasoner-derived-candidates": 428245948,
+    "reasoner-ns": 23753826346,
+    "reasoner-table-slots": 303743888
+  },
+  "cell_cpu_geomean": 1.0099529286977413,
+  "cell_wall_geomean": 1.00649434971611,
+  "cells": 2304,
+  "common_terminal_pairs": 1076,
+  "coverage_gains": [
+    {
+      "baseline_status": "TIMEOUT",
+      "candidate_status": "true",
+      "model": "pso",
+      "repetition": "r01",
+      "task": "fib_safe-5.yml"
+    },
+    {
+      "baseline_status": "TIMEOUT",
+      "candidate_status": "true",
+      "model": "pso",
+      "repetition": "r02",
+      "task": "fib_safe-5.yml"
+    },
+    {
+      "baseline_status": "TIMEOUT",
+      "candidate_status": "true",
+      "model": "pso",
+      "repetition": "r03",
+      "task": "fib_safe-5.yml"
+    },
+    {
+      "baseline_status": "TIMEOUT",
+      "candidate_status": "true",
+      "model": "pso",
+      "repetition": "r04",
+      "task": "fib_safe-5.yml"
+    }
+  ],
+  "coverage_losses": [],
+  "cpu_geomean_of_task_model_medians": 1.0116198787844215,
+  "cpu_task_clustered_bootstrap_95_ci": [
+    1.0052114257452918,
+    1.0177370766326972
+  ],
+  "execution_mismatches": 0,
+  "expected_cells": 2304,
+  "expected_pairs": 1152,
+  "memory_p90_candidate_over_baseline": 1.0021861336664584,
+  "memory_ratio_geomean": 1.0110038995243982,
+  "memory_ratio_p90": 1.003307608235736,
+  "pairs": 1152,
+  "task_model_count": 269,
+  "terminal_verdict_mismatches": 0
+}

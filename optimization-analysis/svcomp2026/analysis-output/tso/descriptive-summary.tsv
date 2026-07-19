@@ -1,0 +1,4 @@
+backend	runs	tasks	solved_runs	timeout_runs	oom_runs	other_failures	median_wall_seconds_solved	median_memory_bytes_solved
+caat-tso	480	96	445	10	25	0	0.063001364	26230784
+cat-tso	480	96	410	45	25	0	0.063393563	26198016
+genmc-tso	480	96	480	0	0	0	0.063261815	25952256

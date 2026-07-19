@@ -1,0 +1,69 @@
+{
+  "cells": 2304,
+  "pairs": 1152,
+  "expected_cells": 2304,
+  "expected_pairs": 1152,
+  "common_terminal_pairs": 1076,
+  "terminal_verdict_mismatches": 0,
+  "execution_mismatches": 0,
+  "candidate_mismatches": 0,
+  "lazy_check_mismatches": 0,
+  "snapshot_mismatches": 0,
+  "base_mismatches": 0,
+  "coverage_gains": 0,
+  "coverage_losses": 0,
+  "new_oom": 0,
+  "task_model_count": 269,
+  "cpu_geomean_of_task_model_medians": 0.9965686972059239,
+  "cpu_four_repetition_model_task_bootstrap_95_ci": [
+    0.9921519004102922,
+    1.000970914738142
+  ],
+  "by_model": {
+    "sc": {
+      "task_model_count": 95,
+      "cpu_geomean": 0.997877388507171,
+      "cpu_bootstrap_95_ci": [
+        0.9923011497483637,
+        1.0035887502416971
+      ]
+    },
+    "tso": {
+      "task_model_count": 90,
+      "cpu_geomean": 0.9954203326731866,
+      "cpu_bootstrap_95_ci": [
+        0.9872110957869588,
+        1.0035750533240644
+      ]
+    },
+    "pso": {
+      "task_model_count": 84,
+      "cpu_geomean": 0.9963207314944492,
+      "cpu_bootstrap_95_ci": [
+        0.9874840156559144,
+        1.0052994328262688
+      ]
+    }
+  },
+  "cell_cpu_geomean": 0.994257079512046,
+  "cell_wall_geomean": 0.9945594410424428,
+  "memory_ratio_p90": 1.0028284115510657,
+  "memory_p90_candidate_over_baseline": 1.0,
+  "large_task_rss_max_ratio": 1.0513096942642972,
+  "formal_pass": false,
+  "task_model_full_check_medians": 128,
+  "full_check_geomean": 1.0,
+  "full_check_by_model": {
+    "sc": null,
+    "tso": 1.0,
+    "pso": 1.0
+  },
+  "candidate_geomean": 1.0,
+  "candidate_by_model": {
+    "sc": null,
+    "tso": 1.0,
+    "pso": 1.0
+  },
+  "status_mismatches": 0,
+  "category_mismatches": 0
+}

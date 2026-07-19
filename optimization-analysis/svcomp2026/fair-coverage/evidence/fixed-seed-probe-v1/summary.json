@@ -1,0 +1,228 @@
+[
+  {
+    "classification": "verified-false",
+    "exit_code": 42,
+    "has_abort_assume": false,
+    "has_nondet": true,
+    "log": "goblint-regression__36-apron_41-threadenter-no-locals_unknown_1_pos.log",
+    "rewrite_rules": [],
+    "seconds": 0.08470144000602886,
+    "source": "c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.c",
+    "task": "c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": false,
+    "has_nondet": true,
+    "log": "goblint-regression__36-apron_16-traces-unprot2_true.log",
+    "rewrite_rules": [],
+    "seconds": 0.08300291799241677,
+    "source": "c/goblint-regression/36-apron_16-traces-unprot2_true.c",
+    "task": "c/goblint-regression/36-apron_16-traces-unprot2_true.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": false,
+    "has_nondet": true,
+    "log": "goblint-regression__13-privatized_18-first-reads_true.log",
+    "rewrite_rules": [],
+    "seconds": 0.0909177020075731,
+    "source": "c/goblint-regression/13-privatized_18-first-reads_true.c",
+    "task": "c/goblint-regression/13-privatized_18-first-reads_true.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__test-easy8.wvr.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "manual-pthread-calls",
+      "manual-atomic-runtime"
+    ],
+    "seconds": 0.0826353799784556,
+    "source": "c/weaver/test-easy8.wvr.c",
+    "task": "c/weaver/test-easy8.wvr.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__parallel-misc-3.wvr.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.0894772470346652,
+    "source": "c/weaver/parallel-misc-3.wvr.c",
+    "task": "c/weaver/parallel-misc-3.wvr.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__bench-exp1x3.wvr.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.08203167200554162,
+    "source": "c/weaver/bench-exp1x3.wvr.c",
+    "task": "c/weaver/bench-exp1x3.wvr.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__security.wvr.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "manual-pthread-calls",
+      "manual-atomic-runtime"
+    ],
+    "seconds": 0.07979034201707691,
+    "source": "c/weaver/security.wvr.c",
+    "task": "c/weaver/security.wvr.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__parallel-ticket-2.wvr.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.07294924301095307,
+    "source": "c/weaver/parallel-ticket-2.wvr.c",
+    "task": "c/weaver/parallel-ticket-2.wvr.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__clever.wvr.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.06885716901160777,
+    "source": "c/weaver/clever.wvr.c",
+    "task": "c/weaver/clever.wvr.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__parallel-barrier-loop.wvr.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.08653198997490108,
+    "source": "c/weaver/parallel-barrier-loop.wvr.c",
+    "task": "c/weaver/parallel-barrier-loop.wvr.yml"
+  },
+  {
+    "classification": "timeout",
+    "exit_code": null,
+    "has_abort_assume": false,
+    "has_nondet": true,
+    "log": "pthread-ext__28_buggy_simple_loop1_vf.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast"
+    ],
+    "seconds": 15.01701560796937,
+    "source": "c/pthread-ext/28_buggy_simple_loop1_vf.c",
+    "task": "c/pthread-ext/28_buggy_simple_loop1_vf.yml"
+  },
+  {
+    "classification": "verified-true",
+    "exit_code": 0,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread__stack-2.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition"
+    ],
+    "seconds": 0.09135624102782458,
+    "source": "c/pthread/stack-2.c",
+    "task": "c/pthread/stack-2.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "ldv-linux-3.14-races__linux-3.14--drivers--spi--spi-tegra20-slink.ko.cil.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "fixed-seed-nondet-cast"
+    ],
+    "seconds": 0.10456271097064018,
+    "source": "c/ldv-linux-3.14-races/linux-3.14--drivers--spi--spi-tegra20-slink.ko.cil.c",
+    "task": "c/ldv-linux-3.14-races/linux-3.14--drivers--spi--spi-tegra20-slink.ko.cil.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-driver-races__char_generic_nvram_read_nvram_nvram_unlocked_ioctl.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-declaration"
+    ],
+    "seconds": 0.08006025699432939,
+    "source": "c/pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.c",
+    "task": "c/pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-driver-races__char_generic_nvram_read_nvram_write_nvram.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-declaration"
+    ],
+    "seconds": 0.07738494803197682,
+    "source": "c/pthread-driver-races/char_generic_nvram_read_nvram_write_nvram.c",
+    "task": "c/pthread-driver-races/char_generic_nvram_read_nvram_write_nvram.yml"
+  },
+  {
+    "classification": "signal-11",
+    "exit_code": -11,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "ldv-linux-3.14-races__linux-3.14--drivers--media--platform--marvell-ccic--cafe_ccic.ko.cil-1.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition",
+      "direct-reach-error",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.9578938389895484,
+    "source": "c/ldv-linux-3.14-races/linux-3.14--drivers--media--platform--marvell-ccic--cafe_ccic.ko.cil-1.i",
+    "task": "c/ldv-linux-3.14-races/linux-3.14--drivers--media--platform--marvell-ccic--cafe_ccic.ko.cil-1.yml"
+  }
+]

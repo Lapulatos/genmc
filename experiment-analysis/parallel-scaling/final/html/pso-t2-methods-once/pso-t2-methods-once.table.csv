@@ -1,0 +1,99 @@
+tool		GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)
+run set		cat-pso.t2.r01.unreach-call	cat-pso.t2.r01.unreach-call	cat-pso.t2.r01.unreach-call	cat-pso.t2.r01.unreach-call	cat-pso.t2.r01.unreach-call	cat-pso.t2.r01.unreach-call	caat-pso.t2.r01.unreach-call	caat-pso.t2.r01.unreach-call	caat-pso.t2.r01.unreach-call	caat-pso.t2.r01.unreach-call	caat-pso.t2.r01.unreach-call	caat-pso.t2.r01.unreach-call
+/Users/sujie/Documents/Codes/C++/GenMC/genmc/experiment-analysis/parallel-scaling/sv-benchmarks/c/		status	cputime (s)	walltime (s)	memory (MB)	blocked	executions	status	cputime (s)	walltime (s)	memory (MB)	blocked	executions
+goblint-regression/13-privatized_66-mine-W-init_true.yml	true	true	0.052996131	0.056119371962267905	25.907200		1	true	0.064231943	0.06999178102705628	25.960448		1
+goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	false	false(unreach-call)	0.053352003	0.05389404797460884	25.960448		0	false(unreach-call)	0.06207484	0.06668763305060565	25.874432		0
+goblint-regression/36-apron_16-traces-unprot2_true.yml	true	true	0.078430164	0.07901016296818852	25.899008		1	true	0.050138003	0.05318810202879831	25.899008		1
+goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	true	true	0.063534763	0.06617498397827148	25.882624		1	true	0.063986404	0.06577976298285648	25.886720		1
+goblint-regression/13-privatized_47-refine-protected2_true.yml	true	true	0.062077405	0.06214628601446748	25.907200		2	true	0.051730965	0.05451658001402393	25.960448		2
+goblint-regression/13-privatized_46-refine-protected1_true.yml	true	true	0.050359955	0.05611443403176963	25.960448		1	true	0.053894787	0.05749496800126508	25.956352		1
+goblint-regression/36-apron_11-traces-max-simple_true.yml	true	true	0.062244677	0.06460662599420175	25.915392		2	true	0.065162816	0.06849938002415001	25.899008		2
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	false	false(unreach-call)	0.054703619	0.05471005104482174	25.903104	1	0	false(unreach-call)	0.057581025	0.05993869999656454	25.907200	1	0
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	false	false(unreach-call)	0.062090534	0.06610677996650338	25.956352		0	false(unreach-call)	0.064143876	0.06468401401070878	25.903104		0
+goblint-regression/13-privatized_40-traces-ex-6_true.yml	true	true	0.055602652	0.05593677598517388	25.882624	1	1	true	0.062051435	0.06452781503321603	25.939968	1	1
+goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	true	true	0.062502187	0.06688915798440576	25.878528		1	true	0.057459149	0.05977166397497058	25.915392		1
+goblint-regression/13-privatized_44-traces-mine2_true.yml	true	true	0.055681008	0.057190130988601595	25.874432	1	1	true	0.061896542	0.0637309779995121	25.972736	1	1
+goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	false	false(unreach-call)	0.055748438	0.05936499801464379	25.985024	1	0	false(unreach-call)	0.057540063	0.06036221102112904	26.087424	1	0
+goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	false	false(unreach-call)	0.066470146	0.06652265903539956	25.960448	1	0	false(unreach-call)	0.065449388	0.06727424601558596	25.997312	1	0
+goblint-regression/13-privatized_36-traces-ex-3_true.yml	true	true	0.053128844	0.05529276799643412	25.874432		3	true	0.05981726	0.06008764397120103	25.911296		3
+goblint-regression/13-privatized_18-first-reads_true.yml	true	true	0.055383386	0.058789381000678986	25.952256		2	true	0.075281957	0.07989509199978784	26.021888		2
+goblint-regression/13-privatized_35-traces-ex-2_true.yml	true	true	0.069726141	0.06858430401189253	25.931776	2	2	true	0.075771386	0.0769283200497739	25.960448	2	2
+goblint-regression/13-privatized_37-traces-ex-4_true.yml	true	true	0.059730094	0.06067886698292568	25.903104		2	true	0.07667409	0.07172878697747365	25.964544		2
+goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	true	true	0.059980778	0.0613217789796181	26.046464	2	2	true	0.067391648	0.06373050302499905	25.944064	2	2
+goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	false	false(unreach-call)	0.052074786	0.05441996396984905	25.960448		1	false(unreach-call)	0.071268611	0.06940693099750206	26.001408		1
+goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	false	false(unreach-call)	0.052440436	0.05330318596679717	25.964544		0	false(unreach-call)	0.050712664	0.05560005601728335	25.956352		0
+goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	false	false(unreach-call)	0.061843756	0.06253265799023211	25.903104		0	false(unreach-call)	0.053527017	0.05657425202662125	25.997312		0
+goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	false	false(unreach-call)	0.053751276	0.055738774011842906	25.915392		1	false(unreach-call)	0.052768156	0.05455736699514091	26.017792		1
+goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	true	true	0.054364554	0.05590344499796629	25.911296	2	2	true	0.071977214	0.07073375297477469	25.972736	2	2
+goblint-regression/13-privatized_01-priv_nr_true.yml	true	true	0.058372882	0.062056379043497145	25.890816		2	true	0.057513602	0.06335965398466215	26.054656		2
+goblint-regression/13-privatized_19-publish-precision_true.yml	true	true	0.070286867	0.07204105099663138	25.948160		3	true	0.067660703	0.06616694497643039	26.038272		3
+goblint-regression/13-privatized_42-traces-ex-mini_true.yml	true	true	0.058234152	0.059661308012437075	25.997312		2	true	0.057669005	0.05645047302823514	25.968640		2
+goblint-regression/13-privatized_33-traces-v-matters_true.yml	true	true	0.051183771	0.056413793994579464	25.919488	2	1	true	0.056519068	0.05854295298922807	25.989120	2	1
+goblint-regression/13-privatized_25-struct_nr_true.yml	true	true	0.053588147	0.056340999028179795	25.989120		2	true	0.066717353	0.06849079503444955	25.985024		2
+goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	true	true	0.065096461	0.07082593400264159	25.956352	1	0	true	0.065730184	0.06930937501601875	26.058752	1	0
+goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	false	false(unreach-call)	0.052286005	0.05522000102791935	25.870336		0	false(unreach-call)	0.058823215	0.06240212399279699	25.894912		0
+goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	true	true	0.058661071	0.05641249701147899	26.005504		4	true	0.080951112	0.07109447795664892	25.952256		4
+goblint-regression/13-privatized_20-publish-regression_true.yml	true	true	0.053646674	0.055373140960000455	25.964544		2	true	0.065793526	0.06744662596611306	25.960448		2
+goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	true	true	0.05414132	0.05421866098186001	25.903104	2	2	true	0.056166798	0.056546919979155064	26.013696	2	2
+goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	true	true	0.061373352	0.05827005399623886	25.948160	2	3	true	0.088809815	0.07278599601704627	26.099712	2	3
+goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	true	true	0.051907393	0.05452698399312794	26.042368	1	1	true	0.064912178	0.0678322910098359	25.915392	1	1
+goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	true	true	0.061895756	0.0625566869857721	26.087424	1	0	true	0.058608195	0.06233022699598223	26.140672	1	0
+goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	true	true	0.076958944	0.07540227699792013	25.944064		4	true	0.106933423	0.08261946600396186	26.034176		4
+goblint-regression/13-privatized_24-multiple-protecting_true.yml	true	true	0.128412354	0.09506288199918345	26.013696		7	true	0.353130898	0.20632811496034265	26.034176		7
+goblint-regression/36-apron_21-traces-cluster-based_true.yml	true	true	0.065481706	0.062233934993855655	26.042368	2	6	true	0.101282923	0.08357258199248463	26.083328	2	6
+goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	true	true	0.054304335	0.05698095902334899	26.030080		1	true	0.066271279	0.0698900479474105	26.021888		1
+goblint-regression/13-privatized_27-multiple-protecting2_true.yml	true	true	0.292678635	0.18232083797920495	26.005504		26	true	1.066540434	0.5656433469848707	26.107904		26
+pthread-ext/14_spin2003.yml	true	true	0.051908075	0.05429398099659011	25.849856	1	0	true	0.050086475	0.05276111699640751	25.952256	1	0
+pthread-ext/29_conditionals_vs.yml	true	true	0.053878464	0.05519153195200488	25.952256	1	0	true	0.061173369	0.06412035797256976	25.886720	1	0
+pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	true	true	0.052466955	0.055762176983989775	26.017792	1	0	true	0.059178241	0.06221757305320352	25.997312	1	0
+pthread-ext/46_monabsex2_vs.yml	true	true	0.049563236	0.05356501700589433	25.878528	1	0	true	0.048814483	0.05161201296141371	26.017792	1	0
+pthread-ext/45_monabsex1_vs.yml	true	true	0.050191345	0.052826585015282035	25.931776	1	0	true	0.066351005	0.06913845002418384	26.030080	1	0
+pthread/stateful01-1.yml	false	false(unreach-call)	0.055408778	0.054951337981037796	26.021888	2	0	false(unreach-call)	0.052506513	0.05420212395256385	26.046464	2	0
+pthread/stateful01-2.yml	true	true	0.070941194	0.06653893401380628	26.038272		6	true	0.086160443	0.07286747498437762	25.980928		6
+pthread-atomic/time_var_mutex.yml	true	true	0.070552536	0.07008171401685104	26.062848		2	true	0.061690716	0.06325107801239938	26.038272		2
+pthread-ext/01b_inc.yml	true	true	0.053510146	0.05629717104602605	25.903104	1	0	true	0.054830918	0.059360585000831634	26.038272	1	0
+pthread/triangular-1.yml	true	TIMEOUT	121.928636923	61.00665639800718	26.021888			TIMEOUT	121.914689539	61.008335483958945	26.075136		
+pthread/triangular-2.yml	false	TIMEOUT	121.925427854	61.009667974023614	26.083328			TIMEOUT	121.710974655	61.0109462569817	26.083328		
+pthread-ext/02_inc_cas.yml	true	true	0.054306487	0.05763192102313042	25.960448	1	0	true	0.054295917	0.05492275004507974	25.911296	1	0
+goblint-regression/28-race_reach_21-deref_read_racing.yml	false	false(unreach-call)	4.628975847	2.9384833539952524	58.109952		0	false(unreach-call)	4.741716136	3.025690955983009	59.015168		0
+pthread-ext/48_ticket_lock_low_contention_vs.yml	true	true	0.053178892	0.057155610993504524	25.997312	1	0	true	0.056860601	0.05967499502003193	26.001408	1	0
+goblint-regression/28-race_reach_37-indirect_racing.yml	false	TIMEOUT	121.120415998	61.30822063103551	4869.505024			TIMEOUT	121.443258252	61.63594956701854	12300.288000		
+goblint-regression/28-race_reach_45-escape_racing.yml	false	false(unreach-call)	0.0526812	0.05482058099005371	25.964544		1	false(unreach-call)	0.056047502	0.057598710991442204	26.058752		1
+goblint-regression/28-race_reach_46-escape_racefree.yml	true	true	0.056451783	0.05956921196775511	26.103808		2	true	0.05589952	0.057080775033682585	26.091520		2
+goblint-regression/28-race_reach_01-simple_racing.yml	false	TIMEOUT	121.127534162	61.31973737699445	4869.316608			TIMEOUT	121.469494187	61.65822607901646	12299.919360		
+goblint-regression/28-race_reach_11-ptr_racing.yml	false	TIMEOUT	120.910091882	61.318727052013855	4869.390336			TIMEOUT	121.26242831	61.66625018202467	12300.021760		
+pthread-deagle/circular_buffer_bad.yml	false	false(unreach-call)	0.101296452	0.08545180602231994	26.116096	7	1	false(unreach-call)	0.094927173	0.07878312299726531	26.165248	8	0
+pthread/fib_safe-5.yml	true	TIMEOUT	121.659186659	61.00896054500481	26.087424			TIMEOUT	121.956114689	61.010833901003934	26.087424		
+pthread/fib_safe-6.yml	true	TIMEOUT	121.95211275	61.008510147978086	25.952256			TIMEOUT	121.955623616	61.00922738999361	26.099712		
+pthread/fib_unsafe-5.yml	false	TIMEOUT	121.824938164	61.01033680298133	26.005504			TIMEOUT	121.937369417	61.00800822401652	26.017792		
+pthread/fib_unsafe-6.yml	false	TIMEOUT	121.954122685	61.012125041976105	25.980928			TIMEOUT	121.767626581	61.009851013019215	26.083328		
+pthread/fib_unsafe-7.yml	false	TIMEOUT	121.952572573	61.00826271000551	26.099712			TIMEOUT	121.950586631	61.0104373760405	26.095616		
+goblint-regression/28-race_reach_24-sound_lock_racing.yml	false	TIMEOUT	121.061334974	61.289237156976014	4869.406720			TIMEOUT	121.458322973	61.65408033202402	12299.964416		
+pthread/lazy01.yml	false	false(unreach-call)	0.061756314	0.06568175100255758	26.087424	3	0	false(unreach-call)	0.068238103	0.07302182097919285	26.030080	3	0
+pthread-deagle/circular_buffer_ok.yml	true	TIMEOUT	121.74666184	61.013467243989	26.038272			TIMEOUT	121.941032488	61.01046026800759	26.214400		
+pthread-atomic/szymanski.yml	true	true	0.097281723	0.08398192102322355	26.091520	25	6	true	0.121367433	0.09790506301214918	26.087424	25	6
+pthread-atomic/dekker.yml	true	true	0.064024019	0.06357214297167957	26.038272	6	4	true	0.083010508	0.07583113299915567	26.095616	6	4
+pthread-atomic/dekker-unfair.yml	true	true	0.061078105	0.06163295899750665	26.087424	6	4	true	0.084506378	0.07728237396804616	26.083328	6	4
+pthread-theta/unwind3-1.yml	false	false(unreach-call)	0.057124412	0.05933656799606979	26.095616		1	false(unreach-call)	0.059922293	0.06300740700680763	26.083328		1
+pthread-theta/exponential-nondet.yml	true	true	0.054296906	0.05719388404395431	26.054656		1	true	0.059454631	0.0632189399912022	26.091520		1
+pthread-theta/unwind2-1.yml	false	false(unreach-call)	0.053110995	0.05574655596865341	26.091520		3	false(unreach-call)	0.058440321	0.05982478999067098	26.087424		3
+pthread-theta/unwind2-100.yml	false	false(unreach-call)	0.055126091	0.05556523997802287	26.087424		3	false(unreach-call)	0.059259789	0.061786309990566224	26.083328		3
+pthread/butterfly.yml	true	true	62.057114502	31.06385524495272	26.161152		64560	TIMEOUT	121.950423598	61.00854844402056	26.234880		
+pthread-ext/43_NetBSD_sysmon_power_sliced.yml	true	true	0.05278047	0.05660259403521195	25.956352	1	0	true	0.052324219	0.05671097803860903	25.956352	1	0
+goblint-regression/28-race_reach_06-cond_racing1.yml	false	TIMEOUT	121.166631502	61.34573863900732	4869.419008			TIMEOUT	121.535362355	61.720664385007694	12300.013568		
+pthread/queue_ok.yml	true	true	0.119149926	0.08951073599746451	26.161152		2	true	0.191608369	0.12740465701790527	26.296320		2
+pthread/queue_ok_longer.yml	true	true	48.611587091	24.352348923974205	573.906944		2	TIMEOUT	122.036017718	61.09709241101518	1360.658432		
+pthread/queue_ok_longest.yml	true	TIMEOUT	122.055365648	61.13317957398249	1850.163200			TIMEOUT	121.998827815	61.224871219019406	3738.705920		
+pthread/queue_longer.yml	false	TIMEOUT	121.955792246	61.01630093000131	96.161792			TIMEOUT	121.952200095	61.01691076596035	160.423936		
+pthread/queue.yml	false	false(unreach-call)	1.474605459	0.7687410329817794	26.112000	14	2	false(unreach-call)	3.365604613	1.7156947940238751	26.189824	14	2
+pthread/singleton.yml	false	false(unreach-call)	0.064112516	0.06316389399580657	26.226688	1	2	false(unreach-call)	0.072322015	0.06994946300983429	26.198016	1	2
+pthread/singleton_with-uninit-problems.yml	true	true	0.066596666	0.06224887300049886	26.165248		4	true	0.081646681	0.07027136802207679	26.333184		4
+pthread-C-DAC/pthread-demo-datarace-3.yml	false	false(unreach-call)	0.316682126	0.19386753102298826	26.038272	14	0	false(unreach-call)	0.464386685	0.26575509895337746	27.623424	14	0
+pthread/reorder_2.yml	false	ABORTED	0.606729039	0.42904133402043954	26.210304			false(unreach-call)	1.937279137	1.008307425014209	26.222592	14	58
+pthread/twostage_3.yml	false	false(unreach-call)	0.095936487	0.08558727998752147	26.353664	8	2	false(unreach-call)	0.289376108	0.1796322590089403	26.415104	10	3
+ldv-races/race-1_1-join.yml	true	true	0.063868015	0.0647238870151341	26.173440		1	true	0.065364139	0.06614676304161549	26.222592		1
+ldv-races/race-1_3-join.yml	false	false(unreach-call)	0.061268784	0.0661637750454247	26.169344	1	1	false(unreach-call)	0.061549369	0.0655411469633691	26.214400	1	1
+ldv-races/race-1_2-join.yml	false	false(unreach-call)	0.060392679	0.061798291048035026	26.218496	1	1	false(unreach-call)	0.074826146	0.07536135404370725	26.165248	1	1
+ldv-races/race-4_1-thread_local_vars.yml	true	true	0.064274579	0.07074355601798743	26.243072	1	0	true	0.06332247	0.06732248002663255	26.337280	1	0
+ldv-races/race-2_1-container_of.yml	true	true	0.061630283	0.06515606900211424	26.300416		1	true	0.062427583	0.0634817389654927	26.341376		1
+ldv-races/race-3_1-container_of-global.yml	true	true	0.068261236	0.072911165014375	26.398720		1	true	0.059391546	0.060282798018306494	26.345472		1

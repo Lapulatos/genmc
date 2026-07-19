@@ -1,0 +1,112 @@
+{
+  "activation": {
+    "all": {
+      "lazy_edge_candidates": 587313381,
+      "product_checks": 879279,
+      "product_size_fallbacks": 36,
+      "product_state_visits": 1305866114,
+      "product_transitions": 4707969838,
+      "profiles": 288,
+      "profiles_with_product": 126,
+      "profiles_with_size_fallback": 4
+    },
+    "pso": {
+      "lazy_edge_candidates": 283436929,
+      "product_checks": 655801,
+      "product_size_fallbacks": 32,
+      "product_state_visits": 491502078,
+      "product_transitions": 619391559,
+      "profiles": 96,
+      "profiles_with_product": 68,
+      "profiles_with_size_fallback": 2
+    },
+    "sc": {
+      "lazy_edge_candidates": 0,
+      "product_checks": 0,
+      "product_size_fallbacks": 0,
+      "product_state_visits": 0,
+      "product_transitions": 0,
+      "profiles": 96,
+      "profiles_with_product": 0,
+      "profiles_with_size_fallback": 0
+    },
+    "tso": {
+      "lazy_edge_candidates": 303876452,
+      "product_checks": 223478,
+      "product_size_fallbacks": 4,
+      "product_state_visits": 814364036,
+      "product_transitions": 4088578279,
+      "profiles": 96,
+      "profiles_with_product": 58,
+      "profiles_with_size_fallback": 2
+    }
+  },
+  "execution_mismatches": [],
+  "large_copy": {
+    "all": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    },
+    "pso": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    },
+    "sc": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    },
+    "tso": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    }
+  },
+  "large_offline": {
+    "all": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    },
+    "pso": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    },
+    "sc": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    },
+    "tso": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    }
+  },
+  "large_peak_snapshot": {
+    "all": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    },
+    "pso": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    },
+    "sc": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    },
+    "tso": {
+      "after_over_before_geomean": null,
+      "four_repetition_model_tasks": 0,
+      "task_bootstrap_95ci": []
+    }
+  },
+  "profiles": 576
+}

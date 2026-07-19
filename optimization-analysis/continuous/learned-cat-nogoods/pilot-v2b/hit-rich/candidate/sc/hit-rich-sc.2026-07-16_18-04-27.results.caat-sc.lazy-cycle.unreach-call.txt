@@ -1,0 +1,57 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/experiments/caat-optimization/learned-cat-nogoods/pilot-definitions/hit-rich-sc.xml
+name:                    hit-rich-sc
+run sets:                caat-sc.lazy-cycle.unreach-call
+date:                    Thu, 2026-07-16 18:04:27 UTC
+tool:                    GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/learned-cat-nogoods/run-with-nogoods.sh
+options:                 --disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats
+parallel runs:           8
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    28b24384724e
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.7450880001 MB
+------------------------------------------------------------
+
+
+
+caat-sc.lazy-cycle.unreach-call
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats --svcomp-backend=caat-sc' and propertyfile 'None'
+
+inputfile                                 status                       cpu time   wall time        host
+-------------------------------------------------------------------------------------------------------
+pthread/butterfly.yml                     true                            12.53       12.54        None
+pthread-atomic/szymanski.yml              true                             0.07        0.08        None
+pthread/triangular-2.yml                  false(unreach-call)              1.39        1.40        None
+pthread/fib_safe-5.yml                    true                             3.31        3.31        None
+pthread/fib_unsafe-5.yml                  false(unreach-call)              0.91        0.91        None
+pthread/reorder_2.yml                     false(unreach-call)              0.14        0.14        None
+pthread/queue.yml                         false(unreach-call)              0.09        0.10        None
+pthread-deagle/circular_buffer_bad.yml    false(unreach-call)              0.07        0.08        None
+-------------------------------------------------------------------------------------------------------
+Run set 1                                 done                            18.53       12.69           -
+
+Statistics:              8 Files
+  correct:               8
+    correct true:        3
+    correct false:       5
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:               0
+  Score:                11 (max: 11)

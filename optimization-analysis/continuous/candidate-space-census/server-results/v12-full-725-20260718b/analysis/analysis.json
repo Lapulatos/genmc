@@ -1,0 +1,127 @@
+{
+  "after_completed_to_resource": 0,
+  "before_completed_to_resource": 0,
+  "common_correct_search_differences": 0,
+  "complete_execution_differences": 0,
+  "counter_totals": {
+    "after": {
+      "preventive-co-candidates": 13517111,
+      "preventive-co-pruned": 12899587,
+      "preventive-direct-base-candidates": 16119624922,
+      "preventive-direct-checks": 1205405,
+      "preventive-direct-edge-candidates": 2943514438,
+      "preventive-rf-candidates": 10197044,
+      "preventive-rf-pruned": 5814007
+    },
+    "before": {
+      "preventive-co-candidates": 13517111,
+      "preventive-co-pruned": 12899587,
+      "preventive-direct-base-candidates": 16119624922,
+      "preventive-direct-checks": 1205405,
+      "preventive-direct-edge-candidates": 2943514438,
+      "preventive-rf-candidates": 10197044,
+      "preventive-rf-pruned": 5814007
+    }
+  },
+  "metrics": {
+    "cputime": {
+      "bootstrap_95ci": [
+        0.9954806974716908,
+        1.0197088611955933
+      ],
+      "geomean_ratio": 1.006792586159796,
+      "median_ratio": 0.9959714173727944,
+      "tasks": 373
+    },
+    "memory": {
+      "bootstrap_95ci": [
+        0.9998924461656032,
+        1.0004752022393322
+      ],
+      "geomean_ratio": 1.0001667384588386,
+      "median_ratio": 1.0,
+      "tasks": 373
+    },
+    "walltime": {
+      "bootstrap_95ci": [
+        0.9951199826622,
+        1.0196592169217014
+      ],
+      "geomean_ratio": 1.0066375480882503,
+      "median_ratio": 1.000154539898767,
+      "tasks": 373
+    }
+  },
+  "mismatches": [
+    {
+      "differences": {
+        "backward-offered": [
+          35755,
+          42845
+        ],
+        "backward-queued": [
+          35755,
+          42845
+        ],
+        "co-offered": [
+          200237,
+          240076
+        ],
+        "realized-revisit-prefixes": [
+          60585,
+          72814
+        ],
+        "rf-offered": [
+          118008,
+          141481
+        ],
+        "rf-queued": [
+          35763,
+          42861
+        ],
+        "validity-queries": [
+          74498,
+          89916
+        ],
+        "work-added": [
+          71518,
+          85706
+        ],
+        "work-popped": [
+          71502,
+          85682
+        ]
+      },
+      "task": "safe011_tso"
+    }
+  ],
+  "rows": 1450,
+  "status_counts": {
+    "after": {
+      "ABORTED": 2,
+      "ERROR (compilation)": 13,
+      "ERROR (unsupported external)": 2,
+      "ERROR (unsupported property: invalid memory access)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "OUT OF MEMORY": 22,
+      "SEGMENTATION FAULT": 1,
+      "TIMEOUT": 276,
+      "false(unreach-call)": 112,
+      "true": 289
+    },
+    "before": {
+      "ABORTED": 2,
+      "ERROR (compilation)": 13,
+      "ERROR (unsupported external)": 2,
+      "ERROR (unsupported property: invalid memory access)": 7,
+      "ERROR (unsupported property: uninitialized memory)": 1,
+      "OUT OF MEMORY": 22,
+      "SEGMENTATION FAULT": 1,
+      "TIMEOUT": 276,
+      "false(unreach-call)": 112,
+      "true": 289
+    }
+  },
+  "status_or_category_differences": 0,
+  "tasks": 725
+}

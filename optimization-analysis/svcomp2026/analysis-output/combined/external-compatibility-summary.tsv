@@ -1,0 +1,7 @@
+tool	semantics_data_model	runs	correct	wrong	unknown	error_or_resource	completed_true_false	median_completed_wall_seconds	median_completed_memory_bytes
+Deagle 4.1.0	SV-COMP/ILP32	725	596	2	20	107	598	0.2140038385	12818432
+CBMC 5.70 SV-COMP archive	SV-COMP/ILP32	725	389	25	0	311	414	0.3787370605	17248256
+TruSt 0.5.3	RC11/LP64	725	78	14	0	633	92	0.0376627760	9687040
+Awamoche 0.8	RC11/LP64	725	84	11	0	630	95	0.08060699998	10129408
+Mixer 0.10.1	RC11/LP64	725	85	15	0	625	100	0.1518253650	24186880
+Spore 0.10.1	RC11/LP64	725	90	15	0	620	105	0.1544104770	24195072

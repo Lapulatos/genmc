@@ -1,0 +1,1491 @@
+diff --git a/genmc/CMakeLists.txt b/genmc/CMakeLists.txt
+index 8841ade..28382e9 100644
+--- a/genmc/CMakeLists.txt
++++ b/genmc/CMakeLists.txt
+@@ -12,6 +12,7 @@ set(LIB_SOURCES
+   genmc/CAT/GraphSynchronizer.cpp
+   genmc/CAT/IncrementalEvaluator.cpp
+   genmc/CAT/LazyCycle.cpp
++  genmc/CAT/LearnedNogood.cpp
+   genmc/CAT/Model.cpp
+   genmc/CAT/Normalized.cpp
+   genmc/CAT/Reasoner.cpp
+diff --git a/genmc/genmc/CAT/GraphSynchronizer.cpp b/genmc/genmc/CAT/GraphSynchronizer.cpp
+index ae3a7cd..ffa8a01 100644
+--- a/genmc/genmc/CAT/GraphSynchronizer.cpp
++++ b/genmc/genmc/CAT/GraphSynchronizer.cpp
+@@ -92,6 +92,8 @@ auto transitionName(GraphTransition transition) -> const char *
+ 		return "replace";
+ 	case GraphTransition::Rebuild:
+ 		return "rebuild";
++	case GraphTransition::LearnedReject:
++		return "learned-reject";
+ 	}
+ 	UNREACHABLE("unknown CAAT graph transition");
+ }
+@@ -101,10 +103,12 @@ auto transitionName(GraphTransition transition) -> const char *
+ GraphSynchronizer::GraphSynchronizer(IncrementalCaatEvaluator &evaluator,
+ 				     std::size_t checkpointLimit, std::size_t oracleInterval,
+ 				     bool profiling, std::vector<std::string> requiredPrimitives,
+-				     std::size_t adaptiveOfflineEventLimit)
++				     std::size_t adaptiveOfflineEventLimit,
++				     LearnedNogoodDatabase *nogoods)
+ 	: evaluator_(&evaluator), stable_(std::move(requiredPrimitives)),
+ 	  checkpointLimit_(checkpointLimit), oracleInterval_(oracleInterval),
+-	  adaptiveOfflineEventLimit_(adaptiveOfflineEventLimit), profiling_(profiling)
++	  adaptiveOfflineEventLimit_(adaptiveOfflineEventLimit), nogoods_(nogoods),
++	  profiling_(profiling)
+ {
+ 	VERIFY(checkpointLimit_ > 0, "CAAT graph synchronizer needs one checkpoint");
+ }
+@@ -207,6 +211,10 @@ auto GraphSynchronizer::synchronize(StableGraphSnapshot stable) -> GraphSynchron
+ {
+ 	if (profiling_)
+ 		recordSpaceStatistics(stable);
++	/* Oracle mode evaluates every query independently; it must not trust a learned
++	 * rejection as a substitute for the requested fresh cross-check. */
++	if (nogoods_ && oracleInterval_ == 0 && nogoods_->matches(stable, stable_))
++		return {GraphTransition::LearnedReject, "matched learned CAT nogood", true};
+ 	const auto timed = [&](auto started) -> std::uint64_t {
+ 		return profiling_ ? static_cast<std::uint64_t>(
+ 					    std::chrono::duration_cast<std::chrono::nanoseconds>(
+diff --git a/genmc/genmc/CAT/GraphSynchronizer.hpp b/genmc/genmc/CAT/GraphSynchronizer.hpp
+index 0ade6c3..d46f70b 100644
+--- a/genmc/genmc/CAT/GraphSynchronizer.hpp
++++ b/genmc/genmc/CAT/GraphSynchronizer.hpp
+@@ -15,6 +15,7 @@
+ #define GENMC_CAT_GRAPH_SYNCHRONIZER_HPP
+ 
+ #include "genmc/CAT/IncrementalEvaluator.hpp"
++#include "genmc/CAT/LearnedNogood.hpp"
+ #include "genmc/CAT/StableGraphAdapter.hpp"
+ 
+ #include <cstdint>
+@@ -31,13 +32,16 @@ enum class GraphTransition : std::uint8_t {
+ 	Rollback,
+ 	RollbackInsert,
+ 	Replace,
+-	Rebuild
++	Rebuild,
++	LearnedReject
+ };
+ 
+ /** Result and fallback reason from one graph synchronization. */
+ struct GraphSynchronizationResult {
+ 	GraphTransition transition{GraphTransition::Initialize};
+ 	std::string reason;
++	/** True when a retained sufficient explanation rejects this snapshot. */
++	bool knownInconsistent{};
+ };
+ 
+ /** Lifetime transition counters for diagnostics and integration tests. */
+@@ -88,7 +92,8 @@ public:
+ 				   std::size_t checkpointLimit = 32, std::size_t oracleInterval = 0,
+ 				   bool profiling = false,
+ 				   std::vector<std::string> requiredPrimitives = {},
+-				   std::size_t adaptiveOfflineEventLimit = 0);
++				   std::size_t adaptiveOfflineEventLimit = 0,
++				   LearnedNogoodDatabase *nogoods = nullptr);
+ 
+ 	/** Materialize and synchronize one current graph snapshot. */
+ 	[[nodiscard]] auto synchronize(const GraphAdapter &snapshot) -> GraphSynchronizationResult;
+@@ -99,6 +104,11 @@ public:
+ 	[[nodiscard]] auto stableAdapter() const -> const StableGraphAdapter & { return stable_; }
+ 	/** Return the number of retained semantic predecessor states. */
+ 	[[nodiscard]] auto retainedCheckpoints() const -> std::size_t { return history_.size(); }
++	/** Learn one positive explanation in the current worker-stable universe. */
++	[[nodiscard]] auto learnNogood(const ExplainedViolation &explained) -> bool
++	{
++		return nogoods_ && nogoods_->learn(explained, stable_);
++	}
+ 	/** Return cumulative observable transition and eviction counters. */
+ 	[[nodiscard]] auto statistics() const -> const GraphSynchronizationStatistics &
+ 	{
+@@ -126,6 +136,8 @@ private:
+ 	std::size_t oracleInterval_{};
+ 	std::size_t queryCount_{};
+ 	std::size_t adaptiveOfflineEventLimit_{};
++	/** Optional worker-local database borrowed from the owning CAT checker. */
++	LearnedNogoodDatabase *nogoods_{};
+ 	GraphSynchronizationStatistics statistics_;
+ 	bool profiling_{};
+ };
+diff --git a/genmc/genmc/CAT/Reasoner.cpp b/genmc/genmc/CAT/Reasoner.cpp
+index 8343df6..890de25 100644
+--- a/genmc/genmc/CAT/Reasoner.cpp
++++ b/genmc/genmc/CAT/Reasoner.cpp
+@@ -62,10 +62,13 @@ public:
+ 		: model_(model), analysis_(analysis), eventCount_(eventCount), values_(values),
+ 		  reasons_(model.predicates().size())
+ 	{
+-		for (const auto &predicate : model.predicates())
+-			reasons_[predicate.id].resize(predicate.type == ValueType::Set
+-							      ? eventCount
+-							      : eventCount * eventCount);
++		for (const auto &predicate : model.predicates()) {
++			const auto slots = predicate.type == ValueType::Set
++						   ? eventCount
++						   : eventCount * eventCount;
++			reasons_[predicate.id].resize(slots);
++			statistics_.reasonTableSlots += slots;
++		}
+ 	}
+ 
+ 	auto run(const std::vector<Violation> &violations) -> ExplanationResult
+@@ -75,7 +78,7 @@ public:
+ 			populateStratum(stratum);
+ 		for (const auto &violation : violations)
+ 			explainViolation(violation);
+-		return {std::move(explained_), std::move(errors_)};
++		return {std::move(explained_), std::move(errors_), statistics_};
+ 	}
+ 
+ private:
+@@ -111,8 +114,10 @@ private:
+ 					       predicate.name == "id";
+ 			if (predicate.type == ValueType::Set) {
+ 				for (std::size_t event = 0; event < eventCount_; ++event) {
++					++statistics_.baseCandidatesScanned;
+ 					if (!contains(predicate.id, event, std::nullopt))
+ 						continue;
++					++statistics_.presentBaseFacts;
+ 					reasons_[predicate.id][event] =
+ 						intrinsic
+ 							? Explanation{}
+@@ -124,8 +129,10 @@ private:
+ 				for (std::size_t first = 0; first < eventCount_; ++first) {
+ 					for (std::size_t second = 0; second < eventCount_;
+ 					     ++second) {
++						++statistics_.baseCandidatesScanned;
+ 						if (!contains(predicate.id, first, second))
+ 							continue;
++						++statistics_.presentBaseFacts;
+ 						reasons_[predicate.id][first * eventCount_ +
+ 								       second] =
+ 							intrinsic ? Explanation{}
+@@ -149,7 +156,7 @@ private:
+ 	}
+ 
+ 	[[nodiscard]] auto shortestPathReason(PredicateId operand, std::size_t source,
+-					      std::size_t target) const
++					      std::size_t target)
+ 		-> std::optional<Explanation>
+ 	{
+ 		/* A non-reflexive closure contains (x,x) only when the seed relation has a
+@@ -158,6 +165,7 @@ private:
+ 		if (source == target) {
+ 			std::optional<Explanation> result;
+ 			for (std::size_t next = 0; next < eventCount_; ++next) {
++				++statistics_.pathCandidatesScanned;
+ 				const auto *first = reason(operand, source, next);
+ 				if (!first)
+ 					continue;
+@@ -179,6 +187,7 @@ private:
+ 			const auto from = queue.front();
+ 			queue.pop_front();
+ 			for (std::size_t to = 0; to < eventCount_; ++to) {
++				++statistics_.pathCandidatesScanned;
+ 				if (parent[to] != eventCount_ || !contains(operand, from, to) ||
+ 				    !reason(operand, from, to))
+ 					continue;
+@@ -195,7 +204,7 @@ private:
+ 	}
+ 
+ 	[[nodiscard]] auto derive(const Predicate &predicate, std::size_t first,
+-				  std::optional<std::size_t> second) const
++				  std::optional<std::size_t> second)
+ 		-> std::optional<Explanation>
+ 	{
+ 		const auto unary =
+@@ -255,6 +264,7 @@ private:
+ 		if (predicate.kind == Predicate::Kind::Composition) {
+ 			std::optional<Explanation> result;
+ 			for (std::size_t middle = 0; middle < eventCount_; ++middle) {
++				++statistics_.compositionMiddlesScanned;
+ 				auto lhs = unary(predicate.operands[0], first, middle);
+ 				auto rhs = unary(predicate.operands[1], middle, second);
+ 				if (!lhs || !rhs)
+@@ -267,6 +277,7 @@ private:
+ 		}
+ 		if (predicate.kind == Predicate::Kind::Domain) {
+ 			for (std::size_t target = 0; target < eventCount_; ++target) {
++				++statistics_.pathCandidatesScanned;
+ 				if (auto result = unary(predicate.operands[0], first, target))
+ 					return result;
+ 			}
+@@ -274,6 +285,7 @@ private:
+ 		}
+ 		if (predicate.kind == Predicate::Kind::Range) {
+ 			for (std::size_t source = 0; source < eventCount_; ++source) {
++				++statistics_.pathCandidatesScanned;
+ 				if (auto result = unary(predicate.operands[0], source, first))
+ 					return result;
+ 			}
+@@ -293,6 +305,7 @@ private:
+ 	{
+ 		bool changed = true;
+ 		while (changed) {
++			++statistics_.stratumPasses;
+ 			changed = false;
+ 			for (const auto id : stratum) {
+ 				const auto &predicate = model_.predicates()[id];
+@@ -302,6 +315,7 @@ private:
+ 							   ? eventCount_
+ 							   : eventCount_ * eventCount_;
+ 				for (std::size_t flat = 0; flat < limit; ++flat) {
++					++statistics_.derivedCandidatesScanned;
+ 					const auto first = predicate.type == ValueType::Set
+ 								   ? flat
+ 								   : flat / eventCount_;
+@@ -311,12 +325,14 @@ private:
+ 							: std::optional(flat % eventCount_);
+ 					if (!contains(id, first, second))
+ 						continue;
++					++statistics_.derivationAttempts;
+ 					auto candidate = derive(predicate, first, second);
+ 					if (!candidate)
+ 						continue;
+ 					auto &current = reasons_[id][flat];
+ 					if (!current || better(*candidate, *current)) {
+ 						current = std::move(candidate);
++						++statistics_.derivationUpdates;
+ 						changed = true;
+ 					}
+ 				}
+@@ -374,6 +390,7 @@ private:
+ 	ReasonTable reasons_;
+ 	std::vector<ExplainedViolation> explained_;
+ 	std::vector<std::string> errors_;
++	ReasonerStatistics statistics_;
+ };
+ 
+ } /* namespace */
+diff --git a/genmc/genmc/CAT/Reasoner.hpp b/genmc/genmc/CAT/Reasoner.hpp
+index 6f411a4..b05e7f0 100644
+--- a/genmc/genmc/CAT/Reasoner.hpp
++++ b/genmc/genmc/CAT/Reasoner.hpp
+@@ -45,10 +45,24 @@ struct ExplainedViolation {
+ 	Explanation explanation;
+ };
+ 
++/** Per-call work performed by full fixed-point provenance reconstruction. */
++struct ReasonerStatistics {
++	std::size_t reasonTableSlots{};
++	std::size_t baseCandidatesScanned{};
++	std::size_t presentBaseFacts{};
++	std::size_t stratumPasses{};
++	std::size_t derivedCandidatesScanned{};
++	std::size_t derivationAttempts{};
++	std::size_t derivationUpdates{};
++	std::size_t compositionMiddlesScanned{};
++	std::size_t pathCandidatesScanned{};
++};
++
+ /** Result of projecting fixed-point witnesses to base predicates. */
+ struct ExplanationResult {
+ 	std::vector<ExplainedViolation> violations;
+ 	std::vector<std::string> errors;
++	ReasonerStatistics statistics;
+ 
+ 	/** Return true exactly when every input violation received an explanation. */
+ 	[[nodiscard]] auto ok() const -> bool { return errors.empty(); }
+diff --git a/genmc/genmc/CAT/StableGraphAdapter.hpp b/genmc/genmc/CAT/StableGraphAdapter.hpp
+index 4d394d2..d0f581f 100644
+--- a/genmc/genmc/CAT/StableGraphAdapter.hpp
++++ b/genmc/genmc/CAT/StableGraphAdapter.hpp
+@@ -68,6 +68,11 @@ public:
+ 	[[nodiscard]] auto universeSize() const -> std::size_t { return keys_.size(); }
+ 	/** Return the stable ID already assigned to @p key, if any. */
+ 	[[nodiscard]] auto id(const StableEventKey &key) const -> std::optional<std::size_t>;
++	/** Return the persistent key assigned to @p id. */
++	[[nodiscard]] auto key(std::size_t id) const -> const StableEventKey &
++	{
++		return keys_.at(id);
++	}
+ 
+ private:
+ 	[[nodiscard]] auto required(std::string_view name) const -> bool;
+diff --git a/genmc/genmc/Execution/Consistency/CATChecker.cpp b/genmc/genmc/Execution/Consistency/CATChecker.cpp
+index 93d5f31..33acf8b 100644
+--- a/genmc/genmc/Execution/Consistency/CATChecker.cpp
++++ b/genmc/genmc/Execution/Consistency/CATChecker.cpp
+@@ -66,6 +66,9 @@ BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(
+ 		pruningHost_ = std::make_unique<HostChecker>(conf);
+ 	if (!conf->useCaatBackend || !conf->caatModel || !conf->caatAnalysis)
+ 		return;
++	if (conf->catLearnedNogoods)
++		learnedNogoods_ =
++			std::make_unique<cat::LearnedNogoodDatabase>(4096, 64, 16, true, 64 * 16);
+ 	incrementalEvaluator_ = std::make_unique<cat::IncrementalCaatEvaluator>(
+ 		*conf->caatModel, *conf->caatAnalysis, conf->catStats,
+ 		!conf->explainCat && !conf->catOracle && !conf->catPreventivePruning);
+@@ -80,7 +83,8 @@ BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(
+ 		graphSynchronizer_ = std::make_unique<cat::GraphSynchronizer>(
+ 			*incrementalEvaluator_, 32, oracleInterval, conf->catStats,
+ 			std::move(requiredPrimitives),
+-			!conf->catOracle && certifiedAdaptiveOffline ? 512 : 0);
++			!conf->catOracle && certifiedAdaptiveOffline ? 512 : 0,
++			learnedNogoods_.get());
+ 	}
+ }
+ 
+@@ -128,6 +132,27 @@ template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
+ 	     << " max-base-relation-pairs=" << stats.maximumBaseRelationPairs
+ 	     << " max-base-relation-density-ppm=" << stats.maximumBaseRelationDensityPpm
+ 	     << " profiled-queries=" << profiledQueries_
++	     << " reasoner-calls=" << reasonerCalls_
++	     << " reasoner-ns=" << reasonerNanoseconds_
++	     << " reasoner-table-slots=" << reasonerStatistics_.reasonTableSlots
++	     << " reasoner-base-candidates=" << reasonerStatistics_.baseCandidatesScanned
++	     << " reasoner-base-facts=" << reasonerStatistics_.presentBaseFacts
++	     << " reasoner-stratum-passes=" << reasonerStatistics_.stratumPasses
++	     << " reasoner-derived-candidates="
++	     << reasonerStatistics_.derivedCandidatesScanned
++	     << " reasoner-derivation-attempts=" << reasonerStatistics_.derivationAttempts
++	     << " reasoner-derivation-updates=" << reasonerStatistics_.derivationUpdates
++	     << " reasoner-composition-middles="
++	     << reasonerStatistics_.compositionMiddlesScanned
++	     << " reasoner-path-candidates=" << reasonerStatistics_.pathCandidatesScanned
++	     << " provenance-materializations=" << provenanceMaterializations_
++	     << " provenance-materialization-ns=" << provenanceMaterializationNanoseconds_
++	     << " provenance-materialization-ops="
++	     << provenanceMaterializationStatistics_.operationEvaluations
++	     << " provenance-materialization-value-changes="
++	     << provenanceMaterializationStatistics_.valueChanges
++	     << " provenance-materialization-queue-pushes="
++	     << provenanceMaterializationStatistics_.worklistPushes
+ 	     << " preventive-prefix-queries=" << preventivePrefixQueries_
+ 	     << " preventive-prefix-inconsistent=" << preventivePrefixInconsistent_
+ 	     << " preventive-rf-candidates=" << preventiveRfCandidates_
+@@ -136,6 +161,29 @@ template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
+ 	     << " preventive-co-pruned=" << preventiveCoPruned_
+ 	     << " preventive-all-pruned-fallbacks=" << preventiveAllPrunedFallbacks_
+ 	     << " preventive-lookup-ns=" << preventiveLookupNanoseconds_;
++	if (learnedNogoods_) {
++		const auto &nogoods = learnedNogoods_->statistics();
++		line << " nogood-learn-attempts=" << nogoods.learnAttempts
++		     << " nogood-explanation-budget-skips=" << nogoods.explanationBudgetSkips
++		     << " nogood-explanation-warmup-skips=" << nogoods.explanationWarmupSkips
++		     << " nogood-explanation-credit-skips=" << nogoods.explanationCreditSkips
++		     << " nogood-learned=" << nogoods.learned
++		     << " nogood-unsupported=" << nogoods.unsupported
++		     << " nogood-duplicates=" << nogoods.duplicates
++		     << " nogood-subsumed=" << nogoods.subsumed
++		     << " nogood-removed-supersets=" << nogoods.removedSupersets
++		     << " nogood-evicted=" << nogoods.evicted
++		     << " nogood-match-queries=" << nogoods.matchQueries
++		     << " nogood-predicate-resolutions=" << nogoods.predicateResolutions
++		     << " nogood-literal-checks=" << nogoods.literalChecks
++		     << " nogood-hits=" << nogoods.hits
++		     << " nogood-current-clauses=" << nogoods.currentClauses
++		     << " nogood-current-literals=" << nogoods.currentLiterals
++		     << " nogood-current-bytes=" << nogoods.currentBytes
++		     << " nogood-maximum-clauses=" << nogoods.maximumClauses
++		     << " nogood-maximum-literals=" << nogoods.maximumLiterals
++		     << " nogood-maximum-bytes=" << nogoods.maximumBytes;
++	}
+ 	/* A process-wide lock keeps worker records parseable under --nthreads. */
+ 	const std::lock_guard lock(catStatisticsMutex);
+ 	std::cerr << line.str() << '\n';
+@@ -167,7 +215,7 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
+ 	if (this->getConf()->useCaatBackend && graphSynchronizer_) {
+ 		const auto syncStart = profile ? std::chrono::steady_clock::now()
+ 					       : std::chrono::steady_clock::time_point{};
+-		(void)graphSynchronizer_->synchronize(graph);
++		const auto synchronization = graphSynchronizer_->synchronize(graph);
+ 		if (profile) {
+ 			synchronizationNanoseconds_ += static_cast<std::uint64_t>(
+ 				std::chrono::duration_cast<std::chrono::nanoseconds>(
+@@ -175,16 +223,83 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
+ 					.count());
+ 			++profiledQueries_;
+ 		}
++		if (synchronization.knownInconsistent)
++			return false;
+ 		const auto &result = incrementalEvaluator_->result();
+ 		VERIFY(result.errors.empty(), "validated incremental CAAT evaluation failed");
+-		if (this->getConf()->explainCat && !result.violations.empty()) {
++		const auto wantsLearnedExplanation = learnedNogoods_ &&
++						     learnedNogoods_->wantsExplanation();
++		if ((this->getConf()->explainCat || wantsLearnedExplanation) &&
++		    !result.violations.empty()) {
++			const auto *reasonValues = &result.values;
++			const auto *reasonViolations = &result.violations;
++			std::optional<cat::CaatEvaluationResult> materialized;
++			if (std::ranges::any_of(result.values,
++						[](const auto &value) { return !value.has_value(); })) {
++				const auto materializationStarted =
++					profile ? std::chrono::steady_clock::now()
++						: std::chrono::steady_clock::time_point{};
++				materialized = cat::CaatEvaluator().evaluate(
++					*caatModel, *caatAnalysis, incrementalEvaluator_->eventCount(),
++					incrementalEvaluator_->baseValues());
++				VERIFY(materialized->errors.empty(),
++				       "validated provenance materialization failed");
++				VERIFY(!materialized->violations.empty(),
++				       "lazy CAT violation disappeared during full materialization");
++				reasonValues = &materialized->values;
++				reasonViolations = &materialized->violations;
++				if (profile) {
++					++provenanceMaterializations_;
++					provenanceMaterializationNanoseconds_ +=
++						static_cast<std::uint64_t>(
++							std::chrono::duration_cast<std::chrono::nanoseconds>(
++								std::chrono::steady_clock::now() -
++								materializationStarted)
++								.count());
++					provenanceMaterializationStatistics_.operationEvaluations +=
++						materialized->statistics.operationEvaluations;
++					provenanceMaterializationStatistics_.valueChanges +=
++						materialized->statistics.valueChanges;
++					provenanceMaterializationStatistics_.worklistPushes +=
++						materialized->statistics.worklistPushes;
++				}
++			}
++			const auto reasonerStarted = profile ? std::chrono::steady_clock::now()
++							     : std::chrono::steady_clock::time_point{};
+ 			auto explained = cat::Reasoner().explain(
+ 				*caatModel, *caatAnalysis, incrementalEvaluator_->eventCount(),
+-				result.values, result.violations);
++				*reasonValues, *reasonViolations);
++			if (profile) {
++				++reasonerCalls_;
++				reasonerNanoseconds_ += static_cast<std::uint64_t>(
++					std::chrono::duration_cast<std::chrono::nanoseconds>(
++						std::chrono::steady_clock::now() - reasonerStarted)
++						.count());
++				const auto &measured = explained.statistics;
++				reasonerStatistics_.reasonTableSlots += measured.reasonTableSlots;
++				reasonerStatistics_.baseCandidatesScanned +=
++					measured.baseCandidatesScanned;
++				reasonerStatistics_.presentBaseFacts += measured.presentBaseFacts;
++				reasonerStatistics_.stratumPasses += measured.stratumPasses;
++				reasonerStatistics_.derivedCandidatesScanned +=
++					measured.derivedCandidatesScanned;
++				reasonerStatistics_.derivationAttempts += measured.derivationAttempts;
++				reasonerStatistics_.derivationUpdates += measured.derivationUpdates;
++				reasonerStatistics_.compositionMiddlesScanned +=
++					measured.compositionMiddlesScanned;
++				reasonerStatistics_.pathCandidatesScanned +=
++					measured.pathCandidatesScanned;
++			}
+ 			VERIFY(explained.ok(), "validated CAT violation explanation failed");
+-			for (const auto &violation : explained.violations)
+-				std::cerr << "CAT explanation: " << cat::Reasoner::format(violation)
+-					  << '\n';
++			for (const auto &violation : explained.violations) {
++				if (learnedNogoods_ && learnedNogoods_->wantsExplanation())
++					(void)graphSynchronizer_->learnNogood(violation);
++				if (this->getConf()->explainCat)
++					std::cerr << "CAT explanation: "
++						  << cat::Reasoner::format(violation) << '\n';
++			}
++		} else if (learnedNogoods_ && !result.violations.empty()) {
++			learnedNogoods_->noteExplanationSkip();
+ 		}
+ 		return result.violations.empty();
+ 	}
+diff --git a/genmc/genmc/Execution/Consistency/CATChecker.hpp b/genmc/genmc/Execution/Consistency/CATChecker.hpp
+index d85a98e..c26af14 100644
+--- a/genmc/genmc/Execution/Consistency/CATChecker.hpp
++++ b/genmc/genmc/Execution/Consistency/CATChecker.hpp
+@@ -15,6 +15,8 @@
+ #define GENMC_CAT_CHECKER_HPP
+ 
+ #include "genmc/CAT/GraphSynchronizer.hpp"
++#include "genmc/CAT/LearnedNogood.hpp"
++#include "genmc/CAT/Reasoner.hpp"
+ #include "genmc/Execution/Consistency/SCChecker.hpp"
+ #include "genmc/Execution/Consistency/TSOChecker.hpp"
+ 
+@@ -54,6 +56,11 @@ public:
+ 	 */
+ 	[[nodiscard]] auto incrementalStatistics() const
+ 		-> const cat::GraphSynchronizationStatistics *;
++	/** Return opt-in learned-nogood counters, or null when disabled. */
++	[[nodiscard]] auto learnedNogoodStatistics() const -> const cat::LearnedNogoodStatistics *
++	{
++		return learnedNogoods_ ? &learnedNogoods_->statistics() : nullptr;
++	}
+ 
+ private:
+ 	/**
+@@ -116,6 +123,8 @@ private:
+ 
+ 	/** Mutable worker-local online state; const consistency queries update caches. */
+ 	mutable std::unique_ptr<cat::IncrementalCaatEvaluator> incrementalEvaluator_;
++	/** Optional bounded explanations; declared before synchronizer that borrows it. */
++	mutable std::unique_ptr<cat::LearnedNogoodDatabase> learnedNogoods_;
+ 	/** Synchronizer points to incrementalEvaluator_, whose allocation never moves. */
+ 	mutable std::unique_ptr<cat::GraphSynchronizer> graphSynchronizer_;
+ 	/** Separate generated checker used only under an exact semantic certificate. */
+@@ -124,6 +133,13 @@ private:
+ 	mutable std::uint64_t adapterNanoseconds_{};
+ 	mutable std::uint64_t synchronizationNanoseconds_{};
+ 	mutable std::size_t profiledQueries_{};
++	/** Full-provenance Reasoner cost, kept separate from incremental evaluation. */
++	mutable std::size_t reasonerCalls_{};
++	mutable std::uint64_t reasonerNanoseconds_{};
++	mutable cat::ReasonerStatistics reasonerStatistics_;
++	mutable std::size_t provenanceMaterializations_{};
++	mutable std::uint64_t provenanceMaterializationNanoseconds_{};
++	mutable cat::FixedPointStatistics provenanceMaterializationStatistics_;
+ 	/** Relation supplying exact reachability for the opt-in recursive-PSO fast path. */
+ 	std::optional<cat::PredicateId> preventiveOrderId_;
+ 	/** Whether the certified relation is `order` and needs an on-demand closure. */
+diff --git a/genmc/genmc/Verification/Config.cpp b/genmc/genmc/Verification/Config.cpp
+index 68a8fa3..3835aed 100644
+--- a/genmc/genmc/Verification/Config.cpp
++++ b/genmc/genmc/Verification/Config.cpp
+@@ -47,6 +47,8 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
+ 		errors.emplace_back("--cat-stats requires --model-file.");
+ 	if (catPreventivePruning && !modelFile)
+ 		errors.emplace_back("--cat-preventive-pruning requires --model-file.");
++	if (catLearnedNogoods && !modelFile)
++		errors.emplace_back("--cat-learned-nogoods requires --model-file.");
+ 	if (catOracle && !modelFile)
+ 		errors.emplace_back("--cat-oracle requires --model-file.");
+ 
+@@ -234,6 +236,9 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
+ 	     caatModel->certifiedCandidateProfile()))
+ 		errors.emplace_back(
+ 			"--cat-preventive-pruning requires the exact bundled recursive PSO model.");
++	if (catLearnedNogoods && (!useCaatBackend || !caatModel || !caatAnalysis))
++		errors.emplace_back("--cat-learned-nogoods requires an online-admissible "
++				    "normalized CAAT model.");
+ 	if (LAPOR) {
+ 		errors.emplace_back("LAPOR is temporarily disabled.");
+ 	}
+diff --git a/genmc/genmc/Verification/Config.hpp b/genmc/genmc/Verification/Config.hpp
+index 8465efb..facfc01 100644
+--- a/genmc/genmc/Verification/Config.hpp
++++ b/genmc/genmc/Verification/Config.hpp
+@@ -58,6 +58,8 @@ struct Config {
+ 	bool catStats{};
+ 	/** Filter exact recursive-PSO RF/CO choices by preventive reach reversal. */
+ 	bool catPreventivePruning{};
++	/** Reuse positive CAAT violation explanations across graph candidates. */
++	bool catLearnedNogoods{};
+ 	/** Recompute and compare every incremental query with the Phase 2 oracle. */
+ 	bool catOracle{};
+ 	/** Whether the user also explicitly selected one of GenMC's built-in models. */
+diff --git a/lli/main.cpp b/lli/main.cpp
+index 93c80c8..a7e9e8f 100644
+--- a/lli/main.cpp
++++ b/lli/main.cpp
+@@ -88,6 +88,10 @@ static llvm::cl::opt<bool> clCatPreventivePruning(
+ 	"cat-preventive-pruning", llvm::cl::cat(clGeneral),
+ 	llvm::cl::desc("Filter certified recursive-PSO choices by preventive order reversal"));
+ 
++static llvm::cl::opt<bool> clCatLearnedNogoods(
++	"cat-learned-nogoods", llvm::cl::cat(clGeneral),
++	llvm::cl::desc("Reuse positive CAAT violation reasons across graph candidates"));
++
+ static llvm::cl::opt<bool>
+ 	clCatOracle("cat-oracle", llvm::cl::cat(clGeneral),
+ 		    llvm::cl::desc("Cross-check every incremental CAT query with Phase 2"));
+@@ -436,6 +440,7 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
+ 	conf.explainCat = clExplainCat;
+ 	conf.catStats = clCatStats;
+ 	conf.catPreventivePruning = clCatPreventivePruning;
++	conf.catLearnedNogoods = clCatLearnedNogoods;
+ 	conf.catOracle = clCatOracle;
+ 	conf.estimate = !clDisableEstimation;
+ 	conf.estimationMax = clEstimationMax;
+diff --git a/tests/cat/recursive-broad-differential.sh b/tests/cat/recursive-broad-differential.sh
+index f95861c..99d6566 100644
+--- a/tests/cat/recursive-broad-differential.sh
++++ b/tests/cat/recursive-broad-differential.sh
+@@ -68,6 +68,10 @@ if [[ "${1:-}" == "--worker" ]]; then
+ 		recursive_command=("${genmc}"
+ 			"--model-file=${models_dir}/recursive-${model}.cat"
+ 			--cat-stats --disable-estimation --disable-mm-detector)
++		if [[ "${GENMC_RECURSIVE_FLAGS:-}" =~ [^[:space:]] ]]; then
++			read -r -a parsed_recursive_flags <<<"${GENMC_RECURSIVE_FLAGS}"
++			recursive_command+=("${parsed_recursive_flags[@]}")
++		fi
+ 		if [[ "${genmc_args}" =~ [^[:space:]] ]]; then
+ 			read -r -a parsed_genmc_args <<<"${genmc_args}"
+ 			baseline_command+=("${parsed_genmc_args[@]}")
+diff --git a/tests/cli/model-file.sh b/tests/cli/model-file.sh
+index 9e3b5d8..e68a48a 100644
+--- a/tests/cli/model-file.sh
++++ b/tests/cli/model-file.sh
+@@ -44,6 +44,7 @@ help_output="$("${genmc}" --help 2>&1)"
+ grep -Fq -- "--model-file=<model.cat>" <<<"${help_output}"
+ grep -Fq -- "--explain-cat" <<<"${help_output}"
+ grep -Fq -- "--cat-stats" <<<"${help_output}"
++grep -Fq -- "--cat-learned-nogoods" <<<"${help_output}"
+ grep -Fq -- "--cat-oracle" <<<"${help_output}"
+ 
+ # All invalid combinations fail during command-line/config processing.
+@@ -59,6 +60,8 @@ expect_failure "--explain-cat requires --model-file" \
+ 	"${genmc}" --explain-cat "${program}"
+ expect_failure "--cat-stats requires --model-file" \
+ 	"${genmc}" --cat-stats "${program}"
++expect_failure "--cat-learned-nogoods requires --model-file" \
++	"${genmc}" --cat-learned-nogoods "${program}"
+ expect_failure "--cat-oracle requires --model-file" \
+ 	"${genmc}" --cat-oracle "${program}"
+ 
+diff --git a/tests/unit/CatEvaluatorTest.cpp b/tests/unit/CatEvaluatorTest.cpp
+index 7dde2f9..2948e49 100644
+--- a/tests/unit/CatEvaluatorTest.cpp
++++ b/tests/unit/CatEvaluatorTest.cpp
+@@ -17,6 +17,7 @@
+ #include "genmc/CAT/Frontend.hpp"
+ #include "genmc/CAT/GraphSynchronizer.hpp"
+ #include "genmc/CAT/IncrementalEvaluator.hpp"
++#include "genmc/CAT/LearnedNogood.hpp"
+ #include "genmc/CAT/Model.hpp"
+ #include "genmc/CAT/Normalized.hpp"
+ #include "genmc/CAT/Reasoner.hpp"
+@@ -205,8 +206,8 @@ TEST(CatValueTest, GrowsEventSetsAcrossPackedWordBoundaries)
+ /* Packed, CSR, and structural rows expose the same ascending successor cursor. */
+ TEST(CatValueTest, IteratesRelationSuccessorsWithoutMaterializingRows)
+ {
+-	const std::vector<std::pair<std::size_t, std::size_t>> edges{{0, 1}, {0, 64},
+-							      {0, 129}, {64, 0}};
++	const std::vector<std::pair<std::size_t, std::size_t>> edges{
++		{0, 1}, {0, 64}, {0, 129}, {64, 0}};
+ 	cat::Relation dense(130);
+ 	for (const auto [from, target] : edges)
+ 		dense.insert(from, target);
+@@ -370,8 +371,8 @@ TEST(CatValueTest, StructuralRelationsMatchDenseAlgebraAndMutation)
+ /* Explicit CSR relations preserve arbitrary sparse edges and exact dense fallback. */
+ TEST(CatValueTest, SparseRelationsMatchDenseAlgebraGrowthAndMutation)
+ {
+-	const std::vector<std::pair<std::size_t, std::size_t>> edges{
+-		{6, 1}, {0, 4}, {2, 2}, {0, 1}, {6, 1}, {4, 6}};
++	const std::vector<std::pair<std::size_t, std::size_t>> edges{{6, 1}, {0, 4}, {2, 2},
++								     {0, 1}, {6, 1}, {4, 6}};
+ 	auto sparse = cat::Relation::sparse(7, edges);
+ 	auto dense = makeRelation(7, {{0, 1}, {0, 4}, {2, 2}, {4, 6}, {6, 1}});
+ 	auto other = makeRelation(7, {{1, 3}, {2, 2}, {4, 0}, {6, 5}});
+@@ -495,11 +496,10 @@ RC_GTEST_PROP(CaatOptimizationPropertyTest, LinearClosureMatchesNaiveKleene,
+ 			break;
+ 		naive = std::move(next);
+ 	}
+-	for (const auto source : {
+-		     "LeftA\nlet rec path = po | (path ; po)\nempty path\n",
+-		     "LeftB\nlet rec path = (path ; po) | po\nempty path\n",
+-		     "RightA\nlet rec path = po | (po ; path)\nempty path\n",
+-		     "RightB\nlet rec path = (po ; path) | po\nempty path\n"}) {
++	for (const auto source : {"LeftA\nlet rec path = po | (path ; po)\nempty path\n",
++				  "LeftB\nlet rec path = (path ; po) | po\nempty path\n",
++				  "RightA\nlet rec path = po | (po ; path)\nempty path\n",
++				  "RightB\nlet rec path = (po ; path) | po\nempty path\n"}) {
+ 		auto analyzed = analyzeModel(source);
+ 		RC_ASSERT(analyzed.model != nullptr);
+ 		const auto result = cat::CaatEvaluator().evaluate(
+@@ -538,17 +538,16 @@ RC_GTEST_PROP(CaatOptimizationPropertyTest, AcyclicClosureSliceMatchesNaiveDfs,
+ 		if (color[event] == 0)
+ 			hasCycle = visit(visit, event);
+ 	}
+-	for (const auto source : {
+-		     "AcyclicSliceProperty\nlet path = po+\nacyclic path as cycle\n",
+-		     "IrreflexiveSliceProperty\nlet path = po+\nirreflexive path as cycle\n"}) {
++	for (const auto source :
++	     {"AcyclicSliceProperty\nlet path = po+\nacyclic path as cycle\n",
++	      "IrreflexiveSliceProperty\nlet path = po+\nirreflexive path as cycle\n"}) {
+ 		auto analyzed = analyzeModel(source);
+ 		RC_ASSERT(analyzed.model != nullptr);
+ 		RC_ASSERT(std::ranges::none_of(
+ 			analyzed.model->predicates(), [](const auto &predicate) {
+ 				return predicate.kind == cat::Predicate::Kind::TransitiveClosure;
+ 			}));
+-		RC_ASSERT(analyzed.model->checks()[0].kind ==
+-			  cat::Statement::CheckKind::Acyclic);
++		RC_ASSERT(analyzed.model->checks()[0].kind == cat::Statement::CheckKind::Acyclic);
+ 		const auto result = cat::CaatEvaluator().evaluate(
+ 			*analyzed.model, *analyzed.analysis, size, {{"po", po}});
+ 		RC_ASSERT(result.consistent() == !hasCycle);
+@@ -590,14 +589,13 @@ acyclic order as cycle
+ 		if ((bits & 4U) != 0)
+ 			loc.insert(from, target);
+ 	}
+-	cat::BaseValues base{{"R", reads}, {"W", writes}, {"po", po}, {"rf", rf},
+-			     {"loc", loc}};
+-	const auto materialized = cat::CaatEvaluator().evaluate(
+-		*analyzed.model, *analyzed.analysis, size, base, false);
+-	const auto lazy = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
+-						       size, base, true);
+-	const auto repeated = cat::CaatEvaluator().evaluate(
+-		*analyzed.model, *analyzed.analysis, size, base, true);
++	cat::BaseValues base{{"R", reads}, {"W", writes}, {"po", po}, {"rf", rf}, {"loc", loc}};
++	const auto materialized = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
++								size, base, false);
++	const auto lazy = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, size,
++							base, true);
++	const auto repeated = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
++							    size, base, true);
+ 	RC_ASSERT(materialized.errors.empty());
+ 	RC_ASSERT(lazy.errors.empty());
+ 	RC_ASSERT(repeated.errors.empty());
+@@ -642,9 +640,9 @@ acyclic order as cycle
+ 		for (std::size_t target = 0; target < size; ++target)
+ 			co.insert(event, target);
+ 	}
+-	const auto result = cat::CaatEvaluator().evaluate(
+-		*analyzed.model, *analyzed.analysis, size,
+-		{{"po", po}, {"rf", rf}, {"co", co}}, true);
++	const auto result = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, size,
++							  {{"po", po}, {"rf", rf}, {"co", co}},
++							  true);
+ 	ASSERT_FALSE(result.consistent());
+ 	ASSERT_EQ(result.violations.size(), 1U);
+ 	EXPECT_EQ(result.violations[0].witness, (std::vector<std::size_t>{0, 0}));
+@@ -668,9 +666,9 @@ acyclic order as cycle
+ 	for (std::size_t event = 1; event < size; ++event)
+ 		po.insert(event - 1, event);
+ 	po.insert(size - 1, 0);
+-	const auto result = cat::CaatEvaluator().evaluate(
+-		*analyzed.model, *analyzed.analysis, size,
+-		{{"po", po}, {"rf", rf}, {"co", co}}, true);
++	const auto result = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, size,
++							  {{"po", po}, {"rf", rf}, {"co", co}},
++							  true);
+ 	ASSERT_FALSE(result.consistent());
+ 	ASSERT_EQ(result.violations.size(), 1U);
+ 	EXPECT_EQ(result.violations[0].witness.size(), size + 1);
+@@ -682,24 +680,23 @@ acyclic order as cycle
+ /* Shared, recursive, and expensive-membership cones retain the generic evaluator. */
+ TEST(CaatOptimizationTest, LazyCyclePlanFailsClosedForNearNeighbours)
+ {
+-	auto exact = analyzeModel(
+-		"LazyExact\nlet order = po | (rf ; co)\nacyclic order\n");
++	auto exact = analyzeModel("LazyExact\nlet order = po | (rf ; co)\nacyclic order\n");
+ 	ASSERT_NE(exact.model, nullptr);
+ 	ASSERT_EQ(exact.analysis->lazyCycleRoots().size(), 1U);
+ 	EXPECT_TRUE(exact.analysis->lazyCycleRoots()[0].has_value());
+ 
+-	for (const auto source : {
+-		     "LazyCheap\nlet order = po | rf\nacyclic order\n",
+-		     "LazyShared\nlet order = po | rf\nacyclic order\nempty order\n",
+-		     "LazyRecursive\nlet rec order = po | (order ; rf)\nacyclic order\n",
+-		     "LazyIntersection\nlet order = (po ; rf) & (rf ; po)\nacyclic order\n"}) {
++	for (const auto source :
++	     {"LazyCheap\nlet order = po | rf\nacyclic order\n",
++	      "LazyShared\nlet order = po | rf\nacyclic order\nempty order\n",
++	      "LazyRecursive\nlet rec order = po | (order ; rf)\nacyclic order\n",
++	      "LazyIntersection\nlet order = (po ; rf) & (rf ; po)\nacyclic order\n"}) {
+ 		auto fallback = analyzeModel(source);
+ 		ASSERT_NE(fallback.model, nullptr) << source;
+ 		EXPECT_TRUE(std::ranges::none_of(fallback.analysis->lazyCycleRoots(),
+-						[](const auto &root) { return root.has_value(); }))
++						 [](const auto &root) { return root.has_value(); }))
+ 			<< source;
+ 		EXPECT_TRUE(std::ranges::none_of(fallback.analysis->lazyCycleElided(),
+-						[](bool elided) { return elided; }))
++						 [](bool elided) { return elided; }))
+ 			<< source;
+ 	}
+ }
+@@ -728,12 +725,11 @@ irreflexive second as b
+ 		EXPECT_EQ(exact.model->predicates()[check.predicate].name, "po");
+ 	}
+ 
+-	for (const auto source : {
+-		     "EmptyUse\nlet path = po+\nempty path\n",
+-		     "PredicateUse\nlet path = po+\nlet copy = path\nacyclic path\n",
+-		     "ReflexiveUse\nlet path = po*\nirreflexive path\n",
+-		     "MixedUse\nlet path = po+\nacyclic path\nempty path\n",
+-		     "Unused\nlet path = po+\nacyclic po\n"}) {
++	for (const auto source : {"EmptyUse\nlet path = po+\nempty path\n",
++				  "PredicateUse\nlet path = po+\nlet copy = path\nacyclic path\n",
++				  "ReflexiveUse\nlet path = po*\nirreflexive path\n",
++				  "MixedUse\nlet path = po+\nacyclic path\nempty path\n",
++				  "Unused\nlet path = po+\nacyclic po\n"}) {
+ 		auto retained = analyzeModel(source);
+ 		ASSERT_NE(retained.model, nullptr) << source;
+ 		EXPECT_EQ(closureCount(*retained.model), 1) << source;
+@@ -781,8 +777,7 @@ acyclic order as cycle
+ 	cat::BaseValues root{{"po", cat::Relation(size)},
+ 			     {"rf", cat::Relation(size)},
+ 			     {"co", cat::Relation(size)}};
+-	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis, true,
+-						 true);
++	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis, true, true);
+ 	incremental.initialize(size, root);
+ 	const auto order = *analyzed.analysis->lazyCycleRoots()[0];
+ 	ASSERT_FALSE(incremental.result().values[order].has_value());
+@@ -1204,14 +1199,14 @@ TEST(CatStableGraphAdapterTest, SparseEdgePrimitivesMatchDenseLargeSnapshot)
+ 	for (int index = 1; index <= 509; ++index)
+ 		addSynchronizerLabel<FenceLabel>(graph, Event(0, index), MemOrdering::Relaxed);
+ 	const SAddr x{0x1000};
+-	auto *first = addSynchronizerLabel<WriteLabel>(
+-		graph, Event(0, 510), MemOrdering::Relaxed, x, ASize(4), SVal(1));
++	auto *first = addSynchronizerLabel<WriteLabel>(graph, Event(0, 510), MemOrdering::Relaxed,
++						       x, ASize(4), SVal(1));
+ 	first->addCo(graph.getInitLabel());
+-	auto *second = addSynchronizerLabel<WriteLabel>(
+-		graph, Event(0, 511), MemOrdering::Relaxed, x, ASize(4), SVal(2));
++	auto *second = addSynchronizerLabel<WriteLabel>(graph, Event(0, 511), MemOrdering::Relaxed,
++							x, ASize(4), SVal(2));
+ 	second->addCo(first);
+-	auto *read = addSynchronizerLabel<ReadLabel>(
+-		graph, Event(0, 512), MemOrdering::Relaxed, x, ASize(4));
++	auto *read = addSynchronizerLabel<ReadLabel>(graph, Event(0, 512), MemOrdering::Relaxed, x,
++						     ASize(4));
+ 	read->setRf(first);
+ 
+ 	cat::StableGraphAdapter adapter({"rf", "co", "fr", "rmw", "tc", "tj"});
+@@ -1456,6 +1451,14 @@ acyclic reach as cycle
+ 						 evaluated.values, evaluated.violations);
+ 	ASSERT_TRUE(explained.ok());
+ 	ASSERT_EQ(explained.violations.size(), 1U);
++	EXPECT_GT(explained.statistics.reasonTableSlots, 0U);
++	EXPECT_GT(explained.statistics.baseCandidatesScanned, 0U);
++	EXPECT_LE(explained.statistics.presentBaseFacts,
++		  explained.statistics.baseCandidatesScanned);
++	EXPECT_LE(explained.statistics.derivationAttempts,
++		  explained.statistics.derivedCandidatesScanned);
++	EXPECT_LE(explained.statistics.derivationUpdates,
++		  explained.statistics.derivationAttempts);
+ 	EXPECT_EQ(explained.violations[0].violation.checkName, "cycle");
+ 	ASSERT_EQ(explained.violations[0].explanation.size(), 3U);
+ 	for (const auto &literal : explained.violations[0].explanation) {
+@@ -1472,6 +1475,187 @@ acyclic reach as cycle
+ 		    replayReach.contains(2, 2));
+ }
+ 
++/* Positive cycle explanations survive stable-ID universe growth and reject only when
++ * every sufficient primitive fact is present. */
++TEST(CaatLearnedNogoodTest, MatchesPositiveStableExplanation)
++{
++	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 2), MemOrdering::Relaxed);
++	cat::StableGraphAdapter stable({"po"});
++	auto snapshot = stable.materialize(graph);
++	const auto first = *stable.id(cat::StableEventKey{Event(0, 1)});
++	const auto second = *stable.id(cat::StableEventKey{Event(0, 2)});
++	auto &po = std::get<cat::Relation>(snapshot.base.at("po"));
++	po.insert(second, first);
++	cat::ExplainedViolation explained{
++		{"cycle", cat::Statement::CheckKind::Acyclic, {}, {first, second, first}},
++		{{0, "po", cat::ValueType::Relation, true, first, second},
++		 {0, "po", cat::ValueType::Relation, true, second, first}}};
++	cat::LearnedNogoodDatabase database;
++
++	EXPECT_TRUE(database.learn(explained, stable));
++	EXPECT_TRUE(database.matches(snapshot, stable));
++	po.erase(second, first);
++	EXPECT_FALSE(database.matches(snapshot, stable));
++
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 3), MemOrdering::Relaxed);
++	auto grown = stable.materialize(graph);
++	std::get<cat::Relation>(grown.base.at("po")).insert(second, first);
++	EXPECT_TRUE(database.matches(grown, stable));
++	EXPECT_EQ(database.statistics().learned, 1U);
++	EXPECT_EQ(database.statistics().hits, 2U);
++	EXPECT_EQ(database.statistics().predicateResolutions, 3U);
++}
++
++/* Subset minimization, capacity eviction, and unsupported explanations fail closed. */
++TEST(CaatLearnedNogoodTest, BoundsAndMinimizesDatabase)
++{
++	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 2), MemOrdering::Relaxed);
++	cat::StableGraphAdapter stable({"po"});
++	auto snapshot = stable.materialize(graph);
++	const auto first = *stable.id(cat::StableEventKey{Event(0, 1)});
++	const auto second = *stable.id(cat::StableEventKey{Event(0, 2)});
++	cat::ExplainedViolation longClause{
++		{"cycle", cat::Statement::CheckKind::Acyclic, {}, {first, second, first}},
++		{{0, "po", cat::ValueType::Relation, true, first, second},
++		 {0, "po", cat::ValueType::Relation, true, second, first}}};
++	auto shortClause = longClause;
++	shortClause.explanation.pop_back();
++	cat::LearnedNogoodDatabase database(1, 4);
++
++	EXPECT_TRUE(database.learn(longClause, stable));
++	EXPECT_TRUE(database.learn(shortClause, stable));
++	EXPECT_EQ(database.statistics().removedSupersets, 1U);
++	EXPECT_EQ(database.statistics().currentClauses, 1U);
++	EXPECT_FALSE(database.learn(shortClause, stable));
++	EXPECT_EQ(database.statistics().duplicates, 1U);
++
++	auto negative = shortClause;
++	negative.explanation[0].positive = false;
++	EXPECT_FALSE(database.learn(negative, stable));
++	auto emptyCheck = shortClause;
++	emptyCheck.violation.checkKind = cat::Statement::CheckKind::Empty;
++	EXPECT_FALSE(database.learn(emptyCheck, stable));
++	EXPECT_EQ(database.statistics().unsupported, 2U);
++}
++
++/* A bounded explanation budget stops optional Reasoner work without changing matching. */
++TEST(CaatLearnedNogoodTest, BoundsExplanationAttempts)
++{
++	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 2), MemOrdering::Relaxed);
++	cat::StableGraphAdapter stable({"po"});
++	auto snapshot = stable.materialize(graph);
++	const auto first = *stable.id(cat::StableEventKey{Event(0, 1)});
++	const auto second = *stable.id(cat::StableEventKey{Event(0, 2)});
++	cat::ExplainedViolation explained{
++		{"cycle", cat::Statement::CheckKind::Acyclic, {}, {first, second, first}},
++		{{0, "po", cat::ValueType::Relation, true, first, second},
++		 {0, "po", cat::ValueType::Relation, true, second, first}}};
++	cat::LearnedNogoodDatabase database(4, 4, 2);
++
++	EXPECT_TRUE(database.wantsExplanation());
++	EXPECT_TRUE(database.learn(explained, stable));
++	EXPECT_FALSE(database.learn(explained, stable));
++	EXPECT_FALSE(database.wantsExplanation());
++	EXPECT_FALSE(database.learn(explained, stable));
++	database.noteExplanationSkip();
++	EXPECT_EQ(database.statistics().learnAttempts, 2U);
++	EXPECT_EQ(database.statistics().explanationBudgetSkips, 1U);
++}
++
++/* Optional explanations must repay the bounded literal budget with actual hits. */
++TEST(CaatLearnedNogoodTest, RequiresHitCreditBeforeNextExplanation)
++{
++	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 2), MemOrdering::Relaxed);
++	cat::StableGraphAdapter stable({"po"});
++	auto snapshot = stable.materialize(graph);
++	const auto first = *stable.id(cat::StableEventKey{Event(0, 1)});
++	const auto second = *stable.id(cat::StableEventKey{Event(0, 2)});
++	auto &po = std::get<cat::Relation>(snapshot.base.at("po"));
++	po.insert(second, first);
++	cat::ExplainedViolation explained{
++		{"cycle", cat::Statement::CheckKind::Acyclic, {}, {first, second, first}},
++		{{0, "po", cat::ValueType::Relation, true, first, second},
++		 {0, "po", cat::ValueType::Relation, true, second, first}}};
++	cat::LearnedNogoodDatabase database(4, 4, 16, true);
++
++	EXPECT_TRUE(database.wantsExplanation());
++	EXPECT_TRUE(database.learn(explained, stable));
++	EXPECT_FALSE(database.wantsExplanation());
++	database.noteExplanationSkip();
++	for (std::size_t hit = 0; hit < 4; ++hit) {
++		EXPECT_TRUE(database.matches(snapshot, stable));
++		EXPECT_EQ(database.wantsExplanation(), hit == 3);
++	}
++	EXPECT_TRUE(database.wantsExplanation());
++	EXPECT_EQ(database.statistics().explanationCreditSkips, 1U);
++}
++
++/* Small explorations do not pay provenance cost before generic work is observed. */
++TEST(CaatLearnedNogoodTest, WarmsUpBeforeFirstExplanation)
++{
++	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
++	addSynchronizerLabel<FenceLabel>(graph, Event(0, 1), MemOrdering::Relaxed);
++	cat::StableGraphAdapter stable({"po"});
++	auto snapshot = stable.materialize(graph);
++	cat::LearnedNogoodDatabase database(4, 4, 16, false, 3);
++
++	EXPECT_FALSE(database.wantsExplanation());
++	database.noteExplanationSkip();
++	for (std::size_t query = 0; query < 3; ++query) {
++		EXPECT_FALSE(database.matches(snapshot, stable));
++		EXPECT_EQ(database.wantsExplanation(), query == 2);
++	}
++	EXPECT_TRUE(database.wantsExplanation());
++	EXPECT_EQ(database.statistics().explanationWarmupSkips, 1U);
++}
++
++/* Every matched randomized positive explanation still violates a fresh CAAT oracle. */
++RC_GTEST_PROP(CaatLearnedNogoodPropertyTest, MatchedExplanationReplaysViolation,
++	      (const std::vector<std::uint8_t> &edgeBytes))
++{
++	static const auto analyzed = analyzeModel(R"CAT(NogoodReplay
++let rec reach = po | (reach ; po)
++acyclic reach as cycle
++)CAT");
++	RC_ASSERT(analyzed.model != nullptr);
++	const auto size = std::size_t{2} + edgeBytes.size() % 5;
++	SynchronizerTestGraph graph{{nullptr, nullptr, true}};
++	for (std::size_t event = 0; event < size; ++event)
++		addSynchronizerLabel<FenceLabel>(graph, Event(0, static_cast<int>(event + 1)),
++						 MemOrdering::Relaxed);
++	cat::StableGraphAdapter stable({"po"});
++	auto snapshot = stable.materialize(graph);
++	cat::Relation relation(size);
++	for (std::size_t edge = 0; edge < edgeBytes.size(); ++edge) {
++		if ((edgeBytes[edge] & 1U) != 0)
++			relation.insert(edge % size, (edge / size) % size);
++	}
++	relation.insert(0, 1);
++	relation.insert(1, 0);
++	snapshot.base["po"] = relation;
++	auto evaluated = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, size,
++						       snapshot.base);
++	RC_ASSERT(!evaluated.violations.empty());
++	auto explained = cat::Reasoner().explain(*analyzed.model, *analyzed.analysis, size,
++						 evaluated.values, evaluated.violations);
++	RC_ASSERT(explained.ok());
++	RC_ASSERT(!explained.violations.empty());
++	cat::LearnedNogoodDatabase database;
++	RC_ASSERT(database.learn(explained.violations.front(), stable));
++	RC_ASSERT(database.matches(snapshot, stable));
++	auto replay = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, size,
++						    snapshot.base);
++	RC_ASSERT(!replay.violations.empty());
++}
++
+ /* Semi-positive difference explanations retain both membership and absence facts. */
+ TEST(CaatReasonerTest, ExplainsNegativeBaseLiteralAndReplaysViolation)
+ {
+@@ -1610,7 +1794,7 @@ empty reach
+  */
+ TEST(CaatEvaluatorTest, BenchmarkRecursiveChainFixedPoints)
+ {
+-auto analyzed = analyzeModel(R"CAT(Benchmark
++	auto analyzed = analyzeModel(R"CAT(Benchmark
+ let rec reach = po | (reach ; po)
+ let observed = reach
+ acyclic observed
+diff --git a/tests/unit/ConfigTest.cpp b/tests/unit/ConfigTest.cpp
+index 007da86..a948886 100644
+--- a/tests/unit/ConfigTest.cpp
++++ b/tests/unit/ConfigTest.cpp
+@@ -143,6 +143,60 @@ TEST(ConfigModelFileTest, SelectsRecursiveCaatBackend)
+ 	std::filesystem::remove(path);
+ }
+ 
++/* Learned nogoods require the positive normalized online backend and reject a repeated
++ * inconsistent snapshot without reading stale evaluator state. */
++TEST(ConfigModelFileTest, ReusesPositiveCycleExplanation)
++{
++	auto path = std::filesystem::path(testing::TempDir()) / "genmc-config-nogood.cat";
++	std::ofstream output(path);
++	output << "Nogood\nlet order = po | rf\n"
++		  "let rec reach = order | (reach ; order)\nacyclic reach as cycle\n";
++	output.close();
++	Config config;
++	config.modelFile = path;
++	config.catLearnedNogoods = true;
++	std::vector<std::string> warnings;
++	ASSERT_TRUE(std::holds_alternative<std::monostate>(config.validate(warnings)));
++	auto checker = ConsistencyChecker::create(&config);
++	auto *catChecker = dynamic_cast<CATSCChecker *>(checker.get());
++	ASSERT_NE(catChecker, nullptr);
++
++	CheckerTestGraph graph{{nullptr, checker.get(), true}};
++	const SAddr location{0x1000};
++	auto *read = addCheckerLabel<ReadLabel>(graph, Event(0, 1), MemOrdering::Relaxed, location,
++						ASize(4));
++	auto *write = addCheckerLabel<WriteLabel>(graph, Event(0, 2), MemOrdering::Relaxed,
++						  location, ASize(4), SVal(1));
++	write->addCo(graph.getInitLabel());
++	read->setRf(write);
++
++	EXPECT_FALSE(checker->isConsistent(graph));
++	ASSERT_NE(catChecker->learnedNogoodStatistics(), nullptr);
++	EXPECT_EQ(catChecker->learnedNogoodStatistics()->learned, 0U);
++	EXPECT_EQ(catChecker->learnedNogoodStatistics()->hits, 0U);
++	/* Production admission observes 64 literals x 16 explanation attempts before
++	 * paying the first optional provenance reconstruction. */
++	for (std::size_t query = 1; query < 64U * 16U; ++query)
++		EXPECT_FALSE(checker->isConsistent(graph));
++	EXPECT_EQ(catChecker->learnedNogoodStatistics()->learned, 1U);
++	EXPECT_EQ(catChecker->learnedNogoodStatistics()->hits, 0U);
++	EXPECT_FALSE(checker->isConsistent(graph));
++	EXPECT_EQ(catChecker->learnedNogoodStatistics()->hits, 1U);
++	std::filesystem::remove(path);
++}
++
++/* Phase 1-only CAT models cannot silently enable a CAAT-specific learned database. */
++TEST(ConfigModelFileTest, RejectsLearnedNogoodsWithoutOnlineCaat)
++{
++	auto path = createModelFile("genmc-config-nogood-offline.cat");
++	Config config;
++	config.modelFile = path;
++	config.catLearnedNogoods = true;
++	std::vector<std::string> warnings;
++	EXPECT_TRUE(hasError(config.validate(warnings), "online-admissible normalized CAAT"));
++	std::filesystem::remove(path);
++}
++
+ /* Preventive pruning is a closed-world recursive-PSO certificate, not a host-checker
+  * shortcut or a filename-based model selection. */
+ TEST(ConfigModelFileTest, CertifiesPreventivePruningOnlyForRecursivePSO)
+diff --git a/genmc/genmc/CAT/LearnedNogood.hpp b/genmc/genmc/CAT/LearnedNogood.hpp
+new file mode 100644
+index 0000000..109d054
+--- /dev/null
++++ b/genmc/genmc/CAT/LearnedNogood.hpp
+@@ -0,0 +1,159 @@
++/*
++ * GenMC -- Generic Model Checking.
++ *
++ * This project is dual-licensed under the Apache License 2.0 and the MIT License.
++ * You may choose to use, distribute, or modify this software under either license.
++ *
++ * Apache License 2.0:
++ *     http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * MIT License:
++ *     https://opensource.org/licenses/MIT
++ */
++
++#ifndef GENMC_CAT_LEARNED_NOGOOD_HPP
++#define GENMC_CAT_LEARNED_NOGOOD_HPP
++
++#include "genmc/CAT/Reasoner.hpp"
++#include "genmc/CAT/StableGraphAdapter.hpp"
++
++#include <cstddef>
++#include <limits>
++#include <optional>
++#include <string>
++#include <vector>
++
++namespace cat {
++
++/** One compiled positive ground base fact in a worker-stable integer namespace. */
++struct StableBaseLiteral {
++	std::size_t predicate{};
++	ValueType type{ValueType::Relation};
++	std::size_t first{};
++	std::optional<std::size_t> second;
++
++	auto operator==(const StableBaseLiteral &) const -> bool = default;
++};
++
++/** Bounded worker-local learned-nogood observability. */
++struct LearnedNogoodStatistics {
++	std::size_t learnAttempts{};
++	std::size_t explanationBudgetSkips{};
++	std::size_t explanationWarmupSkips{};
++	std::size_t explanationCreditSkips{};
++	std::size_t learned{};
++	std::size_t unsupported{};
++	std::size_t duplicates{};
++	std::size_t subsumed{};
++	std::size_t removedSupersets{};
++	std::size_t evicted{};
++	std::size_t matchQueries{};
++	std::size_t predicateResolutions{};
++	std::size_t literalChecks{};
++	std::size_t hits{};
++	std::size_t currentClauses{};
++	std::size_t currentLiterals{};
++	std::size_t currentBytes{};
++	std::size_t maximumClauses{};
++	std::size_t maximumLiterals{};
++	std::size_t maximumBytes{};
++};
++
++/**
++ * Retain sufficient positive CAT explanations across execution-graph candidates.
++ *
++ * Every stored conjunction is matched against materialized primitive values in the
++ * same worker-stable event universe. V1 accepts only positive explanations of cycle or
++ * self-loop violations; insertion of unrelated base facts therefore cannot repair the
++ * witnessed derivation. The database is worker-local, bounded, and not thread-safe.
++ * Eviction loses pruning power only and never affects CAT semantics.
++ */
++class LearnedNogoodDatabase {
++public:
++	/**
++	 * Construct an empty bounded database.
++	 *
++	 * @param clauseLimit Maximum retained clauses; zero disables learning.
++	 * @param literalLimit Maximum literals accepted in one clause; at least one when
++	 * learning is enabled. Also the hit-credit floor when credit is required.
++	 * @param explanationAttemptLimit Maximum optional Reasoner explanations.
++	 * @param requireHitCredit Require realized learned rejections between explanations.
++	 * @param warmupMatchQueries Minimum snapshot-match queries before the first optional
++	 * Reasoner explanation. Delaying learning changes pruning effort only.
++	 */
++	explicit LearnedNogoodDatabase(
++		std::size_t clauseLimit = 4096, std::size_t literalLimit = 64,
++		std::size_t explanationAttemptLimit = std::numeric_limits<std::size_t>::max(),
++		bool requireHitCredit = false, std::size_t warmupMatchQueries = 0);
++
++	/** Whether another costly Reasoner reconstruction may be requested. */
++	[[nodiscard]] auto wantsExplanation() const -> bool
++	{
++		return statistics_.matchQueries >= warmupMatchQueries_ &&
++		       statistics_.learnAttempts < explanationAttemptLimit_ &&
++		       (!requireHitCredit_ || statistics_.hits >= nextExplanationHitTarget_);
++	}
++	/** Record why one inconsistent query was evaluated without an explanation. */
++	void noteExplanationSkip()
++	{
++		if (statistics_.learnAttempts >= explanationAttemptLimit_)
++			++statistics_.explanationBudgetSkips;
++		else if (statistics_.matchQueries < warmupMatchQueries_)
++			++statistics_.explanationWarmupSkips;
++		else
++			++statistics_.explanationCreditSkips;
++	}
++
++	/**
++	 * Convert and retain one Reasoner-certified violation explanation.
++	 *
++	 * @param explained Current positive CAT explanation in stable dense IDs.
++	 * @param stable Worker identity map that produced those IDs.
++	 * @return True exactly when a new non-redundant clause was retained.
++	 */
++	[[nodiscard]] auto learn(const ExplainedViolation &explained,
++				 const StableGraphAdapter &stable) -> bool;
++
++	/**
++	 * Test whether one current primitive snapshot entails a retained nogood.
++	 *
++	 * @param snapshot Materialized values in @p stable's ID universe.
++	 * @param stable Identity map matching @p snapshot.
++	 * @return True when every literal of any retained conjunction is present.
++	 * @complexity O(retained clauses * literals) in V1.
++	 */
++	[[nodiscard]] auto matches(const StableGraphSnapshot &snapshot,
++				   const StableGraphAdapter &stable) -> bool;
++
++	/** Return lifetime and current bounded-storage counters. */
++	[[nodiscard]] auto statistics() const -> const LearnedNogoodStatistics &
++	{
++		return statistics_;
++	}
++
++private:
++	using Clause = std::vector<StableBaseLiteral>;
++	[[nodiscard]] static auto isSubset(const Clause &subset, const Clause &superset) -> bool;
++	[[nodiscard]] static auto literalMatches(const StableBaseLiteral &literal,
++						 const StableGraphSnapshot &snapshot,
++						 const std::vector<const Value *> &values) -> bool;
++	[[nodiscard]] static auto storageBytes(const Clause &clause) -> std::size_t;
++	[[nodiscard]] auto internPredicate(std::string_view name) -> std::size_t;
++	void deferNextExplanation(std::size_t requiredHits);
++	void refreshStorageStatistics();
++
++	std::size_t clauseLimit_{};
++	std::size_t literalLimit_{};
++	std::size_t explanationAttemptLimit_{};
++	bool requireHitCredit_{};
++	std::size_t warmupMatchQueries_{};
++	std::size_t nextExplanationHitTarget_{};
++	std::vector<std::string> predicateNames_;
++	std::vector<const Value *> resolvedValues_;
++	std::vector<Clause> clauses_;
++	LearnedNogoodStatistics statistics_;
++};
++
++} /* namespace cat */
++
++#endif /* GENMC_CAT_LEARNED_NOGOOD_HPP */
+diff --git a/genmc/genmc/CAT/LearnedNogood.cpp b/genmc/genmc/CAT/LearnedNogood.cpp
+new file mode 100644
+index 0000000..b70c061
+--- /dev/null
++++ b/genmc/genmc/CAT/LearnedNogood.cpp
+@@ -0,0 +1,210 @@
++/*
++ * GenMC -- Generic Model Checking.
++ *
++ * This project is dual-licensed under the Apache License 2.0 and the MIT License.
++ * You may choose to use, distribute, or modify this software under either license.
++ *
++ * Apache License 2.0:
++ *     http://www.apache.org/licenses/LICENSE-2.0
++ *
++ * MIT License:
++ *     https://opensource.org/licenses/MIT
++ */
++
++#include "genmc/CAT/LearnedNogood.hpp"
++
++#include "genmc/Support/Error.hpp"
++
++#include <algorithm>
++#include <numeric>
++#include <tuple>
++
++namespace cat {
++namespace {
++
++static auto literalKey(const StableBaseLiteral &literal)
++{
++	return std::tie(literal.predicate, literal.type, literal.first, literal.second);
++}
++
++static auto literalLess(const StableBaseLiteral &lhs, const StableBaseLiteral &rhs) -> bool
++{
++	return literalKey(lhs) < literalKey(rhs);
++}
++
++} /* namespace */
++
++LearnedNogoodDatabase::LearnedNogoodDatabase(std::size_t clauseLimit, std::size_t literalLimit,
++					     std::size_t explanationAttemptLimit,
++					     bool requireHitCredit,
++					     std::size_t warmupMatchQueries)
++	: clauseLimit_(clauseLimit), literalLimit_(literalLimit),
++	  explanationAttemptLimit_(explanationAttemptLimit), requireHitCredit_(requireHitCredit),
++	  warmupMatchQueries_(warmupMatchQueries)
++{
++	VERIFY(clauseLimit_ == 0 || literalLimit_ > 0,
++	       "enabled CAT nogood learning requires a positive literal limit");
++}
++
++void LearnedNogoodDatabase::deferNextExplanation(std::size_t requiredHits)
++{
++	if (!requireHitCredit_)
++		return;
++	const auto remaining = std::numeric_limits<std::size_t>::max() - statistics_.hits;
++	nextExplanationHitTarget_ = statistics_.hits + std::min(requiredHits, remaining);
++}
++
++auto LearnedNogoodDatabase::isSubset(const Clause &subset, const Clause &superset) -> bool
++{
++	return std::ranges::includes(superset, subset, literalLess);
++}
++
++auto LearnedNogoodDatabase::storageBytes(const Clause &clause) -> std::size_t
++{
++	return sizeof(Clause) + clause.capacity() * sizeof(StableBaseLiteral);
++}
++
++auto LearnedNogoodDatabase::internPredicate(std::string_view name) -> std::size_t
++{
++	const auto found = std::ranges::find(predicateNames_, name);
++	if (found != predicateNames_.end())
++		return static_cast<std::size_t>(std::distance(predicateNames_.begin(), found));
++	predicateNames_.emplace_back(name);
++	resolvedValues_.push_back(nullptr);
++	return predicateNames_.size() - 1;
++}
++
++void LearnedNogoodDatabase::refreshStorageStatistics()
++{
++	statistics_.currentClauses = clauses_.size();
++	statistics_.currentLiterals = std::accumulate(
++		clauses_.begin(), clauses_.end(), std::size_t{},
++		[](std::size_t count, const auto &clause) { return count + clause.size(); });
++	statistics_.currentBytes = std::accumulate(
++		clauses_.begin(), clauses_.end(), sizeof(*this),
++		[](std::size_t bytes, const auto &clause) { return bytes + storageBytes(clause); });
++	statistics_.currentBytes += predicateNames_.capacity() * sizeof(std::string) +
++				    resolvedValues_.capacity() * sizeof(const Value *) +
++				    std::accumulate(predicateNames_.begin(), predicateNames_.end(),
++						    std::size_t{},
++						    [](std::size_t bytes, const auto &name) {
++							    return bytes + name.capacity();
++						    });
++	statistics_.maximumClauses =
++		std::max(statistics_.maximumClauses, statistics_.currentClauses);
++	statistics_.maximumLiterals =
++		std::max(statistics_.maximumLiterals, statistics_.currentLiterals);
++	statistics_.maximumBytes = std::max(statistics_.maximumBytes, statistics_.currentBytes);
++}
++
++auto LearnedNogoodDatabase::learn(const ExplainedViolation &explained,
++				  const StableGraphAdapter &stable) -> bool
++{
++	if (!wantsExplanation())
++		return false;
++	++statistics_.learnAttempts;
++	if (clauseLimit_ == 0 || explained.explanation.empty() ||
++	    explained.explanation.size() > literalLimit_ ||
++	    (explained.violation.checkKind != Statement::CheckKind::Acyclic &&
++	     explained.violation.checkKind != Statement::CheckKind::Irreflexive)) {
++		++statistics_.unsupported;
++		deferNextExplanation(literalLimit_);
++		return false;
++	}
++
++	for (const auto &literal : explained.explanation) {
++		if (!literal.positive || literal.first >= stable.universeSize() ||
++		    (literal.type == ValueType::Relation &&
++		     (!literal.second || *literal.second >= stable.universeSize())) ||
++		    (literal.type == ValueType::Set && literal.second)) {
++			++statistics_.unsupported;
++			deferNextExplanation(literalLimit_);
++			return false;
++		}
++	}
++	Clause clause;
++	clause.reserve(explained.explanation.size());
++	for (const auto &literal : explained.explanation) {
++		const auto predicate = internPredicate(literal.predicateName);
++		StableBaseLiteral converted{predicate, literal.type, literal.first, std::nullopt};
++		if (literal.second)
++			converted.second = *literal.second;
++		clause.push_back(std::move(converted));
++	}
++	std::ranges::sort(clause, literalLess);
++	clause.erase(std::unique(clause.begin(), clause.end()), clause.end());
++
++	for (const auto &stored : clauses_) {
++		if (!isSubset(stored, clause))
++			continue;
++		if (stored == clause)
++			++statistics_.duplicates;
++		else
++			++statistics_.subsumed;
++		deferNextExplanation(literalLimit_);
++		return false;
++	}
++
++	const auto oldSize = clauses_.size();
++	std::erase_if(clauses_, [&](const auto &stored) { return isSubset(clause, stored); });
++	statistics_.removedSupersets += oldSize - clauses_.size();
++	while (clauses_.size() >= clauseLimit_) {
++		clauses_.erase(clauses_.begin());
++		++statistics_.evicted;
++	}
++	clauses_.push_back(std::move(clause));
++	++statistics_.learned;
++	deferNextExplanation(literalLimit_);
++	refreshStorageStatistics();
++	return true;
++}
++
++auto LearnedNogoodDatabase::literalMatches(const StableBaseLiteral &literal,
++					   const StableGraphSnapshot &snapshot,
++					   const std::vector<const Value *> &values) -> bool
++{
++	if (literal.first >= snapshot.eventCount || literal.predicate >= values.size())
++		return false;
++	const auto *value = values[literal.predicate];
++	if (!value)
++		return false;
++	if (literal.type == ValueType::Set) {
++		const auto *set = std::get_if<EventSet>(value);
++		return set && set->contains(literal.first);
++	}
++	if (!literal.second)
++		return false;
++	if (*literal.second >= snapshot.eventCount)
++		return false;
++	const auto *relation = std::get_if<Relation>(value);
++	return relation && relation->contains(literal.first, *literal.second);
++}
++
++auto LearnedNogoodDatabase::matches(const StableGraphSnapshot &snapshot, const StableGraphAdapter &)
++	-> bool
++{
++	++statistics_.matchQueries;
++	for (std::size_t predicate = 0; predicate < predicateNames_.size(); ++predicate) {
++		const auto found = snapshot.base.find(predicateNames_[predicate]);
++		resolvedValues_[predicate] = found == snapshot.base.end() ? nullptr
++									  : &found->second;
++		++statistics_.predicateResolutions;
++	}
++	for (const auto &clause : clauses_) {
++		bool matched = true;
++		for (const auto &literal : clause) {
++			++statistics_.literalChecks;
++			if (literalMatches(literal, snapshot, resolvedValues_))
++				continue;
++			matched = false;
++			break;
++		}
++		if (!matched)
++			continue;
++		++statistics_.hits;
++		return true;
++	}
++	return false;
++}
++
++} /* namespace cat */
+

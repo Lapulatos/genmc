@@ -1,0 +1,138 @@
+{
+  "by_backend": {
+    "caat-pso": {
+      "category": {
+        "correct": 237,
+        "error": 51
+      },
+      "completed": 237,
+      "runs": 288,
+      "status": {
+        "OUT OF MEMORY": 8,
+        "TIMEOUT": 43,
+        "false(unreach-call)": 75,
+        "true": 162
+      }
+    },
+    "caat-sc": {
+      "category": {
+        "correct": 270,
+        "error": 18
+      },
+      "completed": 270,
+      "runs": 288,
+      "status": {
+        "OUT OF MEMORY": 13,
+        "TIMEOUT": 5,
+        "false(unreach-call)": 87,
+        "true": 183
+      }
+    },
+    "caat-tso": {
+      "category": {
+        "correct": 267,
+        "error": 21
+      },
+      "completed": 267,
+      "runs": 288,
+      "status": {
+        "OUT OF MEMORY": 8,
+        "TIMEOUT": 13,
+        "false(unreach-call)": 84,
+        "true": 183
+      }
+    }
+  },
+  "metadata": [
+    {
+      "backend": "caat-pso",
+      "date": "2026-07-15 04:25:13 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/wide-before/psoperf-before-pso.2026-07-15_04-25-13.results.caat-pso.r01.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r01",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-pso",
+      "date": "2026-07-15 04:25:13 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/wide-before/psoperf-before-pso.2026-07-15_04-25-13.results.caat-pso.r02.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r02",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-pso",
+      "date": "2026-07-15 04:25:13 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/wide-before/psoperf-before-pso.2026-07-15_04-25-13.results.caat-pso.r03.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r03",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-sc",
+      "date": "2026-07-15 04:18:52 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/wide-before/scperf-before-sc.2026-07-15_04-18-52.results.caat-sc.r01.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r01",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-sc",
+      "date": "2026-07-15 04:18:52 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/wide-before/scperf-before-sc.2026-07-15_04-18-52.results.caat-sc.r02.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r02",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-sc",
+      "date": "2026-07-15 04:18:52 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/wide-before/scperf-before-sc.2026-07-15_04-18-52.results.caat-sc.r03.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r03",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-tso",
+      "date": "2026-07-15 04:22:02 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/wide-before/tsoperf-before-tso.2026-07-15_04-22-02.results.caat-tso.r01.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r01",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-tso",
+      "date": "2026-07-15 04:22:02 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/wide-before/tsoperf-before-tso.2026-07-15_04-22-02.results.caat-tso.r02.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r02",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-tso",
+      "date": "2026-07-15 04:22:02 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/wide-before/tsoperf-before-tso.2026-07-15_04-22-02.results.caat-tso.r03.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r03",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    }
+  ]
+}

@@ -1,0 +1,146 @@
+[
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__test-easy8.wvr.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.07894644496263936,
+    "source": "c/weaver/test-easy8.wvr.c",
+    "task": "c/weaver/test-easy8.wvr.yml"
+  },
+  {
+    "classification": "signal-6",
+    "exit_code": -6,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__parallel-misc-3.wvr.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.21112490398809314,
+    "source": "c/weaver/parallel-misc-3.wvr.c",
+    "task": "c/weaver/parallel-misc-3.wvr.yml"
+  },
+  {
+    "classification": "verified-false",
+    "exit_code": 42,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-wmm__safe033_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact"
+    ],
+    "seconds": 2.0153975280118175,
+    "source": "c/pthread-wmm/safe033_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.c",
+    "task": "c/pthread-wmm/safe033_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml"
+  },
+  {
+    "classification": "verified-false",
+    "exit_code": 42,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-wmm__mix034_pso.opt_tso.opt.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact"
+    ],
+    "seconds": 4.142378571967129,
+    "source": "c/pthread-wmm/mix034_pso.opt_tso.opt.c",
+    "task": "c/pthread-wmm/mix034_pso.opt_tso.opt.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__chl-sre-trans.wvr.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.06535931502003223,
+    "source": "c/weaver/chl-sre-trans.wvr.c",
+    "task": "c/weaver/chl-sre-trans.wvr.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "weaver__chl-sre-subst.wvr.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact",
+      "manual-pthread-calls"
+    ],
+    "seconds": 0.06408636696869507,
+    "source": "c/weaver/chl-sre-subst.wvr.c",
+    "task": "c/weaver/chl-sre-subst.wvr.yml"
+  },
+  {
+    "classification": "verified-false",
+    "exit_code": 42,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-wmm__safe006_rmo.oepc_rmo.opt-thin000_rmo.oepc_rmo.opt.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact"
+    ],
+    "seconds": 0.10061604803195223,
+    "source": "c/pthread-wmm/safe006_rmo.oepc_rmo.opt-thin000_rmo.oepc_rmo.opt.c",
+    "task": "c/pthread-wmm/safe006_rmo.oepc_rmo.opt-thin000_rmo.oepc_rmo.opt.yml"
+  },
+  {
+    "classification": "verified-false",
+    "exit_code": 42,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-wmm__safe018_rmo.oepc.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact"
+    ],
+    "seconds": 0.0887565339799039,
+    "source": "c/pthread-wmm/safe018_rmo.oepc.c",
+    "task": "c/pthread-wmm/safe018_rmo.oepc.yml"
+  },
+  {
+    "classification": "verified-false",
+    "exit_code": 42,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-wmm__safe006_power.oepc-thin000_power.oepc.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact"
+    ],
+    "seconds": 0.09223923605168238,
+    "source": "c/pthread-wmm/safe006_power.oepc-thin000_power.oepc.c",
+    "task": "c/pthread-wmm/safe006_power.oepc-thin000_power.oepc.yml"
+  },
+  {
+    "classification": "verified-false",
+    "exit_code": 42,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-wmm__mix012_pso.opt_tso.opt.log",
+    "rewrite_rules": [
+      "abort-assume-definition",
+      "nondet-bool-exact"
+    ],
+    "seconds": 10.334051591984462,
+    "source": "c/pthread-wmm/mix012_pso.opt_tso.opt.c",
+    "task": "c/pthread-wmm/mix012_pso.opt_tso.opt.yml"
+  }
+]

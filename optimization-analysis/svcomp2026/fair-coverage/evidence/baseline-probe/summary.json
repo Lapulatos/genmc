@@ -1,0 +1,132 @@
+[
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread-atomic__read_write_lock-1.log",
+    "seconds": 0.0768786990083754,
+    "source": "c/pthread-atomic/read_write_lock-1.c",
+    "task": "c/pthread-atomic/read_write_lock-1.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread-divine__tls_destructor_worker.log",
+    "seconds": 0.0686307359719649,
+    "source": "c/pthread-divine/tls_destructor_worker.c",
+    "task": "c/pthread-divine/tls_destructor_worker.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread-ext__40_barrier_vf.log",
+    "seconds": 0.07309941801941022,
+    "source": "c/pthread-ext/40_barrier_vf.c",
+    "task": "c/pthread-ext/40_barrier_vf.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread-ext__18_read_write_lock.log",
+    "seconds": 0.07378141401568428,
+    "source": "c/pthread-ext/18_read_write_lock.c",
+    "task": "c/pthread-ext/18_read_write_lock.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread-divine__tls_basic.log",
+    "seconds": 0.07637820596573874,
+    "source": "c/pthread-divine/tls_basic.c",
+    "task": "c/pthread-divine/tls_basic.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread-deagle__arithmetic_prog_bad.log",
+    "seconds": 0.07279304700205103,
+    "source": "c/pthread-deagle/arithmetic_prog_bad.c",
+    "task": "c/pthread-deagle/arithmetic_prog_bad.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread-deagle__arithmetic_prog_ok.log",
+    "seconds": 0.07417664804961532,
+    "source": "c/pthread-deagle/arithmetic_prog_ok.c",
+    "task": "c/pthread-deagle/arithmetic_prog_ok.yml"
+  },
+  {
+    "classification": "compilation",
+    "exit_code": 5,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread__sync01.log",
+    "seconds": 0.07171524700243026,
+    "source": "c/pthread/sync01.c",
+    "task": "c/pthread/sync01.yml"
+  },
+  {
+    "classification": "unsupported-external",
+    "exit_code": 17,
+    "has_abort_assume": true,
+    "has_nondet": false,
+    "log": "pthread-ext__36_stack_cas_p0_vs_concur.log",
+    "seconds": 0.08502474904526025,
+    "source": "c/pthread-ext/36_stack_cas_p0_vs_concur.c",
+    "task": "c/pthread-ext/36_stack_cas_p0_vs_concur.yml"
+  },
+  {
+    "classification": "unsupported-external",
+    "exit_code": 17,
+    "has_abort_assume": true,
+    "has_nondet": false,
+    "log": "pthread-ext__37_stack_lock_p0_vs_concur.log",
+    "seconds": 0.07454686803976074,
+    "source": "c/pthread-ext/37_stack_lock_p0_vs_concur.c",
+    "task": "c/pthread-ext/37_stack_lock_p0_vs_concur.yml"
+  },
+  {
+    "classification": "unsupported-external",
+    "exit_code": 17,
+    "has_abort_assume": false,
+    "has_nondet": false,
+    "log": "pthread__reorder_5.log",
+    "seconds": 1.595481128024403,
+    "source": "c/pthread/reorder_5.c",
+    "task": "c/pthread/reorder_5.yml"
+  },
+  {
+    "classification": "signal-6",
+    "exit_code": -6,
+    "has_abort_assume": true,
+    "has_nondet": false,
+    "log": "pthread-lit__qw2004-2b.log",
+    "seconds": 0.21777159901103005,
+    "source": "c/pthread-lit/qw2004-2b.c",
+    "task": "c/pthread-lit/qw2004-2b.yml"
+  },
+  {
+    "classification": "signal-6",
+    "exit_code": -6,
+    "has_abort_assume": true,
+    "has_nondet": false,
+    "log": "pthread-theta__wsc.log",
+    "seconds": 0.19578426203224808,
+    "source": "c/pthread-theta/wsc.c",
+    "task": "c/pthread-theta/wsc.yml"
+  }
+]

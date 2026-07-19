@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="60 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/>
+  <option name="--disable-mm-detector"/>
+  <option name="--svcomp-backend=caat-sc"/>
+  <option name="--cat-stats"/>
+  <option name="--cat-disable-adaptive-offline"/>
+  <column title="insertion rejected">insertion-rejections=([0-9]+)</column>
+  <column title="history examined">history-entries-examined=([0-9]+)</column>
+  <column title="subset matches">history-subset-matches=([0-9]+)</column>
+  <column title="rollback attempts">history-rollback-attempts=([0-9]+)</column>
+  <column title="rollback failures">history-rollback-failures=([0-9]+)</column>
+  <column title="advance attempts">history-advance-attempts=([0-9]+)</column>
+  <column title="advance failures">history-advance-failures=([0-9]+)</column>
+  <column title="replacement rejected">replacement-rejections=([0-9]+)</column>
+  <column title="insert">insert=([0-9]+)</column>
+  <column title="rebuild">rebuild=([0-9]+)</column>
+  <rundefinition name="incremental-history-reason">
+    <tasks name="medium-3">
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe004_power.oepc_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/rfi002_tso.yml</include>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

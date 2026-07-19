@@ -1,0 +1,69 @@
+{
+  "cells": 6,
+  "mismatches": {
+    "status": 0,
+    "category": 0,
+    "coverage_loss": 0,
+    "execution": 0,
+    "snapshot": 0,
+    "base": 0
+  },
+  "opportunity": false,
+  "pilot_pass": false,
+  "tasks": {
+    "pso/fib_unsafe-7.yml": {
+      "cpu_median": 1.0001022448848262,
+      "rss_median": 0.9996860775388479,
+      "rss_max_ratio": 0.9996860775388479,
+      "before_full_checks_median": null,
+      "after_full_checks_median": null,
+      "full_check_ratio": null,
+      "candidate_ratio_median": null
+    },
+    "pso/queue_ok_longer.yml": {
+      "cpu_median": 0.9988901042780705,
+      "rss_median": 1.0690148212728858,
+      "rss_max_ratio": 1.0690148212728858,
+      "before_full_checks_median": 34.0,
+      "after_full_checks_median": 34.0,
+      "full_check_ratio": 1.0,
+      "candidate_ratio_median": 1.0
+    },
+    "sc/fib_unsafe-7.yml": {
+      "cpu_median": 0.9970541934377639,
+      "rss_median": 1.002373793321728,
+      "rss_max_ratio": 1.002373793321728,
+      "before_full_checks_median": 0.0,
+      "after_full_checks_median": 0.0,
+      "full_check_ratio": null,
+      "candidate_ratio_median": null
+    },
+    "sc/queue_ok_longer.yml": {
+      "cpu_median": 0.9895351959028851,
+      "rss_median": 1.0000516155672552,
+      "rss_max_ratio": 1.0000516155672552,
+      "before_full_checks_median": 0.0,
+      "after_full_checks_median": 0.0,
+      "full_check_ratio": null,
+      "candidate_ratio_median": null
+    },
+    "tso/fib_unsafe-7.yml": {
+      "cpu_median": 1.0211922086386709,
+      "rss_median": 1.0,
+      "rss_max_ratio": 1.0,
+      "before_full_checks_median": 35572.0,
+      "after_full_checks_median": 35572.0,
+      "full_check_ratio": 1.0,
+      "candidate_ratio_median": 1.0
+    },
+    "tso/queue_ok_longer.yml": {
+      "cpu_median": 1.0129186133976462,
+      "rss_median": 1.0000738552437223,
+      "rss_max_ratio": 1.0000738552437223,
+      "before_full_checks_median": 4.0,
+      "after_full_checks_median": 4.0,
+      "full_check_ratio": 1.0,
+      "candidate_ratio_median": 1.0
+    }
+  }
+}

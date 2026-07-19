@@ -1,0 +1,129 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /workspace/experiments/caat-optimization/cost-selector/definitions/profile-tso.xml
+name:                    profile-tso
+run sets:                caat-tso.r01.unreach-call
+date:                    Wed, 2026-07-15 06:11:38 UTC
+tool:                    GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/cost-selector/build-tests/bin/genmc
+options:                 --disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats
+parallel runs:           32
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    ed6fb15d7415
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.7450880001 MB
+------------------------------------------------------------
+
+
+
+genmc-tso.r01.unreach-call
+Run set 1 of 15: skipped
+
+
+cat-tso.r01.unreach-call
+Run set 2 of 15: skipped
+
+
+caat-tso.r01.unreach-call
+Run set 3 of 15 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats --svcomp-backend=caat-tso' and propertyfile 'None'
+
+inputfile                                                                      status                       cpu time   wall time        host
+--------------------------------------------------------------------------------------------------------------------------------------------
+goblint-regression/13-privatized_01-priv_nr_true.yml                           true                             0.08        0.09        None
+goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml              false(unreach-call)              0.09        0.09        None
+goblint-regression/13-privatized_19-publish-precision_true.yml                 true                             0.07        0.08        None
+goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml        false(unreach-call)              0.09        0.10        None
+goblint-regression/13-privatized_25-struct_nr_true.yml                         true                             0.07        0.08        None
+goblint-regression/13-privatized_35-traces-ex-2_true.yml                       true                             0.09        0.10        None
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml              false(unreach-call)              0.08        0.08        None
+goblint-regression/13-privatized_46-refine-protected1_true.yml                 true                             0.09        0.10        None
+goblint-regression/13-privatized_66-mine-W-init_true.yml                       true                             0.08        0.09        None
+goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml    true                             0.10        0.10        None
+goblint-regression/28-race_reach_01-simple_racing.yml                          TIMEOUT                         61.03       61.15        None
+goblint-regression/28-race_reach_37-indirect_racing.yml                        TIMEOUT                         61.15       61.16        None
+goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml             false(unreach-call)              0.08        0.09        None
+ldv-races/race-1_2-join.yml                                                    false(unreach-call)              0.10        0.12        None
+pthread/fib_unsafe-7.yml                                                       TIMEOUT                         60.98       61.01        None
+pthread/lazy01.yml                                                             false(unreach-call)              0.10        0.10        None
+pthread/queue_longer.yml                                                       TIMEOUT                         60.94       61.03        None
+pthread/queue_ok_longer.yml                                                    true                             5.50        5.51        None
+pthread-atomic/szymanski.yml                                                   true                             0.08        0.08        None
+pthread-deagle/circular_buffer_ok.yml                                          true                            20.79       20.80        None
+pthread-ext/43_NetBSD_sysmon_power_sliced.yml                                  true                             0.07        0.08        None
+pthread-theta/exponential-nondet.yml                                           true                             0.07        0.08        None
+pthread-theta/unwind2-100.yml                                                  false(unreach-call)              0.07        0.08        None
+pthread-theta/unwind3-1.yml                                                    false(unreach-call)              0.09        0.09        None
+--------------------------------------------------------------------------------------------------------------------------------------------
+Run set 3                                                                      done                           271.97       61.45           -
+
+
+cat-tso.r02.unreach-call
+Run set 4 of 15: skipped
+
+
+caat-tso.r02.unreach-call
+Run set 5 of 15: skipped
+
+
+genmc-tso.r02.unreach-call
+Run set 6 of 15: skipped
+
+
+caat-tso.r03.unreach-call
+Run set 7 of 15: skipped
+
+
+genmc-tso.r03.unreach-call
+Run set 8 of 15: skipped
+
+
+cat-tso.r03.unreach-call
+Run set 9 of 15: skipped
+
+
+genmc-tso.r04.unreach-call
+Run set 10 of 15: skipped
+
+
+cat-tso.r04.unreach-call
+Run set 11 of 15: skipped
+
+
+caat-tso.r04.unreach-call
+Run set 12 of 15: skipped
+
+
+cat-tso.r05.unreach-call
+Run set 13 of 15: skipped
+
+
+caat-tso.r05.unreach-call
+Run set 14 of 15: skipped
+
+
+genmc-tso.r05.unreach-call
+Run set 15 of 15: skipped
+
+Statistics:             24 Files
+  correct:              20
+    correct true:       12
+    correct false:       8
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:               4
+  Score:                32 (max: 36)

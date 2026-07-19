@@ -1,0 +1,4 @@
+baseline	backend	paired_tasks	wall_ratio_geomean	bootstrap_95ci_low	bootstrap_95ci_high	cpu_ratio_geomean	cpu_95ci_low	cpu_95ci_high	memory_ratio_geomean	memory_95ci_low	memory_95ci_high	backend_faster	baseline_faster	ties	exact_sign_p	holm_p
+genmc-tso	caat-tso	89	1.34973	1.14324	1.63094	1.36491	1.15811	1.6606	1.08515	1.01092	1.21577	34	55	0	0.0334167	0.0668334
+genmc-tso	cat-tso	82	1.30844	1.0961	1.62978	1.33966	1.11751	1.6754	1.04671	1.01018	1.12358	28	54	0	0.00543592	0.0163078
+cat-tso	caat-tso	82	0.854544	0.745459	0.952066	0.842517	0.732786	0.939592	0.995502	0.98507	1.00081	51	31	0	0.0352414	0.0668334

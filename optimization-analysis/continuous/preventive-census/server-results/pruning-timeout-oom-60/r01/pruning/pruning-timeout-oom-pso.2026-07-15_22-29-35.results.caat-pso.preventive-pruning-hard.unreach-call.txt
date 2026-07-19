@@ -1,0 +1,109 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/experiments/caat-optimization/preventive-census/definitions/pruning-timeout-oom-pso.xml
+name:                    pruning-timeout-oom-pso
+run sets:                caat-pso.preventive-pruning-hard.unreach-call
+date:                    Wed, 2026-07-15 22:29:35 UTC
+tool:                    GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/preventive-census/preventive-genmc-wrapper.sh
+options:                 --disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats
+parallel runs:           24
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    8fbb44c42ee8
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.7450880001 MB
+------------------------------------------------------------
+
+
+
+caat-pso.preventive-pruning-hard.unreach-call
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats --svcomp-backend=caat-pso' and propertyfile 'None'
+
+inputfile                                                                                              status                       cpu time   wall time        host
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+goblint-regression/28-race_reach_01-simple_racing.yml                                                  OUT OF MEMORY                   33.45       33.59        None
+goblint-regression/28-race_reach_03-munge_racing.yml                                                   OUT OF MEMORY                   10.73       10.76        None
+goblint-regression/28-race_reach_05-lockfuns_racefree.yml                                              OUT OF MEMORY                   42.70       42.76        None
+goblint-regression/28-race_reach_07-cond_racing2.yml                                                   OUT OF MEMORY                   42.96       43.00        None
+goblint-regression/28-race_reach_10-ptrmunge_racefree.yml                                              OUT OF MEMORY                   10.42       10.47        None
+goblint-regression/28-race_reach_12-ptr_racefree.yml                                                   OUT OF MEMORY                   32.60       32.63        None
+goblint-regression/28-race_reach_20-callback_racefree.yml                                              OUT OF MEMORY                   47.43       47.46        None
+goblint-regression/28-race_reach_27-funptr_racing.yml                                                  OUT OF MEMORY                   45.43       45.47        None
+goblint-regression/28-race_reach_37-indirect_racing.yml                                                OUT OF MEMORY                   33.05       33.08        None
+goblint-regression/28-race_reach_42-trylock2_racefree.yml                                              OUT OF MEMORY                   35.07       35.11        None
+goblint-regression/28-race_reach_60-invariant_racefree.yml                                             OUT OF MEMORY                   43.85       43.98        None
+goblint-regression/28-race_reach_70-funloop_racefree.yml                                               OUT OF MEMORY                   45.41       45.44        None
+goblint-regression/28-race_reach_73-funloop_hard_racefree.yml                                          OUT OF MEMORY                   46.53       46.57        None
+goblint-regression/28-race_reach_79-equ_racefree.yml                                                   OUT OF MEMORY                   40.72       40.76        None
+goblint-regression/28-race_reach_82-list_racefree.yml                                                  OUT OF MEMORY                   12.41       12.43        None
+goblint-regression/28-race_reach_84-list2_racing2.yml                                                  OUT OF MEMORY                   22.07       22.10        None
+weaver/chl-word-subst.wvr.yml                                                                          ERROR (compilation)              0.07        0.07        None
+weaver/chl-word-symm.wvr.yml                                                                           ERROR (compilation)              0.07        0.07        None
+weaver/mult-comm.wvr.yml                                                                               ERROR (compilation)              0.06        0.07        None
+weaver/mult-flipped-dist.wvr.yml                                                                       ERROR (compilation)              0.06        0.07        None
+weaver/parallel-min-max-1.wvr.yml                                                                      ERROR (unsupported external)        0.06        0.07        None
+weaver/popl20-bad-buffer-mult-alt2.wvr.yml                                                             ERROR (compilation)              0.06        0.07        None
+weaver/popl20-horseshoe.wvr.yml                                                                        ERROR (compilation)              0.06        0.07        None
+weaver/popl20-more-buffer-mult.wvr.yml                                                                 ERROR (compilation)              0.06        0.07        None
+weaver/popl20-more-buffer-mult3.wvr.yml                                                                ERROR (compilation)              0.06        0.08        None
+weaver/popl20-more-queue-add-2-nl.wvr.yml                                                              ERROR (compilation)              0.07        0.08        None
+libvsync/rec_ticketlock.yml                                                                            ERROR (unsupported external)        0.12        0.12        None
+libvsync/rwlock.yml                                                                                    ERROR (unsupported external)        0.12        0.13        None
+libvsync/ticketlock.yml                                                                                ERROR (unsupported external)        0.11        0.11        None
+libvsync/ttaslock.yml                                                                                  ERROR (unsupported external)        0.10        0.11        None
+pthread-wmm/mix001.oepc.yml                                                                            ABORTED                          0.08        0.21        None
+pthread-wmm/mix008_tso.oepc.yml                                                                        ABORTED                          0.09        0.22        None
+pthread-wmm/mix018_power.oepc_pso.oepc_rmo.oepc.yml                                                    ABORTED                          0.08        0.22        None
+pthread-wmm/mix027_tso.yml                                                                             ABORTED                          0.09        0.25        None
+pthread-wmm/mix036_pso.opt_tso.opt.yml                                                                 ABORTED                          0.08        0.21        None
+pthread-wmm/mix045_power.oepc_pso.oepc_rmo.oepc.yml                                                    ABORTED                          0.09        0.21        None
+pthread-wmm/mix056_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml                                      ABORTED                          0.08        0.10        None
+pthread-wmm/safe007_pso.oepc_pso.opt_tso.oepc_tso.opt-thin001_pso.oepc_pso.opt_tso.oepc_tso.opt.yml    ABORTED                          0.07        0.08        None
+pthread-wmm/safe016_rmo.opt.yml                                                                        ABORTED                          0.09        0.22        None
+pthread-wmm/safe027_power.opt.yml                                                                      ABORTED                          0.09        0.22        None
+pthread/fib_safe-10.yml                                                                                TIMEOUT                         60.83       61.01        None
+pthread/fib_safe-7.yml                                                                                 TIMEOUT                         60.96       61.01        None
+pthread/fib_unsafe-12.yml                                                                              TIMEOUT                         60.97       61.02        None
+pthread/stack_longest-1.yml                                                                            ERROR (unsupported external)        0.08        0.10        None
+pthread/triangular-longer-2.yml                                                                        TIMEOUT                         60.80       61.01        None
+pthread-ext/25_stack.yml                                                                               ERROR (unsupported external)        0.07        0.08        None
+pthread-ext/25_stack_longer-2.yml                                                                      ERROR (unsupported external)        0.08        0.08        None
+pthread-ext/26_stack_cas.yml                                                                           ERROR (unsupported external)        0.07        0.08        None
+pthread-ext/26_stack_cas_longer-2.yml                                                                  ERROR (unsupported external)        0.08        0.08        None
+pthread-ext/28_buggy_simple_loop1_vf.yml                                                               ERROR (unsupported external)        0.07        0.08        None
+weaver/popl20-bad-threaded-sum-2.wvr.yml                                                               ERROR (compilation)              0.07        0.08        None
+weaver/popl20-more-nonblocking-counter-alt2.wvr.yml                                                    ERROR (compilation)              0.07        0.07        None
+weaver/popl20-mult-equiv.wvr.yml                                                                       ERROR (compilation)              0.07        0.08        None
+weaver/spaghetti.wvr.yml                                                                               ERROR (unsupported external)        0.07        0.07        None
+pthread-theta/exponential-4.yml                                                                        false(unreach-call)              0.08        0.09        None
+pthread-theta/exponential-64.yml                                                                       false(unreach-call)              9.81        9.84        None
+goblint-regression/13-privatized_04-priv_multi_true.yml                                                ERROR (unsupported external)        0.09        0.09        None
+ldv-linux-3.14-races/linux-3.14--drivers--net--irda--nsc-ircc.ko.cil.yml                               ABORTED                         36.39       36.58        None
+pthread-C-DAC/pthread-demo-datarace-1.yml                                                              ABORTED                          0.73        0.89        None
+pthread-complex/safestack_relacy.yml                                                                   TIMEOUT                         60.96       61.01        None
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                                                              done                           899.34       63.23           -
+
+Statistics:             60 Files
+  correct:               0
+    correct true:        0
+    correct false:       0
+  incorrect:             2
+    incorrect true:      0
+    incorrect false:     2
+  unknown:              58
+  Score:               -32 (max: 97)

@@ -1,0 +1,2 @@
+repetitions	cat_total_seconds_mean	caat_total_seconds_mean	ratio_mean	ratio_sd	ratio_ci_low	ratio_ci_high	median_delta_seconds	p_value	rss_ratio_geomean
+10	0.325	0.364	1.12366504397458	0.0635055846441262	1.0782358854317	1.16909420251746	0.045	0.00569768623639995	0.999698076461686

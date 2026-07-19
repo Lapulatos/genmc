@@ -1,0 +1,11 @@
+{
+  "canonical_shapes": 20,
+  "states_per_shape": 81,
+  "state_cells": 1620,
+  "invocations": 3240,
+  "worker_counts": [
+    1
+  ],
+  "reduced_rvf_cells": 810,
+  "violations": []
+}

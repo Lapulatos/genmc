@@ -1,0 +1,728 @@
+tool		GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)
+run set		adapted-previous-caat-sc.Previous GenMC+CAAT-SC.unreach-call	adapted-previous-caat-sc.Previous GenMC+CAAT-SC.unreach-call	adapted-previous-caat-sc.Previous GenMC+CAAT-SC.unreach-call	adapted-previous-caat-sc.Previous GenMC+CAAT-SC.unreach-call	adapted-latest-caat-sc.Latest GenMC+CAAT-SC.unreach-call	adapted-latest-caat-sc.Latest GenMC+CAAT-SC.unreach-call	adapted-latest-caat-sc.Latest GenMC+CAAT-SC.unreach-call	adapted-latest-caat-sc.Latest GenMC+CAAT-SC.unreach-call
+/workspace/experiments/fair-coverage/comparison-latest-vs-deagle-60s/previous-vs-latest/raw/sv-benchmarks/c/		status	cputime (s)	walltime (s)	memory (MB)	status	cputime (s)	walltime (s)	memory (MB)
+goblint-regression/13-privatized_01-priv_nr_true.yml	true	true	0.061150424	0.09297422901727259	25.817088	true	0.063460491	0.07352796290069818	25.866240
+goblint-regression/13-privatized_04-priv_multi_true.yml	true	TIMEOUT	61.016969286	61.059976437012665	775.192576	TIMEOUT	61.06942008	61.161694334005006	1981.943808
+goblint-regression/13-privatized_18-first-reads_true.yml	true	true	0.05917272	0.139540517993737	25.772032	true	0.066093486	0.06743656902108341	25.894912
+goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	false	false(unreach-call)	0.059862948	0.08266841399017721	25.825280	false(unreach-call)	0.066311347	0.07276691403239965	25.817088
+goblint-regression/13-privatized_18-first-reads_unknown_1_pos.yml	false	true	0.060992377	0.10724310495425016	25.800704	true	0.068990548	0.07209094904828817	25.858048
+goblint-regression/13-privatized_18-first-reads_unknown_2_neg.yml	false	true	0.059236192	0.08776616305112839	25.825280	true	0.057057833	0.06380372901912779	25.800704
+goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	false	false(unreach-call)	0.060167264	0.11658852797700092	25.821184	false(unreach-call)	0.054854482	0.06298239901661873	25.845760
+goblint-regression/13-privatized_19-publish-precision_true.yml	true	true	0.063668808	0.10162382997805253	25.833472	true	0.056080343	0.06337660097051412	25.821184
+goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	false	false(unreach-call)	0.060280981	0.11670112499268726	25.817088	false(unreach-call)	0.0566991	0.06048721994739026	25.866240
+goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	false	false(unreach-call)	0.065894265	0.12051436200272292	25.878528	false(unreach-call)	0.056514491	0.09309795498847961	25.899008
+goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	false	false(unreach-call)	0.059110271	0.1288444860256277	25.743360	false(unreach-call)	0.063995124	0.07000046200118959	25.874432
+goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	false	false(unreach-call)	0.058051508	0.09679532900918275	25.878528	false(unreach-call)	0.062993731	0.07140992605127394	25.821184
+goblint-regression/13-privatized_20-publish-regression_true.yml	true	true	0.059914105	0.08934760699048638	25.825280	true	0.065852307	0.0725945410085842	25.874432
+goblint-regression/13-privatized_24-multiple-protecting_true.yml	true	true	0.060969764	0.18003236001823097	25.862144	true	0.058543357	0.06429472798481584	25.829376
+goblint-regression/13-privatized_25-struct_nr_true.yml	true	true	0.062755543	0.09599937399616465	25.829376	true	0.066207257	0.07569575903471559	25.763840
+goblint-regression/13-privatized_27-multiple-protecting2_true.yml	true	true	0.076179275	0.13355203601531684	25.964544	true	0.067553251	0.08739764103665948	25.911296
+goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	true	true	0.057617825	0.1046312769758515	25.825280	true	0.05628207	0.06423120805993676	25.903104
+goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	true	true	0.058798672	0.10797460499452427	25.821184	true	0.057794323	0.061985386069864035	25.800704
+goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	true	true	0.064252965	0.15106789296260104	25.829376	true	0.066652188	0.07780694402754307	25.866240
+goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	true	true	0.061938531	0.12028910999651998	25.886720	true	0.055515676	0.06534079101402313	25.858048
+goblint-regression/13-privatized_33-traces-v-matters_true.yml	true	true	0.066337401	0.0950121579808183	25.804800	true	0.058660799	0.07242190896067768	25.792512
+goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	true	true	0.059946203	0.12516047694953158	25.780224	true	0.057517343	0.06044113601092249	25.882624
+goblint-regression/13-privatized_35-traces-ex-2_true.yml	true	true	0.059818422	0.13011309900321066	25.829376	true	0.059920261	0.08457192208152264	25.780224
+goblint-regression/13-privatized_36-traces-ex-3_true.yml	true	true	0.057493869	0.1034713180270046	25.767936	true	0.063962086	0.06681959796696901	25.841664
+goblint-regression/13-privatized_37-traces-ex-4_true.yml	true	true	0.056227693	0.10965241002850235	25.800704	true	0.061419931	0.10112660995218903	25.853952
+goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	true	true	0.056700831	0.09715303598204628	25.833472	true	0.053601389	0.08156832703389227	25.743360
+goblint-regression/13-privatized_40-traces-ex-6_true.yml	true	true	0.058203869	0.14472461998229846	25.759744	true	0.060056757	0.06692913791630417	25.808896
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	false	false(unreach-call)	0.059335053	0.1059994759852998	25.817088	false(unreach-call)	0.062944492	0.06765053595881909	25.821184
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	false	false(unreach-call)	0.06382138	0.11447365203639492	25.825280	false(unreach-call)	0.063448938	0.0685049929888919	25.804800
+goblint-regression/13-privatized_42-traces-ex-mini_true.yml	true	true	0.062620262	0.11150574602652341	25.825280	true	0.061267083	0.07435461203567684	25.817088
+goblint-regression/13-privatized_44-traces-mine2_true.yml	true	true	0.057630293	0.08493955503217876	25.821184	true	0.059725604	0.06997975800186396	25.780224
+goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	true	true	0.059964143	0.11431050300598145	25.874432	true	0.062592675	0.06617638398893178	25.862144
+goblint-regression/13-privatized_46-refine-protected1_true.yml	true	true	0.05510168	0.07806091505335644	25.690112	true	0.054659792	0.06754189892672002	25.767936
+goblint-regression/13-privatized_47-refine-protected2_true.yml	true	true	0.057898749	0.08703333098674193	25.825280	true	0.063174443	0.06765572703443468	25.776128
+goblint-regression/13-privatized_52-refine-protected-loop2-small_true.yml	true	TIMEOUT	60.775548135	61.03110322804423	113.774592	TIMEOUT	57.430861661	91.02051716402639	108.544000
+goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	true	true	0.055623538	0.0783305480144918	25.817088	true	0.053456382	0.057120311073958874	25.767936
+goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	true	true	0.058522276	0.10724271001527086	25.776128	true	0.055870955	0.06198845291510224	25.726976
+goblint-regression/13-privatized_66-mine-W-init_true.yml	true	true	0.058614182	0.09884897398296744	25.825280	true	0.056271376	0.06412195903249085	25.817088
+goblint-regression/13-privatized_67-pthread_cond_wait_true.yml	false	ERROR (compilation)	0.058801152	0.06737868598429486	25.858048	ERROR (compilation)	0.066938483	0.07116617599967867	25.882624
+goblint-regression/13-privatized_67-pthread_cond_wait_unknown_1_neg.yml	false	ERROR (compilation)	0.062141956	0.06819085398456082	25.751552	ERROR (compilation)	0.066880516	0.07333935401402414	25.886720
+goblint-regression/13-privatized_67-pthread_cond_wait_unknown_1_pos.yml	false	ERROR (compilation)	0.063606495	0.06952988001285121	25.788416	ERROR (compilation)	0.064880292	0.07114496908616275	25.845760
+goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	true	true	0.059095218	0.12067132099764422	25.833472	true	0.054137469	0.06681572995148599	25.960448
+goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	true	true	0.066199857	0.10404106101486832	25.821184	true	0.056093062	0.07081700500566512	25.853952
+goblint-regression/28-race_reach_01-simple_racing.yml	false	OUT OF MEMORY	45.130004428	45.722855244006496	3999.997952	false(unreach-call)	12.805304413	13.276658060029149	2061.070336
+goblint-regression/28-race_reach_02-simple_racefree.yml	true	OUT OF MEMORY	33.401547175	33.601735643984284	3999.997952	TIMEOUT	61.13016077	69.04039670608472	3964.162048
+goblint-regression/28-race_reach_03-munge_racing.yml	false	OUT OF MEMORY	11.86865867	11.895699429034721	3999.997952	OUT OF MEMORY	12.183288306	14.024722498026676	3999.997952
+goblint-regression/28-race_reach_04-munge_racefree.yml	true	OUT OF MEMORY	11.806529019	11.85768342402298	3999.997952	OUT OF MEMORY	13.041663156	15.143174331984483	3999.997952
+goblint-regression/28-race_reach_05-lockfuns_racefree.yml	true	OUT OF MEMORY	29.644337963	29.78678140498232	3999.997952	TIMEOUT	60.998650544	67.58292297401931	3964.178432
+goblint-regression/28-race_reach_06-cond_racing1.yml	false	OUT OF MEMORY	22.560428828	22.590279738011304	3999.997952	false(unreach-call)	12.815158554	12.921282375929877	2061.094912
+goblint-regression/28-race_reach_07-cond_racing2.yml	false	OUT OF MEMORY	22.306171747	22.327102370967623	3999.997952	TIMEOUT	61.102127877	63.967358399997465	3964.190720
+goblint-regression/28-race_reach_08-cond_racefree.yml	true	OUT OF MEMORY	21.860446341	21.891585554985795	3999.997952	TIMEOUT	60.954079897	61.25911340105813	3964.186624
+goblint-regression/28-race_reach_09-ptrmunge_racing.yml	false	OUT OF MEMORY	11.650742601	11.684076809033286	3999.997952	OUT OF MEMORY	12.197986204	14.196643218048848	3999.997952
+goblint-regression/28-race_reach_10-ptrmunge_racefree.yml	true	OUT OF MEMORY	11.625830754	11.643326492980123	3999.997952	OUT OF MEMORY	12.118860874	12.504549311008304	3999.997952
+goblint-regression/28-race_reach_11-ptr_racing.yml	false	OUT OF MEMORY	30.20445609	30.299552939948626	3999.997952	false(unreach-call)	12.666650385	13.790632633958012	2061.053952
+goblint-regression/28-race_reach_12-ptr_racefree.yml	true	OUT OF MEMORY	26.124006759	26.251329074031673	3999.997952	TIMEOUT	61.137398684	63.28123436495662	3964.170240
+goblint-regression/28-race_reach_19-callback_racing.yml	false	OUT OF MEMORY	25.595469	25.64718031900702	3999.997952	TIMEOUT	61.203482828	62.76100071694236	3983.536128
+goblint-regression/28-race_reach_20-callback_racefree.yml	true	OUT OF MEMORY	26.118427159	26.179314323992003	3999.997952	TIMEOUT	61.239102645	64.28554782504216	3982.934016
+goblint-regression/28-race_reach_21-deref_read_racing.yml	false	ERROR (unsupported property: invalid memory access)	3.64374231	3.656705380999483	56.283136	ERROR (unsupported property: invalid memory access)	3.65538932	4.366633658064529	56.254464
+goblint-regression/28-race_reach_22-deref_read_racefree.yml	true	ERROR (unsupported property: invalid memory access)	3.613767221	3.6278043730417266	56.320000	ERROR (unsupported property: invalid memory access)	3.58470115	4.744246091111563	56.291328
+goblint-regression/28-race_reach_23-sound_unlock_racing.yml	false	ERROR (unsupported external)	1.711766129	1.7221222519874573	25.919488	ERROR (unsupported external)	1.689115234	2.1128737019607797	25.952256
+goblint-regression/28-race_reach_24-sound_lock_racing.yml	false	OUT OF MEMORY	25.322484492	25.397821702004876	3999.997952	false(unreach-call)	12.614528239	13.29722434503492	2061.070336
+goblint-regression/28-race_reach_27-funptr_racing.yml	false	OUT OF MEMORY	22.734253764	22.76856764504919	3999.997952	TIMEOUT	60.841658316	61.270100765977986	3958.255616
+goblint-regression/28-race_reach_28-funptr_racefree.yml	true	OUT OF MEMORY	22.430322261	22.463859788957052	3999.997952	TIMEOUT	60.946198601	61.24112122296356	3958.284288
+goblint-regression/28-race_reach_36-indirect_racefree.yml	true	OUT OF MEMORY	38.990991655	39.203542305971496	3999.997952	TIMEOUT	61.090917438	64.97704243299086	3968.077824
+goblint-regression/28-race_reach_37-indirect_racing.yml	false	OUT OF MEMORY	37.817006817	38.036761011055205	3999.997952	false(unreach-call)	12.928662409	14.741838237969205	2061.012992
+goblint-regression/28-race_reach_40-trylock_racing.yml	false	ERROR (unsupported external)	1.665928576	1.6857993910089135	25.952256	ERROR (unsupported external)	1.647289682	1.7670995270600542	25.956352
+goblint-regression/28-race_reach_41-trylock_racefree.yml	true	OUT OF MEMORY	43.035996794	43.27762595994864	3999.997952	TIMEOUT	61.225449666	71.09716264496092	3967.922176
+goblint-regression/28-race_reach_42-trylock2_racefree.yml	true	OUT OF MEMORY	25.526812577	25.579614606976975	3999.997952	TIMEOUT	60.264102148	61.152420819038525	3896.418304
+goblint-regression/28-race_reach_45-escape_racing.yml	false	false(unreach-call)	0.072252262	0.07795005902880803	25.825280	false(unreach-call)	0.065176141	0.08370246505364776	25.944064
+goblint-regression/28-race_reach_46-escape_racefree.yml	true	true	0.068416622	0.07694986701244488	25.829376	true	0.067223245	0.10834172600880265	25.890816
+goblint-regression/28-race_reach_51-mutexptr_racefree.yml	true	OUT OF MEMORY	24.834203319	24.86475792597048	3999.997952	TIMEOUT	60.628157801	67.07982196600642	3968.790528
+goblint-regression/28-race_reach_60-invariant_racefree.yml	true	OUT OF MEMORY	26.38398905	26.42786882299697	3999.997952	TIMEOUT	60.778027925	66.17823205795139	3963.219968
+goblint-regression/28-race_reach_61-invariant_racing.yml	false	OUT OF MEMORY	25.406561685	25.494549449998885	3999.997952	TIMEOUT	61.153181379	62.36872886191122	3958.059008
+goblint-regression/28-race_reach_70-funloop_racefree.yml	true	OUT OF MEMORY	22.991573956	23.014004401979037	3999.997952	TIMEOUT	60.778971953	61.26995686092414	3987.742720
+goblint-regression/28-race_reach_71-funloop_racing.yml	false	OUT OF MEMORY	23.334938734	23.36762810597429	3999.997952	TIMEOUT	61.056912394	61.28063063498121	3994.869760
+goblint-regression/28-race_reach_72-funloop_hard_racing.yml	false	OUT OF MEMORY	23.116584633	23.170819238992408	3999.997952	TIMEOUT	61.045081356	61.2976998379454	3995.316224
+goblint-regression/28-race_reach_73-funloop_hard_racefree.yml	true	OUT OF MEMORY	23.438531606	23.463725816982333	3999.997952	TIMEOUT	61.093457943	61.30524491798133	3995.283456
+goblint-regression/28-race_reach_74-tricky_address1_racefree.yml	true	true	1.476125975	1.485533831990324	25.964544	true	1.712093503	1.8062125949654728	26.001408
+goblint-regression/28-race_reach_75-tricky_address2_racefree.yml	true	true	1.48142666	1.4926960869925097	25.956352	true	1.712327769	1.7626955889863893	25.997312
+goblint-regression/28-race_reach_76-tricky_address3_racefree.yml	true	true	1.478009902	1.4855945860035717	25.964544	true	1.710957265	1.7612579700071365	26.034176
+goblint-regression/28-race_reach_77-tricky_address4_racing.yml	false	true	1.477766971	1.4853815719834529	25.956352	true	1.715672828	1.7483659220160916	25.944064
+goblint-regression/28-race_reach_78-equ_racing.yml	false	OUT OF MEMORY	22.806187665	22.845175231981557	3999.997952	TIMEOUT	61.159468661	61.28519189695362	3968.106496
+goblint-regression/28-race_reach_79-equ_racefree.yml	true	OUT OF MEMORY	23.501372129	23.69007937499555	3999.997952	TIMEOUT	61.132819451	61.28756360092666	3967.803392
+goblint-regression/28-race_reach_81-list_racing.yml	false	OUT OF MEMORY	12.230059163	12.302311028004624	3999.997952	OUT OF MEMORY	13.776789923	13.848071041051298	3999.997952
+goblint-regression/28-race_reach_82-list_racefree.yml	false	OUT OF MEMORY	12.503105975	12.550222247024067	3999.997952	OUT OF MEMORY	13.876887293	13.92745755892247	3999.997952
+goblint-regression/28-race_reach_83-list2_racing1.yml	false	OUT OF MEMORY	21.809097112	21.901338875002693	3999.997952	OUT OF MEMORY	26.880180506	26.96212174196262	3999.997952
+goblint-regression/28-race_reach_84-list2_racing2.yml	false	OUT OF MEMORY	21.81329683	21.861191448988393	3999.997952	OUT OF MEMORY	25.758733602	25.82182162103709	3999.997952
+goblint-regression/28-race_reach_85-list2_racefree.yml	true	OUT OF MEMORY	21.913433175	21.959053881990258	3999.997952	OUT OF MEMORY	26.139974755	26.25942981801927	3999.997952
+goblint-regression/28-race_reach_86-lists_racing.yml	false	true	23.874397191	23.995348312950227	745.656320	true	26.282545439	26.320226629963145	745.594880
+goblint-regression/28-race_reach_87-lists_racefree.yml	true	true	20.22702952	20.28621758002555	743.653376	true	22.853051547	22.88524315704126	743.690240
+goblint-regression/28-race_reach_90-arrayloop2_racing.yml	false	true	10.544407037	10.555080766964238	98.746368	true	13.870186189	14.033104036003351	98.803712
+goblint-regression/28-race_reach_91-arrayloop2_racefree.yml	true	true	3.500944099	3.54583974101115	55.980032	true	3.889828722	3.8995760530233383	55.984128
+goblint-regression/28-race_reach_92-evilcollapse_racing.yml	false	true	1.60142978	1.6118898190325126	26.169344	true	1.714891775	1.787232463946566	26.124288
+goblint-regression/28-race_reach_93-evilcollapse_racefree.yml	true	true	1.606949428	1.6183417129795998	26.144768	true	1.721127132	1.79299401701428	26.107904
+goblint-regression/28-race_reach_94-alloc_region_racing.yml	false	OUT OF MEMORY	6.807072623	6.867375010042451	3999.997952	OUT OF MEMORY	8.080502068	8.112218466005288	3999.997952
+goblint-regression/36-apron_11-traces-max-simple_true.yml	true	true	0.061454744	0.10999625804834068	25.821184	true	0.063086124	0.06712689402047545	25.837568
+goblint-regression/36-apron_16-traces-unprot2_true.yml	true	true	0.057893181	0.10458689200459048	25.710592	true	0.052015162	0.05771046201698482	25.694208
+goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	false	false(unreach-call)	0.063727656	0.09491555899148807	25.837568	false(unreach-call)	0.066870635	0.07805266708601266	25.751552
+goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_pos.yml	false	true	0.061968918	0.06962117803050205	25.825280	true	0.055733119	0.07979963207617402	25.796608
+goblint-regression/36-apron_21-traces-cluster-based_true.yml	true	true	0.062544497	0.1414190729847178	25.956352	true	0.06153806	0.09400762303266674	25.956352
+goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	true	true	0.0591403	0.13739873899612576	25.960448	true	0.059542239	0.08325714699458331	25.915392
+goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_neg.yml	false	true	0.057994058	0.10596319602336735	25.694208	true	0.056582168	0.05989380902610719	25.792512
+goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	false	false(unreach-call)	0.059090504	0.10910179797792807	25.694208	false(unreach-call)	0.066631823	0.06894396303687245	25.747456
+ldv-linux-3.14-races/linux-3.14--drivers--media--platform--marvell-ccic--cafe_ccic.ko.cil-1.yml	true	ERROR (compilation)	0.092857257	0.10172146104741842	27.537408	ERROR (compilation)	0.093405329	0.10191932402085513	27.582464
+ldv-linux-3.14-races/linux-3.14--drivers--media--platform--marvell-ccic--cafe_ccic.ko.cil-2.yml	false	SEGMENTATION FAULT	0.506648847	0.639091444958467	40.517632	SEGMENTATION FAULT	0.5922121	0.7159054860239848	40.476672
+ldv-linux-3.14-races/linux-3.14--drivers--net--irda--nsc-ircc.ko.cil.yml	false	TIMEOUT	60.993964337	61.01398940902436	51.589120	TIMEOUT	60.917837048	61.013275412027724	51.687424
+ldv-linux-3.14-races/linux-3.14--drivers--net--irda--w83977af_ir.ko.cil.yml	false	ABORTED	7.405036226	7.54510011599632	35.852288	ABORTED	8.302570442	8.45668585295789	35.729408
+ldv-linux-3.14-races/linux-3.14--drivers--spi--spi-tegra20-slink.ko.cil.yml	false	TIMEOUT	60.992469719	61.01542483200319	32.649216	TIMEOUT	60.954202001	61.010227899998426	32.681984
+ldv-linux-3.14-races/linux-3.14--drivers--usb--misc--adutux.ko.cil.yml	false	ABORTED	36.39511233	36.638058405020274	33.292288	ABORTED	39.022709646	39.182587580988184	33.251328
+ldv-races/race-1_1-join.yml	true	true	0.063175484	0.07137247000355273	26.091520	true	0.072543138	0.08074109198059887	26.116096
+ldv-races/race-1_2-join.yml	false	false(unreach-call)	0.070048917	0.07605001900810748	26.083328	false(unreach-call)	0.074391183	0.07848138897679746	26.116096
+ldv-races/race-1_3-join.yml	false	false(unreach-call)	0.065032215	0.0718729819636792	26.087424	false(unreach-call)	0.074379501	0.08254283003043383	26.083328
+ldv-races/race-2_1-container_of.yml	true	true	0.067204861	0.07451985497027636	26.095616	true	0.077551116	0.08104379801079631	26.148864
+ldv-races/race-2_2-container_of.yml	false	true	0.067163232	0.07672653294866905	26.218496	true	0.072269709	0.07522094203159213	26.267648
+ldv-races/race-2_3-container_of.yml	false	true	0.067454739	0.083989916020073	26.173440	true	0.071227826	0.0773021139902994	26.173440
+ldv-races/race-2_4-container_of.yml	false	true	0.0706908	0.07569290499668568	26.210304	true	0.073505632	0.07664886105339974	26.165248
+ldv-races/race-2_5-container_of.yml	false	true	0.068042708	0.07622707902919501	26.226688	true	0.071157588	0.07724639296066016	26.279936
+ldv-races/race-3_1-container_of-global.yml	true	true	0.065907522	0.0760975019657053	26.099712	true	0.070571322	0.07790618401486427	26.189824
+ldv-races/race-3_2-container_of-global.yml	false	true	0.069225072	0.07820744701894	26.218496	true	0.07277942	0.07587331102695316	26.161152
+ldv-races/race-4_1-thread_local_vars.yml	true	true	0.071563681	0.07708363904384896	26.099712	true	0.075323114	0.0786475770873949	26.091520
+libvsync/arraylock.yml	true	true	0.109492081	0.11849266698118299	26.873856	true	0.114771186	0.11980989691801369	26.918912
+libvsync/bounded_mpmc_check_full.yml	true	true	0.117570313	0.126529194007162	26.877952	true	0.120438962	0.12824456801172346	26.939392
+libvsync/cnalock.yml	true	ERROR (unsupported property: invalid memory access)	0.105474895	0.11496004299260676	27.000832	ERROR (unsupported property: invalid memory access)	0.116723458	0.12072017707396299	27.004928
+libvsync/hclhlock.yml	true	ERROR (unsupported property: invalid memory access)	0.108691173	0.1255704690120183	27.136000	ERROR (unsupported property: invalid memory access)	0.117297106	0.12381791393272579	27.115520
+libvsync/hmcslock.yml	true	ERROR (unsupported property: invalid memory access)	0.134945607	0.1396625129855238	27.267072	ERROR (unsupported property: invalid memory access)	0.149032473	0.15962550602853298	27.226112
+libvsync/mcslock.yml	true	ERROR (unsupported property: invalid memory access)	0.09797471	0.10549133701715618	26.955776	ERROR (unsupported property: invalid memory access)	0.105850276	0.11282609798945487	26.906624
+libvsync/rec_mcslock.yml	true	ERROR (unsupported property: invalid memory access)	0.102705745	0.1117093309876509	27.004928	ERROR (unsupported property: invalid memory access)	0.108607936	0.11447758099529892	26.996736
+libvsync/rec_ticketlock.yml	true	OUT OF MEMORY	12.799422446	12.839079959958326	3999.997952	OUT OF MEMORY	14.758554882	14.883905317052267	3999.997952
+libvsync/rwlock.yml	true	OUT OF MEMORY	11.726137356	11.791752547957003	3999.997952	OUT OF MEMORY	13.34926672	13.453130624024197	3999.997952
+libvsync/semaphore.yml	true	true	5.522948868	5.573420869011898	26.873856	true	4.23777697	4.245762093923986	26.861568
+libvsync/ticketlock.yml	true	OUT OF MEMORY	12.815541051	12.833996061002836	3999.997952	OUT OF MEMORY	14.868224972	14.996924459002912	3999.997952
+libvsync/ttaslock.yml	true	OUT OF MEMORY	12.704513248	12.737051511008758	3999.997952	OUT OF MEMORY	14.465660975	14.57956068997737	3999.997952
+pthread-C-DAC/pthread-demo-datarace-1.yml	true	TIMEOUT	60.949893401	61.00859566399595	25.837568	TIMEOUT	60.866086099	61.009229048970155	25.858048
+pthread-C-DAC/pthread-demo-datarace-3.yml	false	false(unreach-call)	0.11798277	0.12473999796202406	25.935872	false(unreach-call)	0.125999067	0.13580152206122875	25.935872
+pthread-C-DAC/pthread-finding-k-matches.yml	true	true	2.140428869	2.1490736859850585	169.062400	true	0.328723921	0.33539422100875527	65.454080
+pthread-C-DAC/pthread-numerical-integration.yml	true	true	0.069061597	0.07726881100097671	26.083328	true	0.073811269	0.0839415059890598	26.103808
+pthread-atomic/dekker-unfair.yml	true	true	0.067126831	0.0747151910327375	25.825280	true	0.064987157	0.0750394300557673	25.939968
+pthread-atomic/dekker.yml	true	true	0.068701637	0.07769796799402684	25.825280	true	0.06386513	0.06956752296537161	25.890816
+pthread-atomic/lamport.yml	true	true	0.069537877	0.07439906697254628	25.882624	true	0.065046229	0.08077711402438581	25.833472
+pthread-atomic/peterson.yml	true	true	0.07103905	0.07566126697929576	25.845760	true	0.066748047	0.18137358804233372	25.841664
+pthread-atomic/read_write_lock-1.yml	true	true	0.076664625	0.08307131205219775	26.087424	true	0.073590963	0.1405086989980191	26.169344
+pthread-atomic/read_write_lock-2.yml	false	false(unreach-call)	0.134973134	0.14345098397461697	25.952256	false(unreach-call)	0.119858568	0.14285350497812033	25.919488
+pthread-atomic/szymanski.yml	true	true	0.069084878	0.078334485006053	25.808896	true	0.06559889	0.09064416098408401	25.903104
+pthread-atomic/time_var_mutex.yml	true	true	0.067127405	0.06959012994775549	25.997312	true	0.066349557	0.12781077600084245	25.899008
+pthread-complex/bounded_buffer.yml	false	ERROR (compilation)	0.065370151	0.07187811896437779	25.694208	ERROR (compilation)	0.067948069	0.07440921000670642	25.808896
+pthread-complex/elimination_backoff_stack.yml	false	true	26.09042013	26.121001209015958	26.345472	true	25.670513896	25.79806624597404	26.411008
+pthread-complex/safestack_relacy.yml	false	TIMEOUT	60.959476338	61.012123037013225	26.083328	TIMEOUT	60.225550135	61.012147177010775	26.140672
+pthread-complex/workstealqueue_mutex-2.yml	true	ERROR (unsupported property: uninitialized memory)	0.084358877	0.09291296498849988	26.361856	ERROR (unsupported property: uninitialized memory)	0.099526475	0.11257366102654487	26.398720
+pthread-deagle/arithmetic_prog_bad.yml	false	ERROR (compilation)	0.0535863	0.0610757659887895	25.436160	ERROR (compilation)	0.058936119	0.06686357501894236	25.473024
+pthread-deagle/arithmetic_prog_ok.yml	true	ERROR (compilation)	0.059290323	0.06444948597345501	25.415680	ERROR (compilation)	0.05952266	0.06453230301849544	25.468928
+pthread-deagle/circular_buffer_bad.yml	false	false(unreach-call)	0.072810138	0.08522550895577297	25.980928	false(unreach-call)	0.072025094	0.0935949559789151	26.021888
+pthread-deagle/circular_buffer_ok.yml	true	true	5.081273203	5.09106826398056	25.964544	true	2.998695331	3.1071356509346515	25.976832
+pthread-divine/tls_basic.yml	true	ERROR (compilation)	0.067340587	0.07243712403578684	25.563136	ERROR (compilation)	0.06277757	0.10705975303426385	25.604096
+pthread-divine/tls_destructor_worker.yml	false	ERROR (compilation)	0.062380121	0.07041229400783777	25.550848	ERROR (compilation)	0.059743568	0.10478205408435315	25.628672
+pthread-driver-races/char_generic_nvram_nvram_unlocked_ioctl_write_nvram.yml	true	true	0.143189882	0.15331740799592808	29.229056	true	0.160969669	0.16396686004009098	29.237248
+pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.yml	true	true	0.148035719	0.15417896601138636	29.237248	true	0.157503226	0.1640906360698864	29.257728
+pthread-driver-races/char_generic_nvram_read_nvram_write_nvram.yml	false	true	0.140899993	0.14914329902967438	29.212672	true	0.155366759	0.1613543649436906	29.229056
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_configure.yml	true	true	0.151694375	0.15956676000496373	29.757440	true	0.172383158	0.24667159793898463	29.736960
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_current.yml	false	true	0.154047911	0.16211049002595246	29.749248	true	0.165778663	0.20012450707145035	29.700096
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_get.yml	true	true	0.148681943	0.1570940829697065	29.683712	true	0.169897919	0.19148099096491933	29.761536
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_set.yml	false	true	0.147439964	0.15690624801209196	29.708288	true	0.167359443	0.19952759193256497	29.675520
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_configure_pc8736x_gpio_current.yml	true	true	0.148879863	0.1583832529722713	29.757440	true	0.165506765	0.17522921704221517	29.724672
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_configure_pc8736x_gpio_get.yml	true	true	0.15285263	0.15893800399499014	29.716480	true	0.171279586	0.1885450619738549	29.777920
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_configure_pc8736x_gpio_set.yml	true	true	0.155564377	0.16220212902408093	29.757440	true	0.167470156	0.1759971589781344	29.765632
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_current_pc8736x_gpio_get.yml	true	true	0.14567447	0.15428274299483746	29.761536	true	0.164000317	0.16971029993146658	29.736960
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_current_pc8736x_gpio_set.yml	false	true	0.153732417	0.15994954900816083	29.757440	true	0.172917756	0.17489876900799572	29.728768
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_get_pc8736x_gpio_set.yml	true	true	0.148049488	0.1556105840136297	29.757440	true	0.16889669	0.17625106999184936	29.761536
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_change.yml	true	true	0.149391797	0.15853995602810755	29.749248	true	0.168674712	0.17471947998274118	29.769728
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_configure.yml	true	true	0.148266378	0.15806192602030933	29.753344	true	0.16737852	0.20122995495330542	29.745152
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_current.yml	true	true	0.147536695	0.1554585100384429	29.757440	true	0.170420325	0.17686822707764804	29.757440
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_get.yml	true	true	0.155851907	0.16090711002470925	29.761536	true	0.17320512	0.18607235106173903	29.745152
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_set.yml	true	true	0.147621065	0.15506313100922853	29.638656	true	0.169606209	0.17519115400500596	29.638656
+pthread-ext/01b_inc.yml	true	true	0.071575735	0.0772845689789392	25.825280	true	0.064775346	0.11097136803437024	25.903104
+pthread-ext/02_inc_cas.yml	true	true	0.075430337	0.08243760699406266	25.837568	true	0.067424589	0.1404851860133931	25.903104
+pthread-ext/03_incdec.yml	true	true	0.074076502	0.07861420296831056	25.821184	true	0.063955817	0.108338194899261	25.833472
+pthread-ext/04_incdec_cas.yml	true	true	0.074193598	0.078673942014575	25.956352	true	0.072411336	0.15947829303331673	25.952256
+pthread-ext/08_rand_cas.yml	true	true	0.070265531	0.07812846498563886	25.960448	true	0.067256879	0.09008920099586248	25.935872
+pthread-ext/09_fmaxsym-zero.yml	true	true	0.071321583	0.07676723296754062	25.767936	true	0.06371623	0.10741679300554097	25.784320
+pthread-ext/09_fmaxsym.yml	true	true	0.066341189	0.07287811499554664	25.866240	true	0.067175293	0.1968270109500736	25.817088
+pthread-ext/11_fmaxsymopt-zero.yml	true	true	0.06601915	0.07615738897584379	25.833472	true	0.063395275	0.06803951901383698	25.812992
+pthread-ext/11_fmaxsymopt.yml	true	true	0.071868488	0.08006289100740105	25.812992	true	0.067269465	0.09145867091137916	25.899008
+pthread-ext/14_spin2003.yml	true	true	0.061515646	0.06907350901747122	25.710592	true	0.064898998	0.19711065699812025	25.825280
+pthread-ext/18_read_write_lock.yml	true	true	0.072802316	0.08067077602026984	26.058752	true	0.068033175	0.12869532604236156	26.017792
+pthread-ext/25_stack.yml	true	TIMEOUT	60.895820748	61.02144120098092	111.079424	TIMEOUT	60.531772195	70.33779712498654	93.249536
+pthread-ext/25_stack_longer-1.yml	false	false(unreach-call)	0.077259112	0.08748313202522695	26.132480	false(unreach-call)	0.08152208	0.1330565878888592	26.038272
+pthread-ext/25_stack_longer-2.yml	true	TIMEOUT	60.881510013	61.02041884197388	112.332800	TIMEOUT	60.595920484	69.6322007329436	92.545024
+pthread-ext/25_stack_longest-1.yml	true	TIMEOUT	60.884538609	61.021584611036815	110.710784	TIMEOUT	60.943053143	72.66388437803835	96.759808
+pthread-ext/25_stack_longest-2.yml	false	false(unreach-call)	0.12637408	0.13466921297367662	26.083328	false(unreach-call)	0.127815782	0.24650555104017258	26.087424
+pthread-ext/26_stack_cas.yml	true	TIMEOUT	60.822160609	61.01769852801226	102.674432	TIMEOUT	60.974162942	74.07591880008113	90.234880
+pthread-ext/26_stack_cas_longer-1.yml	false	false(unreach-call)	0.089027345	0.09435569902416319	26.181632	false(unreach-call)	0.08260076	0.10580701497383416	26.279936
+pthread-ext/26_stack_cas_longer-2.yml	true	TIMEOUT	60.873112438	61.01614590996178	103.735296	TIMEOUT	60.862036732	69.7143864040263	90.492928
+pthread-ext/26_stack_cas_longest-1.yml	false	false(unreach-call)	0.136140017	0.1432368609821424	26.329088	false(unreach-call)	0.13642264	0.23668548103887588	26.300416
+pthread-ext/26_stack_cas_longest-2.yml	true	TIMEOUT	60.87823726	61.02160464896588	108.142592	TIMEOUT	60.752728122	70.08104251604527	93.880320
+pthread-ext/28_buggy_simple_loop1_vf.yml	false	TIMEOUT	60.96782323	61.01189337001415	25.821184	TIMEOUT	60.938605055	66.9083706169622	25.776128
+pthread-ext/29_conditionals_vs.yml	true	true	0.068962988	0.07660704100271687	25.829376	true	0.065168351	0.13431935000699013	25.899008
+pthread-ext/31_simple_loop5_vs.yml	true	TIMEOUT	60.984637749	61.0562922800309	629.145600	TIMEOUT	61.146800923	71.74595254601445	2483.458048
+pthread-ext/35_double_lock_p3_vs.yml	true	true	0.071689205	0.08043660299153998	25.821184	true	0.064584858	0.11150927096605301	25.915392
+pthread-ext/36_stack_cas_p0_vs_concur.yml	true	true	0.076546824	0.08500228897901252	26.091520	true	0.07497638	0.14746668306179345	26.136576
+pthread-ext/37_stack_lock_p0_vs_concur.yml	true	true	0.076540759	0.08518609800375998	26.095616	true	0.073603306	0.16733144305180758	26.091520
+pthread-ext/39_rand_lock_p0_vs.yml	true	true	0.070742012	0.07628874597139657	25.829376	true	0.068037483	0.09260733600240201	25.825280
+pthread-ext/40_barrier_vf.yml	false	ERROR (compilation)	0.05954459	0.07570824795402586	25.604096	ERROR (compilation)	0.060883734	0.09222745103761554	25.583616
+pthread-ext/43_NetBSD_sysmon_power_sliced-pthread.yml	true	ERROR (compilation)	0.062686773	0.07026233500801027	25.563136	ERROR (compilation)	0.055946449	0.06515973503701389	25.579520
+pthread-ext/43_NetBSD_sysmon_power_sliced.yml	true	true	0.078590073	0.08751660899724811	25.964544	true	0.072322958	0.08233916095923632	26.054656
+pthread-ext/45_monabsex1_vs.yml	true	true	0.065867631	0.07195488596335053	25.808896	true	0.063675637	0.10531679098494351	25.870336
+pthread-ext/46_monabsex2_vs.yml	true	true	0.06955153	0.07539520098362118	25.772032	true	0.06674283	0.12933946505654603	25.755648
+pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	true	true	0.067299963	0.07492359197931364	25.829376	true	0.063234188	0.1021835240535438	25.874432
+pthread-ext/48_ticket_lock_low_contention_vs.yml	true	true	0.069661407	0.07821409497410059	25.825280	true	0.067123625	0.11529460793826729	25.825280
+pthread-lit/qw2004-2b.yml	false	false(unreach-call)	0.079494463	0.08594681503018364	25.821184	false(unreach-call)	0.075158649	0.08034402900375426	25.870336
+pthread-lit/sssc12.yml	true	true	0.063211075	0.0719156269915402	25.960448	true	0.066397652	0.07594929996412247	25.874432
+pthread-lit/sssc12_variant.yml	true	true	0.065321198	0.06927759799873456	25.952256	true	0.066284618	0.07218056102283299	25.993216
+pthread-race-challenges/thread-local-pthread-value.yml	true	ERROR (compilation)	0.056408746	0.07549048401415348	25.444352	ERROR (compilation)	0.059247391	0.06527765700593591	25.382912
+pthread-race-challenges/thread-local-value-dynamic.yml	true	true	0.062059814	0.08809836802538484	25.956352	true	0.066792636	0.07470604800619185	25.948160
+pthread-race-challenges/thread-local-value.yml	true	true	0.061766208	0.06891596998320892	25.829376	true	0.066195717	0.07200407504569739	25.931776
+pthread-theta/exponential-4.yml	true	TIMEOUT	60.975428105	61.01185543596512	25.952256	TIMEOUT	60.866514662	63.050705136032775	25.948160
+pthread-theta/exponential-64.yml	true	TIMEOUT	60.976998903	61.018197417026386	88.842240	TIMEOUT	60.747233349	61.01719869894441	65.822720
+pthread-theta/exponential-nondet.yml	true	true	0.069999972	0.07621223502792418	25.952256	true	0.060638163	0.065771060064435	25.911296
+pthread-theta/unwind1-1.yml	false	true	0.067175302	0.07473134703468531	25.956352	true	0.063229452	0.07448735204525292	25.866240
+pthread-theta/unwind1-100.yml	false	true	0.066582847	0.07408137700986117	25.890816	true	0.062149595	0.07347320299595594	25.931776
+pthread-theta/unwind1-nondet.yml	false	true	0.069261359	0.07535417599137872	25.952256	true	0.063654292	0.0693214270286262	25.968640
+pthread-theta/unwind2-1.yml	false	false(unreach-call)	0.068888692	0.07672646502032876	25.960448	false(unreach-call)	0.065288005	0.0755203120643273	25.899008
+pthread-theta/unwind2-100.yml	false	false(unreach-call)	0.068993295	0.07636478898348287	25.964544	false(unreach-call)	0.064400022	0.07354320597369224	25.919488
+pthread-theta/unwind2-nondet.yml	false	true	0.067894614	0.0755689479992725	25.952256	true	0.06427365	0.08158580597955734	25.980928
+pthread-theta/unwind3-1.yml	false	false(unreach-call)	0.067636512	0.07622983097098768	25.956352	false(unreach-call)	0.064612931	0.06890493899118155	25.899008
+pthread-theta/unwind3-100.yml	false	TIMEOUT	60.862885098	61.01621403300669	61.263872	TIMEOUT	60.514233873	61.016609786078334	48.259072
+pthread-theta/unwind3-nondet.yml	false	true	0.067854971	0.07569399499334395	25.956352	true	0.063710658	0.07609189092181623	25.899008
+pthread-theta/wsc.yml	true	true	0.088793596	0.0953420180012472	25.960448	true	0.076301525	0.08648186200298369	25.997312
+pthread-wmm/mix000.oepc.yml	false	false(unreach-call)	0.293558865	0.29644683602964506	26.230784	false(unreach-call)	0.204211165	0.21147221303544939	26.308608
+pthread-wmm/mix000.opt.yml	false	false(unreach-call)	3.594357336	3.6083298759767786	26.218496	false(unreach-call)	2.30141866	2.452130639110692	26.189824
+pthread-wmm/mix001.oepc.yml	false	TIMEOUT	60.839036041	61.01413439400494	26.349568	TIMEOUT	60.985508927	63.14615924900863	26.349568
+pthread-wmm/mix001.opt.yml	false	TIMEOUT	60.925140936	61.012836099020205	26.226688	TIMEOUT	60.77660473	61.009218579973094	26.345472
+pthread-wmm/mix002.oepc.yml	false	TIMEOUT	60.929277017	61.008732656016946	26.218496	TIMEOUT	61.00202096	62.12320805701893	26.251264
+pthread-wmm/mix002.opt.yml	false	TIMEOUT	60.896789268	61.01184404396918	26.349568	TIMEOUT	60.6440655	61.01041974697728	26.251264
+pthread-wmm/mix003.oepc.yml	false	TIMEOUT	60.87788259	61.01293598895427	26.230784	TIMEOUT	60.0957524	61.01090709597338	26.214400
+pthread-wmm/mix003_power.opt_pso.opt_rmo.opt_tso.opt.yml	false	TIMEOUT	60.82992234	61.01264125399757	26.218496	TIMEOUT	60.382663246	61.01090903801378	26.308608
+pthread-wmm/mix004.oepc.yml	false	TIMEOUT	60.813122246	61.01439503900474	26.345472	TIMEOUT	60.63211969	61.008093979093246	26.284032
+pthread-wmm/mix004.opt.yml	false	TIMEOUT	60.81422352	61.02274024498183	26.345472	TIMEOUT	60.978728848	62.65513795602601	26.398720
+pthread-wmm/mix005.opt.yml	false	TIMEOUT	60.832565057	61.01134122000076	26.370048	TIMEOUT	60.389114592	61.010399349965155	26.361856
+pthread-wmm/mix005_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.877307124	61.00692187104141	26.357760	TIMEOUT	60.1097815	61.01429124199785	26.288128
+pthread-wmm/mix005_tso.oepc.yml	false	TIMEOUT	60.843520283	61.01292315503815	26.345472	TIMEOUT	60.302098871	61.0128472680226	26.431488
+pthread-wmm/mix006.opt.yml	false	TIMEOUT	60.919314591	61.013103118981235	26.214400	TIMEOUT	60.262508474	61.0087740420131	26.284032
+pthread-wmm/mix006_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.944774494	61.01497392199235	26.218496	TIMEOUT	60.604734444	61.009868573979475	26.243072
+pthread-wmm/mix006_tso.oepc.yml	false	TIMEOUT	60.811486075	61.013712943997234	26.742784	TIMEOUT	60.249156896	61.007051025051624	26.701824
+pthread-wmm/mix007.oepc.yml	false	TIMEOUT	60.772953414	61.00875171000371	26.267648	TIMEOUT	60.5128719	61.00942393695004	26.279936
+pthread-wmm/mix007.opt.yml	false	TIMEOUT	60.827378449	61.01106713997433	26.394624	TIMEOUT	60.698457163	61.00970758998301	26.312704
+pthread-wmm/mix008.opt.yml	false	TIMEOUT	60.87548041	61.01511091500288	26.361856	TIMEOUT	60.925253765	61.0064250229625	26.386432
+pthread-wmm/mix008_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.853420504	61.01242923800601	26.349568	TIMEOUT	60.709089884	61.00954160199035	26.337280
+pthread-wmm/mix008_tso.oepc.yml	false	TIMEOUT	60.845140605	61.01248501398368	26.693632	TIMEOUT	60.951847297	61.00847366801463	26.738688
+pthread-wmm/mix009.oepc.yml	false	false(unreach-call)	0.231271987	0.2399034280097112	26.222592	false(unreach-call)	0.177410087	0.18876169703435153	26.226688
+pthread-wmm/mix009.opt.yml	false	false(unreach-call)	7.402850459	7.431369744997937	26.214400	false(unreach-call)	4.737544124	5.220715904026292	26.263552
+pthread-wmm/mix010.oepc.yml	false	TIMEOUT	60.932265424	61.01512506400468	26.218496	TIMEOUT	60.989809635	62.13938747602515	26.161152
+pthread-wmm/mix010.opt.yml	false	TIMEOUT	60.900932691	61.015419901988935	26.312704	TIMEOUT	60.798338188	61.01040909695439	26.288128
+pthread-wmm/mix011.opt.yml	false	TIMEOUT	60.938138075	61.00848955695983	26.218496	TIMEOUT	60.53386853	61.00837729300838	26.284032
+pthread-wmm/mix011_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.937131825	61.013230274955276	26.234880	TIMEOUT	60.755232732	61.00979784200899	26.193920
+pthread-wmm/mix011_tso.oepc.yml	false	TIMEOUT	60.949390593	61.012539765040856	26.214400	TIMEOUT	60.763079382	65.28953540406656	26.275840
+pthread-wmm/mix012_power.oepc_power.opt_pso.oepc_rmo.oepc_rmo.opt_tso.oepc.yml	false	false(unreach-call)	0.218127508	0.2261657199705951	26.095616	false(unreach-call)	0.164628928	0.17091694509144872	26.103808
+pthread-wmm/mix012_pso.opt_tso.opt.yml	false	false(unreach-call)	1.57906019	1.5887882770039141	26.218496	false(unreach-call)	1.024459366	1.0476516829803586	26.271744
+pthread-wmm/mix013.oepc.yml	false	TIMEOUT	60.772440901	61.01159120700322	26.349568	TIMEOUT	60.576186121	61.00873073306866	26.329088
+pthread-wmm/mix013.opt.yml	false	TIMEOUT	60.933292694	61.011667911021505	26.345472	TIMEOUT	61.002209078	64.44182192906737	26.267648
+pthread-wmm/mix014.opt.yml	false	TIMEOUT	60.830953468	61.01039836596465	26.370048	TIMEOUT	60.758114054	61.00896804302465	26.361856
+pthread-wmm/mix014_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.639624345	61.005715518957004	26.361856	TIMEOUT	60.626637007	61.01207538798917	26.279936
+pthread-wmm/mix014_tso.oepc.yml	false	TIMEOUT	60.516112695	61.013032004993875	26.763264	TIMEOUT	60.892842158	61.010167425032705	26.791936
+pthread-wmm/mix015.oepc.yml	false	false(unreach-call)	46.254718879	46.39112391398521	26.226688	false(unreach-call)	28.195012009	28.39815408294089	26.247168
+pthread-wmm/mix015.opt.yml	false	TIMEOUT	60.919310436	61.012567859957926	26.222592	TIMEOUT	60.86768469	61.00891388498712	26.296320
+pthread-wmm/mix016.oepc.yml	false	false(unreach-call)	42.382119743	42.4353440059931	26.214400	false(unreach-call)	26.549553228	27.091140317032114	26.263552
+pthread-wmm/mix016_power.opt_rmo.opt.yml	false	TIMEOUT	60.83812067	61.01327717100503	26.218496	TIMEOUT	60.318561462	61.00905470200814	26.124288
+pthread-wmm/mix016_pso.opt_tso.opt.yml	false	TIMEOUT	60.93565458	61.015305320965126	26.234880	TIMEOUT	60.844640918	61.005948838894255	26.308608
+pthread-wmm/mix017.oepc.yml	false	TIMEOUT	60.799148078	61.01793624198763	26.214400	TIMEOUT	60.638422904	61.012230052030645	26.333184
+pthread-wmm/mix017_power.opt_rmo.opt.yml	false	TIMEOUT	60.930093301	61.013758354994934	26.218496	TIMEOUT	60.852230609	61.01128591306042	26.173440
+pthread-wmm/mix017_pso.opt_tso.opt.yml	false	TIMEOUT	60.785706255	61.012174611969385	26.349568	TIMEOUT	60.70514487	61.00628823903389	26.300416
+pthread-wmm/mix018.opt.yml	false	TIMEOUT	60.772766202	61.012451345974114	26.349568	TIMEOUT	60.631699299	66.38903885800391	26.378240
+pthread-wmm/mix018_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.926245258	61.012748587992974	26.222592	TIMEOUT	61.002747494	62.71890838898253	26.284032
+pthread-wmm/mix018_tso.oepc.yml	false	TIMEOUT	60.889295799	61.01561912702164	26.345472	TIMEOUT	60.266790581	61.00904456200078	26.333184
+pthread-wmm/mix019.opt.yml	false	TIMEOUT	60.90047005	61.00832530396292	26.218496	TIMEOUT	60.523390451	61.01275105495006	26.234880
+pthread-wmm/mix019_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	41.764546002	41.85159821197158	26.238976	false(unreach-call)	25.794338954	26.11610502190888	26.198016
+pthread-wmm/mix019_tso.oepc.yml	false	TIMEOUT	60.95585951	61.01228413899662	26.226688	TIMEOUT	60.866038616	61.00913904502522	26.279936
+pthread-wmm/mix020.oepc.yml	false	TIMEOUT	60.81106795	61.01351380802225	26.349568	TIMEOUT	60.320371529	61.00582372699864	26.324992
+pthread-wmm/mix020.opt.yml	false	TIMEOUT	60.849680687	61.0130294879782	26.361856	TIMEOUT	60.571844213	61.029836277943105	26.398720
+pthread-wmm/mix021.opt.yml	false	TIMEOUT	60.886222434	61.00875147496117	26.349568	TIMEOUT	60.939934494	63.62806249293499	26.406912
+pthread-wmm/mix021_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.87010246	61.01206223596819	26.214400	TIMEOUT	60.489799878	61.00902489491273	26.320896
+pthread-wmm/mix021_tso.oepc.yml	false	TIMEOUT	60.862423389	61.014839126961306	26.349568	TIMEOUT	60.970408426	65.41767542401794	26.292224
+pthread-wmm/mix022_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	0.205491553	0.21192381397122517	26.222592	false(unreach-call)	0.169399657	0.19942374201491475	26.218496
+pthread-wmm/mix022_tso.yml	false	false(unreach-call)	1.400340243	1.4112143910024315	26.345472	false(unreach-call)	0.947659354	0.9637832540320233	26.345472
+pthread-wmm/mix023_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.857701438	61.013002641964704	26.353664	TIMEOUT	60.401283619	61.00942919799127	26.353664
+pthread-wmm/mix023_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	60.907750781	61.01257655501831	26.243072	TIMEOUT	60.527771289	61.00865288404748	26.214400
+pthread-wmm/mix023_tso.yml	false	TIMEOUT	60.794936825	61.01227017695783	26.882048	TIMEOUT	60.922431783	61.009619710966945	26.890240
+pthread-wmm/mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	false	false(unreach-call)	45.616120047	45.74286318401573	26.218496	false(unreach-call)	27.821208329	28.212862126994878	26.222592
+pthread-wmm/mix024_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	60.910806891	61.01222226099344	26.222592	TIMEOUT	60.999588539	62.20346721098758	26.234880
+pthread-wmm/mix025_power.oepc_power.opt_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	false	false(unreach-call)	41.602299586	41.727017981989775	26.218496	false(unreach-call)	25.443523903	25.609423929010518	26.198016
+pthread-wmm/mix025_pso.opt_rmo.opt.yml	false	TIMEOUT	60.938517172	61.012426447006874	26.214400	TIMEOUT	60.766146495	61.009565060958266	26.238976
+pthread-wmm/mix026.oepc.yml	false	TIMEOUT	60.837466537	61.00929469795665	26.341376	TIMEOUT	60.634670507	61.005967183969915	26.288128
+pthread-wmm/mix026_power.opt_tso.opt.yml	false	TIMEOUT	60.847815645	61.01289434096543	26.230784	TIMEOUT	60.269549231	61.00941481906921	26.312704
+pthread-wmm/mix026_pso.opt_rmo.opt.yml	false	TIMEOUT	60.917223902	61.01323217200115	26.222592	TIMEOUT	60.560046754	61.00992902193684	26.198016
+pthread-wmm/mix027_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.863548653	61.012799069983885	26.292224	TIMEOUT	60.135649981	61.0094528660411	26.349568
+pthread-wmm/mix027_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	60.919039176	61.01328380702762	26.238976	TIMEOUT	60.633316411	61.007780337007716	26.210304
+pthread-wmm/mix027_tso.yml	false	TIMEOUT	60.919427358	61.00798064097762	26.353664	TIMEOUT	60.072581369	61.006166032049805	26.308608
+pthread-wmm/mix028_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	41.104206918	41.1554233750212	26.238976	false(unreach-call)	25.351501405	25.460838943021372	26.279936
+pthread-wmm/mix028_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	60.952114866	61.014518026961014	26.218496	TIMEOUT	60.015740822	61.007511076983064	26.316800
+pthread-wmm/mix028_tso.yml	false	TIMEOUT	60.835023239	61.01405497896485	26.349568	TIMEOUT	60.687277875	61.01115022005979	26.406912
+pthread-wmm/mix029_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	false	TIMEOUT	60.911894226	61.011739508016035	26.222592	TIMEOUT	60.789345828	61.00723226601258	26.275840
+pthread-wmm/mix029_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	60.938787904	61.01292247697711	26.226688	TIMEOUT	60.535555481	61.00544876197819	26.312704
+pthread-wmm/mix030_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.805342249	61.011357323033735	26.353664	TIMEOUT	60.562709855	61.008798107970506	26.341376
+pthread-wmm/mix030_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	60.910675865	61.01220810500672	26.222592	TIMEOUT	60.456162403	61.0082680870546	26.271744
+pthread-wmm/mix030_tso.yml	false	TIMEOUT	60.867881566	61.009033641952556	26.345472	TIMEOUT	61.000803096	63.1989230660256	26.427392
+pthread-wmm/mix031.oepc.yml	false	false(unreach-call)	0.332517833	0.3412806469714269	26.083328	false(unreach-call)	0.244735527	0.2616721629165113	26.136576
+pthread-wmm/mix031.opt.yml	false	false(unreach-call)	12.551528784	12.587118478026241	26.083328	false(unreach-call)	8.753800727	8.894509291974828	26.120192
+pthread-wmm/mix032.oepc.yml	false	TIMEOUT	60.902561185	61.013057533011306	26.218496	TIMEOUT	60.325775969	61.01914452807978	26.198016
+pthread-wmm/mix032.opt.yml	false	TIMEOUT	60.840168843	61.01382145599928	26.087424	TIMEOUT	60.839935351	61.00764311396051	26.193920
+pthread-wmm/mix033.opt.yml	false	TIMEOUT	60.84570185	61.01173791702604	26.222592	TIMEOUT	60.841757233	61.009610851993784	26.116096
+pthread-wmm/mix033_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.945921752	61.011351989989635	26.218496	TIMEOUT	60.818434658	61.00886779802386	26.255360
+pthread-wmm/mix033_tso.oepc.yml	false	TIMEOUT	60.943273329	61.011684526049066	26.214400	TIMEOUT	60.465995677	61.00969979399815	26.304512
+pthread-wmm/mix034_power.oepc_power.opt_pso.oepc_rmo.oepc_rmo.opt_tso.oepc.yml	false	false(unreach-call)	0.304309232	0.31057610095012933	26.222592	false(unreach-call)	0.232563396	0.24022620799951255	26.136576
+pthread-wmm/mix034_pso.opt_tso.opt.yml	false	false(unreach-call)	2.217863932	2.2361886909930035	26.087424	false(unreach-call)	1.548233807	1.5930607069749385	26.075136
+pthread-wmm/mix035.oepc.yml	false	TIMEOUT	60.696760777	61.0125066509936	26.234880	false(unreach-call)	52.830493701	53.41004607104696	26.210304
+pthread-wmm/mix035_power.opt_rmo.opt.yml	false	TIMEOUT	60.812467026	61.00791902694618	26.218496	TIMEOUT	60.734497157	61.02302577602677	26.148864
+pthread-wmm/mix035_pso.opt_tso.opt.yml	false	TIMEOUT	60.796788813	61.0151348800282	26.222592	TIMEOUT	60.529162416	61.00856644695159	26.189824
+pthread-wmm/mix036.oepc.yml	false	TIMEOUT	60.886707458	61.00923020701157	26.353664	TIMEOUT	60.548419888	61.007658257032745	26.255360
+pthread-wmm/mix036_power.opt_rmo.opt.yml	false	TIMEOUT	60.935222312	61.01544738403754	26.243072	TIMEOUT	60.599881996	61.008450974943116	26.157056
+pthread-wmm/mix036_pso.opt_tso.opt.yml	false	TIMEOUT	60.933918292	61.01454843697138	26.222592	TIMEOUT	60.071577539	61.02265096199699	26.251264
+pthread-wmm/mix037.opt.yml	false	TIMEOUT	60.923568389	61.01214180496754	26.214400	TIMEOUT	61.002284465	62.04576880601235	26.165248
+pthread-wmm/mix037_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.872284516	61.01242566900328	26.349568	TIMEOUT	60.66156782	61.00803069898393	26.230784
+pthread-wmm/mix037_tso.oepc.yml	false	TIMEOUT	60.909205212	61.01405691099353	26.345472	TIMEOUT	60.849365217	61.00937255797908	26.324992
+pthread-wmm/mix038.opt.yml	false	TIMEOUT	60.882345781	61.012688048998825	26.107904	TIMEOUT	60.389178876	61.011161241913214	26.132480
+pthread-wmm/mix038_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.959198154	61.01449283299735	26.222592	false(unreach-call)	51.99638298	53.15216530603357	26.259456
+pthread-wmm/mix038_tso.oepc.yml	false	TIMEOUT	60.830233117	61.01346981304232	26.238976	TIMEOUT	60.943594827	63.67767585499678	26.243072
+pthread-wmm/mix039.oepc.yml	false	TIMEOUT	60.91218279	61.01254996203352	26.234880	TIMEOUT	60.506075805	61.00820153998211	26.288128
+pthread-wmm/mix039.opt.yml	false	TIMEOUT	60.865272361	61.012844852986746	26.214400	TIMEOUT	60.678818698	64.40586838999297	26.259456
+pthread-wmm/mix040.opt.yml	false	TIMEOUT	60.934016048	61.01397381903371	26.124288	TIMEOUT	60.721216719	61.0104619829217	26.128384
+pthread-wmm/mix040_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.865603529	61.01232276001247	26.218496	TIMEOUT	60.979827243	62.61355004401412	26.329088
+pthread-wmm/mix040_tso.oepc.yml	false	TIMEOUT	60.777354032	61.01285720197484	26.214400	TIMEOUT	60.677932054	61.01052494090982	26.300416
+pthread-wmm/mix041_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	0.301591669	0.30860122601734474	26.214400	false(unreach-call)	0.224853399	0.2798564820550382	26.144768
+pthread-wmm/mix041_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	1.839149542	1.8510419350350276	26.189824	false(unreach-call)	1.376788554	1.4120020249392837	26.181632
+pthread-wmm/mix042.oepc.yml	false	TIMEOUT	60.946154043	61.01195863203611	26.198016	false(unreach-call)	51.58209412	51.927591017098166	26.189824
+pthread-wmm/mix042.opt.yml	false	TIMEOUT	60.92210614	61.01159268798074	26.214400	TIMEOUT	60.173437283	61.00869631499518	26.255360
+pthread-wmm/mix043.oepc.yml	false	TIMEOUT	60.778016809	61.01377906597918	26.353664	TIMEOUT	60.638949282	61.02081335207913	26.345472
+pthread-wmm/mix043.opt.yml	false	TIMEOUT	60.932517231	61.01370429596864	26.218496	TIMEOUT	60.63261118	61.006710763904266	26.226688
+pthread-wmm/mix044.opt.yml	false	TIMEOUT	60.911094582	61.01098396698944	26.218496	TIMEOUT	60.692397799	61.006762692006305	26.234880
+pthread-wmm/mix044_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.931099631	61.012911211000755	26.243072	TIMEOUT	60.720374401	61.00843692093622	26.316800
+pthread-wmm/mix044_tso.oepc.yml	false	TIMEOUT	60.906697925	61.013241240987554	26.349568	TIMEOUT	60.526909013	61.01139757304918	26.312704
+pthread-wmm/mix045_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.897504681	61.01404065999668	26.214400	false(unreach-call)	51.023297244	51.44008547195699	26.189824
+pthread-wmm/mix045_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	60.77376768	61.009524014021736	26.226688	TIMEOUT	60.630337595	61.01048816693947	26.210304
+pthread-wmm/mix046.oepc.yml	false	TIMEOUT	60.89190885	61.01383242796874	26.218496	TIMEOUT	60.734214075	61.009888321044855	26.333184
+pthread-wmm/mix046.opt.yml	false	TIMEOUT	60.888435766	61.012891389022116	26.214400	TIMEOUT	60.661898471	61.01225415105	26.333184
+pthread-wmm/mix047_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.93325737	61.01163433701731	26.353664	TIMEOUT	60.6529781	61.00769748701714	26.312704
+pthread-wmm/mix047_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	60.917285464	61.00731023296248	26.234880	TIMEOUT	60.76502519	61.009313218994066	26.275840
+pthread-wmm/mix048_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt-podwr000_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	0.151253023	0.15761760802706704	26.218496	false(unreach-call)	0.127657313	0.14206473110243678	26.120192
+pthread-wmm/mix049_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt-podwr001_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	18.997946066	19.023516025976278	26.230784	false(unreach-call)	11.725612952	12.028397385030985	26.255360
+pthread-wmm/mix050.yml	false	TIMEOUT	60.923239464	61.013011370028835	26.218496	TIMEOUT	60.621558179	61.01035680004861	26.329088
+pthread-wmm/mix051_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.876285193	61.00984597101342	26.218496	TIMEOUT	60.882981192	61.01144470507279	26.271744
+pthread-wmm/mix051_pso.opt_rmo.opt_tso.opt.yml	false	TIMEOUT	60.924083066	61.0151095870533	26.222592	TIMEOUT	60.532865319	61.00970112707	26.148864
+pthread-wmm/mix051_tso.oepc.yml	false	TIMEOUT	60.951603319	61.01278342801379	26.345472	TIMEOUT	60.360714473	61.02994752989616	26.341376
+pthread-wmm/mix052_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	18.686081752	18.714283636014443	26.214400	false(unreach-call)	11.971680659	12.356545336078852	26.255360
+pthread-wmm/mix052_pso.opt_rmo.opt_tso.opt.yml	false	TIMEOUT	60.827281397	61.01392824895447	26.206208	TIMEOUT	60.86894557	61.008226105012	26.193920
+pthread-wmm/mix052_tso.oepc.yml	false	TIMEOUT	60.935162229	61.01470885804156	26.226688	TIMEOUT	60.320505513	61.011307394946925	26.296320
+pthread-wmm/mix053.opt.yml	false	TIMEOUT	60.922472936	61.015892835042905	26.222592	TIMEOUT	60.851107564	61.01080902700778	26.230784
+pthread-wmm/mix053_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.903162862	61.012221860990394	26.226688	TIMEOUT	60.814936193	61.00910217198543	26.312704
+pthread-wmm/mix053_tso.oepc.yml	false	TIMEOUT	60.927681289	61.01514653197955	26.341376	TIMEOUT	60.55578078	61.00813009799458	26.353664
+pthread-wmm/mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	0.149161448	0.15798652498051524	26.095616	false(unreach-call)	0.122257132	0.13477663102094084	26.144768
+pthread-wmm/mix054_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	0.435949136	0.4454486590111628	26.218496	false(unreach-call)	0.348942699	0.3653614000650123	26.169344
+pthread-wmm/mix055.opt.yml	false	TIMEOUT	60.875793484	61.01244974299334	26.214400	TIMEOUT	60.554369785	63.807798199006356	26.247168
+pthread-wmm/mix055_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.923632589	61.01149092800915	26.251264	TIMEOUT	60.68082787	64.17252658295911	26.255360
+pthread-wmm/mix055_tso.oepc.yml	false	TIMEOUT	60.884022646	61.01514756801771	26.349568	TIMEOUT	60.205432921	61.00798556802329	26.349568
+pthread-wmm/mix056_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	18.465763493	18.512484656006563	26.230784	false(unreach-call)	11.336801177	11.417004444054328	26.284032
+pthread-wmm/mix056_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	60.929266203	61.015623622981366	26.222592	TIMEOUT	60.778789026	61.007260033045895	26.284032
+pthread-wmm/mix057_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.944876681	61.012421792023815	26.214400	TIMEOUT	60.435073933	61.00790920399595	26.345472
+pthread-wmm/mix057_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	60.814171608	61.011820291983895	26.214400	TIMEOUT	60.656200956	61.006248224992305	26.308608
+pthread-wmm/rfi000_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	0.336549994	0.34534090699162334	26.476544	false(unreach-call)	0.276508864	0.35753477190155536	26.439680
+pthread-wmm/rfi000_power.opt_pso.opt_rmo.opt.yml	false	false(unreach-call)	1.819071378	1.8269272919860668	26.202112	false(unreach-call)	1.372863777	1.5501750609837472	26.222592
+pthread-wmm/rfi000_tso.yml	true	true	3.977690283	3.9880381320253946	26.480640	true	2.833067079	3.3704611709108576	26.533888
+pthread-wmm/rfi001_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	0.303801597	0.3108982580015436	26.222592	false(unreach-call)	0.230247996	0.27396421204321086	26.177536
+pthread-wmm/rfi001_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	1.838872814	1.8491727550281212	26.226688	false(unreach-call)	1.382082364	1.435862765996717	26.177536
+pthread-wmm/rfi002_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	true	true	12.050594432	12.097647265007254	26.476544	true	7.483076378	7.735877281054854	26.533888
+pthread-wmm/rfi002_tso.yml	true	true	18.68267334	18.702783063985407	26.607616	true	10.814720877	10.849784843041562	26.742784
+pthread-wmm/rfi003_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	5.333806524	5.37204644002486	26.087424	false(unreach-call)	3.79783592	4.175269184052013	26.079232
+pthread-wmm/rfi003_tso.yml	true	true	12.002993074	12.0655765029951	26.480640	true	7.46581648	7.7079397269990295	26.501120
+pthread-wmm/rfi004.yml	false	false(unreach-call)	5.417670493	5.437008915992919	26.083328	false(unreach-call)	3.846775587	3.9307900379644707	26.120192
+pthread-wmm/rfi005.yml	false	false(unreach-call)	0.07718348	0.082731005968526	26.476544	false(unreach-call)	0.082989864	0.11239437304902822	26.411008
+pthread-wmm/rfi006_power.oepc.yml	false	false(unreach-call)	0.081653222	0.08913818100700155	26.361856	false(unreach-call)	0.087571009	0.18530983896926045	26.488832
+pthread-wmm/rfi006_power.opt.yml	false	false(unreach-call)	0.083971434	0.09113889699801803	26.382336	false(unreach-call)	0.088394485	0.18892168800812215	26.472448
+pthread-wmm/rfi006_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	60.838054712	61.01123466301942	26.345472	TIMEOUT	61.001459549	62.372295431094244	26.353664
+pthread-wmm/rfi006_rmo.yml	false	false(unreach-call)	0.093780235	0.10192502901190892	26.218496	false(unreach-call)	0.083157521	0.08893797791097313	26.279936
+pthread-wmm/rfi007_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	0.212999487	0.2189040249795653	26.157056	false(unreach-call)	0.164243638	0.18677237397059798	26.120192
+pthread-wmm/rfi007_tso.yml	false	false(unreach-call)	1.404226928	1.4140098130446859	26.353664	false(unreach-call)	0.960822516	0.9867615500697866	26.333184
+pthread-wmm/rfi008.oepc.yml	false	false(unreach-call)	0.285627193	0.2943652420071885	26.234880	false(unreach-call)	0.202029879	0.20967822207603604	26.238976
+pthread-wmm/rfi008.opt.yml	false	false(unreach-call)	3.58904277	3.599826135963667	26.222592	false(unreach-call)	2.313919886	2.3939672800479457	26.284032
+pthread-wmm/rfi009_power.oepc.yml	false	false(unreach-call)	0.082346136	0.08996178698725998	26.349568	false(unreach-call)	0.087096967	0.12831123394425958	26.464256
+pthread-wmm/rfi009_power.opt_pso.oepc_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	60.774784214	61.0076589770033	26.365952	TIMEOUT	60.623764686	61.0157134749461	26.402816
+pthread-wmm/rfi009_rmo.oepc.yml	false	false(unreach-call)	0.094091792	0.09996513603255153	26.349568	false(unreach-call)	0.085050421	0.09081232303287834	26.296320
+pthread-wmm/rfi010.yml	false	false(unreach-call)	3.506796482	3.5185402869828977	26.218496	false(unreach-call)	2.270566312	2.3339177429443225	26.292224
+pthread-wmm/safe000_power.oepc.yml	false	false(unreach-call)	0.087652835	0.09574481099843979	26.624000	false(unreach-call)	0.091719205	0.09824118996039033	26.509312
+pthread-wmm/safe000_power.opt.yml	false	TIMEOUT	60.806986052	61.016680912987795	26.353664	TIMEOUT	60.296343224	61.02957505208906	26.447872
+pthread-wmm/safe000_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.917834374	61.01325725298375	25.952256	TIMEOUT	60.21200294	61.032098714029416	25.894912
+pthread-wmm/safe000_rmo.yml	false	false(unreach-call)	0.079768683	0.10175060201436281	26.476544	false(unreach-call)	0.093193879	0.09712171996943653	26.484736
+pthread-wmm/safe001_power.oepc.yml	false	false(unreach-call)	0.091890855	0.09822773700580001	26.611712	false(unreach-call)	0.092422841	0.1000042799860239	26.648576
+pthread-wmm/safe001_power.opt_pso.oepc_pso.opt_rmo.opt.yml	false	TIMEOUT	60.951308373	61.01240223302739	26.234880	TIMEOUT	60.96156965	62.4715486940695	26.329088
+pthread-wmm/safe001_rmo.oepc.yml	false	false(unreach-call)	0.080715516	0.09350735100451857	26.488832	false(unreach-call)	0.093336475	0.10425021394621581	26.591232
+pthread-wmm/safe001_tso.yml	true	TIMEOUT	60.899860838	61.021128563035745	25.960448	TIMEOUT	61.001793606	65.79721223399974	25.837568
+pthread-wmm/safe002_power.oepc.yml	false	false(unreach-call)	0.088706533	0.09714170900406316	26.546176	false(unreach-call)	0.091664603	0.10042863106355071	26.624000
+pthread-wmm/safe002_power.opt_pso.oepc_pso.opt_rmo.opt.yml	false	TIMEOUT	60.844558991	61.00870207097614	26.226688	TIMEOUT	60.694009309	61.0131454130169	26.140672
+pthread-wmm/safe002_rmo.oepc.yml	false	false(unreach-call)	0.083738051	0.09153266000794247	26.480640	false(unreach-call)	0.090573137	0.10581284610088915	26.476544
+pthread-wmm/safe002_tso.yml	true	TIMEOUT	60.816112336	61.01546754100127	25.923584	TIMEOUT	60.171342634	61.02666084503289	25.866240
+pthread-wmm/safe003_power.oepc_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	22.696420693	22.782950198976323	26.488832	false(unreach-call)	14.400475867	14.869149347068742	26.587136
+pthread-wmm/safe003_power.opt.yml	false	TIMEOUT	60.776366596	61.01337041996885	26.345472	TIMEOUT	60.607221446	61.01437020394951	26.370048
+pthread-wmm/safe003_tso.yml	true	TIMEOUT	60.781496416	61.012569952989	25.980928	TIMEOUT	61.003961646	62.332504102028906	25.837568
+pthread-wmm/safe004_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	22.362171923	22.46460783900693	26.476544	false(unreach-call)	13.977914914	14.026796477031894	26.537984
+pthread-wmm/safe004_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	60.950804309	61.01150961901294	26.214400	TIMEOUT	60.562303599	61.01040522905532	26.288128
+pthread-wmm/safe004_tso.yml	true	TIMEOUT	60.906553403	61.01500387402484	25.952256	TIMEOUT	60.953140254	63.48511670494918	25.952256
+pthread-wmm/safe005_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	60.905928424	61.0110936909914	26.230784	TIMEOUT	60.844252086	61.008324829046614	26.255360
+pthread-wmm/safe005_tso.yml	true	TIMEOUT	60.903066614	61.00805272097932	25.960448	TIMEOUT	60.621405223	61.025361508945934	25.931776
+pthread-wmm/safe006_power.oepc-thin000_power.oepc.yml	false	false(unreach-call)	0.082762702	0.09043134597595781	26.222592	false(unreach-call)	0.076906228	0.08195681090001017	26.275840
+pthread-wmm/safe006_power.opt-thin000_power.opt.yml	false	false(unreach-call)	0.669368671	0.678837310988456	26.349568	false(unreach-call)	0.463899651	0.48148981004487723	26.279936
+pthread-wmm/safe006_pso.oepc_pso.opt_tso.oepc_tso.opt-thin000_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	true	0.247835582	0.25473869597772136	25.952256	true	0.246100417	0.39959142496809363	25.894912
+pthread-wmm/safe006_rmo.oepc_rmo.opt-thin000_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	0.08028409	0.08789640298346058	26.218496	false(unreach-call)	0.075589685	0.09468568197917193	26.095616
+pthread-wmm/safe007_power.oepc-thin001_power.oepc.yml	false	false(unreach-call)	0.082431653	0.09119275899138302	26.226688	false(unreach-call)	0.083596002	0.09341905207838863	26.296320
+pthread-wmm/safe007_power.opt-thin001_power.opt.yml	false	TIMEOUT	60.912065168	61.01491550501669	26.349568	TIMEOUT	60.532627352	61.01189995498862	26.251264
+pthread-wmm/safe007_pso.oepc_pso.opt_tso.oepc_tso.opt-thin001_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.887004145	61.015299007005524	25.952256	TIMEOUT	60.483437873	61.0276357519906	25.923584
+pthread-wmm/safe007_rmo.oepc_rmo.opt-thin001_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	0.083947238	0.09284793603001162	26.218496	false(unreach-call)	0.079599015	0.09099385200534016	26.230784
+pthread-wmm/safe008_power.oepc_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	13.864323443	13.887183515005745	26.226688	false(unreach-call)	9.3751131	9.426658464944921	26.234880
+pthread-wmm/safe008_power.opt.yml	false	TIMEOUT	60.876083676	61.013175364001654	26.353664	TIMEOUT	60.045217002	61.008125007967465	26.345472
+pthread-wmm/safe008_tso.yml	true	TIMEOUT	60.903738419	61.01135422603693	25.956352	TIMEOUT	60.168068225	61.017413632012904	25.960448
+pthread-wmm/safe009_power.oepc.yml	false	false(unreach-call)	0.085463765	0.08993202797137201	26.476544	false(unreach-call)	0.088364152	0.11334579100366682	26.476544
+pthread-wmm/safe009_power.opt.yml	false	TIMEOUT	60.805786601	61.0129544409574	26.349568	TIMEOUT	60.713892808	64.54815734701697	26.427392
+pthread-wmm/safe009_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	true	57.111702479	57.195616675016936	25.952256	true	51.970028073	54.009252964984626	25.837568
+pthread-wmm/safe009_rmo.oepc.yml	false	false(unreach-call)	0.092167242	0.09709716704674065	26.345472	false(unreach-call)	0.084237796	0.09219424508046359	26.349568
+pthread-wmm/safe009_rmo.opt.yml	false	TIMEOUT	60.899551943	61.007837411016226	26.214400	TIMEOUT	60.432449515	61.0198652719846	26.255360
+pthread-wmm/safe010_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	0.125667203	0.13507021602708846	26.214400	false(unreach-call)	0.106254559	0.11686652794014663	26.165248
+pthread-wmm/safe010_tso.yml	true	true	0.247279102	0.25269216403830796	25.833472	true	0.239515534	0.49702461704146117	25.903104
+pthread-wmm/safe011_power.oepc_pso.oepc_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	13.658355496	13.726127828005701	26.226688	false(unreach-call)	9.232874103	9.261446009972133	26.288128
+pthread-wmm/safe011_power.opt_pso.opt.yml	false	TIMEOUT	60.912008906	61.0125658789766	26.210304	TIMEOUT	60.692564155	61.006181501899846	26.316800
+pthread-wmm/safe011_tso.yml	true	TIMEOUT	60.827111954	61.00905115297064	25.829376	TIMEOUT	60.975102801	69.15605538198724	25.956352
+pthread-wmm/safe012_power.oepc.yml	false	false(unreach-call)	0.087939319	0.09359324001707137	26.218496	false(unreach-call)	0.083951895	0.09057845105417073	26.238976
+pthread-wmm/safe012_power.opt.yml	false	TIMEOUT	60.8812769	61.01169660297455	26.349568	TIMEOUT	60.504334879	61.010663153021596	26.382336
+pthread-wmm/safe012_pso.oepc_pso.opt_rmo.opt.yml	false	TIMEOUT	60.783832035	61.012388647999614	26.218496	TIMEOUT	61.000518276	62.39267828897573	26.165248
+pthread-wmm/safe012_rmo.oepc.yml	false	false(unreach-call)	0.08679591	0.09326666599372402	26.214400	false(unreach-call)	0.076679505	0.08748097496572882	26.177536
+pthread-wmm/safe012_tso.yml	true	TIMEOUT	60.90721427	61.01386242697481	25.960448	TIMEOUT	60.495431908	61.02726650994737	25.976832
+pthread-wmm/safe013_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	60.816145497	61.015939333010465	26.218496	TIMEOUT	60.84582856	61.009683823096566	26.275840
+pthread-wmm/safe013_tso.yml	true	TIMEOUT	60.921673574	61.01243526500184	25.870336	TIMEOUT	60.111198369	61.03432129905559	25.964544
+pthread-wmm/safe014_power.oepc.yml	false	false(unreach-call)	0.085189411	0.0937701869988814	26.210304	false(unreach-call)	0.080494149	0.08915290504228324	26.296320
+pthread-wmm/safe014_power.opt.yml	false	false(unreach-call)	0.086481171	0.09453192498767748	26.210304	false(unreach-call)	0.083091814	0.08651265094522387	26.284032
+pthread-wmm/safe014_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.881909695	61.01228678098414	25.833472	TIMEOUT	60.757271496	61.02960160304792	25.886720
+pthread-wmm/safe014_rmo.oepc.yml	false	false(unreach-call)	0.083912581	0.09267828497104347	26.218496	false(unreach-call)	0.082129968	0.09258185396902263	26.173440
+pthread-wmm/safe014_rmo.opt.yml	false	TIMEOUT	60.902180926	61.0130059630028	26.480640	TIMEOUT	60.774892988	61.00835271703545	26.562560
+pthread-wmm/safe015_power.oepc.yml	false	false(unreach-call)	0.081083075	0.08631178899668157	26.591232	false(unreach-call)	0.08498871	0.1005518320016563	26.599424
+pthread-wmm/safe015_power.opt.yml	false	TIMEOUT	60.955988261	61.01252782501979	26.607616	TIMEOUT	60.557741023	61.01233051996678	26.550272
+pthread-wmm/safe015_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.877253824	61.0123460580362	25.956352	TIMEOUT	60.984628407	70.87021524703596	25.894912
+pthread-wmm/safe015_rmo.yml	false	TIMEOUT	60.916766921	61.011933729983866	26.476544	TIMEOUT	60.634424118	61.0129816790577	26.468352
+pthread-wmm/safe016_power.oepc.yml	false	false(unreach-call)	0.084915572	0.10233759699622169	26.488832	false(unreach-call)	0.090865463	0.10392231401056051	26.509312
+pthread-wmm/safe016_power.opt.yml	false	TIMEOUT	60.949457345	61.013741818023846	26.607616	TIMEOUT	60.274491507	61.02603798999917	26.644480
+pthread-wmm/safe016_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.939544716	61.01212667900836	25.821184	TIMEOUT	60.647261111	61.03029882302508	25.944064
+pthread-wmm/safe016_rmo.oepc.yml	false	false(unreach-call)	0.082456386	0.09056319697992876	26.476544	false(unreach-call)	0.087791884	0.09931205492466688	26.451968
+pthread-wmm/safe016_rmo.opt.yml	false	TIMEOUT	60.858593953	61.01340098399669	26.476544	TIMEOUT	60.621462091	61.00730770791415	26.525696
+pthread-wmm/safe017_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	4.924804415	4.94526563497493	26.218496	false(unreach-call)	3.369640504	3.441516137099825	26.312704
+pthread-wmm/safe017_tso.yml	true	true	55.936341763	56.09106061095372	25.829376	true	50.866972109	55.392582145985216	25.927680
+pthread-wmm/safe018_power.oepc.yml	false	false(unreach-call)	0.086215852	0.09363802598090842	26.218496	false(unreach-call)	0.08025547	0.08852373401168734	26.222592
+pthread-wmm/safe018_power.opt.yml	false	TIMEOUT	60.602617197	61.01066939503653	26.484736	TIMEOUT	60.706639751	61.02861786598805	26.533888
+pthread-wmm/safe018_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.960824672	61.01458111801185	25.817088	true	55.163067029	55.96875382307917	25.882624
+pthread-wmm/safe018_rmo.oepc.yml	false	false(unreach-call)	0.084690729	0.08930051501374692	26.226688	false(unreach-call)	0.077250982	0.0890873110620305	26.234880
+pthread-wmm/safe018_rmo.opt.yml	false	TIMEOUT	60.909206443	61.018318470043596	26.374144	TIMEOUT	60.966813734	62.17583866196219	26.386432
+pthread-wmm/safe019_power.oepc.yml	false	false(unreach-call)	0.085608736	0.10168199398322031	26.480640	false(unreach-call)	0.092663116	0.10426975891459733	26.480640
+pthread-wmm/safe019_power.opt.yml	false	TIMEOUT	60.952995611	61.008192114008125	26.480640	TIMEOUT	60.650386422	61.01076764205936	26.542080
+pthread-wmm/safe019_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.946775184	61.013509364041965	25.952256	TIMEOUT	60.730142597	61.00817041506525	25.911296
+pthread-wmm/safe019_rmo.oepc.yml	false	false(unreach-call)	0.083725618	0.09181663999333978	26.476544	false(unreach-call)	0.089504977	0.14258458698168397	26.513408
+pthread-wmm/safe019_rmo.opt.yml	false	TIMEOUT	60.926005689	61.016034792002756	26.484736	TIMEOUT	60.13084175	61.031342935049906	26.460160
+pthread-wmm/safe020_power.yml	false	TIMEOUT	60.611022459	61.011580001038965	26.480640	TIMEOUT	60.998150774	62.037245028070174	26.476544
+pthread-wmm/safe020_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.92355035	61.01680891297292	25.841664	TIMEOUT	60.775241979	61.01598258095328	25.886720
+pthread-wmm/safe020_rmo.yml	false	TIMEOUT	60.934517977	61.01062782498775	26.365952	TIMEOUT	60.616669745	61.008562352042645	26.345472
+pthread-wmm/safe021_power.oepc_pso.oepc_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	18.72109168	18.74150563799776	26.226688	false(unreach-call)	11.627661354	11.793423712952062	26.210304
+pthread-wmm/safe021_power.opt_pso.opt.yml	false	TIMEOUT	60.961182985	61.01255695900181	26.218496	TIMEOUT	60.99231088	62.51010982110165	26.198016
+pthread-wmm/safe021_tso.yml	true	TIMEOUT	60.785243683	61.015211527002975	25.956352	TIMEOUT	61.004910385	62.501492950017564	25.882624
+pthread-wmm/safe022_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	0.148447895	0.15637174498988315	26.222592	false(unreach-call)	0.124215735	0.14404544699937105	26.193920
+pthread-wmm/safe022_tso.yml	true	true	0.253084261	0.2585367729770951	25.837568	true	0.239465028	0.3844891880871728	25.825280
+pthread-wmm/safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	60.826014239	61.01239356899168	26.624000	TIMEOUT	60.617848903	61.011708526988514	26.550272
+pthread-wmm/safe023_tso.yml	true	TIMEOUT	60.945701487	61.01216781500261	25.956352	TIMEOUT	60.676883264	61.0168731570011	25.845760
+pthread-wmm/safe024_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	60.905472777	61.01337366300868	26.218496	TIMEOUT	60.790982538	61.00787995499559	26.157056
+pthread-wmm/safe024_tso.yml	true	TIMEOUT	60.949538898	61.00837000098545	25.825280	TIMEOUT	60.401992444	61.02552420494612	25.919488
+pthread-wmm/safe025_power.yml	false	false(unreach-call)	0.084157886	0.09017503901850432	26.611712	false(unreach-call)	0.087268513	0.14056660991627723	26.574848
+pthread-wmm/safe025_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.870249265	61.01285120099783	25.956352	TIMEOUT	60.998171771	69.01436736504547	25.931776
+pthread-wmm/safe025_rmo.yml	false	TIMEOUT	60.901597243	61.0125135119888	26.488832	TIMEOUT	60.962487242	62.86970890802331	26.574848
+pthread-wmm/safe026_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	6.815268388	6.84104471700266	26.218496	false(unreach-call)	4.204365691	4.255617327056825	26.267648
+pthread-wmm/safe026_tso.yml	true	true	58.162764748	58.34778166003525	25.956352	true	51.603267856	57.17662109201774	25.952256
+pthread-wmm/safe027_power.oepc.yml	false	false(unreach-call)	0.084838995	0.0921683440101333	26.476544	false(unreach-call)	0.089055256	0.09790388599503785	26.402816
+pthread-wmm/safe027_power.opt.yml	false	TIMEOUT	60.955259746	61.01385965500958	26.480640	TIMEOUT	60.627652488	61.00751507491805	26.488832
+pthread-wmm/safe027_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.955858888	61.0127140909899	25.948160	TIMEOUT	60.595102814	61.00995074107777	25.964544
+pthread-wmm/safe027_rmo.yml	false	false(unreach-call)	0.082151317	0.08998547296505421	26.349568	false(unreach-call)	0.090814476	0.1737587780226022	26.411008
+pthread-wmm/safe028_power.yml	false	TIMEOUT	60.845272873	61.013114825007506	26.476544	TIMEOUT	60.572888488	61.01065579999704	26.439680
+pthread-wmm/safe028_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.933052067	61.01318634697236	25.956352	TIMEOUT	60.974688234	62.27851901599206	25.890816
+pthread-wmm/safe028_rmo.yml	false	TIMEOUT	60.841753974	61.01252753601875	26.345472	TIMEOUT	60.176047995	61.009023677092046	26.382336
+pthread-wmm/safe029_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	0.126172986	0.13478169997688383	26.222592	false(unreach-call)	0.11288836	0.12973013299051672	26.132480
+pthread-wmm/safe029_power.opt_pso.opt_rmo.opt.yml	false	false(unreach-call)	0.431835855	0.440197083982639	26.214400	false(unreach-call)	0.349109486	0.3721235579578206	26.132480
+pthread-wmm/safe029_tso.yml	true	true	0.232179707	0.23925533099099994	25.821184	true	0.232946752	0.47622029506601393	25.845760
+pthread-wmm/safe030_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	13.328365218	13.347980074991938	26.234880	false(unreach-call)	9.136756149	9.239191479049623	26.198016
+pthread-wmm/safe030_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	60.918253805	61.013317409029696	26.238976	TIMEOUT	61.000252527	62.026110560051166	26.206208
+pthread-wmm/safe030_tso.yml	true	TIMEOUT	60.770569845	61.01403503702022	25.956352	TIMEOUT	61.005376635	62.029053002013825	25.923584
+pthread-wmm/safe031_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	60.720923856	61.01217878103489	26.214400	TIMEOUT	60.460233832	61.007476389058866	26.193920
+pthread-wmm/safe031_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	60.896477336	61.01432332699187	26.214400	TIMEOUT	60.415109029	61.00573820702266	26.173440
+pthread-wmm/safe031_tso.yml	true	TIMEOUT	60.878178027	61.012147871020716	25.829376	TIMEOUT	61.002080034	62.054688512929715	25.927680
+pthread-wmm/safe032_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	60.89035263	61.010779793024994	26.480640	TIMEOUT	60.594376579	61.00855785794556	26.492928
+pthread-wmm/safe032_tso.yml	true	TIMEOUT	60.906844216	61.011793735960964	25.886720	TIMEOUT	60.994605271	62.151079209987074	25.931776
+pthread-wmm/safe033_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	0.991186446	0.9974946230067872	26.099712	false(unreach-call)	0.732151934	0.7582033120561391	26.177536
+pthread-wmm/safe033_tso.yml	true	true	0.426856766	0.43540899199433625	25.837568	true	0.417518335	0.7230581570183858	25.931776
+pthread-wmm/safe034_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	60.855493368	61.01200956403045	26.218496	TIMEOUT	60.985479378	65.29483718797565	26.136576
+pthread-wmm/safe034_tso.yml	true	TIMEOUT	60.814654342	61.011635239003226	25.956352	TIMEOUT	61.00236264	62.06239515997004	25.886720
+pthread-wmm/safe035_power.yml	true	TIMEOUT	60.863445124	61.011228657036554	26.771456	TIMEOUT	60.844962472	61.00799677497707	26.685440
+pthread-wmm/safe035_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.927120027	61.01317926199408	25.952256	TIMEOUT	60.358862121	61.02412656904198	25.952256
+pthread-wmm/safe036.yml	true	true	0.963464849	0.9731129489955492	25.825280	true	0.900090801	0.9564545199973509	25.960448
+pthread-wmm/safe037.yml	true	TIMEOUT	60.84376932	61.01270283001941	25.825280	TIMEOUT	60.037103988	61.027710351976566	25.903104
+pthread-wmm/thin002_power.oepc.yml	false	false(unreach-call)	0.089585226	0.09849035303341225	26.218496	false(unreach-call)	0.085464491	0.09519147395621985	26.251264
+pthread-wmm/thin002_power.opt.yml	false	TIMEOUT	60.625720889	61.0108864249778	26.353664	TIMEOUT	60.525028565	61.024857338983566	26.394624
+pthread-wmm/thin002_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	60.940391461	61.01355220499681	26.013696	TIMEOUT	60.678420406	61.00760830496438	25.890816
+pthread-wmm/thin002_rmo.yml	false	false(unreach-call)	0.090907911	0.09813487302744761	26.218496	false(unreach-call)	0.083441753	0.10066420398652554	26.169344
+pthread/bigshot_s.yml	true	true	0.065090385	0.0700762159540318	26.013696	true	0.070383771	0.07720945100300014	26.009600
+pthread/bigshot_s2.yml	true	true	0.068820502	0.07294893200742081	26.017792	true	0.06622756	0.07263710291590542	25.944064
+pthread/butterfly.yml	true	true	24.853875735	24.87424804701004	25.952256	true	14.423832887	14.897518693003803	25.944064
+pthread/fib_safe-10.yml	true	TIMEOUT	60.902728943	61.014081021014135	25.952256	TIMEOUT	60.982155152	73.91029886703473	25.956352
+pthread/fib_safe-11.yml	true	TIMEOUT	60.829033545	61.01339548500255	25.825280	TIMEOUT	60.783442118	65.75739724596497	25.825280
+pthread/fib_safe-12.yml	true	TIMEOUT	60.874281795	61.01508324901806	25.829376	TIMEOUT	60.600232031	70.92212097998708	25.886720
+pthread/fib_safe-5.yml	true	true	6.687545776	6.708454143954441	25.849856	true	3.59918237	3.8113704109564424	25.829376
+pthread/fib_safe-6.yml	true	true	36.769141429	36.83556378301	25.825280	true	18.501466969	19.54311827593483	25.919488
+pthread/fib_safe-7.yml	true	TIMEOUT	60.907679752	61.01193117699586	25.845760	TIMEOUT	60.489857387	76.39780363906175	25.825280
+pthread/fib_unsafe-10.yml	false	TIMEOUT	60.501545188	61.01521609601332	25.964544	TIMEOUT	60.964474815	71.66589819197543	25.882624
+pthread/fib_unsafe-11.yml	false	TIMEOUT	60.772304478	61.00987814401742	25.825280	TIMEOUT	60.40037795	71.15967550093774	25.821184
+pthread/fib_unsafe-12.yml	false	TIMEOUT	60.764682764	61.01387471402995	25.821184	TIMEOUT	60.260554131	74.28195321490057	25.915392
+pthread/fib_unsafe-5.yml	false	false(unreach-call)	1.794843489	1.806492171017453	25.825280	false(unreach-call)	0.988810161	1.1841985889477655	25.956352
+pthread/fib_unsafe-6.yml	false	false(unreach-call)	10.148519224	10.207966455025598	25.821184	false(unreach-call)	5.041358579	5.92826411803253	25.829376
+pthread/fib_unsafe-7.yml	false	false(unreach-call)	54.827577501	54.94894843903603	25.849856	false(unreach-call)	25.70232041	26.330148553010076	25.853952
+pthread/lazy01.yml	false	false(unreach-call)	0.074275253	0.07900673104450107	25.948160	false(unreach-call)	0.063706562	0.07001852698158473	25.968640
+pthread/queue.yml	false	false(unreach-call)	0.091911839	0.09843262803042307	26.058752	false(unreach-call)	0.098166143	0.10591033298987895	25.972736
+pthread/queue_longer.yml	false	TIMEOUT	60.920896681	61.039343144977465	393.617408	TIMEOUT	60.624423642	61.082235979964025	950.095872
+pthread/queue_longest.yml	false	TIMEOUT	60.529181393	61.027770982997026	282.660864	TIMEOUT	60.948860941	61.04609221697319	570.503168
+pthread/queue_ok.yml	true	true	0.072029351	0.08055135898757726	26.034176	true	0.073705416	0.08045176998712122	26.083328
+pthread/queue_ok_longer.yml	true	true	2.374260342	2.3839419159921817	164.499456	true	0.468782751	0.576902306987904	79.384576
+pthread/queue_ok_longest.yml	true	true	15.009470663	15.034550811978988	613.089280	true	1.652197601	1.665567977936007	276.946944
+pthread/reorder_2.yml	false	false(unreach-call)	0.152106287	0.15996440302114934	26.001408	false(unreach-call)	0.146032711	0.15329042403027415	26.050560
+pthread/reorder_5.yml	false	false(unreach-call)	3.992855677	4.006006368028466	26.087424	false(unreach-call)	3.29035986	3.3016405020607635	26.050560
+pthread/singleton.yml	false	false(unreach-call)	0.069701196	0.07775320997461677	26.152960	false(unreach-call)	0.072763654	0.07920493104029447	26.165248
+pthread/singleton_with-uninit-problems.yml	true	true	0.065172892	0.07221749401651323	26.042368	true	0.072836895	0.0789778979960829	26.148864
+pthread/stack-1.yml	true	true	0.063589907	0.07175897603156045	25.956352	true	0.067547675	0.07713927410077304	26.030080
+pthread/stack-2.yml	false	true	0.064192358	0.07293233601376414	25.952256	true	0.070244943	0.0730782380560413	25.960448
+pthread/stack_longer-1.yml	false	true	22.508687937	22.54173080797773	710.688768	true	14.118244227	16.48175001400523	695.930880
+pthread/stack_longer-2.yml	true	true	22.492773637	22.520726843038574	711.909376	true	14.156491929	14.350900065037422	687.153152
+pthread/stack_longest-1.yml	false	TIMEOUT	61.00938229	61.127188626036514	1634.844672	TIMEOUT	60.989128839	61.20662243105471	2885.345280
+pthread/stack_longest-2.yml	true	TIMEOUT	61.075875828	61.13021984696388	1667.334144	TIMEOUT	60.924917286	61.20082134602126	2878.283776
+pthread/stateful01-1.yml	false	false(unreach-call)	0.068574218	0.07734853000147268	25.829376	false(unreach-call)	0.068448183	0.1262821729760617	25.927680
+pthread/stateful01-2.yml	true	true	0.069561406	0.07758498500334099	25.804800	true	0.065535056	0.10210910998284817	25.894912
+pthread/sync01.yml	true	ERROR (compilation)	0.050939546	0.05580668698530644	25.559040	ERROR (compilation)	0.057352807	0.06473296694457531	25.518080
+pthread/triangular-1.yml	true	true	7.040419139	7.076291949022561	25.956352	true	6.389746063	6.453404141939245	25.939968
+pthread/triangular-2.yml	false	false(unreach-call)	1.664060776	1.6793307189946063	25.964544	false(unreach-call)	1.588555417	2.5337680620141327	25.890816
+pthread/triangular-longer-1.yml	true	TIMEOUT	60.744695352	61.01129165897146	25.886720	TIMEOUT	60.223891248	67.1328402160434	25.948160
+pthread/triangular-longer-2.yml	false	TIMEOUT	60.718782362	61.01218331605196	25.968640	TIMEOUT	60.955623757	64.37700982706156	25.886720
+pthread/triangular-longest-1.yml	true	TIMEOUT	60.79351171	61.01342857000418	25.833472	TIMEOUT	60.806334249	67.15026671707164	25.878528
+pthread/triangular-longest-2.yml	false	TIMEOUT	60.992537563	62.64688480895711	25.960448	TIMEOUT	60.621865357	65.66885024809744	25.960448
+pthread/twostage_3.yml	false	false(unreach-call)	0.082070041	0.08757582202088088	26.095616	false(unreach-call)	0.088802095	0.09693930495996028	26.128384
+weaver/array-eq-symm.wvr.yml	true	true	0.058613378	0.10472212999593467	25.427968	true	0.063523565	0.08912764606066048	25.432064
+weaver/array-eq-trans.wvr.yml	true	true	0.069451763	0.07838269101921469	25.427968	true	0.063060744	0.10102518904022872	25.436160
+weaver/bench-exp1x3.wvr.yml	true	true	0.056007984	0.08127825800329447	25.382912	true	0.060550228	0.07157293998170644	25.407488
+weaver/bench-exp2x3.wvr.yml	true	true	0.061319538	0.07723051897482947	25.370624	true	0.059751899	0.09981260693166405	25.460736
+weaver/bench-exp2x4.wvr.yml	true	true	0.057675108	0.09250834304839373	25.350144	true	0.055675663	0.12004575901664793	25.403392
+weaver/bench-exp2x6.wvr.yml	true	true	0.059151082	0.09855639800662175	25.440256	true	0.062006838	0.18198494298849255	25.427968
+weaver/bench-exp2x9.wvr.yml	true	true	0.066145106	0.07218530995305628	25.427968	true	0.061428595	0.09798609500285238	25.432064
+weaver/bench-exp3x3-opt.wvr.yml	true	true	0.072498067	0.07537783397128806	25.427968	true	0.067648233	0.10451889398973435	25.518080
+weaver/bench-exp3x3.wvr.yml	true	true	0.066763138	0.0763945120270364	25.427968	true	0.065435499	0.13475372502580285	25.436160
+weaver/chl-array-int-subst.wvr.yml	true	true	0.066845102	0.15364372602198273	25.473024	true	0.06574064	0.0957509350264445	25.436160
+weaver/chl-array-int-symm.wvr.yml	true	true	0.072189353	0.08052398101426661	25.423872	true	0.06297528	0.09854698297567666	25.411584
+weaver/chl-array-int-trans.wvr.yml	true	true	0.070210724	0.07882693002466112	25.427968	true	0.065656255	0.09173718409147114	25.448448
+weaver/chl-chromosome-opt-symm.wvr.yml	true	true	0.068868902	0.07702705601695925	25.485312	true	0.0649055	0.07799527794122696	25.395200
+weaver/chl-chromosome-subst.wvr.yml	true	true	0.066662966	0.11057527200318873	25.436160	true	0.063094923	0.08217744599096477	25.464832
+weaver/chl-chromosome-symm.wvr.yml	true	true	0.070882308	0.07612610299838707	25.432064	true	0.06398379	0.12998546694871038	25.432064
+weaver/chl-chromosome-trans.wvr.yml	true	true	0.065657533	0.13351644400972873	25.489408	true	0.065851663	0.09424151096027344	25.489408
+weaver/chl-collitem-subst.wvr.yml	true	true	0.076733202	0.08098426298238337	25.448448	true	0.066019609	0.07902907102834433	25.456640
+weaver/chl-collitem-symm.wvr.yml	true	true	0.06997836	0.07618015096522868	25.436160	true	0.065965135	0.10004610405303538	25.436160
+weaver/chl-collitem-trans.wvr.yml	true	true	0.072206933	0.07841846399242058	25.436160	true	0.063209429	0.11233120202086866	25.513984
+weaver/chl-exp-term-subst.wvr.yml	true	true	0.065582003	0.14989382302155718	25.509888	true	0.064397323	0.09483156003989279	25.505792
+weaver/chl-exp-term-symm.wvr.yml	true	true	0.062984751	0.16587491298560053	25.460736	true	0.062830766	0.09714072605129331	25.399296
+weaver/chl-file-item-subst.wvr.yml	true	true	0.065910596	0.12861829198664054	25.452544	true	0.061839376	0.10636131698265672	25.427968
+weaver/chl-file-item-symm.wvr.yml	true	true	0.069328957	0.07486687897471711	25.436160	true	0.063177606	0.07754486205521971	25.395200
+weaver/chl-file-item-trans.wvr.yml	true	true	0.063362566	0.16769064898835495	25.432064	true	0.065984222	0.1344169279327616	25.497600
+weaver/chl-match-subst.wvr.yml	true	true	0.064086725	0.1557371380040422	25.427968	true	0.064526987	0.08252839103806764	25.432064
+weaver/chl-match-symm.wvr.yml	true	true	0.067409016	0.07418186101131141	25.440256	true	0.062001671	0.09486232895869762	25.399296
+weaver/chl-match-trans.wvr.yml	true	true	0.071311925	0.07723488903138787	25.432064	true	0.063417225	0.10129924898501486	25.407488
+weaver/chl-name-comparator-subst.wvr.yml	true	true	0.072998488	0.08041281101759523	25.563136	true	0.073192646	0.14249287999700755	25.681920
+weaver/chl-name-comparator-symm.wvr.yml	true	true	0.073160332	0.08013449399732053	25.563136	true	0.069284068	0.13055969099514186	25.604096
+weaver/chl-name-comparator-trans.wvr.yml	true	true	0.072521816	0.07885417900979519	25.559040	true	0.068643441	0.0943991009844467	25.587712
+weaver/chl-node-subst.wvr.yml	true	true	0.070025738	0.07417634199373424	25.620480	true	0.069829112	0.09834979905281216	25.563136
+weaver/chl-node-symm.wvr.yml	true	true	0.070932054	0.07774337701266631	25.559040	true	0.062531285	0.06962332304101437	25.477120
+weaver/chl-node-trans.wvr.yml	true	true	0.075042881	0.0798874759930186	25.563136	true	0.068903028	0.13204714900348336	25.628672
+weaver/chl-nzb-file-subst.wvr.yml	true	true	0.097040764	0.10242402396397665	25.698304	true	0.094547187	0.12055547500494868	25.694208
+weaver/chl-nzb-file-symm.wvr.yml	true	true	0.084668017	0.09461952996207401	25.710592	true	0.087587903	0.13718070089817047	25.657344
+weaver/chl-nzb-file-trans.wvr.yml	true	true	0.099824714	0.10330710798734799	25.694208	true	0.092000136	0.12898826296441257	25.698304
+weaver/chl-poker-hand-subst.wvr.yml	true	true	0.120100348	0.12783232098445296	26.476544	true	0.113100497	0.19073898496571928	26.427392
+weaver/chl-poker-hand-symm.wvr.yml	true	true	0.099486986	0.10813074203906581	26.091520	true	0.094853749	0.13234942697454244	26.087424
+weaver/chl-poker-hand-trans.wvr.yml	true	true	0.119813008	0.1285548490122892	26.464256	true	0.117755216	0.20100284391082823	26.513408
+weaver/chl-simpl-str-subst.wvr.yml	true	true	0.067901043	0.07745500898454338	25.473024	true	0.064172897	0.1158512260299176	25.436160
+weaver/chl-simpl-str-symm.wvr.yml	true	true	0.059108401	0.08604527101852	25.337856	true	0.058567134	0.1282750170212239	25.423872
+weaver/chl-simpl-str-trans.wvr.yml	true	true	0.067254944	0.07638607599074021	25.427968	true	0.059843157	0.10138045693747699	25.477120
+weaver/chl-sre-subst.wvr.yml	true	true	0.058933838	0.10489491000771523	25.427968	true	0.060710317	0.08685153594706208	25.370624
+weaver/chl-sre-symm.wvr.yml	true	true	0.055933001	0.07565804198384285	25.317376	true	0.055862769	0.08373008295893669	25.464832
+weaver/chl-sre-trans.wvr.yml	true	true	0.061576179	0.10875606699846685	25.366528	true	0.059474398	0.11272781400475651	25.423872
+weaver/chl-time-subst.wvr.yml	true	true	0.069929802	0.07890926901018247	25.395200	true	0.067926303	0.13775020895991474	25.432064
+weaver/chl-time-symm.wvr.yml	true	true	0.05962606	0.09322044998407364	25.444352	true	0.062280728	0.11857654701452702	25.427968
+weaver/chl-time-trans.wvr.yml	true	true	0.069959539	0.07843390200287104	25.432064	true	0.06487552	0.11092786898370832	25.432064
+weaver/chl-word-subst.wvr.yml	true	OUT OF MEMORY	15.402215844	15.550548863015138	3999.997952	OUT OF MEMORY	15.206183879	15.68575578299351	3999.997952
+weaver/chl-word-symm.wvr.yml	true	OUT OF MEMORY	15.115763015	15.460944316990208	3999.997952	OUT OF MEMORY	15.033887134	16.25595116603654	3999.997952
+weaver/chl-word-trans.wvr.yml	true	OUT OF MEMORY	15.099667717	15.250921095954254	3999.997952	OUT OF MEMORY	14.998311488	15.394676835974678	3999.997952
+weaver/clever.wvr.yml	true	true	0.05837531	0.06847803900018334	25.333760	true	0.056103977	0.06168484303634614	25.366528
+weaver/fibonacci.wvr.yml	true	true	0.061737995	0.09147474501514807	25.436160	true	0.062568506	0.10423520195763558	25.427968
+weaver/loop-tiling-eq.wvr.yml	true	true	0.074082417	0.08183432999067008	25.427968	true	0.065956718	0.11373089603148401	25.501696
+weaver/mult-comm.wvr.yml	true	OUT OF MEMORY	11.001325518	11.998657112009823	3999.997952	OUT OF MEMORY	11.055864485	11.103169949958101	3999.997952
+weaver/mult-dist.wvr.yml	true	OUT OF MEMORY	10.846175629	11.252022063010372	3999.997952	OUT OF MEMORY	11.077855229	11.86915832106024	3999.997952
+weaver/mult-flipped-dist.wvr.yml	true	OUT OF MEMORY	11.385086363	11.592753995966632	3999.997952	OUT OF MEMORY	11.333846065	12.067400604952127	3999.997952
+weaver/parallel-bakery-2.wvr.yml	true	true	0.058028819	0.08346797100966796	25.432064	true	0.062098924	0.092746289097704	25.444352
+weaver/parallel-bakery-3.wvr.yml	true	true	0.065509478	0.07519106101244688	25.501696	true	0.061622467	0.1291095979977399	25.481216
+weaver/parallel-bakery-4.wvr.yml	true	true	0.071872513	0.08093363203806803	25.706496	true	0.072570225	0.15078416804317385	25.694208
+weaver/parallel-barrier-loop.wvr.yml	false	true	0.068533997	0.077634901041165	25.530368	true	0.061627806	0.12134444003459066	25.473024
+weaver/parallel-barrier.wvr.yml	true	true	0.069216921	0.0778530560201034	25.518080	true	0.062278514	0.08527080796193331	25.452544
+weaver/parallel-bluetooth.wvr.yml	true	true	0.056415122	0.0793401799746789	25.423872	true	0.058221895	0.07237650698516518	25.440256
+weaver/parallel-lamport.wvr.yml	true	true	0.074698686	0.08434713998576626	25.436160	true	0.061232673	0.09081933496054262	25.513984
+weaver/parallel-min-max-1.wvr.yml	true	OUT OF MEMORY	15.909018984	16.78829167695949	3999.997952	OUT OF MEMORY	15.637045995	16.975418782094494	3999.997952
+weaver/parallel-misc-1.wvr.yml	true	true	0.069607947	0.07632163300877437	25.456640	true	0.062004735	0.09485659305937588	25.501696
+weaver/parallel-misc-2-unrolled-atomic.wvr.yml	true	true	0.056254343	0.08300715300720185	25.419776	true	0.057322911	0.11111515399534255	25.444352
+weaver/parallel-misc-2-unrolled.wvr.yml	true	true	0.053808107	0.06868071400094777	25.411584	true	0.054512241	0.0658115919213742	25.419776
+weaver/parallel-misc-2.wvr.yml	true	true	0.055438479	0.11534248699899763	25.382912	true	0.056916778	0.09342879289761186	25.395200
+weaver/parallel-misc-3-extended.wvr.yml	true	true	0.118336362	0.17655415704939514	25.427968	true	0.100851603	0.2243712570052594	25.382912
+weaver/parallel-misc-3.wvr.yml	true	true	0.06068592	0.15527716901851818	25.391104	true	0.061477039	0.07379774597939104	25.358336
+weaver/parallel-misc-4.wvr.yml	true	true	0.056946864	0.10884973098291084	25.432064	true	0.056906217	0.095002401038073	25.440256
+weaver/parallel-misc-5.wvr.yml	true	true	0.068162115	0.07466250302968547	25.427968	true	0.061013749	0.09520213701762259	25.362432
+weaver/parallel-parallel-sum-1-dsl.wvr.yml	true	true	0.077103636	0.08953219203976914	25.571328	true	0.069232166	0.08357642206829041	25.612288
+weaver/parallel-parallel-sum-1.wvr.yml	true	true	0.077405267	0.08290797099471092	25.563136	true	0.068402427	0.11524075199849904	25.559040
+weaver/parallel-parallel-sum-2.wvr.yml	true	true	0.071493589	0.07709181495010853	25.563136	true	0.068024339	0.1137315669329837	25.563136
+weaver/parallel-parallel-sum-equiv.wvr.yml	true	true	0.070175632	0.07786581700202078	25.464832	true	0.068054632	0.13471795397344977	25.563136
+weaver/parallel-simple-equiv.wvr.yml	true	true	0.061258643	0.12249809602508321	25.370624	true	0.05675071	0.05998041608836502	25.341952
+weaver/parallel-ticket-2.wvr.yml	true	true	0.055332028	0.10302618099376559	25.432064	true	0.052232231	0.06376455398276448	25.362432
+weaver/parallel-ticket-3.wvr.yml	true	true	0.060642145	0.08052945899544284	25.432064	true	0.058824648	0.10471604205667973	25.432064
+weaver/parallel-ticket-4.wvr.yml	true	true	0.056244029	0.13070596399484202	25.427968	true	0.060044736	0.11808834201656282	25.407488
+weaver/parallel-ticket-5.wvr.yml	true	true	0.066494998	0.073209460999351	25.407488	true	0.064084282	0.1317555099958554	25.456640
+weaver/parallel-ticket-6.wvr.yml	true	true	0.061480442	0.14431874494766816	25.440256	true	0.062665416	0.07742050709202886	25.436160
+weaver/parallel-ticket-7.wvr.yml	true	true	0.071505071	0.08052942401263863	25.436160	true	0.061379833	0.10468763310927898	25.530368
+weaver/parallel-ticket-8.wvr.yml	true	true	0.064938459	0.12289807602064684	25.522176	true	0.061870619	0.0888647809624672	25.505792
+weaver/popl20-bad-buffer-mult-alt.wvr.yml	true	OUT OF MEMORY	15.588432415	15.613842127961107	3999.997952	OUT OF MEMORY	15.638093708	17.703506445046514	3999.997952
+weaver/popl20-bad-buffer-mult-alt2.wvr.yml	true	OUT OF MEMORY	15.554332913	15.574440858035814	3999.997952	OUT OF MEMORY	15.401348119	15.949630573042668	3999.997952
+weaver/popl20-bad-buffer-mult-alt3.wvr.yml	false	OUT OF MEMORY	15.669336033	15.956317229021806	3999.997952	OUT OF MEMORY	15.590729114	18.427806047024205	3999.997952
+weaver/popl20-bad-commit-1.wvr-bad.yml	true	true	0.068993905	0.0771522709983401	25.563136	true	0.069165834	0.0880149781005457	25.542656
+weaver/popl20-bad-commit-2.wvr-bad.yml	true	true	0.077270736	0.08322671195492148	25.571328	true	0.068162095	0.10291140899062157	25.653248
+weaver/popl20-bad-counter-queue.wvr.yml	false	true	0.068393083	0.07700359204318374	25.427968	true	0.064509924	0.09836545295547694	25.432064
+weaver/popl20-bad-counter-queue2.wvr.yml	true	true	0.068425741	0.07703407795634121	25.419776	true	0.064631669	0.10092872299719602	25.448448
+weaver/popl20-bad-dot-product-alt.wvr.yml	true	true	0.071842911	0.0817755670286715	25.563136	true	0.067220643	0.1400141610065475	25.505792
+weaver/popl20-bad-dot-product.wvr.yml	true	true	0.074097915	0.08130456798244268	25.427968	true	0.062796725	0.08104099496267736	25.468928
+weaver/popl20-bad-ring-nondet.wvr.yml	true	true	0.074111311	0.0783815510221757	25.563136	true	0.070115169	0.13985133299138397	25.563136
+weaver/popl20-bad-ring.wvr.yml	true	true	0.070040535	0.07860434899339452	25.575424	true	0.067509451	0.12232793995644897	25.526272
+weaver/popl20-bad-threaded-sum-2.wvr.yml	true	TIMEOUT	60.148200396	61.013734909996856	95.268864	TIMEOUT	60.701873574	63.347303447080776	94.097408
+weaver/popl20-bad-three-array-sum-alt.wvr.yml	true	true	0.064969621	0.0739482719800435	25.509888	true	0.064395483	0.07782898598816246	25.403392
+weaver/popl20-channel-sum.wvr.yml	true	true	0.066353528	0.07451300299726427	25.436160	true	0.063736951	0.09808278002310544	25.432064
+weaver/popl20-commit-1.wvr.yml	true	true	0.070654703	0.07334228802938014	25.530368	true	0.067311055	0.09572480502538383	25.534464
+weaver/popl20-commit-2.wvr.yml	true	true	0.102360903	0.1087812909972854	25.604096	true	0.09897694	0.19791434600483626	25.563136
+weaver/popl20-counter-determinism.wvr.yml	true	true	0.056426267	0.08910832804394886	25.407488	true	0.057789181	0.08010036800988019	25.468928
+weaver/popl20-counter-fun.wvr.yml	true	true	0.061389824	0.12941156601300463	25.444352	true	0.066384547	0.1657437609974295	25.423872
+weaver/popl20-difference-det.wvr.yml	true	true	0.058549303	0.10924197098938748	25.432064	true	0.054350194	0.061433005961589515	25.354240
+weaver/popl20-figure1-alt.wvr.yml	true	true	0.054212306	0.08002507500350475	25.300992	true	0.057344092	0.065892230020836	25.370624
+weaver/popl20-figure1.wvr.yml	true	true	0.053441453	0.07819576596375555	25.296896	true	0.055004903	0.06021259899716824	25.321472
+weaver/popl20-figure3.wvr.yml	true	TIMEOUT	61.004333268	63.578336803999264	116.895744	TIMEOUT	61.002449875	63.55408263998106	111.833088
+weaver/popl20-horseshoe.wvr.yml	true	OUT OF MEMORY	15.077803216	15.10987872997066	3999.997952	OUT OF MEMORY	15.063411673	17.50775472901296	3999.997952
+weaver/popl20-min-max-dec.wvr.yml	true	true	0.067576932	0.07613720500376076	25.432064	true	0.062655378	0.10524317901581526	25.497600
+weaver/popl20-min-max-inc-dec.wvr.yml	true	true	0.072988513	0.07767781498841941	25.440256	true	0.061953793	0.11190775502473116	25.464832
+weaver/popl20-min-max-inc.wvr.yml	true	true	0.068369572	0.08459854801185429	25.473024	true	0.062327784	0.09526631201151758	25.452544
+weaver/popl20-more-array-sum-alt.wvr.yml	false	true	0.062982904	0.08312934002606198	25.440256	true	0.066468745	0.13290209602564573	25.481216
+weaver/popl20-more-array-sum-alt2.wvr.yml	true	true	0.065383975	0.13321054703556	25.440256	true	0.066497837	0.09667012002319098	25.440256
+weaver/popl20-more-array-sum.wvr.yml	false	true	0.068086639	0.07711343298433349	25.427968	true	0.068112252	0.14065587904769927	25.460736
+weaver/popl20-more-array-sum2.wvr.yml	true	true	0.075855444	0.0830724349943921	25.432064	true	0.063021405	0.08672466198913753	25.403392
+weaver/popl20-more-buffer-mult.wvr.yml	true	OUT OF MEMORY	15.898001586	15.942266182042658	3999.997952	OUT OF MEMORY	15.552202773	17.858665158972144	3999.997952
+weaver/popl20-more-buffer-mult2.wvr.yml	true	OUT OF MEMORY	15.214990372	15.25246926699765	3999.997952	OUT OF MEMORY	15.539709952	16.21765534800943	3999.997952
+weaver/popl20-more-buffer-mult3.wvr.yml	false	OUT OF MEMORY	15.854627769	15.880954547028523	3999.997952	OUT OF MEMORY	15.702586884	17.022953671053983	3999.997952
+weaver/popl20-more-buffer-series.wvr.yml	true	true	0.074880781	0.08102376596070826	25.563136	true	0.06792371	0.1261929910397157	25.579520
+weaver/popl20-more-buffer-series2.wvr.yml	true	true	0.072061	0.08025363000342622	25.559040	true	0.071017223	0.136835340061225	25.612288
+weaver/popl20-more-buffer-series3.wvr.yml	false	true	0.072423392	0.08025472500594333	25.563136	true	0.069684224	0.09579003998078406	25.600000
+weaver/popl20-more-dec-subseq.wvr.yml	true	true	0.066751618	0.07392838603118435	25.468928	true	0.061076066	0.08259992604143918	25.427968
+weaver/popl20-more-inc-subseq.wvr.yml	true	true	0.068873515	0.11778339400188997	25.440256	true	0.061245168	0.09662622702307999	25.419776
+weaver/popl20-more-max-array-hom.wvr.yml	true	true	0.068580669	0.07691120298113674	25.432064	true	0.06814268	0.11855993093922734	25.489408
+weaver/popl20-more-max-array.wvr.yml	true	true	0.067348657	0.07541370001854375	25.423872	true	0.063754819	0.09363016404677182	25.452544
+weaver/popl20-more-min-array-hom.wvr.yml	true	true	0.068890352	0.07917793397791684	25.444352	true	0.061866655	0.10071084590163082	25.395200
+weaver/popl20-more-min-array.wvr.yml	true	true	0.067879553	0.10342245502397418	25.473024	true	0.062295623	0.08632543194107711	25.452544
+weaver/popl20-more-min-le-max.wvr.yml	true	true	0.070509948	0.07595354499062523	25.427968	true	0.063139994	0.08867912006098777	25.436160
+weaver/popl20-more-mts.wvr.yml	true	true	0.071527814	0.07635339698754251	25.415680	true	0.065734852	0.06800678395666182	25.444352
+weaver/popl20-more-multiply-verify.wvr.yml	true	OUT OF MEMORY	15.359869368	15.382770740950946	3999.997952	OUT OF MEMORY	15.082666545	16.496692211017944	3999.997952
+weaver/popl20-more-nonblocking-counter-alt2.wvr.yml	true	TIMEOUT	60.676448956	61.02191666403087	106.024960	TIMEOUT	60.934261427	64.68187122198287	101.134336
+weaver/popl20-more-queue-add-2-nl.wvr.yml	true	OUT OF MEMORY	15.176079128	15.577997429005336	3999.997952	OUT OF MEMORY	14.973860271	15.3052451540716	3999.997952
+weaver/popl20-more-queue-add-3-nl.wvr.yml	true	OUT OF MEMORY	15.241408534	15.274091028026305	3999.997952	OUT OF MEMORY	15.096358798	16.220787878963165	3999.997952
+weaver/popl20-more-sorted.wvr.yml	true	true	0.06547903	0.07681470195529982	25.415680	true	0.061270006	0.08534591901116073	25.427968
+weaver/popl20-more-sum-array-hom.wvr.yml	true	true	0.068448969	0.0728842849493958	25.395200	true	0.060405082	0.08984449796844274	25.432064
+weaver/popl20-more-vector-add.wvr.yml	true	true	0.068216958	0.07570267200935632	25.432064	true	0.063872484	0.08360401901882142	25.452544
+weaver/popl20-mult-4.wvr.yml	true	TIMEOUT	60.995919935	62.94486127898563	115.306496	TIMEOUT	61.008404784	62.383524617995135	104.890368
+weaver/popl20-mult-equiv.wvr.yml	true	TIMEOUT	60.381186108	61.029044788039755	110.759936	TIMEOUT	60.275059778	66.59362344897818	99.991552
+weaver/popl20-nonblocking-cntr-alt.wvr.yml	true	true	0.057653499	0.09173160797217861	25.296896	true	0.056563905	0.09265328105539083	25.374720
+weaver/popl20-nonblocking-cntr.wvr.yml	true	true	0.056887139	0.08436001499649137	25.432064	true	0.052772368	0.0702534590382129	25.300992
+weaver/popl20-prod-cons-eq.wvr.yml	true	true	0.075584208	0.08303173200692981	25.567232	true	0.070162445	0.09193673403933644	25.595904
+weaver/popl20-prod-cons.wvr.yml	true	true	0.069373358	0.0775056509883143	25.419776	true	0.060694085	0.07557020999956876	25.432064
+weaver/popl20-prod-cons3.wvr.yml	true	true	0.070671373	0.07972514897119254	25.563136	true	0.064741999	0.10383581498172134	25.481216
+weaver/popl20-proofs-counter-add-4-semi-Q67.wvr.yml	true	true	0.059902135	0.10785961197689176	25.436160	true	0.060583564	0.0660100809764117	25.378816
+weaver/popl20-queue-add-2.wvr.yml	true	true	0.067814249	0.07479486695956439	25.391104	true	0.065073741	0.09512582491151989	25.378816
+weaver/popl20-queue-add-3.wvr.yml	true	true	0.070906488	0.07821814902126789	25.444352	true	0.065391625	0.10237998003140092	25.427968
+weaver/popl20-send-receive-alt.wvr.yml	true	true	0.069907183	0.07552423496963456	25.436160	true	0.061981916	0.11035243701189756	25.456640
+weaver/popl20-send-receive.wvr.yml	true	true	0.063610849	0.1096842089900747	25.460736	true	0.061166153	0.08307983097620308	25.432064
+weaver/popl20-simple-array-sum.wvr.yml	true	true	0.060483002	0.13408374699065462	25.440256	true	0.059484303	0.08890917897224426	25.358336
+weaver/popl20-simple-queue.wvr.yml	true	true	0.065700071	0.07250803400529549	25.378816	true	0.060793834	0.07627175492234528	25.452544
+weaver/popl20-threaded-sum-3.wvr.yml	true	TIMEOUT	60.759103111	61.01953995000804	104.517632	TIMEOUT	60.996248879	67.33862450392917	108.007424
+weaver/popl20-three-array-max.wvr.yml	true	true	0.070777247	0.07555502402829006	25.436160	true	0.064968401	0.09998984704725444	25.534464
+weaver/popl20-three-array-min.wvr.yml	true	true	0.063313351	0.09974236402194947	25.468928	true	0.062938324	0.09854826901573688	25.419776
+weaver/popl20-three-array-sum.wvr.yml	true	true	0.068742264	0.07383209402905777	25.440256	true	0.064897596	0.09098368801642209	25.497600
+weaver/popl20-two-queue.wvr.yml	true	true	0.06696369	0.07502326095709577	25.427968	true	0.064094837	0.0879846770549193	25.444352
+weaver/security.wvr.yml	true	true	0.05741045	0.07835959998192266	25.427968	true	0.062976787	0.07291229302063584	25.300992
+weaver/spaghetti.wvr.yml	true	TIMEOUT	61.009609849	64.30866204400081	80.850944	TIMEOUT	60.934553891	88.45896277506836	83.787776
+weaver/test-context1.wvr.yml	true	true	0.070886748	0.07741650595562533	25.440256	true	0.063748711	0.06897531996946782	25.395200
+weaver/test-easy1.wvr.yml	true	true	0.057244076	0.13886658195406199	25.333760	true	0.055283105	0.0815016400301829	25.432064
+weaver/test-easy10.wvr.yml	true	true	0.061761682	0.15525506302947178	25.448448	true	0.060134226	0.11120180902071297	25.436160
+weaver/test-easy11.wvr.yml	true	TIMEOUT	60.998710847	64.21761553303804	25.366528	TIMEOUT	54.41906669	91.0177525349427	25.419776
+weaver/test-easy6.wvr.yml	true	true	0.059235783	0.10928950004745275	25.300992	true	0.056173642	0.07600755803287029	25.403392
+weaver/test-easy7.wvr.yml	true	true	0.055163896	0.09603109303861856	25.305088	true	0.051961903	0.06140218197833747	25.309184
+weaver/test-easy8.wvr.yml	true	true	0.058333192	0.08771006198367104	25.300992	true	0.054562921	0.06872375099919736	25.272320
+weaver/test-hard1.wvr.yml	true	true	0.068476972	0.07735005702124909	25.513984	true	0.064224744	0.11471116892062128	25.452544
+weaver/test-semi1.wvr.yml	true	true	0.052504696	0.07707812800072134	25.292800	true	0.060368279	0.06512741092592478	25.399296
+weaver/unroll-2.wvr.yml	true	true	0.068745372	0.10075310000684112	25.481216	true	0.063719885	0.10726143303327262	25.366528
+weaver/unroll-3.wvr.yml	true	true	0.065337376	0.07459997700061649	25.432064	true	0.065057355	0.12856880202889442	25.407488
+weaver/unroll-4.wvr.yml	true	true	0.067923737	0.07714862999273464	25.440256	true	0.065501623	0.09970846702344716	25.419776
+weaver/unroll-5.wvr.yml	true	true	0.067916458	0.07909679395379499	25.427968	true	0.064513721	0.10306638199836016	25.419776
+weaver/unroll-cond-2.wvr.yml	true	true	0.069945598	0.07633286499185488	25.432064	true	0.062903757	0.08477723400574178	25.489408
+weaver/unroll-cond-3.wvr.yml	true	true	0.069467292	0.07805905397981405	25.395200	true	0.066120563	0.10965962707996368	25.366528
+weaver/unroll-cond-4.wvr.yml	true	true	0.069365569	0.07697364001069218	25.427968	true	0.062675412	0.12219272297807038	25.432064
+weaver/unroll-cond-5.wvr.yml	true	true	0.066051051	0.10820231400430202	25.448448	true	0.064740758	0.12690747599117458	25.464832

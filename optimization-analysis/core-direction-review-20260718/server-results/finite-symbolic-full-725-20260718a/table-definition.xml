@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<table>
+  <column title="status"/>
+  <column title="category"/>
+  <column title="cputime"/>
+  <column title="walltime"/>
+  <column title="memory" displayUnit="MB" sourceUnit="B"/>
+  <column title="terminationreason" displayTitle="termination"/>
+
+  <result filename="baseline/finite-symbolic-full-725.2026-07-18_07-34-19.results.baseline.unreach-call.xml.bz2"/>
+  <result filename="finite-symbolic/finite-symbolic-full-725.2026-07-18_07-34-19.results.finite-symbolic.unreach-call.xml.bz2"/>
+</table>

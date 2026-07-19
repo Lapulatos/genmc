@@ -1,0 +1,10 @@
+stage	model	program	status	initialize	unchanged	insert	rollback	rollback_insert	rebuild	evicted	oracle	eval_ops	value_changes	queue_pushes	offline_evals	adapter_ns	sync_ns	offline_ns	copy_ns	worklist_ns	checkpoint_ns	rollback_ns	materialize_ns	equality_ns	insert_attempt_ns	history_ns	rebuild_ns	profiled_queries
+stage-5b	sc	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	63	67	63	18	0	5103832	1335707	91916	877251	67707	4125	692706	2254	1474750	1479252	1348167	22
+stage-5b	sc	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	187	204	187	25	0	9300836	1908039	114914	2560166	101792	17541	1031956	3872	2622252	3560959	1910706	35
+stage-5b	sc	correct/data-structures/fcombiner-async/variants/main0.c	0	1	8	20	0	176	122	0	0	4489	5090	4489	123	0	953956796	55453168	7745829	428252370	5167327	2619338	46630134	302779	98236921	746124829	55461327	327
+stage-5b	tso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	185	164	185	18	0	7792873	2145749	231502	2272874	136665	9750	826711	5207	3239043	1378959	2147749	22
+stage-5b	tso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	455	415	455	25	0	14220415	3215669	342414	5261876	317540	42958	1281251	9833	5017126	4246335	3218001	35
+stage-5b	tso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	1	0	3	3	0	0	246	239	246	4	0	17906499	1076708	469831	10616083	165040	87208	943374	6917	3661667	11998167	1078332	10
+stage-5b	pso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	192	167	192	18	0	7809458	2159791	286921	2339666	151165	11041	781293	5541	3271042	1371043	2161667	22
+stage-5b	pso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	498	455	498	25	0	14475960	3126419	354161	5743873	251207	46501	1340419	10250	5247164	4399000	3128919	35
+stage-5b	pso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	1	0	3	3	0	0	260	257	260	4	0	18510417	1100418	535833	11042625	240750	82750	1000542	6957	3890666	12210583	1102083	10

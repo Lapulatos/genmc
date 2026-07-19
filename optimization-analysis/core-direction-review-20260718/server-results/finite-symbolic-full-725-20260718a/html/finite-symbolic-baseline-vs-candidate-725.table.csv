@@ -1,0 +1,728 @@
+tool		GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)	GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)
+run set		baseline.unreach-call	baseline.unreach-call	baseline.unreach-call	baseline.unreach-call	baseline.unreach-call	baseline.unreach-call	finite-symbolic.unreach-call	finite-symbolic.unreach-call	finite-symbolic.unreach-call	finite-symbolic.unreach-call	finite-symbolic.unreach-call	finite-symbolic.unreach-call
+../../../workspace/svcomp2026-caat/sv-benchmarks/c/		status	category	cputime (s)	walltime (s)	memory (MB)	termination	status	category	cputime (s)	walltime (s)	memory (MB)	termination
+goblint-regression/13-privatized_66-mine-W-init_true.yml	true	true	correct	0.066303378	0.06916217898833565	25.956352		true	correct	0.088749339	0.09243729800800793	30.949376	
+goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_neg.yml	false	true	wrong	0.064653383	0.06779662700137123	25.956352		ABORTED	error	0.078144006	0.18014985299669206	31.182848	
+goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	true	true	correct	0.064476524	0.07246260599640664	26.058752		true	correct	0.105576521	0.10910671899910085	31.395840	
+goblint-regression/13-privatized_46-refine-protected1_true.yml	true	true	correct	0.066244044	0.06786400500277523	25.960448		ABORTED	error	0.086604734	0.2060775849968195	30.978048	
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	false	false(unreach-call)	correct	0.059898538	0.06563440398895182	26.025984		false(unreach-call)	correct	44.048147342	44.059006882001995	69.447680	
+goblint-regression/13-privatized_40-traces-ex-6_true.yml	true	true	correct	0.066523261	0.07207434400334023	26.091520		true	correct	53.722100845	53.73253280199424	69.169152	
+goblint-regression/13-privatized_44-traces-mine2_true.yml	true	true	correct	0.064965723	0.0689649739942979	26.091520		TIMEOUT	error	60.997014634	61.01476014999207	56.074240	cputime
+goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	false	false(unreach-call)	correct	0.072603925	0.07447753399901558	26.046464		false(unreach-call)	correct	0.068968225	0.0748843460023636	26.009600	
+goblint-regression/13-privatized_18-first-reads_unknown_2_neg.yml	false	true	wrong	0.073777276	0.0754666470020311	26.087424		true	wrong	0.065161912	0.07005733599362429	26.042368	
+goblint-regression/13-privatized_36-traces-ex-3_true.yml	true	true	correct	0.067503376	0.07205809999140911	26.091520		TIMEOUT	error	61.002879524	61.012519834999694	65.200128	cputime
+goblint-regression/13-privatized_35-traces-ex-2_true.yml	true	true	correct	0.055706725	0.061727623993647285	26.099712		TIMEOUT	error	60.478071346	61.01593282300746	100.241408	cputime
+goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	true	true	correct	0.068630572	0.07494009801303037	26.083328		TIMEOUT	error	61.004473945	61.013805959009915	69.169152	cputime
+goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	false	false(unreach-call)	correct	0.066040697	0.07297711199498735	25.989120		false(unreach-call)	correct	0.063863416	0.06597940799838398	26.054656	
+goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	false	false(unreach-call)	correct	0.063794573	0.06884322399855591	26.091520		false(unreach-call)	correct	0.071829265	0.07552076900901739	26.087424	
+goblint-regression/13-privatized_01-priv_nr_true.yml	true	true	correct	0.068215079	0.07271877699531615	26.046464		true	correct	0.069426495	0.07315422799729276	26.042368	
+goblint-regression/13-privatized_42-traces-ex-mini_true.yml	true	true	correct	0.0657035	0.06772600499971304	26.083328		TIMEOUT	error	60.997677026	61.010116221994394	68.026368	cputime
+goblint-regression/13-privatized_25-struct_nr_true.yml	true	true	correct	0.06887357	0.07325085399497766	26.046464		true	correct	0.068831093	0.0731174129905412	26.009600	
+goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_pos.yml	false	true	wrong	0.068739234	0.07033571100328118	26.042368		TIMEOUT	error	60.997302557	61.01077167100448	70.950912	cputime
+goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	true	true	correct	0.07242972	0.07434848400589544	26.030080		true	correct	0.059323871	0.06209716900775675	26.116096	
+goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	true	true	correct	0.069463198	0.07732141800806858	26.005504		true	correct	0.069544248	0.07523057601065375	26.087424	
+goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	true	true	correct	0.06969183	0.07457885600160807	26.030080		TIMEOUT	error	60.529230252	61.01180054199358	98.885632	cputime
+goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	true	true	correct	0.072850483	0.07727332100330386	26.062848		true	correct	0.072701885	0.07490562400198542	26.042368	
+weaver/test-semi1.wvr.yml	true	true	correct	0.059892926	0.06430155299312901	25.526272		true	correct	0.052459767	0.05829364599776454	25.632768	
+weaver/test-easy11.wvr.yml	true	TIMEOUT	error	60.995682871	61.011114783002995	25.534464	cputime	TIMEOUT	error	61.001614545	61.00897094400716	25.595904	cputime
+weaver/test-easy7.wvr.yml	true	true	correct	0.06222502	0.0676602609892143	25.522176		true	correct	0.057887627	0.063049297008547	25.579520	
+weaver/test-easy1.wvr.yml	true	true	correct	0.054114954	0.057257958003901877	25.518080		true	correct	0.058042774	0.06215073599014431	25.518080	
+weaver/popl20-figure1-alt.wvr.yml	true	true	correct	0.064421807	0.06969994600513019	25.526272		true	correct	0.065325121	0.07099119600025006	25.579520	
+weaver/popl20-figure3.wvr.yml	true	TIMEOUT	error	60.897485098	61.01740523299668	124.989440	cputime	TIMEOUT	error	61.006084771	61.01571013400098	114.126848	cputime
+weaver/test-easy8.wvr.yml	true	true	correct	0.051855956	0.06078010100463871	25.546752		true	correct	0.056930854	0.06444579600065481	25.559040	
+weaver/parallel-misc-2-unrolled.wvr.yml	true	true	correct	0.063372378	0.07235424999089446	25.559040		true	correct	0.054665187	0.059673001000192016	25.571328	
+weaver/parallel-simple-equiv.wvr.yml	true	true	correct	0.055275837	0.058328475992311724	25.563136		true	correct	0.055452288	0.06151722099457402	25.624576	
+weaver/parallel-ticket-2.wvr.yml	true	true	correct	0.05511967	0.06106550199910998	25.509888		true	correct	0.064504744	0.07162295399757568	25.522176	
+weaver/mult-dist.wvr.yml	true	OUT OF MEMORY	error	10.786260401	10.796065042013652	3999.997952	memory	OUT OF MEMORY	error	10.656769709	10.692144775995985	3999.997952	memory
+weaver/clever.wvr.yml	true	true	correct	0.057700283	0.06481631800124887	25.591808		true	correct	0.064562325	0.06716802400478628	25.604096	
+weaver/popl20-more-nonblocking-counter-alt2.wvr.yml	true	TIMEOUT	error	60.996490055	61.01761683700897	113.618944	cputime	TIMEOUT	error	60.997432587	61.012677183010965	97.968128	cputime
+weaver/popl20-counter-determinism.wvr.yml	true	true	correct	0.057462284	0.06403773999772966	25.690112		true	correct	0.06360983	0.06837941000412684	25.657344	
+weaver/parallel-misc-2.wvr.yml	true	true	correct	0.056407362	0.06186956100282259	25.649152		true	correct	0.065293465	0.07002247699711006	25.563136	
+weaver/parallel-misc-2-unrolled-atomic.wvr.yml	true	true	correct	0.05430989	0.05905587899906095	25.653248		true	correct	0.056135116	0.061005453011603095	25.554944	
+weaver/chl-sre-trans.wvr.yml	true	true	correct	0.054810888	0.057735804992262274	25.665536		true	correct	0.057422419	0.06262811900523957	25.567232	
+weaver/spaghetti.wvr.yml	true	TIMEOUT	error	60.997481709	61.015667960004066	83.668992	cputime	TIMEOUT	error	61.004152343	61.01400612699217	76.886016	cputime
+weaver/chl-sre-subst.wvr.yml	true	true	correct	0.059449714	0.06581744800496381	25.645056		true	correct	0.058876456	0.06371244399633724	25.681920	
+weaver/chl-simpl-str-symm.wvr.yml	true	true	correct	0.05747045	0.059281182999257	25.673728		true	correct	0.0580086	0.06213698899955489	25.665536	
+weaver/popl20-bad-threaded-sum-2.wvr.yml	true	TIMEOUT	error	60.985075046	61.01217289699707	106.217472	cputime	TIMEOUT	error	61.004149916	61.013004270993406	89.923584	cputime
+weaver/test-easy10.wvr.yml	true	true	correct	0.062061405	0.06698318700364325	25.657344		true	correct	0.059280775	0.06335885700536892	25.661440	
+weaver/parallel-bakery-2.wvr.yml	true	true	correct	0.054856848	0.05959761900885496	25.661440		true	correct	0.065908023	0.0698239980119979	25.694208	
+weaver/popl20-mult-equiv.wvr.yml	true	TIMEOUT	error	60.974931385	61.01584161299979	117.235712	cputime	TIMEOUT	error	61.002827169	61.01463599099952	99.426304	cputime
+weaver/popl20-proofs-counter-add-4-semi-Q67.wvr.yml	true	true	correct	0.052024492	0.05700524499116	25.661440		true	correct	0.06194759	0.06694502399477642	25.694208	
+weaver/chl-time-symm.wvr.yml	true	true	correct	0.054414953	0.06485532500664704	25.600000		true	correct	0.058214535	0.06147375899308827	25.698304	
+weaver/bench-exp3x3.wvr.yml	true	true	correct	0.064748705	0.0688288129895227	25.690112		true	correct	0.073217003	0.07909128800383769	25.686016	
+weaver/popl20-channel-sum.wvr.yml	true	true	correct	0.056674192	0.06386506899434607	25.661440		true	correct	0.057675923	0.05994389599072747	25.554944	
+weaver/popl20-bad-counter-queue.wvr.yml	false	true	wrong	0.061010988	0.06526461799512617	25.698304		true	wrong	0.060165729	0.06333031700341962	25.571328	
+weaver/test-context1.wvr.yml	true	true	correct	0.058176701	0.06202709300850984	25.567232		true	correct	0.056881017	0.06155427100020461	25.620480	
+weaver/chl-match-symm.wvr.yml	true	true	correct	0.055484556	0.06075037000118755	25.698304		true	correct	0.05806307	0.0641420809988631	25.657344	
+weaver/popl20-more-sorted.wvr.yml	true	true	correct	0.0618024	0.06597821100149304	25.624576		true	correct	0.059356056	0.0642939419922186	25.677824	
+weaver/parallel-ticket-5.wvr.yml	true	true	correct	0.056371289	0.06032490399957169	25.686016		true	correct	0.063530305	0.06690464200801216	25.706496	
+weaver/chl-exp-term-symm.wvr.yml	true	true	correct	0.058907769	0.063340294000227	25.645056		true	correct	0.063651547	0.06985347499721684	25.690112	
+weaver/popl20-more-array-sum-alt.wvr.yml	false	true	wrong	0.056687009	0.061553216000902466	25.649152		true	wrong	0.059347151	0.06382386799668893	25.690112	
+weaver/unroll-3.wvr.yml	true	true	correct	0.057143265	0.06414227599452715	25.694208		true	correct	0.058938927	0.06428166799014434	25.702400	
+weaver/chl-chromosome-opt-symm.wvr.yml	true	true	correct	0.052003824	0.058737636005389504	25.706496		true	correct	0.060373751	0.06611557101132348	25.706496	
+weaver/popl20-more-min-array.wvr.yml	true	true	correct	0.049831787	0.05377258299267851	25.686016		true	correct	0.058624956	0.06332078999548685	25.620480	
+weaver/popl20-bad-counter-queue2.wvr.yml	true	true	correct	0.057500325	0.062226117006503046	25.698304		true	correct	0.056216071	0.06093205598881468	25.640960	
+weaver/bench-exp3x3-opt.wvr.yml	true	true	correct	0.053459787	0.05808076699031517	25.735168		true	correct	0.058654728	0.06355464499210939	25.731072	
+weaver/popl20-more-min-array-hom.wvr.yml	true	true	correct	0.053448672	0.05846745699818712	25.706496		true	correct	0.0620922	0.0637706010020338	25.681920	
+weaver/loop-tiling-eq.wvr.yml	true	true	correct	0.061259356	0.06330142400111072	25.608192		true	correct	0.057933827	0.06330434199480806	25.710592	
+weaver/unroll-cond-3.wvr.yml	true	true	correct	0.056535047	0.06213841200224124	25.714688		true	correct	0.062948435	0.06846205799956806	25.726976	
+weaver/popl20-send-receive-alt.wvr.yml	true	true	correct	0.055596332	0.05982524900173303	25.616384		true	correct	0.061391506	0.0682749010011321	25.669632	
+weaver/popl20-threaded-sum-3.wvr.yml	true	TIMEOUT	error	60.906332594	61.01671670599899	102.596608	cputime	TIMEOUT	error	61.002432435	61.01382679100789	93.794304	cputime
+weaver/popl20-counter-fun.wvr.yml	true	true	correct	0.055552116	0.061837857007049024	25.694208		true	correct	0.069047219	0.07089464800083078	25.714688	
+weaver/popl20-more-array-sum-alt2.wvr.yml	true	true	correct	0.059823571	0.06538043099862989	25.706496		true	correct	0.058143935	0.06299044900515582	25.640960	
+weaver/popl20-min-max-inc.wvr.yml	true	true	correct	0.058917278	0.06561155000235885	25.698304		true	correct	0.062732644	0.07343772800231818	25.726976	
+weaver/popl20-more-mts.wvr.yml	true	true	correct	0.057046758	0.06249695099540986	25.690112		true	correct	0.061153677	0.06576640599814709	25.669632	
+weaver/parallel-misc-5.wvr.yml	true	true	correct	0.055379694	0.05816447699908167	25.694208		true	correct	0.057991718	0.05981099700147752	25.624576	
+weaver/chl-time-subst.wvr.yml	true	true	correct	0.060577389	0.0671503030025633	25.653248		true	correct	0.064844236	0.0670367510028882	25.690112	
+weaver/popl20-more-array-sum2.wvr.yml	true	true	correct	0.055534386	0.06044832699990366	25.694208		true	correct	0.056792354	0.06233761699695606	25.714688	
+weaver/chl-match-trans.wvr.yml	true	true	correct	0.057041504	0.06362947399611585	25.731072		true	correct	0.059311169	0.06498324900167063	25.743360	
+weaver/chl-chromosome-symm.wvr.yml	true	true	correct	0.060960911	0.06378942698938772	25.694208		true	correct	0.059572204	0.06689223599096294	25.714688	
+weaver/popl20-more-queue-add-2-nl.wvr.yml	true	OUT OF MEMORY	error	14.143599685	14.150570122990757	3999.997952	memory	OUT OF MEMORY	error	13.989589434	13.998413699999219	3999.997952	memory
+weaver/chl-match-subst.wvr.yml	true	true	correct	0.059151247	0.062305664003361017	25.673728		true	correct	0.06276444	0.06598245199711528	25.706496	
+weaver/parallel-ticket-7.wvr.yml	true	true	correct	0.056602224	0.061601091001648456	25.796608		true	correct	0.06150572	0.06370891099504661	25.718784	
+weaver/parallel-misc-1.wvr.yml	true	true	correct	0.056901463	0.06196737600839697	25.640960		true	correct	0.063334959	0.0660174139920855	25.710592	
+weaver/popl20-more-inc-subseq.wvr.yml	true	true	correct	0.055776436	0.061847456003306434	25.702400		true	correct	0.058771792	0.061510524988989346	25.690112	
+weaver/chl-array-int-subst.wvr.yml	true	true	correct	0.06144044	0.06381303899979685	25.661440		true	correct	0.064514487	0.06996260899177287	25.759744	
+weaver/popl20-three-array-min.wvr.yml	true	true	correct	0.060138368	0.06294088499271311	25.632768		true	correct	0.065381844	0.06787297599657904	25.673728	
+weaver/popl20-three-array-max.wvr.yml	true	true	correct	0.061816262	0.06676474699634127	25.694208		true	correct	0.061568754	0.06724904599832371	25.698304	
+weaver/popl20-bad-dot-product.wvr.yml	true	true	correct	0.062082672	0.06827036100730766	25.690112		true	correct	0.057125142	0.06323786100256257	25.759744	
+weaver/parallel-barrier.wvr.yml	true	true	correct	0.054376709	0.06070983900281135	25.735168		true	correct	0.059370122	0.06418419399415143	25.706496	
+weaver/test-hard1.wvr.yml	true	true	correct	0.060109938	0.06674936300260015	25.690112		true	correct	0.059348414	0.061626089009223506	25.628672	
+weaver/parallel-ticket-8.wvr.yml	true	true	correct	0.056210809	0.06485706201056018	25.743360		true	correct	0.067391153	0.07244227098999545	25.694208	
+weaver/chl-chromosome-subst.wvr.yml	true	true	correct	0.060459932	0.0660730980016524	25.747456		true	correct	0.061683008	0.06872256500355434	25.710592	
+weaver/parallel-bakery-3.wvr.yml	true	true	correct	0.062379083	0.0660892190062441	25.694208		true	correct	0.060512576	0.06581071800610516	25.710592	
+weaver/chl-collitem-trans.wvr.yml	true	true	correct	0.060795316	0.06678113600355573	25.620480		true	correct	0.060477427	0.06594320900330786	25.649152	
+weaver/chl-collitem-subst.wvr.yml	true	true	correct	0.05615339	0.06221920400275849	25.690112		true	correct	0.062759341	0.0660165299923392	25.694208	
+weaver/popl20-horseshoe.wvr.yml	true	OUT OF MEMORY	error	14.452189397	14.462430401996244	3999.997952	memory	OUT OF MEMORY	error	14.373462323	14.396299683008692	3999.997952	memory
+weaver/popl20-more-queue-add-3-nl.wvr.yml	true	OUT OF MEMORY	error	14.549361617	14.561182834993815	3999.997952	memory	OUT OF MEMORY	error	14.440499931	14.449705573002575	3999.997952	memory
+weaver/parallel-parallel-sum-1.wvr.yml	true	true	correct	0.059997347	0.06243859500682447	25.698304		true	correct	0.060790659	0.06664296498638578	25.767936	
+weaver/popl20-bad-ring.wvr.yml	true	true	correct	0.059135251	0.0608448309940286	25.735168		true	correct	0.062204293	0.06686034999438561	25.690112	
+weaver/popl20-prod-cons3.wvr.yml	true	true	correct	0.059336174	0.0646390780020738	25.698304		true	correct	0.061467118	0.06716059599420987	25.751552	
+weaver/popl20-more-buffer-mult2.wvr.yml	true	OUT OF MEMORY	error	14.23793477	14.244559348007897	3999.997952	memory	OUT OF MEMORY	error	14.229000442	14.24575200601248	3999.997952	memory
+weaver/popl20-more-buffer-mult.wvr.yml	true	OUT OF MEMORY	error	14.451960508	14.47058327900595	3999.997952	memory	OUT OF MEMORY	error	14.465000719	14.542152898997301	3999.997952	memory
+weaver/popl20-more-buffer-series2.wvr.yml	true	true	correct	0.064658261	0.06964194501051679	25.739264		true	correct	0.065434589	0.06764965699403547	25.808896	
+weaver/parallel-parallel-sum-2.wvr.yml	true	true	correct	0.065113111	0.07027036600629799	25.747456		true	correct	0.064429975	0.0683988539967686	25.747456	
+weaver/popl20-bad-buffer-mult-alt.wvr.yml	true	OUT OF MEMORY	error	14.259472635	14.276017441996373	3999.997952	memory	OUT OF MEMORY	error	14.450161529	14.459651700992254	3999.997952	memory
+weaver/popl20-more-buffer-series.wvr.yml	true	true	correct	0.064747771	0.0686579159955727	25.853952		true	correct	0.071562013	0.07609250000678003	25.821184	
+weaver/parallel-parallel-sum-1-dsl.wvr.yml	true	true	correct	0.060635457	0.06591911400028039	25.821184		true	correct	0.065440926	0.07284104698919691	25.759744	
+weaver/parallel-bakery-4.wvr.yml	true	true	correct	0.063976013	0.06964742399577517	25.907200		true	correct	0.06751496	0.07442651900055353	25.956352	
+weaver/chl-name-comparator-trans.wvr.yml	true	true	correct	0.063671397	0.07060759300657082	25.845760		true	correct	0.070491908	0.07649923099961597	25.825280	
+weaver/chl-nzb-file-symm.wvr.yml	true	true	correct	0.074017888	0.07943036500364542	25.923584		true	correct	0.082100807	0.0880186370050069	25.899008	
+weaver/popl20-commit-2.wvr.yml	true	true	correct	0.090487556	0.09432199198636226	25.772032		true	correct	0.090943416	0.10011505399597809	25.821184	
+weaver/popl20-bad-commit-2.wvr-bad.yml	true	true	correct	0.063830227	0.06991488300263882	25.817088		true	correct	0.066767874	0.07492941898817662	25.821184	
+weaver/chl-poker-hand-symm.wvr.yml	true	true	correct	0.088153152	0.0938235219946364	26.341376		true	correct	0.090612797	0.09896467199723702	26.365952	
+weaver/chl-poker-hand-subst.wvr.yml	true	true	correct	0.110734893	0.11751620299764909	26.730496		true	correct	0.110859387	0.12156366401177365	26.742784	
+pthread-atomic/read_write_lock-1.yml	true	true	correct	0.066934654	0.07445223598915618	26.337280		true	correct	0.072461825	0.0774676150031155	26.296320	
+pthread-ext/29_conditionals_vs.yml	true	true	correct	0.062471619	0.067244470003061	26.120192		true	correct	0.063012245	0.06989109099959023	26.062848	
+pthread-ext/46_monabsex2_vs.yml	true	true	correct	0.057341198	0.06757536499935668	26.058752		true	correct	0.061548055	0.06872030399972573	26.091520	
+pthread-divine/tls_destructor_worker.yml	false	ERROR (compilation)	error	0.056940876	0.0630320100026438	25.874432		ERROR (compilation)	error	0.060436981	0.07200824499886949	25.862144	
+pthread/stateful01-1.yml	false	false(unreach-call)	correct	0.062905852	0.06611606999649666	26.161152		false(unreach-call)	correct	0.071546196	0.0749937999935355	26.091520	
+pthread-atomic/time_var_mutex.yml	true	true	correct	0.062025106	0.0650027490046341	26.198016		true	correct	0.071101484	0.07501509699795861	26.218496	
+pthread-ext/40_barrier_vf.yml	false	ERROR (compilation)	error	0.05718708	0.059440637996885926	25.804800		ERROR (compilation)	error	0.057898523	0.06404480600031093	25.829376	
+pthread/triangular-2.yml	false	false(unreach-call)	correct	1.394311836	1.4013354850030737	26.177536		false(unreach-call)	correct	1.444568294	1.4507234829943627	26.087424	
+pthread/triangular-longer-1.yml	true	TIMEOUT	error	60.995187605	61.009471992991166	26.087424	cputime	TIMEOUT	error	60.975389165	61.01055422799254	26.308608	cputime
+pthread/triangular-longest-1.yml	true	TIMEOUT	error	60.985060342	61.009742740992806	26.157056	cputime	TIMEOUT	error	60.714924311	61.01075849699555	26.177536	cputime
+pthread/triangular-longest-2.yml	false	TIMEOUT	error	60.96843773	61.011073251997004	26.099712	cputime	TIMEOUT	error	60.999526286	61.00836300299852	26.087424	cputime
+pthread-ext/36_stack_cas_p0_vs_concur.yml	true	true	correct	0.067746328	0.07036171399522573	26.267648		true	correct	0.079930662	0.08570140501251444	26.353664	
+pthread-ext/18_read_write_lock.yml	true	true	correct	0.063333164	0.06897809500514995	26.288128		true	correct	0.067477135	0.07395087700570002	26.202112	
+pthread-ext/09_fmaxsym.yml	true	true	correct	0.05582759	0.06184727499203291	26.087424		true	correct	0.07090306	0.07263309900008608	26.083328	
+goblint-regression/28-race_reach_22-deref_read_racefree.yml	true	ERROR (unsupported property: invalid memory access)	error	3.010458454	3.0196858370036352	57.651200		ERROR (unsupported property: invalid memory access)	error	3.159607161	3.17489631898934	57.622528	
+goblint-regression/28-race_reach_45-escape_racing.yml	false	false(unreach-call)	correct	0.064280832	0.06706303599639796	26.075136		false(unreach-call)	correct	0.067374033	0.07284917500510346	26.132480	
+pthread-ext/39_rand_lock_p0_vs.yml	true	true	correct	0.061845654	0.06533369301178027	26.083328		true	correct	0.071244512	0.07624073399347253	26.054656	
+goblint-regression/28-race_reach_41-trylock_racefree.yml	true	TIMEOUT	error	61.183599236	61.21757923500263	3989.225472	cputime	TIMEOUT	error	61.100208671	61.121110306994524	3989.250048	cputime
+goblint-regression/28-race_reach_36-indirect_racefree.yml	true	TIMEOUT	error	60.952644494	61.13851653900929	3989.921792	cputime	TIMEOUT	error	61.155792121	61.167162141005974	3989.848064	cputime
+goblint-regression/28-race_reach_01-simple_racing.yml	false	false(unreach-call)	correct	11.619446562	11.633731256995816	2061.238272		false(unreach-call)	correct	11.756331952	11.768575187001261	2061.156352	
+goblint-regression/28-race_reach_11-ptr_racing.yml	false	false(unreach-call)	correct	11.578517453	11.586190444999374	2061.213696		false(unreach-call)	correct	11.805779092	11.818088807995082	2061.164544	
+pthread-divine/tls_basic.yml	true	ERROR (compilation)	error	0.062125573	0.06806194900127593	25.862144		ERROR (compilation)	error	0.066402272	0.0710154819971649	25.825280	
+pthread/fib_safe-5.yml	true	true	correct	3.529650716	3.559963288003928	26.091520		true	correct	3.637128751	3.653963197997655	26.144768	
+pthread/fib_safe-7.yml	true	TIMEOUT	error	60.991849898	61.01337781299662	26.050560	cputime	TIMEOUT	error	60.646988923	61.00679027700971	26.083328	cputime
+pthread/fib_unsafe-6.yml	false	false(unreach-call)	correct	4.949459512	4.95578122700681	26.083328		false(unreach-call)	correct	5.04944321	5.056820740006515	26.087424	
+pthread/fib_safe-10.yml	true	TIMEOUT	error	60.922199677	61.00895520100312	26.128384	cputime	TIMEOUT	error	60.975749017	61.01295007899171	26.091520	cputime
+pthread/fib_safe-12.yml	true	TIMEOUT	error	60.989994916	61.01052739098668	26.103808	cputime	TIMEOUT	error	60.845315737	61.01181923500553	26.087424	cputime
+pthread/fib_unsafe-11.yml	false	TIMEOUT	error	60.997414234	61.01028395201138	26.181632	cputime	TIMEOUT	error	60.986360571	61.01482509000925	26.075136	cputime
+goblint-regression/28-race_reach_40-trylock_racing.yml	false	ERROR (unsupported external)	error	1.269018174	1.2905043220089283	26.218496		ERROR (unsupported external)	error	1.259838628	1.2683259680052288	26.230784	
+goblint-regression/28-race_reach_51-mutexptr_racefree.yml	true	TIMEOUT	error	61.182837113	61.19290127400018	3990.429696	cputime	TIMEOUT	error	61.142638782	61.16068227100186	3990.609920	cputime
+pthread/lazy01.yml	false	false(unreach-call)	correct	0.067646356	0.07769419200485572	26.185728		false(unreach-call)	correct	0.068123964	0.07303275501180906	26.087424	
+goblint-regression/28-race_reach_19-callback_racing.yml	false	OUT OF MEMORY	error	59.904902694	59.93033604300581	3999.997952	memory	OUT OF MEMORY	error	59.68961341	59.699997232004534	3999.997952	memory
+pthread-ext/04_incdec_cas.yml	true	true	correct	0.068891652	0.07521235699823592	26.091520		true	correct	0.064763621	0.06984394500614144	26.161152	
+goblint-regression/28-race_reach_03-munge_racing.yml	false	OUT OF MEMORY	error	10.19004946	10.196789633002481	3999.997952	memory	OUT OF MEMORY	error	10.220930132	10.34272811700066	3999.997952	memory
+goblint-regression/28-race_reach_09-ptrmunge_racing.yml	false	OUT OF MEMORY	error	10.11919796	10.126246778003406	3999.997952	memory	OUT OF MEMORY	error	10.215703786	10.22073174698744	3999.997952	memory
+goblint-regression/28-race_reach_61-invariant_racing.yml	false	TIMEOUT	error	61.155349768	61.17784315199242	3978.530816	cputime	TIMEOUT	error	61.169163673	61.178304675006075	3978.567680	cputime
+pthread-atomic/read_write_lock-2.yml	false	false(unreach-call)	correct	0.114160892	0.12175265498808585	26.173440		false(unreach-call)	correct	0.112239858	0.12107611900137272	26.136576	
+pthread-ext/26_stack_cas.yml	true	TIMEOUT	error	60.9864773	61.0171179780009	105.906176	cputime	TIMEOUT	error	60.999851191	61.01224660400476	102.477824	cputime
+pthread-ext/26_stack_cas_longest-2.yml	true	TIMEOUT	error	60.99957683	61.021566652008914	112.435200	cputime	TIMEOUT	error	61.006002447	61.01408288600214	104.509440	cputime
+pthread-ext/26_stack_cas_longest-1.yml	false	false(unreach-call)	correct	0.120916511	0.13064104500517715	26.468352		false(unreach-call)	correct	0.109910087	0.1159583249973366	26.431488	
+pthread-ext/25_stack_longer-2.yml	true	TIMEOUT	error	60.862425128	61.01812447399425	101.806080	cputime	TIMEOUT	error	61.007448117	61.01652045099763	103.174144	cputime
+pthread-ext/25_stack_longer-1.yml	false	false(unreach-call)	correct	0.078059594	0.08427986901369877	26.267648		false(unreach-call)	correct	0.079269214	0.08125632999872323	26.402816	
+pthread-ext/08_rand_cas.yml	true	true	correct	0.069937287	0.079797537997365	26.181632		true	correct	0.063743685	0.06945783999981359	26.087424	
+pthread-wmm/safe029_tso.yml	true	true	correct	0.225654801	0.22791425499599427	26.103808		TIMEOUT	error	61.017047038	61.02823986099975	303.898624	cputime
+pthread-wmm/safe033_tso.yml	true	true	correct	0.396585546	0.4061034509941237	26.083328		TIMEOUT	error	61.01806049	61.026093886001036	303.087616	cputime
+pthread-wmm/safe006_pso.oepc_pso.opt_tso.oepc_tso.opt-thin000_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	true	correct	0.229732894	0.23557938200247008	26.095616		TIMEOUT	error	61.017469039	61.02808849400026	301.608960	cputime
+pthread-wmm/safe030_tso.yml	true	TIMEOUT	error	60.995259978	61.01183395199769	26.083328	cputime	TIMEOUT	error	61.00153724	61.01017511099053	32.587776	cputime
+pthread-wmm/safe011_tso.yml	true	TIMEOUT	error	60.992188088	61.01289758499479	26.124288	cputime	TIMEOUT	error	60.434417329	61.028802756991354	307.490816	cputime
+pthread-atomic/peterson.yml	true	true	correct	0.06812722	0.07428200400318019	26.095616		true	correct	0.060039528	0.06827687699114904	26.087424	
+pthread-wmm/safe031_tso.yml	true	TIMEOUT	error	60.906759277	61.01119671900233	26.103808	cputime	ABORTED	error	0.082072901	0.19418492699333	31.084544	
+pthread-wmm/safe004_tso.yml	true	TIMEOUT	error	61.000713102	61.007640869996976	26.087424	cputime	TIMEOUT	error	61.018232667	61.02470394800184	303.341568	cputime
+pthread-wmm/safe021_tso.yml	true	TIMEOUT	error	60.988335775	61.01097187800042	26.087424	cputime	ABORTED	error	0.081268652	0.21407351999368984	31.133696	
+pthread-wmm/safe018_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	true	correct	51.339000851	51.389297904999694	26.083328		true	correct	51.982143007	52.06773163299658	32.129024	
+pthread-wmm/safe015_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.927296312	61.0116074240068	26.087424	cputime	TIMEOUT	error	61.008727681	61.025618097992265	307.437568	cputime
+pthread-wmm/safe003_tso.yml	true	TIMEOUT	error	60.993100448	61.008393479991355	26.189824	cputime	ABORTED	error	0.081076525	0.2064989259961294	31.010816	
+pthread-wmm/safe028_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.919001389	61.00778703499236	26.091520	cputime	ABORTED	error	0.08378397	0.22874786099418998	30.986240	
+pthread-wmm/safe000_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.989279862	61.00817895799992	26.087424	cputime	TIMEOUT	error	61.01557775	61.027484410005854	309.833728	cputime
+pthread-wmm/safe034_tso.yml	true	TIMEOUT	error	60.958848251	61.0152845410048	26.099712	cputime	TIMEOUT	error	60.354309518	61.03230717500264	307.699712	cputime
+pthread-wmm/safe023_tso.yml	true	TIMEOUT	error	60.997136306	61.0098314939969	26.083328	cputime	TIMEOUT	error	60.649311365	61.02614839799935	310.644736	cputime
+pthread-wmm/safe007_pso.oepc_pso.opt_tso.oepc_tso.opt-thin001_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.884650679	61.0105330790102	26.087424	cputime	ABORTED	error	0.084467362	0.2167646649904782	31.043584	
+pthread-wmm/safe025_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.809719193	61.01035518498975	26.107904	cputime	TIMEOUT	error	61.020286025	61.0297857849946	306.966528	cputime
+pthread-wmm/safe035_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.992898701	61.01333816599799	26.083328	cputime	TIMEOUT	error	61.020023814	61.026734849991044	309.309440	cputime
+pthread-atomic/lamport.yml	true	true	correct	0.06790533	0.07794606400420889	26.091520		true	correct	0.068142507	0.07829998599481769	26.083328	
+pthread-wmm/safe027_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.999641632	61.01398968300782	26.116096	cputime	TIMEOUT	error	61.024451976	61.03386493700964	316.235776	cputime
+pthread-atomic/dekker-unfair.yml	true	true	correct	0.071602389	0.07484471499628853	26.038272		true	correct	0.067362029	0.07582594999985304	26.087424	
+pthread-theta/unwind3-1.yml	false	false(unreach-call)	correct	0.068926177	0.0776819080056157	26.124288		false(unreach-call)	correct	0.072806768	0.07917831100348849	26.210304	
+pthread-theta/unwind3-nondet.yml	false	true	wrong	0.070113133	0.07294136399286799	26.144768		true	wrong	0.067995773	0.07411742801195942	26.214400	
+pthread-theta/unwind1-100.yml	false	true	wrong	0.066018874	0.07188686699373648	26.087424		true	wrong	0.067197296	0.07393144299567211	26.087424	
+pthread-theta/exponential-64.yml	true	TIMEOUT	error	61.002695754	61.01437768799951	65.060864	cputime	TIMEOUT	error	60.626482804	61.016437421989394	65.310720	cputime
+pthread-theta/exponential-nondet.yml	true	true	correct	0.066902905	0.06965392600977793	26.157056		true	correct	0.066384007	0.07472758099902421	26.087424	
+pthread-theta/unwind2-100.yml	false	false(unreach-call)	correct	0.065756455	0.07126155600417405	26.198016		false(unreach-call)	correct	0.067134754	0.0735403759899782	26.345472	
+pthread-ext/43_NetBSD_sysmon_power_sliced-pthread.yml	true	ERROR (compilation)	error	0.060645444	0.06728234700858593	25.747456		ERROR (compilation)	error	0.062693746	0.0689282139937859	25.829376	
+pthread-theta/wsc.yml	true	true	correct	0.082102382	0.08508974600408692	26.214400		true	correct	0.081647534	0.08431909800856374	26.177536	
+pthread-wmm/safe033_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	0.684846235	0.6908408660092391	26.370048		TIMEOUT	error	60.999419642	61.0327510109928	337.076224	cputime
+pthread-wmm/rfi004.yml	false	false(unreach-call)	correct	3.490099943	3.498098904005019	26.353664		TIMEOUT	error	60.837449758	61.03178609099996	346.914816	cputime
+pthread-wmm/safe029_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	0.111120456	0.11735211800260004	26.406912		TIMEOUT	error	61.011399415	61.02431450699805	200.925184	cputime
+pthread-wmm/mix054_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	correct	0.325332706	0.32755126600386575	26.349568		TIMEOUT	error	61.018806812	61.03263588499976	344.293376	cputime
+pthread-wmm/safe010_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	0.113841041	0.11745234701083973	26.353664		TIMEOUT	error	61.008163185	61.02968468099425	345.812992	cputime
+pthread-wmm/mix052_pso.opt_rmo.opt_tso.opt.yml	false	TIMEOUT	error	60.991906071	61.009084991994314	26.411008	cputime	TIMEOUT	error	61.01724574	61.02844796401041	336.846848	cputime
+pthread-wmm/mix022_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	0.158241088	0.16356777100008912	26.349568		TIMEOUT	error	61.007665378	61.030655050999485	352.792576	cputime
+pthread-wmm/mix048_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt-podwr000_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	correct	0.125509951	0.13078419800149277	26.480640		TIMEOUT	error	61.02349802	61.03185874699557	337.096704	cputime
+pthread-wmm/rfi000_power.opt_pso.opt_rmo.opt.yml	false	false(unreach-call)	correct	1.256247139	1.2612782149954	26.456064		TIMEOUT	error	61.011306426	61.029070323013	344.227840	cputime
+pthread-wmm/rfi001_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	0.217470631	0.22289123400696553	26.357760		TIMEOUT	error	61.011867245	61.02257697099412	206.503936	cputime
+pthread-wmm/mix041_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	correct	1.281580161	1.2879826499993214	26.374144		TIMEOUT	error	61.014991095	61.02459583099699	349.241344	cputime
+pthread-wmm/mix012_power.oepc_power.opt_pso.oepc_rmo.oepc_rmo.opt_tso.oepc.yml	false	false(unreach-call)	correct	0.160313746	0.1636301060061669	26.345472		TIMEOUT	error	61.01596459	61.035435572004644	357.273600	cputime
+pthread-wmm/mix034_power.oepc_power.opt_pso.oepc_rmo.oepc_rmo.opt_tso.oepc.yml	false	false(unreach-call)	correct	0.216509437	0.22166499400918838	26.345472		TIMEOUT	error	61.012903869	61.033136526006274	201.592832	cputime
+pthread-wmm/safe030_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	error	60.99783919	61.01142430600885	26.349568	cputime	TIMEOUT	error	61.019517453	61.032016601006035	354.971648	cputime
+pthread-wmm/mix056_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	error	60.987799182	61.01248853800644	26.480640	cputime	TIMEOUT	error	60.551049302	61.03261820600892	356.208640	cputime
+pthread-wmm/mix033.opt.yml	false	TIMEOUT	error	60.985255114	61.00959257899376	26.320896	cputime	TIMEOUT	error	61.019045967	61.03382998800953	360.140800	cputime
+pthread-wmm/mix053.opt.yml	false	TIMEOUT	error	60.898098348	61.00845640800253	26.386432	cputime	TIMEOUT	error	61.012363597	61.03421764400264	345.260032	cputime
+pthread-wmm/mix032.opt.yml	false	TIMEOUT	error	60.994993673	61.010456421005074	26.320896	cputime	TIMEOUT	error	61.008631073	61.03525945000001	347.013120	cputime
+pthread-wmm/safe013_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	error	60.995101206	61.01187820000632	26.345472	cputime	TIMEOUT	error	60.354161391	61.03229075799754	348.442624	cputime
+pthread-wmm/safe002_power.opt_pso.oepc_pso.opt_rmo.opt.yml	false	TIMEOUT	error	60.991391225	61.008919772008085	26.415104	cputime	TIMEOUT	error	60.645455498	61.03002675199241	368.472064	cputime
+pthread-wmm/mix045_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	error	60.967259343	61.009782627996174	26.476544	cputime	TIMEOUT	error	61.019592235	61.033748789006495	351.264768	cputime
+pthread-wmm/safe005_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	error	61.002642405	61.01185573400289	26.402816	cputime	TIMEOUT	error	61.010537665	61.029793787995004	358.821888	cputime
+pthread-wmm/safe014_rmo.oepc.yml	false	false(unreach-call)	correct	0.080185404	0.09122641599969938	26.390528		false(unreach-call)	correct	0.082757352	0.08857946300122421	26.365952	
+pthread-wmm/safe012_rmo.oepc.yml	false	false(unreach-call)	correct	0.077195781	0.08319315798871685	26.349568		false(unreach-call)	correct	0.084986324	0.09041756400256418	26.480640	
+pthread-wmm/safe007_rmo.oepc_rmo.opt-thin001_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	0.075513798	0.08190365499467589	26.435584		false(unreach-call)	correct	0.085420794	0.09151019601267762	26.345472	
+pthread-wmm/safe030_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	8.521797316	8.546585727992351	26.484736		TIMEOUT	error	61.018956062	61.03441308399488	346.357760	cputime
+pthread-wmm/mix039.opt.yml	false	TIMEOUT	error	60.998529393	61.00910226900305	26.451968	cputime	TIMEOUT	error	60.421987251	61.03336336799839	355.946496	cputime
+pthread-wmm/mix035_power.opt_rmo.opt.yml	false	TIMEOUT	error	60.988848564	61.01306000100158	26.492928	cputime	TIMEOUT	error	61.006445984	61.03742938199139	350.703616	cputime
+pthread-wmm/mix056_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	10.700212397	10.707847191006294	26.480640		TIMEOUT	error	60.851645381	61.02465543700964	219.140096	cputime
+pthread-wmm/mix036_pso.opt_tso.opt.yml	false	TIMEOUT	error	60.973238752	61.01428741800191	26.378240	cputime	TIMEOUT	error	61.023423043	61.03503603900026	353.456128	cputime
+pthread-wmm/mix024_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	error	60.894542174	61.015696810994996	26.480640	cputime	TIMEOUT	error	61.025681521	61.035507795008016	351.600640	cputime
+pthread-wmm/safe006_power.oepc-thin000_power.oepc.yml	false	false(unreach-call)	correct	0.081370366	0.08583330099645536	26.476544		false(unreach-call)	correct	0.085997172	0.09207184601109475	26.484736	
+pthread-wmm/safe004_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	error	60.993235742	61.01147528000001	26.419200	cputime	TIMEOUT	error	61.017098126	61.02621793000435	225.730560	cputime
+pthread-wmm/safe001_power.opt_pso.oepc_pso.opt_rmo.opt.yml	false	TIMEOUT	error	60.971883827	61.011333539005136	26.546176	cputime	TIMEOUT	error	61.023323265	61.03692703900742	354.836480	cputime
+pthread-wmm/safe021_power.oepc_pso.oepc_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	11.020668221	11.028203822002979	26.488832		TIMEOUT	error	61.001150762	61.020898642003885	223.924224	cputime
+pthread-wmm/safe008_power.oepc_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	8.860432282	8.900510441002552	26.480640		TIMEOUT	error	61.022636634	61.031512861998635	360.542208	cputime
+pthread-wmm/mix028_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	23.955836523	24.008146975000273	26.394624		TIMEOUT	error	61.024852816	61.03426238099928	359.727104	cputime
+pthread-wmm/mix045_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	48.280805405	48.29533678700682	26.443776		TIMEOUT	error	61.02428733	61.035490143010975	356.737024	cputime
+pthread-wmm/mix027_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	error	61.000821877	61.01084920299763	26.427392	cputime	TIMEOUT	error	61.025691817	61.03318823999143	369.725440	cputime
+pthread-wmm/mix047_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	error	60.665907004	61.01395780099847	26.480640	cputime	TIMEOUT	error	61.024472673	61.03439478301152	368.570368	cputime
+pthread-wmm/mix042.oepc.yml	false	false(unreach-call)	correct	49.318891639	49.34054559699143	26.423296		TIMEOUT	error	61.019197684	61.028866542998	372.555776	cputime
+pthread-wmm/mix038_tso.oepc.yml	false	TIMEOUT	error	60.798159069	61.01324679100071	26.492928	cputime	TIMEOUT	error	60.993871864	61.030565635999665	361.762816	cputime
+pthread-wmm/mix044.opt.yml	false	TIMEOUT	error	61.002628639	61.01300677600375	26.468352	cputime	TIMEOUT	error	60.384592111	61.02949719900789	366.133248	cputime
+pthread-wmm/mix026_pso.opt_rmo.opt.yml	false	TIMEOUT	error	61.004231668	61.014711691997945	26.480640	cputime	TIMEOUT	error	61.024852258	61.03432520700153	365.043712	cputime
+pthread-wmm/mix006_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	61.002954425	61.014630525998655	26.484736	cputime	ABORTED	error	0.100794745	0.2448341050039744	32.014336	
+pthread-wmm/mix023_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	error	61.000137289	61.011518182000145	26.386432	cputime	TIMEOUT	error	61.025702791	61.03636973800894	360.423424	cputime
+pthread-wmm/mix012_pso.opt_tso.opt.yml	false	false(unreach-call)	correct	0.960603216	0.968533793988172	26.488832		TIMEOUT	error	61.025007626	61.032931468012976	349.417472	cputime
+pthread-wmm/thin002_rmo.yml	false	false(unreach-call)	correct	0.081076506	0.08688892799546011	26.492928		false(unreach-call)	correct	0.087197448	0.0975017609889619	26.480640	
+pthread-wmm/rfi010.yml	false	false(unreach-call)	correct	2.13095465	2.164529236004455	26.492928		TIMEOUT	error	60.476619773	61.02667943299457	347.848704	cputime
+pthread-wmm/mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	false	false(unreach-call)	correct	26.204012166	26.218444454003475	26.398720		ABORTED	error	0.100363705	0.23442506699939258	32.034816	
+pthread-wmm/mix033_tso.oepc.yml	false	TIMEOUT	error	61.003311598	61.0095569230034	26.521600	cputime	TIMEOUT	error	60.573959122	61.03383222199045	372.879360	cputime
+pthread-wmm/mix015.oepc.yml	false	false(unreach-call)	correct	26.404266773	26.414261458005058	26.505216		ABORTED	error	0.099036647	0.2331692620064132	32.030720	
+pthread-wmm/mix000.opt.yml	false	false(unreach-call)	correct	2.162677467	2.170630665990757	26.492928		TIMEOUT	error	60.989453433	61.02470022000489	236.232704	cputime
+pthread-wmm/safe009_rmo.opt.yml	false	TIMEOUT	error	60.973573648	61.012720079990686	26.480640	cputime	TIMEOUT	error	61.003809445	61.011732122991816	26.419200	cputime
+pthread-wmm/safe018_power.oepc.yml	false	false(unreach-call)	correct	0.081004334	0.08733421900251415	26.513408		false(unreach-call)	correct	0.085869823	0.09467802000290249	26.476544	
+pthread-wmm/mix030_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	error	61.004683708	61.01330926999799	26.517504	cputime	TIMEOUT	error	61.02437035	61.03448312400724	368.115712	cputime
+pthread-wmm/safe014_power.oepc.yml	false	false(unreach-call)	correct	0.084336254	0.09347347500442993	26.439680		false(unreach-call)	correct	0.089349571	0.1006345099885948	26.501120	
+pthread-wmm/mix002.oepc.yml	false	TIMEOUT	error	60.984193251	61.01118102799228	26.488832	cputime	TIMEOUT	error	60.514545945	61.03682186399237	373.198848	cputime
+pthread-wmm/mix021_tso.oepc.yml	false	TIMEOUT	error	60.96173377	61.00787940900773	26.480640	cputime	TIMEOUT	error	61.007245138	61.033550071006175	357.298176	cputime
+pthread-wmm/mix022_tso.yml	false	false(unreach-call)	correct	0.899072982	0.9345714429946383	26.472448		TIMEOUT	error	60.938576026	61.034541945991805	369.819648	cputime
+pthread-wmm/rfi007_tso.yml	false	false(unreach-call)	correct	0.898296928	0.9238887289975537	26.554368		TIMEOUT	error	61.014985978	61.02456995900138	228.093952	cputime
+pthread-wmm/mix026_power.opt_tso.opt.yml	false	TIMEOUT	error	61.004131115	61.01083430199651	26.406912	cputime	TIMEOUT	error	61.021026502	61.02874449900992	371.990528	cputime
+pthread-wmm/mix016_pso.opt_tso.opt.yml	false	TIMEOUT	error	60.995344146	61.01328360600746	26.558464	cputime	TIMEOUT	error	61.010761694	61.026214047000394	230.940672	cputime
+pthread-wmm/mix057_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.979408425	61.01105818200449	26.480640	cputime	TIMEOUT	error	61.023327375	61.038177416005055	373.043200	cputime
+pthread-wmm/mix000.oepc.yml	false	false(unreach-call)	correct	0.198729376	0.20663647599576507	26.488832		TIMEOUT	error	61.011726247	61.02736911299871	229.453824	cputime
+pthread-wmm/rfi008.oepc.yml	false	false(unreach-call)	correct	0.194560267	0.20054743099899497	26.525696		TIMEOUT	error	61.0243562	61.034066392996465	364.650496	cputime
+pthread-wmm/mix055_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.999086616	61.011406189005356	26.484736	cputime	TIMEOUT	error	61.015694249	61.02643934299704	248.958976	cputime
+pthread-wmm/mix030_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.98883884	61.0123430340027	26.484736	cputime	TIMEOUT	error	61.018249239	61.0241971630021	240.463872	cputime
+pthread-wmm/mix003_power.opt_pso.opt_rmo.opt_tso.opt.yml	false	TIMEOUT	error	60.987285431	61.012044160001096	26.456064	cputime	TIMEOUT	error	61.024812602	61.031762977989274	368.021504	cputime
+pthread-wmm/mix027_tso.yml	false	TIMEOUT	error	60.961373085	61.00791078200564	26.578944	cputime	TIMEOUT	error	61.012779271	61.027224980993196	256.847872	cputime
+pthread-wmm/mix015.opt.yml	false	TIMEOUT	error	60.998633879	61.011870981004904	26.456064	cputime	TIMEOUT	error	61.020336664	61.03619264200097	367.329280	cputime
+pthread-wmm/mix021_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.961652235	61.00983293101308	26.480640	cputime	TIMEOUT	error	61.020848702	61.027544640004635	344.305664	cputime
+pthread-wmm/mix047_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.843611654	61.00902826800302	26.484736	cputime	TIMEOUT	error	60.605355502	61.02390247299627	235.216896	cputime
+pthread-wmm/mix028_tso.yml	false	TIMEOUT	error	60.870483661	61.01478623600269	26.562560	cputime	TIMEOUT	error	61.024167526	61.03403531599906	365.051904	cputime
+pthread-wmm/mix020.oepc.yml	false	TIMEOUT	error	60.99355953	61.01541515601275	26.546176	cputime	TIMEOUT	error	61.01323487	61.02697200900002	238.800896	cputime
+pthread-wmm/mix046.oepc.yml	false	TIMEOUT	error	60.995826642	61.01168708199111	26.513408	cputime	TIMEOUT	error	61.025820154	61.03717397899891	339.951616	cputime
+pthread-wmm/mix044_tso.oepc.yml	false	TIMEOUT	error	60.73661992	61.0130725850031	26.619904	cputime	TIMEOUT	error	60.769422829	61.03427015300258	347.103232	cputime
+pthread-wmm/mix040_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.866800414	61.01176586000656	26.484736	cputime	TIMEOUT	error	60.539798651	61.02731158900133	380.817408	cputime
+pthread-wmm/thin002_power.oepc.yml	false	false(unreach-call)	correct	0.092706599	0.10135462100151926	26.476544		false(unreach-call)	correct	0.091628949	0.09726460099045653	26.476544	
+pthread-wmm/mix037_tso.oepc.yml	false	TIMEOUT	error	60.992370738	61.01054835700779	26.611712	cputime	TIMEOUT	error	61.026973012	61.03396401400096	371.007488	cputime
+pthread-wmm/mix039.oepc.yml	false	TIMEOUT	error	60.998399554	61.01110974799667	26.537984	cputime	TIMEOUT	error	61.01793145	61.024663552991115	253.173760	cputime
+pthread-wmm/mix008_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.995836635	61.01501144799113	26.476544	cputime	TIMEOUT	error	61.025248292	61.03767682099715	347.529216	cputime
+pthread-wmm/mix021.opt.yml	false	TIMEOUT	error	60.997092989	61.00972579899826	26.525696	cputime	TIMEOUT	error	60.457090957	61.03684644700843	388.235264	cputime
+pthread-wmm/safe012_power.opt.yml	false	TIMEOUT	error	60.993896698	61.01124090400117	26.480640	cputime	TIMEOUT	error	60.997893289	61.01386055701005	26.505216	cputime
+pthread-wmm/mix007.oepc.yml	false	TIMEOUT	error	60.995569167	61.01046184099687	26.591232	cputime	TIMEOUT	error	60.980232392	61.03130921399861	349.011968	cputime
+pthread-wmm/mix005_tso.oepc.yml	false	TIMEOUT	error	60.993758362	61.01007983100135	26.607616	cputime	TIMEOUT	error	61.022628011	61.030539828992914	377.966592	cputime
+pthread-wmm/rfi009_power.opt_pso.oepc_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	error	60.984554292	61.007079466988216	26.529792	cputime	TIMEOUT	error	61.017885224	61.02676863400848	242.126848	cputime
+pthread-wmm/mix014_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.99093067	61.009754508006154	26.509312	cputime	TIMEOUT	error	61.025215586	61.02965277200565	340.914176	cputime
+pthread-wmm/mix020.opt.yml	false	TIMEOUT	error	61.000571968	61.011752003993024	26.533888	cputime	TIMEOUT	error	61.024203173	61.03389237499505	344.514560	cputime
+pthread-wmm/mix013.oepc.yml	false	TIMEOUT	error	61.00059021	61.01170226800605	26.583040	cputime	TIMEOUT	error	61.016632033	61.02355826100393	241.758208	cputime
+pthread-wmm/mix008.opt.yml	false	TIMEOUT	error	60.976124666	61.01093345999834	26.607616	cputime	TIMEOUT	error	61.022695216	61.03503919500508	345.600000	cputime
+pthread-wmm/mix005.opt.yml	false	TIMEOUT	error	60.957684591	61.00773158700031	26.607616	cputime	TIMEOUT	error	61.019387119	61.032645573999616	373.592064	cputime
+pthread-wmm/mix014.opt.yml	false	TIMEOUT	error	60.99787829	61.01028177399712	26.615808	cputime	TIMEOUT	error	61.022675337	61.02989324499504	345.395200	cputime
+pthread-wmm/mix013.opt.yml	false	TIMEOUT	error	60.994070881	61.01139166600478	26.587136	cputime	TIMEOUT	error	61.027402459	61.03384542700951	347.287552	cputime
+pthread-wmm/safe009_rmo.oepc.yml	false	false(unreach-call)	correct	0.086705525	0.09455427300417796	26.619904		false(unreach-call)	correct	0.084281102	0.09183718299027532	26.652672	
+pthread-wmm/rfi006_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	error	60.984842322	61.00951892598823	26.673152	cputime	TIMEOUT	error	61.019662941	61.03285159700317	377.905152	cputime
+pthread-wmm/safe008_power.opt.yml	false	TIMEOUT	error	60.988742466	61.012659967003856	26.607616	cputime	TIMEOUT	error	60.989094222	61.00957228599873	26.628096	cputime
+pthread-wmm/safe000_power.opt.yml	false	TIMEOUT	error	60.992750458	61.008635681995656	26.664960	cputime	TIMEOUT	error	60.993890606	61.00982006599952	26.583040	cputime
+pthread-wmm/safe028_rmo.yml	false	TIMEOUT	error	60.884319625	61.01221642100427	26.619904	cputime	TIMEOUT	error	60.459044503	61.01110601500841	26.587136	cputime
+pthread-wmm/thin002_power.opt.yml	false	TIMEOUT	error	60.974189516	61.01199668299523	26.689536	cputime	TIMEOUT	error	60.99437652	61.00752895500045	26.742784	cputime
+pthread-wmm/mix001.oepc.yml	false	TIMEOUT	error	60.972496683	61.01342823100276	26.624000	cputime	TIMEOUT	error	61.015549441	61.025123765008175	239.935488	cputime
+pthread-wmm/safe019_rmo.oepc.yml	false	false(unreach-call)	correct	0.091757563	0.09825997998996172	26.624000		false(unreach-call)	correct	0.089490575	0.09538956599135417	26.607616	
+pthread-wmm/rfi005.yml	false	false(unreach-call)	correct	0.084674351	0.09210546500980854	26.640384		TIMEOUT	error	61.020348079	61.0291374540102	247.971840	cputime
+pthread-wmm/rfi000_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	0.261137491	0.265995075009414	26.644480		TIMEOUT	error	60.806792544	61.022182161003	251.842560	cputime
+pthread-deagle/arithmetic_prog_ok.yml	true	ERROR (compilation)	error	0.067380652	0.070258482999634	25.694208		ERROR (compilation)	error	0.065000586	0.0677591499988921	25.694208	
+pthread-wmm/safe009_power.oepc.yml	false	false(unreach-call)	correct	0.088360259	0.09812008299923036	26.636288		false(unreach-call)	correct	0.091104653	0.09581338700081687	26.738688	
+pthread-wmm/safe019_rmo.opt.yml	false	TIMEOUT	error	60.994625227	61.01037519799138	26.738688	cputime	TIMEOUT	error	60.431082547	61.010255572997266	26.607616	cputime
+pthread-wmm/safe018_power.opt.yml	false	TIMEOUT	error	60.61800584	61.01225526101189	26.755072	cputime	TIMEOUT	error	61.005959902	61.015528324001934	26.611712	cputime
+pthread-wmm/safe016_power.oepc.yml	false	false(unreach-call)	correct	0.094461519	0.10163972699956503	26.746880		false(unreach-call)	correct	0.091596052	0.09745138199650683	26.746880	
+pthread-wmm/safe016_rmo.opt.yml	false	TIMEOUT	error	60.999629624	61.01167708700814	26.767360	cputime	TIMEOUT	error	61.003371415	61.01228944200557	26.738688	cputime
+pthread-wmm/rfi002_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	true	true	correct	7.095353786	7.104762522998499	26.755072		TIMEOUT	error	61.081293981	61.08645633100241	352.776192	cputime
+pthread-wmm/safe003_power.oepc_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	13.476074442	13.499174707001657	26.750976		TIMEOUT	error	60.440808773	61.03065946701099	365.510656	cputime
+pthread-wmm/safe032_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	error	61.032636565	61.05619005000335	26.828800	cputime	TIMEOUT	error	61.039557269	61.067312140992726	276.406272	cputime
+pthread-wmm/safe000_rmo.yml	false	false(unreach-call)	correct	0.091538007	0.0974628709955141	26.710016		false(unreach-call)	correct	0.093609271	0.10212247399613261	26.738688	
+pthread-wmm/safe002_rmo.oepc.yml	false	false(unreach-call)	correct	0.092352496	0.09862285100098234	26.763264		false(unreach-call)	correct	0.093368017	0.09972888599440921	26.746880	
+pthread-wmm/safe019_power.opt.yml	false	TIMEOUT	error	60.996574688	61.013265368994325	26.755072	cputime	TIMEOUT	error	60.998785679	61.0162908659986	26.734592	cputime
+goblint-regression/28-race_reach_27-funptr_racing.yml	false	TIMEOUT	error	61.224070568	61.253561503006495	3978.932224	cputime	TIMEOUT	error	61.240582074	61.2477460730006	3978.969088	cputime
+pthread-wmm/safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	error	60.99010932	61.012274802997126	26.791936	cputime	TIMEOUT	error	61.024770971	61.02933746800409	404.717568	cputime
+pthread-wmm/safe001_power.oepc.yml	false	false(unreach-call)	correct	0.093619471	0.10190584199153818	26.755072		false(unreach-call)	correct	0.091873495	0.09759446000680327	26.812416	
+pthread-wmm/safe000_power.oepc.yml	false	false(unreach-call)	correct	0.098208638	0.10286187399469782	26.763264		false(unreach-call)	correct	0.094022094	0.09981751500163227	26.873856	
+pthread/sync01.yml	true	ERROR (compilation)	error	0.062832759	0.0697694240079727	25.821184		ERROR (compilation)	error	0.060490738	0.06564596500538755	25.829376	
+pthread-wmm/safe025_power.yml	false	false(unreach-call)	correct	0.08793382	0.10044316700077616	26.869760		false(unreach-call)	correct	0.088262107	0.09247485500236508	26.873856	
+goblint-regression/28-race_reach_08-cond_racefree.yml	true	TIMEOUT	error	61.146310914	61.239261841998086	3984.515072	cputime	TIMEOUT	error	61.227485109	61.23732131499855	3988.164608	cputime
+goblint-regression/28-race_reach_70-funloop_racefree.yml	true	TIMEOUT	error	61.21713626	61.2257500429987	3987.955712	cputime	TIMEOUT	error	61.242634347	61.25328112099669	3987.939328	cputime
+pthread/stack_longer-2.yml	true	true	correct	12.63062788	12.640105222002603	693.714944		true	correct	12.63792227	12.644344918997376	692.813824	
+pthread/stack-2.yml	false	true	wrong	0.069869942	0.07779824000317603	26.181632		true	wrong	0.06528556	0.06832419299462344	26.218496	
+pthread/stack_longest-1.yml	false	TIMEOUT	error	61.176336421	61.194315671004006	3169.529856	cputime	TIMEOUT	error	61.206141705	61.21109189100389	3185.270784	cputime
+goblint-regression/28-race_reach_71-funloop_racing.yml	false	TIMEOUT	error	61.228012647	61.238932729000226	3995.066368	cputime	TIMEOUT	error	61.246168165	61.26790987201093	3995.054080	cputime
+goblint-regression/28-race_reach_76-tricky_address3_racefree.yml	true	true	correct	1.277341333	1.2875624680018518	26.193920		true	correct	1.260566853	1.2674121940071927	26.161152	
+goblint-regression/28-race_reach_72-funloop_hard_racing.yml	false	TIMEOUT	error	61.207556754	61.220404577994486	3995.521024	cputime	TIMEOUT	error	61.220323342	61.24358628199843	3995.521024	cputime
+pthread-wmm/safe035_power.yml	true	TIMEOUT	error	61.001587857	61.01493528699211	26.996736	cputime	TIMEOUT	error	61.020622437	61.026912496003206	300.597248	cputime
+pthread/queue_ok.yml	true	true	correct	0.076571428	0.08243743699858896	26.292224		true	correct	0.067809819	0.07404245300858747	26.243072	
+pthread/queue_ok_longest.yml	true	true	correct	1.538766185	1.5411981280049076	277.082112		true	correct	1.544134764	1.5509557439945638	277.086208	
+pthread/queue_longest.yml	false	TIMEOUT	error	61.019528696	61.04739026199968	620.781568	cputime	TIMEOUT	error	61.026485723	61.047450017998926	620.613632	cputime
+pthread-wmm/mix014_tso.oepc.yml	false	TIMEOUT	error	60.998739644	61.01230599998962	27.004928	cputime	TIMEOUT	error	60.674195152	61.03189727300196	327.000064	cputime
+pthread-wmm/mix008_tso.oepc.yml	false	TIMEOUT	error	60.981443218	61.00876433200028	27.000832	cputime	TIMEOUT	error	61.021611858	61.02904435399978	352.796672	cputime
+pthread-lit/sssc12.yml	true	true	correct	0.07048479	0.07705906500632409	26.112000		true	correct	0.067638491	0.07443344200146385	26.091520	
+goblint-regression/28-race_reach_78-equ_racing.yml	false	TIMEOUT	error	61.246751472	61.25994951100438	3986.976768	cputime	TIMEOUT	error	61.266397232	61.27361991199723	3989.221376	cputime
+goblint-regression/28-race_reach_81-list_racing.yml	false	OUT OF MEMORY	error	13.675299168	13.687263907995657	3999.997952	memory	OUT OF MEMORY	error	12.274677715	12.281252790999133	3999.997952	memory
+goblint-regression/28-race_reach_87-lists_racefree.yml	true	true	correct	22.463822273	22.468165810001665	743.936000		true	correct	22.095700589	22.104054341005394	743.923712	
+goblint-regression/28-race_reach_86-lists_racing.yml	false	true	wrong	25.591785989	25.619385017998866	745.787392		true	wrong	24.307226004	24.316954008012544	745.771008	
+goblint-regression/28-race_reach_92-evilcollapse_racing.yml	false	true	wrong	1.28549948	1.2930339309968986	26.320896		true	wrong	1.28411154	1.2946520530094858	26.378240	
+pthread-race-challenges/thread-local-pthread-value.yml	true	ERROR (compilation)	error	0.060935441	0.07459306900273077	25.702400		ERROR (compilation)	error	0.059708974	0.06671605400333647	25.690112	
+goblint-regression/28-race_reach_83-list2_racing1.yml	false	OUT OF MEMORY	error	23.515339415	23.562688228004845	3999.997952	memory	OUT OF MEMORY	error	23.340129466	23.459790549008176	3999.997952	memory
+goblint-regression/28-race_reach_84-list2_racing2.yml	false	OUT OF MEMORY	error	22.477903266	22.62440572999185	3999.997952	memory	OUT OF MEMORY	error	23.033704885	23.133680008992087	3999.997952	memory
+goblint-regression/28-race_reach_90-arrayloop2_racing.yml	false	true	wrong	12.173706535	12.200824970990652	98.988032		true	wrong	12.385193817	12.392527324002003	98.955264	
+pthread/bigshot_s.yml	true	true	correct	0.074594718	0.08259645999351051	26.148864		true	correct	0.069529358	0.07645480999781284	26.214400	
+pthread/singleton_with-uninit-problems.yml	true	true	correct	0.075566886	0.0854219790053321	26.345472		true	correct	0.07148346	0.07954033400164917	26.304512	
+goblint-regression/13-privatized_67-pthread_cond_wait_true.yml	false	ERROR (compilation)	error	0.064446594	0.07187733300088439	26.021888		ERROR (compilation)	error	0.062688719	0.07090283501020167	26.091520	
+goblint-regression/13-privatized_67-pthread_cond_wait_unknown_1_neg.yml	false	ERROR (compilation)	error	0.066946159	0.07457522099139169	26.034176		ERROR (compilation)	error	0.065088577	0.06904482100799214	26.083328	
+pthread/reorder_5.yml	false	false(unreach-call)	correct	3.069137808	3.1219178139872383	26.292224		false(unreach-call)	correct	3.06245009	3.069332564002252	26.218496	
+pthread/reorder_2.yml	false	false(unreach-call)	correct	0.145530038	0.1588542969984701	26.259456		false(unreach-call)	correct	0.139735671	0.14947787798882928	26.222592	
+pthread-C-DAC/pthread-numerical-integration.yml	true	true	correct	0.07576002	0.0841853459860431	26.329088		true	correct	0.071531908	0.08104929800902028	26.353664	
+pthread-complex/elimination_backoff_stack.yml	false	true	wrong	23.699987076	23.822693106994848	26.566656		true	wrong	24.200779471	24.20786516199587	26.611712	
+ldv-races/race-1_1-join.yml	true	true	correct	0.077161717	0.08532436599489301	26.300416		true	correct	0.069756351	0.07802327099489048	26.349568	
+ldv-races/race-1_3-join.yml	false	false(unreach-call)	correct	0.078365918	0.09580587699019816	26.341376		false(unreach-call)	correct	0.075524015	0.08241534799162764	26.349568	
+ldv-races/race-4_1-thread_local_vars.yml	true	true	correct	0.080072433	0.08598665399767924	26.345472		true	correct	0.076172593	0.08301675200345926	26.353664	
+ldv-linux-3.14-races/linux-3.14--drivers--spi--spi-tegra20-slink.ko.cil.yml	false	TIMEOUT	error	60.687815737	61.01322056198842	32.907264	cputime	TIMEOUT	error	61.006555533	61.01357647799887	32.845824	cputime
+ldv-races/race-3_1-container_of-global.yml	true	true	correct	0.077135317	0.090649719000794	26.345472		true	correct	0.077214046	0.08456318700336851	26.345472	
+ldv-races/race-3_2-container_of-global.yml	false	true	wrong	0.077926349	0.0875323039945215	26.365952		true	wrong	0.073291642	0.07987666199915111	26.476544	
+ldv-races/race-2_4-container_of.yml	false	true	wrong	0.080541855	0.0877512670122087	26.484736		true	wrong	0.072520385	0.08250793899060227	26.476544	
+libvsync/ttaslock.yml	true	OUT OF MEMORY	error	13.87025829	13.96117047900043	3999.997952	memory	OUT OF MEMORY	error	13.515699372	13.529235587993753	3999.997952	memory
+libvsync/semaphore.yml	true	true	correct	4.017012705	4.024298679010826	27.144192		true	correct	4.069526209	4.0734190399962245	27.131904	
+libvsync/bounded_mpmc_check_full.yml	true	true	correct	0.125048643	0.13120076300401706	27.099136		true	correct	0.123453579	0.1300247109902557	27.131904	
+libvsync/rec_ticketlock.yml	true	OUT OF MEMORY	error	13.986093098	13.997240937998868	3999.997952	memory	OUT OF MEMORY	error	13.936227057	13.942254444002174	3999.997952	memory
+libvsync/cnalock.yml	true	ERROR (unsupported property: invalid memory access)	error	0.119622361	0.12866887600102928	27.271168		ERROR (unsupported property: invalid memory access)	error	0.116620912	0.12035261200799141	27.262976	
+libvsync/hclhlock.yml	true	ERROR (unsupported property: invalid memory access)	error	0.121978377	0.13316824201319832	27.394048		ERROR (unsupported property: invalid memory access)	error	0.129125081	0.1419367040070938	27.344896	
+ldv-linux-3.14-races/linux-3.14--drivers--usb--misc--adutux.ko.cil.yml	false	ABORTED	error	37.605730396	37.73327439800778	33.632256		ABORTED	error	37.751839242	37.869732159000705	33.488896	
+pthread-driver-races/char_generic_nvram_nvram_unlocked_ioctl_write_nvram.yml	true	true	correct	0.165272563	0.18006188899744302	29.499392		true	correct	0.177803781	0.18742049699358176	29.421568	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_set.yml	true	true	correct	0.176591727	0.1910491659946274	29.888512		true	correct	0.191267044	0.20140793500468135	29.929472	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_get_pc8736x_gpio_set.yml	true	true	correct	0.177470147	0.18336121599713806	29.990912		true	correct	0.193498667	0.20687610798631795	29.908992	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_get.yml	true	true	correct	0.176031576	0.18661979399621487	29.880320		true	correct	0.193940811	0.21315004800271709	29.888512	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_configure_pc8736x_gpio_set.yml	true	true	correct	0.177859366	0.19110510899918154	29.892608		true	correct	0.19303454	0.20149039100215305	29.884416	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_current_pc8736x_gpio_get.yml	true	true	correct	0.17694168	0.19666088299709372	29.884416		true	correct	0.196918524	0.20282241099630482	29.888512	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_configure_pc8736x_gpio_current.yml	true	true	correct	0.177844839	0.18663277399900835	29.876224		true	correct	0.19428873	0.21377483700052835	30.015488	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_set.yml	false	true	wrong	0.180586018	0.19392961300036404	29.904896		true	wrong	0.196371739	0.2106975620117737	29.986816	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_current.yml	false	true	wrong	0.17836949	0.1844235439930344	29.892608		true	wrong	0.189228316	0.21968851899146102	29.888512	
+ldv-linux-3.14-races/linux-3.14--drivers--net--irda--nsc-ircc.ko.cil.yml	false	TIMEOUT	error	60.905501426	61.01048601399816	51.859456	cputime	TIMEOUT	error	60.989341844	61.013867850997485	51.863552	cputime
+ldv-linux-3.14-races/linux-3.14--drivers--media--platform--marvell-ccic--cafe_ccic.ko.cil-2.yml	false	SEGMENTATION FAULT	error	0.618972829	0.7327679250010988	40.656896		SEGMENTATION FAULT	error	0.636875994	0.7783528849977301	40.624128	
+goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	false	false(unreach-call)	correct	0.066073661	0.0731930150068365	25.980928		false(unreach-call)	correct	0.089728524	0.11123601500003133	31.195136	
+goblint-regression/36-apron_16-traces-unprot2_true.yml	true	true	correct	0.067835767	0.07653331699839327	25.899008		true	correct	0.098828268	0.10209765699983109	31.535104	
+goblint-regression/13-privatized_47-refine-protected2_true.yml	true	true	correct	0.068588074	0.07862210299936123	25.964544		true	correct	0.778089966	0.8118161920137936	33.849344	
+goblint-regression/36-apron_11-traces-max-simple_true.yml	true	true	correct	0.069090282	0.07612545300798956	26.087424		true	correct	1.728492649	1.7372479119949276	35.463168	
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	false	false(unreach-call)	correct	0.071837608	0.09019361100217793	26.087424		false(unreach-call)	correct	31.98732012	32.17449514499458	69.316608	
+goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	true	true	correct	0.067495572	0.07435232801071834	25.997312		true	correct	0.385405726	0.3923644400056219	32.337920	
+goblint-regression/13-privatized_18-first-reads_unknown_1_pos.yml	false	true	wrong	0.072939347	0.08013980800751597	26.087424		true	wrong	0.066571746	0.07385435499600135	26.087424	
+goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	false	false(unreach-call)	correct	0.070684114	0.07697032899886835	26.087424		false(unreach-call)	correct	0.064242432	0.0709094789926894	26.087424	
+goblint-regression/13-privatized_52-refine-protected-loop2-small_true.yml	true	TIMEOUT	error	61.001742445	61.01565125399793	121.860096	cputime	TIMEOUT	error	61.008017813	61.01587177999318	108.621824	cputime
+goblint-regression/13-privatized_18-first-reads_true.yml	true	true	correct	0.070599579	0.0785119299980579	26.071040		true	correct	0.067760335	0.07424707600148395	26.214400	
+goblint-regression/13-privatized_37-traces-ex-4_true.yml	true	true	correct	0.068937937	0.07636856600583997	25.964544		TIMEOUT	error	61.009202113	61.012412156007485	97.570816	cputime
+goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	false	false(unreach-call)	correct	0.074539	0.08644812299462501	26.046464		false(unreach-call)	correct	0.067006708	0.07289608799328562	26.091520	
+goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	false	false(unreach-call)	correct	0.067542828	0.07367635899572633	26.050560		false(unreach-call)	correct	0.065716042	0.07380921600270085	26.083328	
+goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	true	true	correct	0.070868689	0.07909575999656226	26.083328		TIMEOUT	error	60.928691069	61.01428037798905	97.509376	cputime
+goblint-regression/13-privatized_19-publish-precision_true.yml	true	true	correct	0.066314762	0.07286837199353613	26.087424		true	correct	0.066269107	0.07281489700835664	26.091520	
+goblint-regression/13-privatized_33-traces-v-matters_true.yml	true	true	correct	0.063949304	0.06896745300036855	26.087424		TIMEOUT	error	60.727605545	61.01400881698646	71.036928	cputime
+goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	true	true	correct	0.067733733	0.07276061200536788	26.071040		true	correct	0.065609011	0.072445814992534	26.185728	
+goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	false	false(unreach-call)	correct	0.065254642	0.07076065499859396	26.091520		TIMEOUT	error	61.009277372	61.020646958000725	101.318656	cputime
+goblint-regression/13-privatized_20-publish-regression_true.yml	true	true	correct	0.065326425	0.07022886200866196	26.083328		true	correct	0.06688485	0.07349925700691529	26.116096	
+goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	true	true	correct	0.069116288	0.07227237700135447	26.120192		true	correct	0.068446557	0.07645158800005447	26.083328	
+goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	true	true	correct	0.070222601	0.07917502800410148	26.165248		true	correct	0.067818209	0.07446122299006674	26.177536	
+goblint-regression/13-privatized_24-multiple-protecting_true.yml	true	true	correct	0.07093479	0.0784333249903284	26.050560		true	correct	0.068342277	0.07770335100940429	26.152960	
+weaver/popl20-figure1.wvr.yml	true	true	correct	0.061423266	0.07803295100165997	25.579520		true	correct	0.060441209	0.07063313800608739	25.595904	
+weaver/bench-exp1x3.wvr.yml	true	true	correct	0.063415789	0.07026773400139064	25.600000		true	correct	0.060282747	0.06840762999490835	25.616384	
+goblint-regression/36-apron_21-traces-cluster-based_true.yml	true	true	correct	0.06864775	0.077650706996792	26.103808		TIMEOUT	error	60.892419363	61.0221540969942	175.017984	cputime
+goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	true	true	correct	0.065132762	0.07654212199850008	26.120192		TIMEOUT	error	61.005976396	61.01408582399017	76.263424	cputime
+weaver/mult-comm.wvr.yml	true	OUT OF MEMORY	error	10.779473537	10.783347320000757	3999.997952	memory	OUT OF MEMORY	error	11.098723949	11.107776047996595	3999.997952	memory
+weaver/security.wvr.yml	true	true	correct	0.066316484	0.07526995299849659	25.538560		true	correct	0.063876543	0.07089038299454842	25.567232	
+weaver/test-easy6.wvr.yml	true	true	correct	0.062971708	0.07354300399310887	25.636864		true	correct	0.062524203	0.06930644199019298	25.559040	
+weaver/popl20-nonblocking-cntr.wvr.yml	true	true	correct	0.062561495	0.0683842109865509	25.563136		true	correct	0.065552936	0.0719157150015235	25.575424	
+weaver/parallel-misc-3.wvr.yml	true	true	correct	0.061861192	0.07379916399077047	25.604096		true	correct	0.065173055	0.07122059400717262	25.559040	
+weaver/popl20-nonblocking-cntr-alt.wvr.yml	true	true	correct	0.062319135	0.06927420198917389	25.550848		true	correct	0.060769976	0.07257388900325168	25.575424	
+weaver/chl-sre-symm.wvr.yml	true	true	correct	0.0638535	0.07051151800260413	25.571328		true	correct	0.065850758	0.07634468300966546	25.559040	
+goblint-regression/13-privatized_27-multiple-protecting2_true.yml	true	true	correct	0.078854669	0.0817288260004716	26.206208		true	correct	0.075671719	0.08670681700459681	26.222592	
+weaver/mult-flipped-dist.wvr.yml	true	OUT OF MEMORY	error	10.890099549	10.98320120900462	3999.997952	memory	OUT OF MEMORY	error	10.998602587	11.108480045993929	3999.997952	memory
+weaver/popl20-difference-det.wvr.yml	true	true	correct	0.06434576	0.07537498700548895	25.698304		true	correct	0.063773744	0.07168578200798947	25.702400	
+weaver/parallel-misc-4.wvr.yml	true	true	correct	0.062229889	0.0689358399977209	25.653248		true	correct	0.065803117	0.06789723300607875	25.559040	
+weaver/bench-exp2x3.wvr.yml	true	true	correct	0.068075637	0.07176775300467853	25.628672		true	correct	0.064163334	0.07075889900443144	25.559040	
+weaver/parallel-ticket-3.wvr.yml	true	true	correct	0.071694671	0.07614658398961183	25.628672		true	correct	0.064636762	0.07035400300810579	25.571328	
+weaver/bench-exp2x4.wvr.yml	true	true	correct	0.063476611	0.07024820400692988	25.694208		true	correct	0.065663002	0.07219808800437022	25.694208	
+weaver/parallel-misc-3-extended.wvr.yml	true	true	correct	0.105564544	0.11452253100287635	25.657344		true	correct	0.104429337	0.10732849899795838	25.563136	
+weaver/parallel-bluetooth.wvr.yml	true	true	correct	0.070062581	0.07730811400688253	25.559040		true	correct	0.06499335	0.07112054499157239	25.559040	
+weaver/bench-exp2x6.wvr.yml	true	true	correct	0.063441928	0.07035523900412954	25.604096		true	correct	0.06697333	0.07405384999583475	25.690112	
+weaver/parallel-ticket-4.wvr.yml	true	true	correct	0.064836417	0.07319729099981487	25.600000		true	correct	0.062498057	0.06977319400175475	25.616384	
+weaver/array-eq-symm.wvr.yml	true	true	correct	0.066428721	0.07674027999746613	25.694208		true	correct	0.063062535	0.06946793801034801	25.690112	
+weaver/fibonacci.wvr.yml	true	true	correct	0.06639773	0.07505238900193945	25.628672		true	correct	0.0654144	0.07183325401274487	25.698304	
+weaver/popl20-mult-4.wvr.yml	true	TIMEOUT	error	60.979710596	61.017346351000015	120.971264	cputime	TIMEOUT	error	61.011587822	61.018825949999155	117.919744	cputime
+weaver/chl-file-item-symm.wvr.yml	true	true	correct	0.065664775	0.0730191519978689	25.694208		true	correct	0.064211771	0.06996912800241262	25.690112	
+weaver/chl-simpl-str-trans.wvr.yml	true	true	correct	0.065134159	0.07259690499631688	25.665536		true	correct	0.067667027	0.07559647799644154	25.690112	
+weaver/bench-exp2x9.wvr.yml	true	true	correct	0.066879712	0.07932990000699647	25.694208		true	correct	0.064111488	0.07213965900882613	25.694208	
+weaver/unroll-2.wvr.yml	true	true	correct	0.064952847	0.07233378899400122	25.665536		true	correct	0.06367645	0.07220558199333027	25.694208	
+weaver/popl20-simple-queue.wvr.yml	true	true	correct	0.068480009	0.07717498400597833	25.579520		true	correct	0.063511315	0.07040480599971488	25.690112	
+weaver/chl-simpl-str-subst.wvr.yml	true	true	correct	0.064438255	0.07144025499292184	25.694208		true	correct	0.064321117	0.07074998700409196	25.698304	
+weaver/popl20-more-sum-array-hom.wvr.yml	true	true	correct	0.067034826	0.07625812900369056	25.690112		true	correct	0.064980737	0.07254176399146672	25.812992	
+weaver/unroll-cond-2.wvr.yml	true	true	correct	0.064749367	0.07203673900221474	25.661440		true	correct	0.063969012	0.07040814000356477	25.649152	
+weaver/popl20-simple-array-sum.wvr.yml	true	true	correct	0.070663424	0.07947329600574449	25.690112		true	correct	0.062871632	0.06951785500859842	25.694208	
+weaver/popl20-more-min-le-max.wvr.yml	true	true	correct	0.066874844	0.07392128699575551	25.612288		true	correct	0.062790545	0.0695343739935197	25.690112	
+weaver/popl20-more-array-sum.wvr.yml	false	true	wrong	0.07092617	0.07437967699661385	25.616384		true	wrong	0.069384857	0.07833983401360456	25.698304	
+weaver/popl20-more-max-array.wvr.yml	true	true	correct	0.065107691	0.07680768899444956	25.690112		true	correct	0.065359274	0.0702012069959892	25.702400	
+weaver/unroll-4.wvr.yml	true	true	correct	0.064740681	0.07303019099344965	25.649152		true	correct	0.061637685	0.06960408200393431	25.661440	
+weaver/popl20-bad-three-array-sum-alt.wvr.yml	true	true	correct	0.0618686	0.07093435800925363	25.702400		true	correct	0.066828591	0.07130900300398935	25.722880	
+weaver/popl20-more-max-array-hom.wvr.yml	true	true	correct	0.065970346	0.07354462900548242	25.690112		true	correct	0.063944172	0.07021196899586357	25.608192	
+weaver/parallel-min-max-1.wvr.yml	true	OUT OF MEMORY	error	15.43488037	15.45861767999304	3999.997952	memory	OUT OF MEMORY	error	15.017626027	15.025747300998773	3999.997952	memory
+weaver/chl-array-int-symm.wvr.yml	true	true	correct	0.065438187	0.07890196899825241	25.673728		true	correct	0.064059566	0.07080739100638311	25.690112	
+weaver/unroll-5.wvr.yml	true	true	correct	0.065114278	0.07301929799723439	25.751552		true	correct	0.065429145	0.07159898499958217	25.640960	
+weaver/popl20-more-vector-add.wvr.yml	true	true	correct	0.066775059	0.0733091010042699	25.690112		true	correct	0.065663788	0.07190003400319256	25.694208	
+weaver/parallel-ticket-6.wvr.yml	true	true	correct	0.062026296	0.06851658500090707	25.706496		true	correct	0.064682268	0.07302099699154496	25.698304	
+weaver/chl-file-item-trans.wvr.yml	true	true	correct	0.067366873	0.07473870800458826	25.702400		true	correct	0.06645799	0.07497133199649397	25.694208	
+weaver/popl20-queue-add-2.wvr.yml	true	true	correct	0.064246487	0.07064841699320823	25.595904		true	correct	0.061985194	0.06873865899979137	25.690112	
+weaver/popl20-min-max-dec.wvr.yml	true	true	correct	0.065715776	0.07081528801063541	25.628672		true	correct	0.064072016	0.0719869180029491	25.677824	
+weaver/chl-time-trans.wvr.yml	true	true	correct	0.069626305	0.07585077900148463	25.702400		true	correct	0.066702441	0.07156670998665504	25.677824	
+weaver/array-eq-trans.wvr.yml	true	true	correct	0.06431838	0.07298939100292046	25.628672		true	correct	0.063237296	0.07344907999504358	25.710592	
+weaver/popl20-three-array-sum.wvr.yml	true	true	correct	0.06528464	0.07244086400896776	25.632768		true	correct	0.063977821	0.0706107570003951	25.694208	
+weaver/unroll-cond-4.wvr.yml	true	true	correct	0.066210816	0.0728757239994593	25.669632		true	correct	0.065128488	0.07368203101214021	25.694208	
+weaver/chl-collitem-symm.wvr.yml	true	true	correct	0.066859771	0.07082660999731161	25.681920		true	correct	0.066797674	0.07304983799986076	25.702400	
+weaver/chl-word-symm.wvr.yml	true	OUT OF MEMORY	error	14.518601577	14.549882487001014	3999.997952	memory	OUT OF MEMORY	error	14.204854562	14.213731148993247	3999.997952	memory
+weaver/chl-file-item-subst.wvr.yml	true	true	correct	0.067153166	0.07531692099291831	25.731072		true	correct	0.065489865	0.0762302160001127	25.702400	
+weaver/chl-array-int-trans.wvr.yml	true	true	correct	0.062817553	0.07338421999884304	25.690112		true	correct	0.066008425	0.0808828420122154	25.690112	
+weaver/popl20-min-max-inc-dec.wvr.yml	true	true	correct	0.06734662	0.07584389399562497	25.698304		true	correct	0.063932392	0.07089776199427433	25.702400	
+weaver/popl20-more-dec-subseq.wvr.yml	true	true	correct	0.064861047	0.07403673400403932	25.694208		true	correct	0.069078259	0.079597146002925	25.706496	
+weaver/chl-exp-term-subst.wvr.yml	true	true	correct	0.064685921	0.07584149100875948	25.702400		true	correct	0.065767402	0.07666904000507202	25.694208	
+weaver/unroll-cond-5.wvr.yml	true	true	correct	0.069150863	0.08142381299694534	25.739264		true	correct	0.064879805	0.07157020900922362	25.698304	
+weaver/popl20-two-queue.wvr.yml	true	true	correct	0.065571916	0.07171402299718466	25.673728		true	correct	0.062091251	0.06879150899476372	25.653248	
+weaver/parallel-lamport.wvr.yml	true	true	correct	0.068193398	0.0703962230036268	25.694208		true	correct	0.063034121	0.069836116002989	25.690112	
+weaver/popl20-prod-cons.wvr.yml	true	true	correct	0.064269034	0.07240565300162416	25.731072		true	correct	0.063946613	0.06919104099506512	25.661440	
+weaver/popl20-more-multiply-verify.wvr.yml	true	OUT OF MEMORY	error	14.538565376	14.553060473001096	3999.997952	memory	OUT OF MEMORY	error	14.208040418	14.22558485600166	3999.997952	memory
+weaver/popl20-send-receive.wvr.yml	true	true	correct	0.064279263	0.07046588799858	25.591808		true	correct	0.064979982	0.07263477599190082	25.702400	
+weaver/chl-chromosome-trans.wvr.yml	true	true	correct	0.06795941	0.0760065219947137	25.706496		true	correct	0.067389917	0.07781282000360079	25.690112	
+weaver/chl-word-trans.wvr.yml	true	OUT OF MEMORY	error	14.389642931	14.413659589990857	3999.997952	memory	OUT OF MEMORY	error	14.260532489	14.267025631997967	3999.997952	memory
+weaver/popl20-bad-dot-product-alt.wvr.yml	true	true	correct	0.069031474	0.07485478100716136	25.833472		true	correct	0.064320613	0.07103547900624108	25.698304	
+weaver/chl-word-subst.wvr.yml	true	OUT OF MEMORY	error	14.461944589	14.481553167002858	3999.997952	memory	OUT OF MEMORY	error	14.558974233	14.628525017993525	3999.997952	memory
+weaver/popl20-queue-add-3.wvr.yml	true	true	correct	0.071433097	0.07698697499290574	25.743360		true	correct	0.064119141	0.07037507199856918	25.694208	
+weaver/parallel-barrier-loop.wvr.yml	false	true	wrong	0.067419058	0.07749687999603339	25.772032		true	wrong	0.064015081	0.07397321501048282	25.698304	
+weaver/chl-node-symm.wvr.yml	true	true	correct	0.068058571	0.07851897500222549	25.694208		true	correct	0.063238337	0.07075192400952801	25.702400	
+weaver/parallel-parallel-sum-equiv.wvr.yml	true	true	correct	0.067453699	0.0764039609930478	25.698304		true	correct	0.06371328	0.07006446599552874	25.743360	
+weaver/chl-name-comparator-symm.wvr.yml	true	true	correct	0.065824481	0.08058901899494231	25.821184		true	correct	0.061947012	0.06787777000863571	25.788416	
+weaver/popl20-bad-ring-nondet.wvr.yml	true	true	correct	0.069402131	0.07569745900400449	25.743360		true	correct	0.064726888	0.07011861799401231	25.825280	
+weaver/popl20-bad-buffer-mult-alt2.wvr.yml	true	OUT OF MEMORY	error	14.559278754	14.621986427999218	3999.997952	memory	OUT OF MEMORY	error	14.355275496	14.365644538003835	3999.997952	memory
+weaver/popl20-more-buffer-mult3.wvr.yml	false	OUT OF MEMORY	error	14.739984789	14.827635398993152	3999.997952	memory	OUT OF MEMORY	error	14.777744854	14.79524195000704	3999.997952	memory
+weaver/chl-node-trans.wvr.yml	true	true	correct	0.070364457	0.077041829994414	25.821184		true	correct	0.065560357	0.07117438000568654	25.985024	
+weaver/chl-node-subst.wvr.yml	true	true	correct	0.0675279	0.07473010900139343	25.821184		true	correct	0.065620368	0.07024489999457728	25.825280	
+weaver/popl20-bad-buffer-mult-alt3.wvr.yml	false	OUT OF MEMORY	error	14.803900208	14.826076273006038	3999.997952	memory	OUT OF MEMORY	error	14.420445231	14.464771566010313	3999.997952	memory
+weaver/popl20-more-buffer-series3.wvr.yml	false	true	wrong	0.068571636	0.07568720799463335	25.776128		true	wrong	0.068857816	0.07528629100124817	25.837568	
+weaver/popl20-commit-1.wvr.yml	true	true	correct	0.071219771	0.08620507000887301	25.825280		true	correct	0.064963675	0.07135795200883877	25.788416	
+weaver/popl20-prod-cons-eq.wvr.yml	true	true	correct	0.070501311	0.07760599799803458	25.776128		true	correct	0.065796076	0.07330511100008152	25.755648	
+weaver/chl-name-comparator-subst.wvr.yml	true	true	correct	0.07307794	0.07837396999821067	25.796608		true	correct	0.06925134	0.07597105499007739	25.833472	
+weaver/popl20-bad-commit-1.wvr-bad.yml	true	true	correct	0.069434341	0.07480694899277296	25.829376		true	correct	0.064788112	0.07197722399723716	25.825280	
+weaver/chl-nzb-file-trans.wvr.yml	true	true	correct	0.093393475	0.10157469799742103	25.968640		true	correct	0.09060084	0.09935482699074782	25.985024	
+weaver/chl-nzb-file-subst.wvr.yml	true	true	correct	0.098816768	0.10370745899854228	25.964544		true	correct	0.089651495	0.09579493501223624	26.025984	
+weaver/chl-poker-hand-trans.wvr.yml	true	true	correct	0.112461717	0.12087853699631523	26.722304		true	correct	0.112020819	0.12126132199773565	26.742784	
+pthread-ext/28_buggy_simple_loop1_vf.yml	false	TIMEOUT	error	60.999269735	61.01176494199899	25.968640	cputime	TIMEOUT	error	60.986394723	61.0097445089923	25.956352	cputime
+pthread-ext/14_spin2003.yml	true	true	correct	0.066866983	0.07407798498752527	26.087424		true	correct	0.065886791	0.07536411000182852	26.083328	
+pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	true	true	correct	0.074153252	0.08122021000599489	26.083328		true	correct	0.0673099	0.0723871189984493	26.087424	
+pthread-ext/45_monabsex1_vs.yml	true	true	correct	0.068301364	0.07613589899847284	26.083328		true	correct	0.064800983	0.07191849099763203	25.956352	
+pthread-ext/31_simple_loop5_vs.yml	true	TIMEOUT	error	61.126147402	61.17742635900504	2641.068032	cputime	TIMEOUT	error	61.088633946	61.172184096009005	2632.396800	cputime
+pthread/stateful01-2.yml	true	true	correct	0.070965336	0.07711343200935517	26.054656		true	correct	0.067090251	0.07034748299338389	26.189824	
+pthread-ext/01b_inc.yml	true	true	correct	0.065977334	0.07231522099755239	26.091520		true	correct	0.064892772	0.07133566700213123	26.017792	
+pthread/triangular-1.yml	true	true	correct	5.910812963	5.946755295997718	26.107904		true	correct	6.140367976	6.2328015609964496	26.095616	
+pthread-ext/09_fmaxsym-zero.yml	true	true	correct	0.065905782	0.0756674629956251	26.058752		true	correct	0.065062963	0.07161473599262536	26.083328	
+pthread-ext/35_double_lock_p3_vs.yml	true	true	correct	0.071042576	0.07712284200533759	26.009600		true	correct	0.064299367	0.07062729900644626	26.013696	
+pthread/triangular-longer-2.yml	false	TIMEOUT	error	60.974343104	61.00960926400148	26.091520	cputime	TIMEOUT	error	60.605247105	61.01043404500524	26.103808	cputime
+pthread-ext/02_inc_cas.yml	true	true	correct	0.071336298	0.07808398100314662	26.132480		true	correct	0.066163596	0.07551886899454985	26.083328	
+goblint-regression/28-race_reach_21-deref_read_racing.yml	false	ERROR (unsupported property: invalid memory access)	error	3.112143332	3.122918616005336	56.610816		ERROR (unsupported property: invalid memory access)	error	3.08145635	3.092395020998083	57.090048	
+pthread-ext/11_fmaxsymopt-zero.yml	true	true	correct	0.071786119	0.07395827599975746	26.091520		true	correct	0.066561165	0.0748599080106942	26.062848	
+pthread-ext/48_ticket_lock_low_contention_vs.yml	true	true	correct	0.067493792	0.07363194900972303	26.128384		true	correct	0.066411622	0.0807979960081866	26.046464	
+goblint-regression/28-race_reach_37-indirect_racing.yml	false	false(unreach-call)	correct	11.863671643	11.874645067000529	2061.230080		false(unreach-call)	correct	11.769003383	11.858691532004741	2061.299712	
+goblint-regression/28-race_reach_46-escape_racefree.yml	true	true	correct	0.068087917	0.07997831299144309	26.091520		true	correct	0.066086938	0.07378993999736849	26.083328	
+pthread-ext/37_stack_lock_p0_vs_concur.yml	true	true	correct	0.073211152	0.08079292099864688	26.165248		true	correct	0.075644972	0.08304968800803181	26.284032	
+goblint-regression/28-race_reach_05-lockfuns_racefree.yml	true	TIMEOUT	error	61.20050684	61.26011301900144	3988.025344	cputime	TIMEOUT	error	61.247225421	61.26099303600495	3988.299776	cputime
+pthread-ext/11_fmaxsymopt.yml	true	true	correct	0.06908139	0.07945538900094107	26.099712		true	correct	0.066033257	0.07576871200581081	26.083328	
+goblint-regression/28-race_reach_02-simple_racefree.yml	true	TIMEOUT	error	60.949069532	61.268223336010124	3964.362752	cputime	TIMEOUT	error	61.24526686	61.27268548699794	3988.406272	cputime
+goblint-regression/28-race_reach_12-ptr_racefree.yml	true	TIMEOUT	error	61.263429977	61.28947532099846	3988.299776	cputime	TIMEOUT	error	61.264292092	61.27391893201275	3988.340736	cputime
+pthread-deagle/circular_buffer_bad.yml	false	false(unreach-call)	correct	0.07378503	0.08165679599915165	26.185728		false(unreach-call)	correct	0.069525395	0.07562558799691033	26.222592	
+pthread/fib_safe-6.yml	true	true	correct	18.110981445	18.129398608012707	26.083328		true	correct	18.199573562	18.220985011997982	26.181632	
+pthread/fib_unsafe-5.yml	false	false(unreach-call)	correct	0.966715038	0.9725475110026309	26.087424		false(unreach-call)	correct	0.957182724	0.9660037780122366	26.091520	
+pthread/fib_unsafe-7.yml	false	false(unreach-call)	correct	25.43901551	25.45404027000768	26.083328		false(unreach-call)	correct	25.543926808	25.551390613007243	26.071040	
+pthread/fib_safe-11.yml	true	TIMEOUT	error	60.986958979	61.0128128810029	26.083328	cputime	TIMEOUT	error	60.992741236	61.0111264839943	26.087424	cputime
+pthread/fib_unsafe-10.yml	false	TIMEOUT	error	60.989901511	61.01161037800193	26.148864	cputime	TIMEOUT	error	60.899304132	61.01367062999634	26.099712	cputime
+pthread/fib_unsafe-12.yml	false	TIMEOUT	error	60.731381015	61.012743543004035	26.087424	cputime	TIMEOUT	error	60.995920347	61.010160666992306	26.214400	cputime
+goblint-regression/28-race_reach_24-sound_lock_racing.yml	false	false(unreach-call)	correct	11.986115088	11.9962564400048	2061.213696		false(unreach-call)	correct	11.887295457	11.894692436006153	2061.209600	
+pthread-ext/03_incdec.yml	true	true	correct	0.0724752	0.07916712798760273	26.087424		true	correct	0.068654322	0.07296528198639862	26.091520	
+pthread-deagle/circular_buffer_ok.yml	true	true	correct	2.898253814	2.904656529004569	26.234880		true	correct	2.93378216	2.961343463990488	26.214400	
+goblint-regression/28-race_reach_20-callback_racefree.yml	true	TIMEOUT	error	61.259294205	61.28920385199308	3983.138816	cputime	TIMEOUT	error	60.342230532	60.357080289992155	3999.997952	memory
+goblint-regression/28-race_reach_23-sound_unlock_racing.yml	false	ERROR (unsupported external)	error	1.271931592	1.2814434400061145	26.206208		ERROR (unsupported external)	error	1.262556455	1.268676335006603	26.218496	
+goblint-regression/28-race_reach_04-munge_racefree.yml	true	OUT OF MEMORY	error	10.601676011	10.61053206800716	3999.997952	memory	OUT OF MEMORY	error	10.586481322	10.659515286999522	3999.997952	memory
+goblint-regression/28-race_reach_10-ptrmunge_racefree.yml	true	OUT OF MEMORY	error	10.708623338	10.7183696560096	3999.997952	memory	OUT OF MEMORY	error	10.459910651	10.4682279080007	3999.997952	memory
+goblint-regression/28-race_reach_60-invariant_racefree.yml	true	TIMEOUT	error	61.263477327	61.28522378200432	3987.234816	cputime	TIMEOUT	error	61.261576353	61.28741847600031	3987.271680	cputime
+pthread-lit/qw2004-2b.yml	false	false(unreach-call)	correct	0.075913384	0.0826942089915974	26.062848		TIMEOUT	error	60.597439792	61.03192638800829	297.779200	cputime
+pthread-ext/26_stack_cas_longer-2.yml	true	TIMEOUT	error	61.007314569	61.01964709999447	108.335104	cputime	TIMEOUT	error	60.875925885	61.018771403003484	99.893248	cputime
+pthread-ext/26_stack_cas_longer-1.yml	false	false(unreach-call)	correct	0.08648055	0.09557843398943078	26.484736		false(unreach-call)	correct	0.080716505	0.08801024900458287	26.488832	
+pthread-ext/25_stack.yml	true	TIMEOUT	error	61.003863757	61.02081857100711	106.446848	cputime	TIMEOUT	error	61.009733306	61.01822331199946	97.878016	cputime
+pthread-ext/25_stack_longest-1.yml	true	TIMEOUT	error	60.988733421	61.02203677700891	114.253824	cputime	TIMEOUT	error	61.006187441	61.01755555800628	101.310464	cputime
+pthread-ext/25_stack_longest-2.yml	false	false(unreach-call)	correct	0.118517406	0.1223083850054536	26.316800		false(unreach-call)	correct	0.113306988	0.11883067901362665	26.374144	
+goblint-regression/28-race_reach_42-trylock2_racefree.yml	true	TIMEOUT	error	61.092164545	61.15817661600886	3896.602624	cputime	TIMEOUT	error	61.135428981	61.146189434002736	3896.606720	cputime
+pthread-wmm/safe010_tso.yml	true	true	correct	0.231928585	0.25046872900566086	26.087424		TIMEOUT	error	61.006845711	61.03044776299794	296.243200	cputime
+pthread-wmm/safe022_tso.yml	true	true	correct	0.236418076	0.2581663729943102	26.234880		TIMEOUT	error	60.570407177	61.02740665699821	298.713088	cputime
+pthread-wmm/safe036.yml	true	true	correct	0.874892021	0.9058098609966692	26.095616		TIMEOUT	error	60.431956805	61.033839468000224	308.862976	cputime
+pthread-wmm/safe017_tso.yml	true	true	correct	49.200664957	49.21429428200645	26.087424		ABORTED	error	0.085050183	0.21775749100197572	31.059968	
+pthread-wmm/safe026_tso.yml	true	true	correct	49.988859347	50.155578086996684	26.091520		true	correct	50.456886096	50.47099530498963	32.264192	
+pthread-wmm/safe009_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	true	correct	48.920386511	48.94686115499644	26.083328		true	correct	50.44358041	50.82152187000611	32.141312	
+pthread-wmm/safe001_tso.yml	true	TIMEOUT	error	60.993294263	61.00948499899823	26.083328	cputime	ABORTED	error	0.084080321	0.2169370009942213	31.084544	
+pthread-wmm/safe008_tso.yml	true	TIMEOUT	error	60.992351172	61.01705387700349	26.083328	cputime	ABORTED	error	0.082638874	0.21697243400558364	31.088640	
+pthread-wmm/safe020_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.997482602	61.008353001991054	26.185728	cputime	ABORTED	error	0.082429298	0.2196082650043536	31.084544	
+pthread-wmm/safe013_tso.yml	true	TIMEOUT	error	60.992293888	61.01236634400266	26.157056	cputime	TIMEOUT	error	60.991220048	61.02862974800519	304.824320	cputime
+pthread-wmm/safe002_tso.yml	true	TIMEOUT	error	60.999914284	61.01189634000184	26.193920	cputime	TIMEOUT	error	61.00983987	61.03116308200697	307.482624	cputime
+pthread-wmm/safe012_tso.yml	true	TIMEOUT	error	60.959785991	61.01657904101012	26.083328	cputime	ABORTED	error	0.081087627	0.21647018200019374	31.051776	
+pthread-wmm/safe032_tso.yml	true	TIMEOUT	error	60.997667084	61.0103683549969	26.132480	cputime	TIMEOUT	error	61.023924858	61.033492215006845	312.582144	cputime
+pthread-wmm/safe014_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.997968391	61.01254581499961	26.120192	cputime	TIMEOUT	error	61.022414023	61.031791090994375	308.453376	cputime
+pthread-wmm/safe005_tso.yml	true	TIMEOUT	error	61.006427615	61.01400216598995	26.128384	cputime	TIMEOUT	error	61.023139312	61.028546814006404	308.015104	cputime
+pthread-wmm/safe024_tso.yml	true	TIMEOUT	error	60.968879345	61.01353833900066	26.083328	cputime	ABORTED	error	0.084561009	0.21831349600688554	31.064064	
+pthread-atomic/szymanski.yml	true	true	correct	0.073658298	0.08041039798990823	26.083328		true	correct	0.071058954	0.07823023998935241	26.083328	
+pthread-wmm/safe037.yml	true	TIMEOUT	error	60.784504502	61.01134287599416	26.079232	cputime	TIMEOUT	error	60.471921664	61.029503579993616	310.706176	cputime
+pthread-wmm/safe016_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	61.001384059	61.010463444996276	26.218496	cputime	TIMEOUT	error	61.022457172	61.03236268500041	308.502528	cputime
+pthread-wmm/safe019_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	60.988133906	61.012592683997354	26.144768	cputime	TIMEOUT	error	61.02137619	61.033549526997376	310.464512	cputime
+pthread-atomic/dekker.yml	true	true	correct	0.07117582	0.07793089300685097	26.152960		true	correct	0.069681473	0.07682509899314027	26.087424	
+pthread-wmm/thin002_pso.oepc_pso.opt_tso.oepc_tso.opt.yml	true	TIMEOUT	error	61.001445803	61.016125737005495	26.128384	cputime	TIMEOUT	error	61.032701292	61.044010320998495	593.358848	cputime
+pthread-theta/unwind3-100.yml	false	TIMEOUT	error	60.616323035	61.01417449300061	48.107520	cputime	TIMEOUT	error	61.008635367	61.017710090993205	48.877568	cputime
+pthread-theta/unwind1-1.yml	false	true	wrong	0.07474925	0.07866919699881691	26.087424		true	wrong	0.064636177	0.07094988999597263	26.091520	
+pthread-theta/exponential-4.yml	true	TIMEOUT	error	60.800207984	61.009207230003085	26.095616	cputime	TIMEOUT	error	61.003740397	61.009367336999276	26.132480	cputime
+pthread-theta/unwind1-nondet.yml	false	true	wrong	0.069015954	0.07483337100711651	26.087424		true	wrong	0.066605485	0.07806764901033603	26.214400	
+pthread-theta/unwind2-1.yml	false	false(unreach-call)	correct	0.068033449	0.07491034899430815	26.116096		false(unreach-call)	correct	0.069737261	0.07679894600005355	26.218496	
+pthread-theta/unwind2-nondet.yml	false	true	wrong	0.069791424	0.07266597299894784	26.218496		true	wrong	0.068833941	0.0803885019995505	26.206208	
+pthread/butterfly.yml	true	true	correct	13.396483346	13.405508324998664	26.161152		true	correct	13.548603129	13.614322698005708	26.218496	
+pthread-ext/43_NetBSD_sysmon_power_sliced.yml	true	true	correct	0.07670213	0.08563111801049672	26.214400		true	correct	0.076026919	0.08822460199007764	26.230784	
+pthread-wmm/mix034_pso.opt_tso.opt.yml	false	false(unreach-call)	correct	1.453755326	1.4589280140062328	26.357760		TIMEOUT	error	61.027035255	61.03430002499954	340.578304	cputime
+pthread-wmm/safe029_power.opt_pso.opt_rmo.opt.yml	false	false(unreach-call)	correct	0.32621785	0.34703930698742624	26.411008		TIMEOUT	error	61.023356895	61.03003314200032	335.663104	cputime
+pthread-wmm/rfi003_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	3.509562831	3.600472977006575	26.415104		TIMEOUT	error	60.458602626	61.03568860300584	334.557184	cputime
+pthread-wmm/mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	0.124273501	0.12642394000431523	26.472448		TIMEOUT	error	61.023368547	61.03229150699917	339.259392	cputime
+pthread-wmm/mix031.opt.yml	false	false(unreach-call)	correct	8.064177432	8.070963959005894	26.349568		TIMEOUT	error	61.018241834	61.026468490003026	213.491712	cputime
+pthread-wmm/safe022_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	0.121098883	0.1312681679992238	26.333184		TIMEOUT	error	60.418838609	61.03654284498771	338.976768	cputime
+pthread-wmm/rfi007_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	0.160280554	0.17132369299361017	26.382336		TIMEOUT	error	60.896483119	61.03562714300642	339.480576	cputime
+pthread-wmm/safe006_rmo.oepc_rmo.opt-thin000_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	0.076698856	0.08337318900157697	26.357760		false(unreach-call)	correct	0.080965402	0.0900237010064302	26.353664	
+pthread-wmm/mix041_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	0.217997779	0.22216517500055488	26.349568		TIMEOUT	error	61.020532435	61.03094693800085	350.720000	cputime
+pthread-wmm/safe034_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	error	60.991743306	61.00990008300869	26.423296	cputime	TIMEOUT	error	61.022030902	61.03076392499497	352.407552	cputime
+pthread-wmm/rfi001_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	correct	1.277607002	1.2833638370066183	26.370048		TIMEOUT	error	61.02474067	61.03255241199804	351.424512	cputime
+pthread-wmm/mix038.opt.yml	false	TIMEOUT	error	61.005055261	61.010975296012475	26.415104	cputime	TIMEOUT	error	61.025836435	61.034402583987685	355.528704	cputime
+pthread-wmm/mix035_pso.opt_tso.opt.yml	false	TIMEOUT	error	60.770060541	61.01447734600515	26.435584	cputime	TIMEOUT	error	60.989455588	61.02958560999832	211.869696	cputime
+pthread-wmm/mix009.oepc.yml	false	false(unreach-call)	correct	0.169672808	0.17464463600481395	26.447872		TIMEOUT	error	60.607622872	61.03295145800803	352.038912	cputime
+pthread-wmm/mix031.oepc.yml	false	false(unreach-call)	correct	0.234007742	0.24133937699662056	26.411008		TIMEOUT	error	61.020914049	61.03323886700673	353.980416	cputime
+pthread-wmm/safe031_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	error	60.998805716	61.01084880898998	26.386432	cputime	TIMEOUT	error	61.023881027	61.03312912999536	340.635648	cputime
+pthread-wmm/safe031_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	61.004516752	61.016858818999026	26.378240	cputime	TIMEOUT	error	61.031356543	61.039920686002006	359.587840	cputime
+pthread-wmm/mix051_pso.opt_rmo.opt_tso.opt.yml	false	TIMEOUT	error	60.99941733	61.0124168839975	26.456064	cputime	TIMEOUT	error	61.028072433	61.03717013700225	359.464960	cputime
+pthread-wmm/safe012_pso.oepc_pso.opt_rmo.opt.yml	false	TIMEOUT	error	61.006423695	61.01202638199902	26.435584	cputime	TIMEOUT	error	61.026651751	61.03544357800274	351.850496	cputime
+pthread-wmm/safe018_rmo.oepc.yml	false	false(unreach-call)	correct	0.084900407	0.08946253400063142	26.349568		false(unreach-call)	correct	0.083427914	0.09232279899879359	26.361856	
+pthread-wmm/mix025_pso.opt_rmo.opt.yml	false	TIMEOUT	error	60.920964897	61.01276025599509	26.353664	cputime	TIMEOUT	error	60.716713598	61.0340628180129	358.412288	cputime
+pthread-wmm/safe024_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	TIMEOUT	error	60.993136847	61.00799695900059	26.464256	cputime	TIMEOUT	error	61.022927698	61.0326961880055	356.827136	cputime
+pthread-wmm/mix042.opt.yml	false	TIMEOUT	error	61.006137848	61.01290466901264	26.476544	cputime	TIMEOUT	error	61.028407308	61.03916388799553	350.724096	cputime
+pthread-wmm/mix040.opt.yml	false	TIMEOUT	error	61.003441716	61.00968036901031	26.357760	cputime	TIMEOUT	error	61.026736142	61.03394217599998	346.112000	cputime
+pthread-wmm/mix016_power.opt_rmo.opt.yml	false	TIMEOUT	error	61.003393287	61.010730021997006	26.460160	cputime	TIMEOUT	error	61.020325201	61.03001370000129	212.901888	cputime
+pthread-wmm/mix037.opt.yml	false	TIMEOUT	error	61.006935341	61.015346537998994	26.353664	cputime	TIMEOUT	error	61.027430754	61.036323535998235	344.952832	cputime
+pthread-wmm/safe017_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	3.197444969	3.257726472002105	26.480640		TIMEOUT	error	61.026396375	61.032946802006336	354.381824	cputime
+pthread-wmm/safe011_power.opt_pso.opt.yml	false	TIMEOUT	error	60.953521183	61.012925918010296	26.464256	cputime	TIMEOUT	error	61.027569249	61.03885341799469	354.562048	cputime
+pthread-wmm/safe011_power.oepc_pso.oepc_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	8.782129861	8.792505568999331	26.476544		TIMEOUT	error	60.617421802	61.03713615798915	352.960512	cputime
+pthread-wmm/safe026_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	false	false(unreach-call)	correct	3.961725629	3.9677470729948254	26.476544		TIMEOUT	error	61.025857992	61.030192452992196	352.501760	cputime
+pthread-wmm/mix057_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml	false	TIMEOUT	error	61.004170227	61.01512647299387	26.480640	cputime	TIMEOUT	error	61.002706501	61.04033345000062	354.172928	cputime
+pthread-wmm/mix052_tso.oepc.yml	false	TIMEOUT	error	60.999458315	61.01420281700848	26.492928	cputime	TIMEOUT	error	60.536286694	61.032684953999706	366.616576	cputime
+pthread-wmm/safe021_power.opt_pso.opt.yml	false	TIMEOUT	error	60.97932723	61.01186679600505	26.492928	cputime	TIMEOUT	error	60.820776615	61.04114223399665	346.857472	cputime
+pthread-wmm/mix055.opt.yml	false	TIMEOUT	error	61.002107658	61.01367529100389	26.476544	cputime	TIMEOUT	error	61.02550505	61.036191387000144	361.119744	cputime
+pthread-wmm/mix052_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	10.998402861	11.073432500998024	26.480640		TIMEOUT	error	61.021409754	61.03342535000411	348.319744	cputime
+pthread-wmm/mix028_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	error	61.006382954	61.012907517986605	26.501120	cputime	TIMEOUT	error	61.027216106	61.0352188720135	360.275968	cputime
+pthread-wmm/mix019_tso.oepc.yml	false	TIMEOUT	error	61.004208386	61.01524968800368	26.484736	cputime	TIMEOUT	error	61.029194227	61.03620763300569	354.131968	cputime
+pthread-wmm/mix019_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	24.327435267	24.355920921007055	26.451968		TIMEOUT	error	60.800483183	61.035922486000345	351.735808	cputime
+pthread-wmm/mix025_power.oepc_power.opt_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	false	false(unreach-call)	correct	24.273566448	24.39007692800078	26.443776		TIMEOUT	error	60.598763199	61.028717879002215	230.039552	cputime
+pthread-wmm/mix049_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt-podwr001_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt_tso.oepc_tso.opt.yml	false	false(unreach-call)	correct	11.137563704	11.170593262999319	26.484736		TIMEOUT	error	61.016471686	61.02494262700202	223.674368	cputime
+pthread-wmm/mix016.oepc.yml	false	false(unreach-call)	correct	24.648992497	24.65494029200636	26.447872		TIMEOUT	error	61.00410609	61.026171110002906	233.291776	cputime
+pthread-wmm/mix038_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	48.766300955	48.77397278200078	26.480640		TIMEOUT	error	61.028869232	61.03797613600909	357.388288	cputime
+pthread-wmm/mix046.opt.yml	false	TIMEOUT	error	60.797041958	61.01049733800755	26.480640	cputime	TIMEOUT	error	61.028651534	61.03836839100404	366.522368	cputime
+pthread-wmm/mix035.oepc.yml	false	false(unreach-call)	correct	49.887559406	49.935664983000606	26.488832		TIMEOUT	error	60.978301129	61.0340681450034	365.903872	cputime
+pthread-wmm/mix043.opt.yml	false	TIMEOUT	error	60.991141011	61.01302451000083	26.472448	cputime	TIMEOUT	error	60.598027355	61.03213640800095	360.103936	cputime
+pthread-wmm/mix017_power.opt_rmo.opt.yml	false	TIMEOUT	error	61.001383218	61.01213508899673	26.431488	cputime	TIMEOUT	error	61.024980352	61.035689259006176	359.354368	cputime
+pthread-wmm/mix003.oepc.yml	false	TIMEOUT	error	60.988506083	61.008666601992445	26.525696	cputime	ABORTED	error	0.103502269	0.2410530729976017	32.129024	
+pthread-wmm/mix011_tso.oepc.yml	false	TIMEOUT	error	60.999407997	61.011574538992136	26.480640	cputime	TIMEOUT	error	61.025921152	61.03387293200649	359.632896	cputime
+pthread-wmm/mix011_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.991572615	61.01085683700512	26.480640	cputime	ABORTED	error	0.101634753	0.23925163599778898	32.030720	
+pthread-wmm/mix036_power.opt_rmo.opt.yml	false	TIMEOUT	error	60.871432285	61.01325412900769	26.480640	cputime	TIMEOUT	error	61.030046847	61.0380735249928	370.163712	cputime
+pthread-wmm/mix010.oepc.yml	false	TIMEOUT	error	60.979355736	61.012801429998945	26.476544	cputime	ABORTED	error	0.102300041	0.2463536980067147	32.010240	
+pthread-wmm/mix033_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.974612998	61.01192841900047	26.517504	cputime	TIMEOUT	error	61.029955897	61.041389997000806	353.411072	cputime
+pthread-wmm/mix053_tso.oepc.yml	false	TIMEOUT	error	60.989181739	61.01231877799728	26.525696	cputime	TIMEOUT	error	61.027226125	61.033971095006564	374.452224	cputime
+pthread-wmm/rfi008.opt.yml	false	false(unreach-call)	correct	2.183147546	2.217065282005933	26.533888		TIMEOUT	error	61.020780416	61.02635170299618	227.147776	cputime
+pthread-wmm/mix032.oepc.yml	false	TIMEOUT	error	60.557175048	61.01261175300169	26.476544	cputime	TIMEOUT	error	61.027854261	61.03464496300148	381.358080	cputime
+pthread-wmm/mix009.opt.yml	false	false(unreach-call)	correct	4.462391036	4.469878383009927	26.492928		TIMEOUT	error	60.822059195	61.03517653400195	352.821248	cputime
+pthread-wmm/safe012_power.oepc.yml	false	false(unreach-call)	correct	0.08318242	0.08803830199758522	26.521600		false(unreach-call)	correct	0.088613508	0.09562389999337029	26.456064	
+pthread-wmm/safe007_power.oepc-thin001_power.oepc.yml	false	false(unreach-call)	correct	0.085678277	0.0926323930034414	26.476544		false(unreach-call)	correct	0.087244695	0.09418185899266973	26.447872	
+pthread-wmm/mix029_power.opt_pso.opt_rmo.opt.yml	false	TIMEOUT	error	60.9887186	61.01199964999978	26.537984	cputime	TIMEOUT	error	61.02778098	61.03170587000204	371.314688	cputime
+pthread-wmm/safe006_power.opt-thin000_power.opt.yml	false	false(unreach-call)	correct	0.44216261	0.45003351199557073	26.435584		false(unreach-call)	correct	0.448764744	0.4549275480094366	26.480640	
+pthread-wmm/mix040_tso.oepc.yml	false	TIMEOUT	error	60.978618063	61.0104630029964	26.492928	cputime	TIMEOUT	error	60.638058037	61.028617178002605	243.298304	cputime
+pthread-wmm/mix019.opt.yml	false	TIMEOUT	error	60.922613152	61.0102410170075	26.476544	cputime	TIMEOUT	error	60.970389027	61.03338451600575	372.891648	cputime
+pthread-wmm/safe014_power.opt.yml	false	false(unreach-call)	correct	0.082529164	0.09059717500349507	26.517504		false(unreach-call)	correct	0.08662557	0.09533473399642389	26.480640	
+pthread-wmm/mix006.opt.yml	false	TIMEOUT	error	61.003641823	61.012438366000424	26.542080	cputime	TIMEOUT	error	61.025796624	61.032332605012925	362.213376	cputime
+pthread-wmm/mix055_tso.oepc.yml	false	TIMEOUT	error	61.006669008	61.01049624000734	26.578944	cputime	TIMEOUT	error	61.024077191	61.030319052995765	336.044032	cputime
+pthread-wmm/mix053_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.994433273	61.0109335409943	26.497024	cputime	TIMEOUT	error	61.019361882	61.027254554996034	252.628992	cputime
+pthread-wmm/mix011.opt.yml	false	TIMEOUT	error	60.985709723	61.00801504099218	26.451968	cputime	TIMEOUT	error	61.02920285	61.03739745200437	371.896320	cputime
+pthread-wmm/mix051_tso.oepc.yml	false	TIMEOUT	error	60.960175982	61.01046445700922	26.570752	cputime	TIMEOUT	error	61.025019946	61.032879128004424	388.358144	cputime
+pthread-wmm/mix051_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.983251578	61.01214965399413	26.476544	cputime	TIMEOUT	error	60.901225516	61.03390819800552	342.093824	cputime
+pthread-wmm/mix010.opt.yml	false	TIMEOUT	error	60.987940423	61.01032533199759	26.476544	cputime	TIMEOUT	error	60.804012084	61.02717466400645	234.967040	cputime
+pthread-wmm/mix050.yml	false	TIMEOUT	error	60.996382795	61.01362314198923	26.447872	cputime	TIMEOUT	error	61.025205757	61.03243544799625	375.074816	cputime
+pthread-wmm/mix027_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.993092934	61.012615088999155	26.533888	cputime	TIMEOUT	error	61.022360718	61.03452385100536	344.809472	cputime
+pthread-wmm/mix029_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	false	TIMEOUT	error	60.99120904	61.01191809900047	26.546176	cputime	TIMEOUT	error	61.026434376	61.03151983699354	336.777216	cputime
+pthread-wmm/mix001.opt.yml	false	TIMEOUT	error	60.645988024	61.010401795996586	26.456064	cputime	TIMEOUT	error	61.029650879	61.03591212599713	363.929600	cputime
+pthread-wmm/mix026.oepc.yml	false	TIMEOUT	error	60.990549914	61.01363533700351	26.574848	cputime	TIMEOUT	error	61.021094491	61.02867763899849	245.157888	cputime
+pthread-wmm/mix018_tso.oepc.yml	false	TIMEOUT	error	61.002246523	61.007272376999026	26.497024	cputime	TIMEOUT	error	60.887491068	61.03264774399577	343.977984	cputime
+pthread-wmm/mix018_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	61.002134846	61.010788888001116	26.525696	cputime	TIMEOUT	error	61.023548694	61.033131964999484	382.775296	cputime
+pthread-wmm/mix044_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.992147558	61.0087069250003	26.492928	cputime	TIMEOUT	error	61.027578531	61.03527745199972	376.201216	cputime
+pthread-wmm/mix002.opt.yml	false	TIMEOUT	error	60.967505709	61.01024465999217	26.492928	cputime	TIMEOUT	error	61.02794918	61.03613826999208	373.465088	cputime
+pthread-wmm/mix017.oepc.yml	false	TIMEOUT	error	60.919475853	61.015986145997886	26.484736	cputime	TIMEOUT	error	61.016642908	61.025734094000654	242.434048	cputime
+pthread-wmm/mix043.oepc.yml	false	TIMEOUT	error	60.965091237	61.01157418699586	26.488832	cputime	TIMEOUT	error	61.02552356	61.02959791600006	345.587712	cputime
+pthread-wmm/mix023_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.99742449	61.01223061600467	26.484736	cputime	TIMEOUT	error	61.024210619	61.03195949300425	347.185152	cputime
+pthread-wmm/mix037_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.997535091	61.01128449800308	26.533888	cputime	TIMEOUT	error	61.028672044	61.03565599699505	340.520960	cputime
+pthread-wmm/rfi006_rmo.yml	false	false(unreach-call)	correct	0.087644917	0.0949967480119085	26.497024		false(unreach-call)	correct	0.09200921	0.09936985401145648	26.480640	
+pthread-wmm/safe007_power.opt-thin001_power.opt.yml	false	TIMEOUT	error	60.491139994	61.00855773501098	26.484736	cputime	TIMEOUT	error	60.935678518	61.01396223499614	26.480640	cputime
+pthread-wmm/mix036.oepc.yml	false	TIMEOUT	error	60.987665016	61.01109988699318	26.533888	cputime	TIMEOUT	error	61.027888318	61.03774153300037	346.689536	cputime
+pthread-wmm/mix005_power.oepc_pso.oepc_rmo.oepc.yml	false	TIMEOUT	error	60.998146926	61.01587382800062	26.480640	cputime	TIMEOUT	error	60.882257317	61.034174158994574	343.285760	cputime
+pthread-wmm/mix018.opt.yml	false	TIMEOUT	error	60.878377762	61.01445079299447	26.603520	cputime	TIMEOUT	error	61.026263436	61.03308083298907	376.918016	cputime
+pthread-wmm/mix004.oepc.yml	false	TIMEOUT	error	60.997607	61.01009108500148	26.607616	cputime	TIMEOUT	error	61.023650889	61.02984074900451	349.184000	cputime
+pthread-wmm/rfi009_rmo.oepc.yml	false	false(unreach-call)	correct	0.087857683	0.09711289900587872	26.574848		false(unreach-call)	correct	0.087684832	0.09689273699768819	26.456064	
+pthread-wmm/mix017_pso.opt_tso.opt.yml	false	TIMEOUT	error	60.988516172	61.015523570997175	26.505216	cputime	TIMEOUT	error	61.028260261	61.03694614399865	372.776960	cputime
+pthread-wmm/mix007.opt.yml	false	TIMEOUT	error	60.992732472	61.01520709099714	26.603520	cputime	TIMEOUT	error	61.029062383	61.035065407006186	378.540032	cputime
+pthread-wmm/mix004.opt.yml	false	TIMEOUT	error	60.975646424	61.01472101699619	26.607616	cputime	TIMEOUT	error	61.027691894	61.03788860498753	343.486464	cputime
+pthread-wmm/safe009_power.opt.yml	false	TIMEOUT	error	60.971494664	61.008314407998114	26.595328	cputime	TIMEOUT	error	61.004469082	61.011144699004944	26.619904	cputime
+pthread-wmm/mix030_tso.yml	false	TIMEOUT	error	60.992432149	61.0083204429975	26.632192	cputime	TIMEOUT	error	61.0217764	61.028264099993976	349.380608	cputime
+pthread-wmm/safe020_rmo.yml	false	TIMEOUT	error	61.002087622	61.0171659829939	26.624000	cputime	TIMEOUT	error	60.937679952	61.013922867001384	26.611712	cputime
+pthread-wmm/safe018_rmo.opt.yml	false	TIMEOUT	error	60.99719522	61.01320953600225	26.509312	cputime	TIMEOUT	error	61.007155842	61.01432685100008	26.607616	cputime
+pthread-wmm/safe003_power.opt.yml	false	TIMEOUT	error	60.994438921	61.009977485999116	26.619904	cputime	TIMEOUT	error	61.005643436	61.014964100002544	26.615808	cputime
+pthread-wmm/safe027_rmo.yml	false	false(unreach-call)	correct	0.089588817	0.09570879800594412	26.599424		false(unreach-call)	correct	0.090673315	0.1005385850003222	26.611712	
+pthread-wmm/safe016_rmo.oepc.yml	false	false(unreach-call)	correct	0.09000646	0.09650178099400364	26.611712		false(unreach-call)	correct	0.092725959	0.09943621199636254	26.615808	
+pthread-wmm/rfi006_power.oepc.yml	false	false(unreach-call)	correct	0.095128601	0.101756119998754	26.587136		false(unreach-call)	correct	0.089502455	0.09624100699147675	26.619904	
+pthread-wmm/rfi009_power.oepc.yml	false	false(unreach-call)	correct	0.089410134	0.09649565099971369	26.607616		false(unreach-call)	correct	0.092370549	0.0988431819860125	26.619904	
+pthread-wmm/rfi000_tso.yml	true	true	correct	2.658770839	2.6671489639993524	26.656768		TIMEOUT	error	61.026281847	61.0372228930064	348.033024	cputime
+pthread-deagle/arithmetic_prog_bad.yml	false	ERROR (compilation)	error	0.067724229	0.0726224940008251	25.698304		ERROR (compilation)	error	0.061667973	0.07087897798919585	25.690112	
+pthread-wmm/rfi006_power.opt.yml	false	false(unreach-call)	correct	0.091969548	0.10012550299870782	26.587136		false(unreach-call)	correct	0.091158831	0.09941707699908875	26.595328	
+pthread-wmm/safe027_power.oepc.yml	false	false(unreach-call)	correct	0.094939278	0.09857882400683593	26.673152		false(unreach-call)	correct	0.095351237	0.10143508300825488	26.628096	
+pthread-wmm/safe020_power.yml	false	TIMEOUT	error	60.991492596	61.01818139299576	26.726400	cputime	TIMEOUT	error	61.004927945	61.013501397988875	26.750976	cputime
+pthread-wmm/safe028_power.yml	false	TIMEOUT	error	60.348087437	61.013928458996816	26.742784	cputime	TIMEOUT	error	61.021549546	61.03715772301075	26.611712	cputime
+pthread-wmm/rfi003_tso.yml	true	true	correct	7.018968921	7.030126272002235	26.726400		TIMEOUT	error	60.876605966	61.03008861700073	273.862656	cputime
+pthread-wmm/safe019_power.oepc.yml	false	false(unreach-call)	correct	0.094506834	0.09994626199477352	26.652672		false(unreach-call)	correct	0.094662744	0.105357502005063	26.746880	
+pthread-wmm/safe004_power.oepc_pso.oepc_rmo.oepc.yml	false	false(unreach-call)	correct	13.30989317	13.317205485000159	26.755072		TIMEOUT	error	61.025347583	61.02970130099857	368.959488	cputime
+pthread-wmm/safe001_rmo.oepc.yml	false	false(unreach-call)	correct	0.092549711	0.10115752900310326	26.738688		false(unreach-call)	correct	0.094840139	0.10427561499818694	26.738688	
+pthread-wmm/safe015_rmo.yml	false	TIMEOUT	error	60.989434379	61.01371203099552	26.689536	cputime	TIMEOUT	error	61.004247099	61.0123927280074	26.742784	cputime
+pthread-wmm/safe014_rmo.opt.yml	false	TIMEOUT	error	60.988864288	61.01153340000019	26.734592	cputime	TIMEOUT	error	61.006203686	61.01031632500235	26.742784	cputime
+pthread-wmm/safe025_rmo.yml	false	TIMEOUT	error	60.994839047	61.011201458997675	26.763264	cputime	TIMEOUT	error	61.003820384	61.011743823997676	26.742784	cputime
+pthread-wmm/safe016_power.opt.yml	false	TIMEOUT	error	60.972286435	61.01326340100786	26.849280	cputime	TIMEOUT	error	61.005483141	61.01439000199025	26.738688	cputime
+goblint-regression/28-race_reach_28-funptr_racefree.yml	true	TIMEOUT	error	61.208853514	61.23300655599451	3979.030528	cputime	TIMEOUT	error	61.227426327	61.23572944899206	3979.124736	cputime
+pthread-wmm/safe027_power.opt.yml	false	TIMEOUT	error	60.988141561	61.01419129301212	26.759168	cputime	TIMEOUT	error	61.005752874	61.014524036989314	26.759168	cputime
+pthread-wmm/safe015_power.opt.yml	false	TIMEOUT	error	60.999345639	61.01009473600425	26.816512	cputime	TIMEOUT	error	60.936971573	61.0124251429952	26.738688	cputime
+pthread-wmm/safe002_power.oepc.yml	false	false(unreach-call)	correct	0.093708497	0.10136134600907099	26.841088		false(unreach-call)	correct	0.09349973	0.10191604799183551	26.828800	
+pthread-wmm/safe015_power.oepc.yml	false	false(unreach-call)	correct	0.090444387	0.09479470500082243	26.869760		false(unreach-call)	correct	0.089603868	0.09571848499763291	26.877952	
+goblint-regression/28-race_reach_06-cond_racing1.yml	false	false(unreach-call)	correct	11.97796318	11.988215669000056	2061.180928		false(unreach-call)	correct	11.925667325	11.93699963799736	2061.246464	
+goblint-regression/28-race_reach_07-cond_racing2.yml	false	TIMEOUT	error	61.127501422	61.1512343249924	3988.664320	cputime	TIMEOUT	error	61.05427088	61.183034369998495	3988.586496	cputime
+pthread/stack-1.yml	true	true	correct	0.070301905	0.07621823200315703	26.243072		true	correct	0.069690301	0.07972082900232635	26.214400	
+pthread/stack_longest-2.yml	true	TIMEOUT	error	60.973584271	61.18616202000703	3288.375296	cputime	TIMEOUT	error	61.197344326	61.205190840992145	3348.131840	cputime
+pthread/stack_longer-1.yml	false	true	wrong	12.578316346	12.585076272996957	691.445760		true	wrong	12.548060072	12.557414145005168	690.675712	
+goblint-regression/28-race_reach_74-tricky_address1_racefree.yml	true	true	correct	1.282165366	1.3214070550020551	26.218496		true	correct	1.267670738	1.2775665060034953	26.214400	
+goblint-regression/28-race_reach_75-tricky_address2_racefree.yml	true	true	correct	1.286493092	1.295298394994461	26.144768		true	correct	1.270280226	1.2727131540013943	26.218496	
+goblint-regression/28-race_reach_77-tricky_address4_racing.yml	false	true	wrong	1.279590237	1.2860077059885953	26.247168		true	wrong	1.267985085	1.275248937003198	26.214400	
+goblint-regression/28-race_reach_73-funloop_hard_racefree.yml	true	TIMEOUT	error	61.157745488	61.16839478499605	3995.545600	cputime	TIMEOUT	error	61.223371976	61.22577110299608	3995.488256	cputime
+pthread-wmm/rfi002_tso.yml	true	true	correct	10.293008518	10.341540353008895	26.873856		TIMEOUT	error	61.020185061	61.02598726798897	318.312448	cputime
+pthread/queue_ok_longer.yml	true	true	correct	0.439336512	0.44511839498591144	79.515648		true	correct	0.442982815	0.45100015799107496	79.593472	
+pthread/queue_longer.yml	false	TIMEOUT	error	61.049439811	61.06847790098982	1083.383808	cputime	TIMEOUT	error	61.070211331	61.079385140008526	1087.246336	cputime
+pthread/queue.yml	false	false(unreach-call)	correct	0.095736184	0.10284824899281375	26.292224		false(unreach-call)	correct	0.091756146	0.10004443499201443	26.296320	
+pthread-wmm/mix006_tso.oepc.yml	false	TIMEOUT	error	60.993237347	61.0153655489994	27.004928	cputime	TIMEOUT	error	61.019936021	61.02577233698685	335.941632	cputime
+pthread-wmm/mix023_tso.yml	false	TIMEOUT	error	60.989335485	61.0149715669977	27.136000	cputime	TIMEOUT	error	61.028808921	61.0347616890067	384.118784	cputime
+pthread-lit/sssc12_variant.yml	true	true	correct	0.073660815	0.07890717400005087	26.185728		true	correct	0.068785821	0.07842286900267936	26.083328	
+goblint-regression/28-race_reach_79-equ_racefree.yml	true	TIMEOUT	error	61.23901227	61.260037578991614	3990.159360	cputime	TIMEOUT	error	61.128676362	61.26137365199975	3990.069248	cputime
+goblint-regression/28-race_reach_82-list_racefree.yml	false	OUT OF MEMORY	error	12.553613199	12.729248790987185	3999.997952	memory	OUT OF MEMORY	error	12.231161632	12.241423455998302	3999.997952	memory
+goblint-regression/28-race_reach_91-arrayloop2_racefree.yml	true	true	correct	3.397275031	3.4043765899987193	56.143872		true	correct	3.234496252	3.245789513006457	56.225792	
+pthread-race-challenges/thread-local-value.yml	true	true	correct	0.074141333	0.08086890800041147	26.087424		true	correct	0.068282088	0.07527758600190282	26.091520	
+pthread-race-challenges/thread-local-value-dynamic.yml	true	true	correct	0.073583252	0.08040269200864714	26.087424		true	correct	0.069348644	0.07747945799201261	26.083328	
+goblint-regression/28-race_reach_93-evilcollapse_racefree.yml	true	true	correct	1.300492861	1.3064855039992835	26.423296		true	correct	1.2775611	1.285499259000062	26.308608	
+goblint-regression/28-race_reach_85-list2_racefree.yml	true	OUT OF MEMORY	error	21.799287446	21.819122747008805	3999.997952	memory	OUT OF MEMORY	error	21.762333518	21.77061131699884	3999.997952	memory
+goblint-regression/13-privatized_04-priv_multi_true.yml	true	TIMEOUT	error	61.144597937	61.16014823700243	2226.524160	cputime	TIMEOUT	error	61.150953619	61.16335177599103	2169.610240	cputime
+pthread/bigshot_s2.yml	true	true	correct	0.071587159	0.08622246999584604	26.148864		true	correct	0.071962674	0.08002482300798874	26.226688	
+pthread/singleton.yml	false	false(unreach-call)	correct	0.076087544	0.08471719900262542	26.345472		false(unreach-call)	correct	0.073545453	0.0832185259932885	26.353664	
+pthread-C-DAC/pthread-demo-datarace-1.yml	true	TIMEOUT	error	60.970220934	61.00906893600768	26.091520	cputime	TIMEOUT	error	61.003150477	61.00815082300687	26.091520	cputime
+goblint-regression/13-privatized_67-pthread_cond_wait_unknown_1_pos.yml	false	ERROR (compilation)	error	0.067404346	0.07582846000150312	26.042368		ERROR (compilation)	error	0.066368444	0.07312594799441285	26.087424	
+pthread-C-DAC/pthread-demo-datarace-3.yml	false	false(unreach-call)	correct	0.117530318	0.12433239701204002	26.071040		false(unreach-call)	correct	0.117930505	0.12858676600444596	26.083328	
+goblint-regression/28-race_reach_94-alloc_region_racing.yml	false	OUT OF MEMORY	error	7.299095901	7.317577202004031	3999.997952	memory	OUT OF MEMORY	error	7.219087585	7.231008236005437	3999.997952	memory
+pthread-C-DAC/pthread-finding-k-matches.yml	true	true	correct	0.301820436	0.3061393320094794	65.642496		true	correct	0.304448085	0.3138936870091129	65.646592	
+pthread/twostage_3.yml	false	false(unreach-call)	correct	0.081789016	0.08792111300863326	26.374144		false(unreach-call)	correct	0.0830721	0.0891260819917079	26.357760	
+pthread-complex/bounded_buffer.yml	false	ERROR (compilation)	error	0.068650717	0.07554444999550469	25.960448		ERROR (compilation)	error	0.069513414	0.07362361300329212	25.960448	
+pthread-complex/safestack_relacy.yml	false	TIMEOUT	error	60.96746377	61.013936689996626	26.345472	cputime	TIMEOUT	error	61.003302151	61.01016514300136	26.353664	cputime
+ldv-races/race-1_2-join.yml	false	false(unreach-call)	correct	0.07321928	0.08773392600414809	26.382336		false(unreach-call)	correct	0.072788856	0.0777569769998081	26.349568	
+pthread-complex/workstealqueue_mutex-2.yml	true	ERROR (unsupported property: uninitialized memory)	error	0.094716739	0.10197535400220659	26.611712		ERROR (unsupported property: uninitialized memory)	error	0.095905814	0.10159758500230964	26.611712	
+ldv-races/race-2_1-container_of.yml	true	true	correct	0.074749966	0.08110152900917456	26.349568		true	correct	0.075853885	0.08387290500104427	26.357760	
+ldv-races/race-2_2-container_of.yml	false	true	wrong	0.073953539	0.08409088201005943	26.345472		true	wrong	0.075192955	0.08542967299581505	26.365952	
+ldv-races/race-2_5-container_of.yml	false	true	wrong	0.075622796	0.08246209799835924	26.443776		true	wrong	0.072193598	0.08204331899469253	26.476544	
+ldv-races/race-2_3-container_of.yml	false	true	wrong	0.076985349	0.0844293190020835	26.447872		true	wrong	0.074847285	0.08465759699174669	26.480640	
+libvsync/ticketlock.yml	true	OUT OF MEMORY	error	13.79486351	13.826857328996994	3999.997952	memory	OUT OF MEMORY	error	13.783309213	13.790546853007982	3999.997952	memory
+libvsync/mcslock.yml	true	ERROR (unsupported property: invalid memory access)	error	0.108998496	0.12133184699632693	27.164672		ERROR (unsupported property: invalid memory access)	error	0.109338883	0.11535003701283131	27.144192	
+libvsync/arraylock.yml	true	true	correct	0.116590112	0.12297861100523733	27.140096		true	correct	0.114659051	0.12938512199616525	27.131904	
+libvsync/rwlock.yml	true	OUT OF MEMORY	error	12.806060783	12.816919648990734	3999.997952	memory	OUT OF MEMORY	error	12.593426951	12.60415144599392	3999.997952	memory
+libvsync/rec_mcslock.yml	true	ERROR (unsupported property: invalid memory access)	error	0.111818173	0.12072614399949089	27.262976		ERROR (unsupported property: invalid memory access)	error	0.109128299	0.11750996600312646	27.279360	
+libvsync/hmcslock.yml	true	ERROR (unsupported property: invalid memory access)	error	0.147962335	0.1567793510039337	27.553792		ERROR (unsupported property: invalid memory access)	error	0.139010082	0.1728802980069304	27.533312	
+pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.yml	true	true	correct	0.161953689	0.17559117700147908	29.462528		true	correct	0.160226874	0.18236812300165184	29.491200	
+pthread-driver-races/char_generic_nvram_read_nvram_write_nvram.yml	false	true	wrong	0.160977903	0.17359367699828	29.409280		true	wrong	0.155189872	0.16967320699768607	29.442048	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_change.yml	true	true	correct	0.172813742	0.18059229000937194	29.876224		true	correct	0.170782334	0.18009391099622007	29.884416	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_current.yml	true	true	correct	0.173540506	0.1835710160085	29.933568		true	correct	0.167172121	0.1746512779936893	29.892608	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_get.yml	true	true	correct	0.171463406	0.179009257000871	29.888512		true	correct	0.16820914	0.18459809599153232	29.884416	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_open_pc8736x_gpio_configure.yml	true	true	correct	0.17421653	0.18073066000943072	29.958144		true	correct	0.169862028	0.18068244399910327	29.933568	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_change_pc8736x_gpio_configure.yml	true	true	correct	0.177679003	0.18815587299468461	29.908992		true	correct	0.170889928	0.17683034999936353	29.958144	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_configure_pc8736x_gpio_get.yml	true	true	correct	0.172765841	0.17866191500797868	29.892608		true	correct	0.173687713	0.19317888699879404	29.896704	
+pthread-driver-races/char_pc8736x_gpio_pc8736x_gpio_current_pc8736x_gpio_set.yml	false	true	wrong	0.173202913	0.18064559598860797	29.892608		true	wrong	0.168205959	0.20202919399889652	29.888512	
+ldv-linux-3.14-races/linux-3.14--drivers--net--irda--w83977af_ir.ko.cil.yml	false	ABORTED	error	7.917467094	8.028105754987337	36.057088		ABORTED	error	7.525809973	7.651304668994271	35.880960	
+ldv-linux-3.14-races/linux-3.14--drivers--media--platform--marvell-ccic--cafe_ccic.ko.cil-1.yml	true	ERROR (compilation)	error	0.099590854	0.10903406300349161	27.746304		ERROR (compilation)	error	0.096568596	0.10315758700016886	27.795456	

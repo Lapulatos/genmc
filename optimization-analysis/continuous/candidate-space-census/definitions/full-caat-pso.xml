@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="60 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/><option name="--disable-mm-detector"/><option name="--nthreads=1"/><option name="--v1"/><option name="--cat-stats"/>
+  <column title="executions">Number of complete executions explored: (.*)</column>
+  <column title="rf offered">rf-offered=([0-9]+)</column><column title="rf queued">rf-queued=([0-9]+)</column>
+  <column title="rf value points">rf-value-choice-points=([0-9]+)</column><column title="rf value classes">rf-value-classes=([0-9]+)</column>
+  <column title="rf same-value upper">rf-same-value-candidate-upper-bound=([0-9]+)</column><column title="rf same-value points">rf-same-value-choice-points=([0-9]+)</column><column title="rf same-value max">max-rf-same-value-class=([0-9]+)</column>
+  <column title="co offered">co-offered=([0-9]+)</column><column title="co queued">co-queued=([0-9]+)</column>
+  <column title="back offered">backward-offered=([0-9]+)</column><column title="back queued">backward-queued=([0-9]+)</column>
+  <column title="work added">work-added=([0-9]+)</column><column title="work popped">work-popped=([0-9]+)</column>
+  <rundefinition name="caat-pso.rvf-opportunity"><option name="--svcomp-backend=caat-pso"/><tasks name="unreach-call"><includesfile>/workspace/experiments/caat-optimization/rvf-opportunity-census/definitions/fair-census-all.set</includesfile><propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile></tasks></rundefinition>
+</benchmark>

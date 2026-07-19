@@ -1,0 +1,35 @@
+{
+  "adaptive_checkpoint_use_rate": 0.0,
+  "all_checkpoint_use_rate": 0.0,
+  "median_task_preventive_history_share": 1.0,
+  "records": 87,
+  "retention_identity_check": {
+    "matches": true,
+    "retentions_minus_unique_used": 307832,
+    "unused_discarded_plus_unused_live": 307832
+  },
+  "summed_max_history_base_bytes": 92023544,
+  "summed_max_preventive_history_base_bytes": 73732376,
+  "summed_preventive_history_share": 0.8012338233789388,
+  "tasks_with_adaptive_use": 0,
+  "tasks_with_preventive_retention": 73,
+  "tasks_with_preventive_use": 0,
+  "totals": {
+    "checkpoint-ns": 104786217,
+    "history-ns": 194617440,
+    "offline-evals": 460184,
+    "preventive-adaptive-retentions": 307753,
+    "preventive-adaptive-used": 0,
+    "preventive-live-checkpoints": 69,
+    "preventive-retentions": 307832,
+    "preventive-rollback-hits": 0,
+    "preventive-syncs": 307832,
+    "preventive-unused-discards": 307763,
+    "preventive-unused-live": 69,
+    "preventive-used-checkpoints": 0,
+    "retained-snapshot-equivalent-bytes": 593033392,
+    "retained-undo-bytes": 323895024,
+    "rollback-ns": 0,
+    "sync-ns": 202624424719
+  }
+}

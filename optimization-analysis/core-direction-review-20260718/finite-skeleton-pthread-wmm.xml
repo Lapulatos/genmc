@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="15 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/>
+  <option name="--disable-mm-detector"/>
+  <column title="finite control">Finite skeleton: finite-control=([01])</column>
+  <column title="encodable subset">encodable-subset=([01])</column>
+  <column title="functions">functions=([0-9]+)</column>
+  <column title="blocks">blocks=([0-9]+)</column>
+  <column title="instructions">instructions=([0-9]+)</column>
+  <column title="branches">branches=([0-9]+)</column>
+  <column title="loads">loads=([0-9]+)</column>
+  <column title="stores">stores=([0-9]+)</column>
+  <column title="rmw">rmw=([0-9]+)</column>
+  <column title="nondet">nondet=([0-9]+)</column>
+  <column title="assumes">assumes=([0-9]+)</column>
+  <column title="creates">creates=([0-9]+)</column>
+  <column title="joins">joins=([0-9]+)</column>
+  <column title="backedges">backedges=([0-9]+)</column>
+  <column title="indirect calls">indirect-calls=([0-9]+)</column>
+  <column title="recursive functions">recursive-functions=([0-9]+)</column>
+  <column title="dynamic addresses">dynamic-addresses=([0-9]+)</column>
+  <column title="unsupported externals">unsupported-externals=([0-9]+)</column>
+  <rundefinition name="finite-skeleton.pthread-wmm">
+    <option name="--svcomp-backend=caat-sc"/>
+    <tasks name="unreach-call">
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/*.yml</include>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

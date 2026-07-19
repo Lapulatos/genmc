@@ -1,0 +1,865 @@
+backend	repetition	task_yaml	property	expected_verdict	status	category	cputime_seconds	walltime_seconds	memory_bytes	returnvalue	exitsignal	starttime	executions	blocked	max_active_events	max_stable_events	max_inactive_events	max_current_base_bytes	max_history_base_bytes	max_base_relation_pairs	max_base_relation_density_ppm	rebuilds	profiled_queries
+caat-pso	r01	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.068279252	0.07766648998949677	25935872	0		2026-07-15T06:05:30.828464+00:00	2										
+caat-pso	r02	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.07475159	0.0860255720326677	25960448	0		2026-07-15T06:06:33.937924+00:00	2										
+caat-pso	r03	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.084641556	0.09117483795853332	25956352	0		2026-07-15T06:07:37.111108+00:00	2										
+caat-pso	r01	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.093089858	0.09595529496436939	25989120	0		2026-07-15T06:05:30.606233+00:00	2										
+caat-pso	r02	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.091779796	0.09862466197228059	25960448	0		2026-07-15T06:06:33.716497+00:00	2										
+caat-pso	r03	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.074310679	0.07794540701434016	25956352	0		2026-07-15T06:07:36.913110+00:00	2										
+caat-pso	r01	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.077314604	0.08705819002352655	25952256	42		2026-07-15T06:05:30.560954+00:00	0										
+caat-pso	r02	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.082204384	0.08870044001378119	25964544	42		2026-07-15T06:06:33.678629+00:00	0										
+caat-pso	r03	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.094602941	0.1036843890324235	26038272	42		2026-07-15T06:07:36.883617+00:00	0										
+caat-pso	r01	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.067585823	0.0737074869684875	25952256	42		2026-07-15T06:05:30.539178+00:00	0										
+caat-pso	r02	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.067666961	0.07555573200806975	26034176	42		2026-07-15T06:06:33.662689+00:00	0										
+caat-pso	r03	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.0797157	0.10001248604385182	25956352	42		2026-07-15T06:07:36.837267+00:00	0										
+caat-pso	r01	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.095609565	0.09939478302840143	26034176	0		2026-07-15T06:05:30.849577+00:00	3										
+caat-pso	r02	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.090109872	0.09971935796784237	25952256	0		2026-07-15T06:06:33.952272+00:00	3										
+caat-pso	r03	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.073891368	0.08107214799383655	25976832	0		2026-07-15T06:07:37.098234+00:00	3										
+caat-pso	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.072741015	0.07718952803406864	26050560	42		2026-07-15T06:05:30.769205+00:00	0										
+caat-pso	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.068064019	0.07834644604008645	26062848	42		2026-07-15T06:06:33.865254+00:00	0										
+caat-pso	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.091638136	0.10375132400076836	26042368	42		2026-07-15T06:07:37.049300+00:00	0										
+caat-pso	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.069531303	0.07544124301057309	25956352	42		2026-07-15T06:05:30.689400+00:00	0										
+caat-pso	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.081125218	0.09369554300792515	26009600	42		2026-07-15T06:06:33.797594+00:00	0										
+caat-pso	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.072957594	0.08314451499609277	25927680	42		2026-07-15T06:07:37.003373+00:00	0										
+caat-pso	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.080749329	0.09007000300334767	25972736	42		2026-07-15T06:05:30.765023+00:00	0										
+caat-pso	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.083013089	0.09040545899188146	25960448	42		2026-07-15T06:06:33.898202+00:00	0										
+caat-pso	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.084266414	0.08913508499972522	26030080	42		2026-07-15T06:07:37.068168+00:00	0										
+caat-pso	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.081180363	0.08851755800424144	26017792	42		2026-07-15T06:05:30.735170+00:00	0										
+caat-pso	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.070659375	0.08208759303670377	25956352	42		2026-07-15T06:06:33.821763+00:00	0										
+caat-pso	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.082096127	0.09761078399606049	25952256	42		2026-07-15T06:07:37.020585+00:00	0										
+caat-pso	r01	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.080490616	0.08637845900375396	25952256	0		2026-07-15T06:05:30.960110+00:00	2										
+caat-pso	r02	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.069953037	0.07811568601755425	25956352	0		2026-07-15T06:06:34.100864+00:00	2										
+caat-pso	r03	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.07463212	0.08598794101271778	26034176	0		2026-07-15T06:07:37.296450+00:00	2										
+caat-pso	r01	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.190719926	0.20117818901780993	26034176	0		2026-07-15T06:05:31.195429+00:00	7										
+caat-pso	r02	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.147941223	0.17563318798784167	26046464	0		2026-07-15T06:06:34.225277+00:00	7										
+caat-pso	r03	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.145321892	0.1553585910005495	26083328	0		2026-07-15T06:07:37.423395+00:00	7										
+caat-pso	r01	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.084486366	0.08797285094624385	26054656	0		2026-07-15T06:05:30.906809+00:00	2										
+caat-pso	r02	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.069746792	0.08121488295728341	26025984	0		2026-07-15T06:06:34.017558+00:00	2										
+caat-pso	r03	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.082457721	0.09332110197283328	25952256	0		2026-07-15T06:07:37.179900+00:00	2										
+caat-pso	r01	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.37473124	0.3830438139848411	26136576	0		2026-07-15T06:05:31.172067+00:00	26										
+caat-pso	r02	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.415708544	0.4208755050203763	26030080	0		2026-07-15T06:06:34.341064+00:00	26										
+caat-pso	r03	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.356923819	0.37191285099834204	26099712	0		2026-07-15T06:07:37.520518+00:00	26										
+caat-pso	r01	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.094825702	0.10069637501146644	26083328	0		2026-07-15T06:05:31.132179+00:00	4										
+caat-pso	r02	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.080256693	0.09155204996932298	26013696	0		2026-07-15T06:06:34.231399+00:00	4										
+caat-pso	r03	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.099596897	0.107336106011644	26087424	0		2026-07-15T06:07:37.361565+00:00	4										
+caat-pso	r01	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.068886662	0.07853230502223596	25964544	0		2026-07-15T06:05:31.023633+00:00	2	2									
+caat-pso	r02	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.080801506	0.08959581499220803	26005504	0		2026-07-15T06:06:34.132725+00:00	2	2									
+caat-pso	r03	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.08366631	0.0934493169770576	26062848	0		2026-07-15T06:07:37.288091+00:00	2	2									
+caat-pso	r01	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.095627288	0.10371714999200776	25993216	0		2026-07-15T06:05:31.016636+00:00	4										
+caat-pso	r02	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.085395922	0.09653447300661355	26050560	0		2026-07-15T06:06:34.060632+00:00	4										
+caat-pso	r03	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.078906816	0.09531107498332858	25972736	0		2026-07-15T06:07:37.278381+00:00	4										
+caat-pso	r01	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.10186803	0.11054767400491983	26091520	0		2026-07-15T06:05:31.034179+00:00	3	2									
+caat-pso	r02	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.090532001	0.10031072498532012	26005504	0		2026-07-15T06:06:34.145022+00:00	3	2									
+caat-pso	r03	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.088416521	0.10828974301693961	26071040	0		2026-07-15T06:07:37.340899+00:00	3	2									
+caat-pso	r01	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.08816864	0.09642804099712521	25927680	0		2026-07-15T06:05:30.883794+00:00	1	2									
+caat-pso	r02	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.079741944	0.08938284701434895	25964544	0		2026-07-15T06:06:33.976450+00:00	1	2									
+caat-pso	r03	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.08008802	0.09103137202328071	25960448	0		2026-07-15T06:07:37.171682+00:00	1	2									
+caat-pso	r01	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.072258009	0.0794644090346992	26017792	0		2026-07-15T06:05:31.089858+00:00	1	1									
+caat-pso	r02	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.082959529	0.0897022959543392	25964544	0		2026-07-15T06:06:34.206475+00:00	1	1									
+caat-pso	r03	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.093394275	0.10565802705241367	25944064	0		2026-07-15T06:07:37.332614+00:00	1	1									
+caat-pso	r01	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.082812025	0.0853289789520204	25952256	0		2026-07-15T06:05:30.631356+00:00	2	2									
+caat-pso	r02	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.073138173	0.07697417598683387	25956352	0		2026-07-15T06:06:33.733279+00:00	2	2									
+caat-pso	r03	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.093596928	0.10202160099288449	25972736	0		2026-07-15T06:07:36.944027+00:00	2	2									
+caat-pso	r01	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.083443136	0.09016940300352871	25923584	0		2026-07-15T06:05:30.583807+00:00	3										
+caat-pso	r02	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.069454569	0.07623178698122501	25939968	0		2026-07-15T06:06:33.701123+00:00	3										
+caat-pso	r03	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.084734134	0.09117604396305978	25993216	0		2026-07-15T06:07:36.898485+00:00	3										
+caat-pso	r01	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.079561372	0.08662217605160549	25956352	0		2026-07-15T06:05:30.645151+00:00	2										
+caat-pso	r02	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.069515711	0.07757566001964733	25903104	0		2026-07-15T06:06:33.754260+00:00	2										
+caat-pso	r03	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.082435073	0.09176618995843455	25997312	0		2026-07-15T06:07:36.962815+00:00	2										
+caat-pso	r01	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.083531769	0.08782691898522899	25993216	0		2026-07-15T06:05:30.676919+00:00	2	2									
+caat-pso	r02	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.083971601	0.09184878901578486	25903104	0		2026-07-15T06:06:33.798157+00:00	2	2									
+caat-pso	r03	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.084614295	0.09476773301139474	26042368	0		2026-07-15T06:07:36.981121+00:00	2	2									
+caat-pso	r01	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.095903526	0.09761367604369298	25919488	0		2026-07-15T06:05:30.495225+00:00	1	1									
+caat-pso	r02	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.081776767	0.08873645303538069	25952256	0		2026-07-15T06:06:33.599148+00:00	1	1									
+caat-pso	r03	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.081943187	0.10660899395588785	25972736	0		2026-07-15T06:07:36.759762+00:00	1	1									
+caat-pso	r01	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.081006443	0.0858929610112682	25944064	42		2026-07-15T06:05:30.478647+00:00	0										
+caat-pso	r02	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.067468013	0.07855992903932929	25935872	42		2026-07-15T06:06:33.588316+00:00	0										
+caat-pso	r03	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.078987326	0.11504635197343305	25911296	42		2026-07-15T06:07:36.749802+00:00	0										
+caat-pso	r01	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.092563973	0.09809225698700175	25952256	42		2026-07-15T06:05:30.469791+00:00	0										
+caat-pso	r02	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.080770083	0.08638155704829842	25948160	42		2026-07-15T06:06:33.571242+00:00	0										
+caat-pso	r03	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.081004232	0.09348745603347197	25952256	42		2026-07-15T06:07:36.731558+00:00	0										
+caat-pso	r01	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.080396418	0.09537954698316753	26025984	0		2026-07-15T06:05:30.856087+00:00	2										
+caat-pso	r02	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.070957383	0.08628061896888539	25931776	0		2026-07-15T06:06:33.950817+00:00	2										
+caat-pso	r03	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.069432221	0.08049347100313753	25952256	0		2026-07-15T06:07:37.137299+00:00	2										
+caat-pso	r01	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.090066726	0.0947652219911106	25927680	0		2026-07-15T06:05:30.517720+00:00	1	1									
+caat-pso	r02	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.08382089	0.08720556495245546	26034176	0		2026-07-15T06:06:33.645640+00:00	1	1									
+caat-pso	r03	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.080362002	0.09036272903904319	25956352	0		2026-07-15T06:07:36.845530+00:00	1	1									
+caat-pso	r01	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.082182841	0.0901556130265817	26005504	0		2026-07-15T06:05:30.751833+00:00	2	2									
+caat-pso	r02	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.0808057	0.08905862603569403	26034176	0		2026-07-15T06:06:33.914469+00:00	2	2									
+caat-pso	r03	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.085811333	0.09608097496675327	25964544	0		2026-07-15T06:07:37.081379+00:00	2	2									
+caat-pso	r01	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.091798266	0.09759863599902019	25894912	0		2026-07-15T06:05:30.447740+00:00	1										
+caat-pso	r02	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.080877781	0.08886975102359429	25956352	0		2026-07-15T06:06:33.541705+00:00	1										
+caat-pso	r03	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.091209179	0.1053684179787524	25952256	0		2026-07-15T06:07:36.695548+00:00	1										
+caat-pso	r01	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.079871501	0.08352114795707166	25956352	0		2026-07-15T06:05:30.437421+00:00	2										
+caat-pso	r02	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.080782945	0.08437970897648484	25972736	0		2026-07-15T06:06:33.529554+00:00	2										
+caat-pso	r03	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.081611793	0.08961563400225714	26005504	0		2026-07-15T06:07:36.677432+00:00	2										
+caat-pso	r01	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.090437562	0.09316305100219324	25886720	0		2026-07-15T06:05:30.427379+00:00	1										
+caat-pso	r02	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.084771841	0.09201247501187027	25952256	0		2026-07-15T06:06:33.515527+00:00	1										
+caat-pso	r03	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.094342398	0.10331157600739971	25956352	0		2026-07-15T06:07:36.662184+00:00	1										
+caat-pso	r01	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.075893475	0.08165417599957436	25960448	0		2026-07-15T06:05:30.507709+00:00	1										
+caat-pso	r02	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.067345927	0.0757098930189386	25956352	0		2026-07-15T06:06:33.621289+00:00	1										
+caat-pso	r03	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.069863541	0.09861986304167658	26009600	0		2026-07-15T06:07:36.820607+00:00	1										
+caat-pso	r01	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.078821148	0.08265401201788336	25956352	0		2026-07-15T06:05:30.398628+00:00	1										
+caat-pso	r02	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.075332545	0.08494399097980931	25829376	0		2026-07-15T06:06:33.475004+00:00	1										
+caat-pso	r03	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.079115574	0.09090980602195486	25952256	0		2026-07-15T06:07:36.590769+00:00	1										
+caat-pso	r01	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.084327262	0.09075300296535715	26132480	0		2026-07-15T06:05:31.126892+00:00	0	1									
+caat-pso	r02	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.072446815	0.08184187597362325	26112000	0		2026-07-15T06:06:34.252320+00:00	0	1									
+caat-pso	r03	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.078606576	0.09902102197520435	26021888	0		2026-07-15T06:07:37.333648+00:00	0	1									
+caat-pso	r01	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.073867674	0.08082588599063456	26071040	0		2026-07-15T06:05:30.926296+00:00	0	1									
+caat-pso	r02	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.070528085	0.07980164099717513	26087424	0		2026-07-15T06:06:34.029338+00:00	0	1									
+caat-pso	r03	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.084618521	0.09297682798933238	26009600	0		2026-07-15T06:07:37.206198+00:00	0	1									
+caat-pso	r01	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	TIMEOUT	error	60.9685882	61.1357685260009	1657020416		9	2026-07-15T06:05:31.681361+00:00											
+caat-pso	r02	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	TIMEOUT	error	61.073889064	61.14663042098982	1657098240		9	2026-07-15T06:06:34.763391+00:00											
+caat-pso	r03	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	TIMEOUT	error	61.198135285	61.212779477005824	1656991744		9	2026-07-15T06:07:37.895521+00:00											
+caat-pso	r01	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	TIMEOUT	error	61.138629512	61.16706096701091	1657028608		9	2026-07-15T06:05:32.043027+00:00											
+caat-pso	r02	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	TIMEOUT	error	60.888250819	61.113096614019014	1657016320		9	2026-07-15T06:06:35.158526+00:00											
+caat-pso	r03	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	TIMEOUT	error	60.829835266	61.12179038999602	1657114624		9	2026-07-15T06:07:38.259815+00:00											
+caat-pso	r01	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	TIMEOUT	error	60.9497564	61.13810902700061	1657085952		9	2026-07-15T06:05:31.690299+00:00											
+caat-pso	r02	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	TIMEOUT	error	60.984329385	61.20426213002065	1657106432		9	2026-07-15T06:06:34.740477+00:00											
+caat-pso	r03	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	TIMEOUT	error	60.888971393	61.181276440038346	2460196864		9	2026-07-15T06:07:37.906695+00:00											
+caat-pso	r01	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	5.393361989	5.4937157580279745	57249792	42		2026-07-15T06:05:31.563525+00:00	0										
+caat-pso	r02	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	4.398723364	4.4654202370438725	56864768	42		2026-07-15T06:06:34.667943+00:00	0										
+caat-pso	r03	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	5.813503306	5.831182920956053	57020416	42		2026-07-15T06:07:37.772501+00:00	0										
+caat-pso	r01	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	TIMEOUT	error	61.04056058	61.13143955200212	1657012224		9	2026-07-15T06:05:31.816846+00:00											
+caat-pso	r02	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	TIMEOUT	error	60.975188732	61.12618232698878	1657044992		9	2026-07-15T06:06:34.915838+00:00											
+caat-pso	r03	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	TIMEOUT	error	60.959248443	61.13109291798901	1657036800		9	2026-07-15T06:07:38.040050+00:00											
+caat-pso	r01	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	TIMEOUT	error	61.173504162	61.20326819800539	1657008128		9	2026-07-15T06:05:31.611829+00:00											
+caat-pso	r02	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	TIMEOUT	error	60.898290877	61.198334874992725	2460352512		9	2026-07-15T06:06:34.700981+00:00											
+caat-pso	r03	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	TIMEOUT	error	60.709986242	61.1763544830028	2259554304		9	2026-07-15T06:07:37.819335+00:00											
+caat-pso	r01	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.070056808	0.0772478049620986	26021888	42		2026-07-15T06:05:31.655041+00:00	0										
+caat-pso	r02	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.076503501	0.08475883700884879	26091520	42		2026-07-15T06:06:34.701517+00:00	0										
+caat-pso	r03	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.075037925	0.08942093298537657	25968640	42		2026-07-15T06:07:37.847816+00:00	0										
+caat-pso	r01	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.072928762	0.08347906300332397	25964544	0		2026-07-15T06:05:31.633164+00:00	2										
+caat-pso	r02	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.074573652	0.08474304794799536	26054656	0		2026-07-15T06:06:34.752545+00:00	2										
+caat-pso	r03	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.082189954	0.09603044495452195	26009600	0		2026-07-15T06:07:37.875677+00:00	2										
+caat-pso	r01	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.067162128	0.07232903799740598	25956352	0		2026-07-15T06:05:30.456067+00:00	2										
+caat-pso	r02	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.068640336	0.07461524300742894	25952256	0		2026-07-15T06:06:33.556423+00:00	2										
+caat-pso	r03	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.071045233	0.09106940001947805	25964544	0		2026-07-15T06:07:36.710408+00:00	2										
+caat-pso	r01	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.079014965	0.0824560999753885	25956352	0		2026-07-15T06:05:30.417571+00:00	1										
+caat-pso	r02	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.068364508	0.08092365303309634	25956352	0		2026-07-15T06:06:33.500533+00:00	1										
+caat-pso	r03	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.081379809	0.1137363410089165	25944064	0		2026-07-15T06:07:36.622017+00:00	1										
+caat-pso	r01	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.068316707	0.08066787500865757	25948160	42		2026-07-15T06:05:30.968912+00:00	0										
+caat-pso	r02	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.069501152	0.08036335703218356	26021888	42		2026-07-15T06:06:34.086906+00:00	0										
+caat-pso	r03	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.081147452	0.09090959501918405	26013696	42		2026-07-15T06:07:37.250482+00:00	0										
+caat-pso	r01	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.090324799	0.0966031770221889	26021888	0		2026-07-15T06:05:31.187171+00:00	6	2									
+caat-pso	r02	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.078175174	0.09717935603111982	26107904	0		2026-07-15T06:06:34.252156+00:00	6	2									
+caat-pso	r03	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.105679997	0.11303345201304182	26054656	0		2026-07-15T06:07:37.458313+00:00	6	2									
+caat-pso	r01	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.081103593	0.08849261800060049	26091520	0		2026-07-15T06:05:31.163087+00:00	1										
+caat-pso	r02	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.074341399	0.08244597597513348	26030080	0		2026-07-15T06:06:34.268938+00:00	1										
+caat-pso	r03	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.085521246	0.09684822103008628	26001408	0		2026-07-15T06:07:37.492522+00:00	1										
+caat-pso	r01	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.0758275	0.08230015897424892	25960448	42		2026-07-15T06:05:30.407657+00:00	0										
+caat-pso	r02	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.081374664	0.08679469401249662	25878528	42		2026-07-15T06:06:33.487724+00:00	0										
+caat-pso	r03	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.094297065	0.10472045297501609	25862144	42		2026-07-15T06:07:36.610173+00:00	0										
+caat-pso	r01	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.075044026	0.08683366602053866	26222592	0		2026-07-15T06:05:32.281165+00:00	1										
+caat-pso	r02	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.088868035	0.09742752398597077	26288128	0		2026-07-15T06:06:35.356795+00:00	1										
+caat-pso	r03	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.087586462	0.11395141400862485	26210304	0		2026-07-15T06:07:38.598501+00:00	1										
+caat-pso	r01	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.080600694	0.09047887596534565	26275840	42		2026-07-15T06:05:32.291856+00:00	1										
+caat-pso	r02	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.114661593	0.11910338804591447	26214400	42		2026-07-15T06:06:35.468512+00:00	1										
+caat-pso	r03	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.09109409	0.1091322039719671	26288128	42		2026-07-15T06:07:38.587141+00:00	1										
+caat-pso	r01	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.08903521	0.09809381200466305	26198016	42		2026-07-15T06:05:32.301778+00:00	1										
+caat-pso	r02	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.079334138	0.08616455498849973	26226688	42		2026-07-15T06:06:35.459852+00:00	1										
+caat-pso	r03	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.079521492	0.15772225701948628	26243072	42		2026-07-15T06:07:38.515847+00:00	1										
+caat-pso	r01	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.077206955	0.08878145401831716	26222592	0		2026-07-15T06:05:32.348843+00:00	1										
+caat-pso	r02	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.07689457	0.08508160396013409	26271744	0		2026-07-15T06:06:35.504849+00:00	1										
+caat-pso	r03	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.094251672	0.1034210060024634	26275840	0		2026-07-15T06:07:38.640135+00:00	1										
+caat-pso	r01	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.088429858	0.0969735260005109	26288128	0		2026-07-15T06:05:32.341836+00:00	1										
+caat-pso	r02	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.080507621	0.08931022300384939	26361856	0		2026-07-15T06:06:35.490841+00:00	1										
+caat-pso	r03	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.082568496	0.09112918301252648	26333184	0		2026-07-15T06:07:38.656323+00:00	1										
+caat-pso	r01	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.078057767	0.08905449003214017	26308608	0		2026-07-15T06:05:32.314686+00:00	0	1									
+caat-pso	r02	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.101760987	0.10753760597435758	26382336	0		2026-07-15T06:06:35.479211+00:00	0	1									
+caat-pso	r03	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.092517794	0.10547518101520836	26312704	0		2026-07-15T06:07:38.628801+00:00	0	1									
+caat-pso	r01	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.189422263	0.20154203695710748	26071040	42		2026-07-15T06:05:32.194281+00:00	0										
+caat-pso	r02	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.199370125	0.2088755170116201	26042368	42		2026-07-15T06:06:35.311537+00:00	0										
+caat-pso	r03	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.178321408	0.2017983359983191	26095616	42		2026-07-15T06:07:38.438725+00:00	0										
+caat-pso	r01	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.085674029	0.09434877603780478	26062848	0		2026-07-15T06:05:31.902059+00:00	4	6									
+caat-pso	r02	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.101423306	0.10836738400394097	26005504	0		2026-07-15T06:06:35.033895+00:00	4	6									
+caat-pso	r03	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.089083134	0.09896173299057409	26046464	0		2026-07-15T06:07:38.148519+00:00	4	6									
+caat-pso	r01	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.073956427	0.08353052200982347	26087424	0		2026-07-15T06:05:31.894379+00:00	4	6									
+caat-pso	r02	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.087583717	0.0995022080023773	26034176	0		2026-07-15T06:06:34.956021+00:00	4	6									
+caat-pso	r03	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.087808401	0.10214918898418546	26087424	0		2026-07-15T06:07:38.127456+00:00	4	6									
+caat-pso	r01	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.103450432	0.10926219099201262	26021888	0		2026-07-15T06:05:31.872534+00:00	6	25									
+caat-pso	r02	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.115223068	0.12441570201190189	26054656	0		2026-07-15T06:06:34.972313+00:00	6	25									
+caat-pso	r03	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.118375032	0.13117197703104466	25993216	0		2026-07-15T06:07:38.104182+00:00	6	25									
+caat-pso	r01	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.084947822	0.10443852498428896	26136576	0		2026-07-15T06:05:31.405253+00:00	2										
+caat-pso	r02	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.070140731	0.09003375499742106	26132480	0		2026-07-15T06:06:34.565882+00:00	2										
+caat-pso	r03	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.073374662	0.08718048600712791	26083328	0		2026-07-15T06:07:37.673450+00:00	2										
+caat-pso	r01	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.181923222	0.19133668998256326	26050560	42		2026-07-15T06:05:31.710357+00:00	1										
+caat-pso	r02	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.15933258	0.1722722320118919	26157056	42		2026-07-15T06:06:34.794440+00:00	1										
+caat-pso	r03	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.146835487	0.16115203604567796	26083328	42		2026-07-15T06:07:37.918256+00:00	1										
+caat-pso	r01	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	TIMEOUT	error	60.716097023	61.019394028000534	26189824		9	2026-07-15T06:05:31.825710+00:00											
+caat-pso	r02	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	TIMEOUT	error	60.915547152	61.02266768796835	26062848		9	2026-07-15T06:06:34.955243+00:00											
+caat-pso	r03	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	TIMEOUT	error	61.007035881	61.02110506896861	26189824		9	2026-07-15T06:07:38.088640+00:00											
+caat-pso	r01	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.07969167	0.08718298800522462	25956352	0		2026-07-15T06:05:31.526649+00:00	0	1									
+caat-pso	r02	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.06877986	0.07859784399624914	26071040	0		2026-07-15T06:06:34.586321+00:00	0	1									
+caat-pso	r03	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.086926747	0.10376942000584677	26025984	0		2026-07-15T06:07:37.655321+00:00	0	1									
+caat-pso	r01	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.067718738	0.07444721198407933	25927680	0		2026-07-15T06:05:31.590329+00:00	0	1									
+caat-pso	r02	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.090432406	0.10346616600872949	26017792	0		2026-07-15T06:06:34.623813+00:00	0	1									
+caat-pso	r03	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.08238233	0.09825327299768105	25939968	0		2026-07-15T06:07:37.784322+00:00	0	1									
+caat-pso	r01	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.071685629	0.07870524801546708	25956352	0		2026-07-15T06:05:31.236161+00:00	0	1									
+caat-pso	r02	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.08240019	0.1115839519770816	26013696	0		2026-07-15T06:06:34.348988+00:00	0	1									
+caat-pso	r03	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.079521168	0.09323253203183413	25899008	0		2026-07-15T06:07:37.514471+00:00	0	1									
+caat-pso	r01	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.068627404	0.07513716095127165	25964544	0		2026-07-15T06:05:31.248297+00:00	0	1									
+caat-pso	r02	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.070826321	0.08015464199706912	25886720	0		2026-07-15T06:06:34.464594+00:00	0	1									
+caat-pso	r03	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.081997538	0.09442137001315132	25866240	0		2026-07-15T06:07:37.542818+00:00	0	1									
+caat-pso	r01	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.08053804	0.09254596498794854	25919488	0		2026-07-15T06:05:32.032612+00:00	0	1									
+caat-pso	r02	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.069552056	0.08147667202865705	25911296	0		2026-07-15T06:06:35.142943+00:00	0	1									
+caat-pso	r03	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.083108585	0.09447847999399528	25903104	0		2026-07-15T06:07:38.238012+00:00	0	1									
+caat-pso	r01	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.065815097	0.07461588695878163	25972736	0		2026-07-15T06:05:31.300903+00:00	0	1									
+caat-pso	r02	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.078326675	0.09714581602020189	25960448	0		2026-07-15T06:06:34.431687+00:00	0	1									
+caat-pso	r03	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.08589048	0.09750791097758338	25948160	0		2026-07-15T06:07:37.597971+00:00	0	1									
+caat-pso	r01	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.067037563	0.07648203801363707	25972736	0		2026-07-15T06:05:31.296583+00:00	0	1									
+caat-pso	r02	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.070254234	0.08143771201139316	26025984	0		2026-07-15T06:06:34.517097+00:00	0	1									
+caat-pso	r03	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.094232267	0.10442307696212083	25960448	0		2026-07-15T06:07:37.591296+00:00	0	1									
+caat-pso	r01	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.076420749	0.1243803600082174	26030080	0		2026-07-15T06:05:31.356140+00:00	0	1									
+caat-pso	r02	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.081923847	0.11601236998103559	25997312	0		2026-07-15T06:06:34.380798+00:00	0	1									
+caat-pso	r03	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.084645263	0.09292233997257426	25976832	0		2026-07-15T06:07:37.558194+00:00	0	1									
+caat-pso	r01	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.085837872	0.0984430419630371	26058752	0		2026-07-15T06:05:31.598648+00:00	0	1									
+caat-pso	r02	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.080134929	0.0910153069999069	26001408	0		2026-07-15T06:06:34.646222+00:00	0	1									
+caat-pso	r03	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.082235212	0.09328731196001172	26054656	0		2026-07-15T06:07:37.793207+00:00	0	1									
+caat-pso	r01	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.072853531	0.11506165901664644	26017792	0		2026-07-15T06:05:31.943930+00:00	1										
+caat-pso	r02	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.082328996	0.10003217001212761	26120192	0		2026-07-15T06:06:35.064139+00:00	1										
+caat-pso	r03	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.082958759	0.09130706003634259	26038272	0		2026-07-15T06:07:38.181212+00:00	1										
+caat-pso	r01	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.092043165	0.10261794499820098	26083328	42		2026-07-15T06:05:31.959918+00:00	1										
+caat-pso	r02	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.083126411	0.094280218007043	26079232	42		2026-07-15T06:06:35.048281+00:00	1										
+caat-pso	r03	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.085909937	0.10905094700865448	26087424	42		2026-07-15T06:07:38.205279+00:00	1										
+caat-pso	r01	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.070731134	0.08087819296633825	26054656	42		2026-07-15T06:05:31.998723+00:00	1										
+caat-pso	r02	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.072011365	0.07921511703170836	26091520	42		2026-07-15T06:06:35.118978+00:00	1										
+caat-pso	r03	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.073962185	0.0877149670268409	26050560	42		2026-07-15T06:07:38.194690+00:00	1										
+caat-pso	r01	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.073477685	0.08119837800040841	26095616	42		2026-07-15T06:05:31.931914+00:00	1										
+caat-pso	r02	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.070961192	0.08720103098312393	26103808	42		2026-07-15T06:06:35.063617+00:00	1										
+caat-pso	r03	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.083237813	0.09292194299632683	26021888	42		2026-07-15T06:07:38.165853+00:00	1										
+caat-pso	r01	c/pthread/butterfly.yml	unreach-call	true	TIMEOUT	error	60.991579078	61.02237702801358	26181632		9	2026-07-15T06:05:32.019104+00:00											
+caat-pso	r02	c/pthread/butterfly.yml	unreach-call	true	TIMEOUT	error	60.656477376	61.0134159399895	26173440		9	2026-07-15T06:06:35.130464+00:00											
+caat-pso	r03	c/pthread/butterfly.yml	unreach-call	true	TIMEOUT	error	60.551842313	61.01726171799237	26218496		9	2026-07-15T06:07:38.217160+00:00											
+caat-pso	r01	c/pthread/fib_safe-5.yml	unreach-call	true	TIMEOUT	error	60.970550615	61.01886452600593	26083328		9	2026-07-15T06:05:31.730209+00:00											
+caat-pso	r02	c/pthread/fib_safe-5.yml	unreach-call	true	TIMEOUT	error	60.878840172	61.016520432021935	25964544		9	2026-07-15T06:06:34.828543+00:00											
+caat-pso	r03	c/pthread/fib_safe-5.yml	unreach-call	true	TIMEOUT	error	60.957362297	61.021649832022376	25968640		9	2026-07-15T06:07:37.957857+00:00											
+caat-pso	r01	c/pthread/fib_safe-6.yml	unreach-call	true	TIMEOUT	error	61.00699243	61.018406178976875	25997312		9	2026-07-15T06:05:31.738566+00:00											
+caat-pso	r02	c/pthread/fib_safe-6.yml	unreach-call	true	TIMEOUT	error	60.955889628	61.01459239795804	25972736		9	2026-07-15T06:06:34.851899+00:00											
+caat-pso	r03	c/pthread/fib_safe-6.yml	unreach-call	true	TIMEOUT	error	60.675693482	61.018079935980495	26038272		9	2026-07-15T06:07:37.935884+00:00											
+caat-pso	r01	c/pthread/fib_unsafe-5.yml	unreach-call	false	TIMEOUT	error	60.935795958	61.02193016401725	26054656		9	2026-07-15T06:05:31.827773+00:00											
+caat-pso	r02	c/pthread/fib_unsafe-5.yml	unreach-call	false	TIMEOUT	error	60.509376012	61.012775189010426	26038272		9	2026-07-15T06:06:34.862105+00:00											
+caat-pso	r03	c/pthread/fib_unsafe-5.yml	unreach-call	false	TIMEOUT	error	60.922675923	61.014943341957405	25964544		9	2026-07-15T06:07:37.957140+00:00											
+caat-pso	r01	c/pthread/fib_unsafe-6.yml	unreach-call	false	TIMEOUT	error	60.955002898	61.01336141797947	26066944		9	2026-07-15T06:05:31.784248+00:00											
+caat-pso	r02	c/pthread/fib_unsafe-6.yml	unreach-call	false	TIMEOUT	error	60.970225847	61.01149384997552	25972736		9	2026-07-15T06:06:34.872167+00:00											
+caat-pso	r03	c/pthread/fib_unsafe-6.yml	unreach-call	false	TIMEOUT	error	60.985434513	61.01754929096205	26046464		9	2026-07-15T06:07:37.991351+00:00											
+caat-pso	r01	c/pthread/fib_unsafe-7.yml	unreach-call	false	TIMEOUT	error	60.867386628	61.01277799298987	26083328		9	2026-07-15T06:05:31.803840+00:00											
+caat-pso	r02	c/pthread/fib_unsafe-7.yml	unreach-call	false	TIMEOUT	error	60.910077732	61.01165294001112	26017792		9	2026-07-15T06:06:34.902528+00:00											
+caat-pso	r03	c/pthread/fib_unsafe-7.yml	unreach-call	false	TIMEOUT	error	60.721823283	61.0190335100051	26054656		9	2026-07-15T06:07:38.028250+00:00											
+caat-pso	r01	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.073513839	0.09297841798979789	26112000	42		2026-07-15T06:05:31.827226+00:00	1										
+caat-pso	r02	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.083248422	0.0903125429758802	26087424	42		2026-07-15T06:06:34.938247+00:00	1										
+caat-pso	r03	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.086983763	0.09645923605421558	26079232	42		2026-07-15T06:07:38.060616+00:00	1										
+caat-pso	r01	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	4.356836213	4.366546695004217	26210304	42		2026-07-15T06:05:32.119400+00:00	2										
+caat-pso	r02	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	4.64082756	4.665777446003631	26206208	42		2026-07-15T06:06:35.236162+00:00	2										
+caat-pso	r03	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	4.311371629	4.322428025014233	26206208	42		2026-07-15T06:07:38.352862+00:00	2										
+caat-pso	r01	c/pthread/queue_longer.yml	unreach-call	false	TIMEOUT	error	60.58754822	61.02320262801368	100913152		9	2026-07-15T06:05:32.103855+00:00											
+caat-pso	r02	c/pthread/queue_longer.yml	unreach-call	false	TIMEOUT	error	61.004881069	61.02852750901366	105070592		9	2026-07-15T06:06:35.213601+00:00											
+caat-pso	r03	c/pthread/queue_longer.yml	unreach-call	false	TIMEOUT	error	60.897927877	61.031262604985386	102264832		9	2026-07-15T06:07:38.331593+00:00											
+caat-pso	r01	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.158574309	0.1652911359560676	26247168	0		2026-07-15T06:05:32.063853+00:00	2										
+caat-pso	r02	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.142663458	0.14995164202991873	26161152	0		2026-07-15T06:06:35.174171+00:00	2										
+caat-pso	r03	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.147263689	0.156334865023382	26140672	0		2026-07-15T06:07:38.273736+00:00	2										
+caat-pso	r01	c/pthread/queue_ok_longer.yml	unreach-call	true	TIMEOUT	error	60.86848018	61.08142351405695	1081950208		9	2026-07-15T06:05:32.051933+00:00											
+caat-pso	r02	c/pthread/queue_ok_longer.yml	unreach-call	true	TIMEOUT	error	60.923773154	61.124321780051105	1081995264		9	2026-07-15T06:06:35.189699+00:00											
+caat-pso	r03	c/pthread/queue_ok_longer.yml	unreach-call	true	TIMEOUT	error	61.103400413	61.13167275197338	1081970688		9	2026-07-15T06:07:38.322595+00:00											
+caat-pso	r01	c/pthread/queue_ok_longest.yml	unreach-call	true	TIMEOUT	error	61.007420953	61.09186047001276	1290723328		9	2026-07-15T06:05:32.083254+00:00											
+caat-pso	r02	c/pthread/queue_ok_longest.yml	unreach-call	true	TIMEOUT	error	61.115951008	61.13440796697978	1290711040		9	2026-07-15T06:06:35.202931+00:00											
+caat-pso	r03	c/pthread/queue_ok_longest.yml	unreach-call	true	TIMEOUT	error	61.111273499	61.14662955200765	1290706944		9	2026-07-15T06:07:38.332797+00:00											
+caat-pso	r01	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	2.360011468	2.4061434179893695	26140672	42		2026-07-15T06:05:32.211250+00:00	162										
+caat-pso	r02	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	2.353867082	2.416994684957899	26226688	42		2026-07-15T06:06:35.333663+00:00	162										
+caat-pso	r03	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	2.194676695	2.2252242590184323	26161152	42		2026-07-15T06:07:38.504603+00:00	162										
+caat-pso	r01	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.079188615	0.08866540400777012	26226688	42		2026-07-15T06:05:32.133848+00:00	1										
+caat-pso	r02	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.08078604	0.09020306699676439	26247168	42		2026-07-15T06:06:35.248506+00:00	1										
+caat-pso	r03	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.082592901	0.09239225700730458	26234880	42		2026-07-15T06:07:38.363363+00:00	1										
+caat-pso	r01	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.085249299	0.09628010302549228	26284032	0		2026-07-15T06:05:32.150333+00:00	4										
+caat-pso	r02	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.084997642	0.09602262102998793	26189824	0		2026-07-15T06:06:35.268855+00:00	4										
+caat-pso	r03	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.090360584	0.117023792990949	26218496	0		2026-07-15T06:07:38.380451+00:00	4										
+caat-pso	r01	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.080192327	0.093145702034235	26083328	42		2026-07-15T06:05:31.336679+00:00	0										
+caat-pso	r02	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.082005197	0.09514507296262309	26017792	42		2026-07-15T06:06:34.451446+00:00	0										
+caat-pso	r03	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.073934116	0.08360574999824166	26009600	42		2026-07-15T06:07:37.624038+00:00	0										
+caat-pso	r01	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.095403837	0.18111999600660056	26042368	0		2026-07-15T06:05:31.329489+00:00	6										
+caat-pso	r02	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.07919562	0.09001737297512591	26132480	0		2026-07-15T06:06:34.546337+00:00	6										
+caat-pso	r03	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.085754187	0.10168794199125841	26042368	0		2026-07-15T06:07:37.625285+00:00	6										
+caat-pso	r01	c/pthread/triangular-1.yml	unreach-call	true	TIMEOUT	error	61.002982833	61.01688750303583	26030080		9	2026-07-15T06:05:31.547631+00:00											
+caat-pso	r02	c/pthread/triangular-1.yml	unreach-call	true	TIMEOUT	error	60.895446857	61.01343947899295	26030080		9	2026-07-15T06:06:34.610029+00:00											
+caat-pso	r03	c/pthread/triangular-1.yml	unreach-call	true	TIMEOUT	error	60.603769449	61.02859251399059	26062848		9	2026-07-15T06:07:37.672364+00:00											
+caat-pso	r01	c/pthread/triangular-2.yml	unreach-call	false	TIMEOUT	error	60.921586324	61.019982148951385	26062848		9	2026-07-15T06:05:31.564860+00:00											
+caat-pso	r02	c/pthread/triangular-2.yml	unreach-call	false	TIMEOUT	error	60.829267069	61.01434477901785	26087424		9	2026-07-15T06:06:34.621816+00:00											
+caat-pso	r03	c/pthread/triangular-2.yml	unreach-call	false	TIMEOUT	error	60.808911646	61.02021529502235	26034176		9	2026-07-15T06:07:37.750637+00:00											
+caat-pso	r01	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.120352911	0.12803255597827956	26353664	42		2026-07-15T06:05:32.237917+00:00	4										
+caat-pso	r02	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.137679231	0.1454770399723202	26353664	42		2026-07-15T06:06:35.342056+00:00	4										
+caat-pso	r03	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.132163327	0.15708632598398253	26353664	42		2026-07-15T06:07:38.492571+00:00	4										
+caat-sc	r01	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.067018203	0.07435076095862314	25784320	0		2026-07-15T05:59:10.033388+00:00	2										
+caat-sc	r02	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.065107813	0.07224522199248895	25772032	0		2026-07-15T06:00:12.647199+00:00	2										
+caat-sc	r03	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.075830258	0.08380933001171798	25829376	0		2026-07-15T06:01:15.477702+00:00	2										
+caat-sc	r01	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.064103994	0.12014320801245049	25825280	0		2026-07-15T05:59:09.799741+00:00	2										
+caat-sc	r02	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.06896438	0.07540528202662244	25796608	0		2026-07-15T06:00:12.447415+00:00	2										
+caat-sc	r03	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.069598493	0.07693863898748532	25833472	0		2026-07-15T06:01:15.261296+00:00	2										
+caat-sc	r01	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.078446109	0.08217210602015257	25804800	42		2026-07-15T05:59:09.771164+00:00	0										
+caat-sc	r02	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.065687575	0.0719975579995662	25772032	42		2026-07-15T06:00:12.418641+00:00	0										
+caat-sc	r03	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.075705697	0.0790491160005331	25825280	42		2026-07-15T06:01:15.221797+00:00	0										
+caat-sc	r01	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.06843391	0.10443335602758452	25886720	42		2026-07-15T05:59:09.756280+00:00	0										
+caat-sc	r02	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.062286849	0.07150661502964795	25821184	42		2026-07-15T06:00:12.402377+00:00	0										
+caat-sc	r03	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.062910217	0.07089216000167653	25829376	42		2026-07-15T06:01:15.207683+00:00	0										
+caat-sc	r01	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.066809391	0.07752735703252256	25890816	0		2026-07-15T05:59:10.050913+00:00	3										
+caat-sc	r02	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.070938469	0.0764785970095545	25845760	0		2026-07-15T06:00:12.634024+00:00	3										
+caat-sc	r03	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.073029178	0.09473495802376419	25858048	0		2026-07-15T06:01:15.480067+00:00	3										
+caat-sc	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.067270528	0.07249859301373363	25829376	42		2026-07-15T05:59:09.961387+00:00	0										
+caat-sc	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.064588851	0.07070628297515213	25800704	42		2026-07-15T06:00:12.598968+00:00	0										
+caat-sc	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.061703615	0.06986187497386709	25882624	42		2026-07-15T06:01:15.442720+00:00	0										
+caat-sc	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.065837111	0.07282770599704236	25817088	42		2026-07-15T05:59:09.966410+00:00	0										
+caat-sc	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.071319234	0.07914037100272253	25833472	42		2026-07-15T06:00:12.568700+00:00	0										
+caat-sc	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.071777469	0.07946945901494473	25800704	42		2026-07-15T06:01:15.379385+00:00	0										
+caat-sc	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.056793185	0.06767855799989775	25821184	42		2026-07-15T05:59:09.999387+00:00	0										
+caat-sc	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.067627078	0.0766280249808915	25894912	42		2026-07-15T06:00:12.614060+00:00	0										
+caat-sc	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.076479595	0.08214963105274364	25841664	42		2026-07-15T06:01:15.459286+00:00	0										
+caat-sc	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.065942129	0.07376999198459089	25821184	42		2026-07-15T05:59:09.973927+00:00	0										
+caat-sc	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.060327197	0.06908781302627176	25853952	42		2026-07-15T06:00:12.558818+00:00	0										
+caat-sc	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.06066805	0.07277884002542123	25763840	42		2026-07-15T06:01:15.403893+00:00	0										
+caat-sc	r01	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.069264435	0.07462931302143261	25792512	0		2026-07-15T05:59:10.124061+00:00	2										
+caat-sc	r02	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.066221995	0.11935695598367602	25866240	0		2026-07-15T06:00:12.783712+00:00	2										
+caat-sc	r03	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.071552004	0.07780861802166328	25825280	0		2026-07-15T06:01:15.642977+00:00	2										
+caat-sc	r01	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.069629639	0.07367182796588168	25903104	0		2026-07-15T05:59:10.230470+00:00	7										
+caat-sc	r02	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.071705766	0.0790437429677695	25833472	0		2026-07-15T06:00:12.951363+00:00	7										
+caat-sc	r03	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.074530717	0.08247972105164081	25919488	0		2026-07-15T06:01:15.736980+00:00	7										
+caat-sc	r01	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.066183705	0.07188179803779349	25833472	0		2026-07-15T05:59:10.087690+00:00	2										
+caat-sc	r02	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.064116961	0.07951386400964111	25821184	0		2026-07-15T06:00:12.710868+00:00	2										
+caat-sc	r03	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.08025065	0.08505445101764053	25825280	0		2026-07-15T06:01:15.580333+00:00	2										
+caat-sc	r01	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.071247862	0.07524455199018121	25956352	0		2026-07-15T05:59:10.278956+00:00	26										
+caat-sc	r02	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.073506071	0.08642688597319648	25899008	0		2026-07-15T06:00:12.979008+00:00	26										
+caat-sc	r03	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.08471133	0.09249067498603836	25825280	0		2026-07-15T06:01:15.835829+00:00	26										
+caat-sc	r01	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.069283577	0.07340488297631964	25853952	0		2026-07-15T05:59:10.214329+00:00	4										
+caat-sc	r02	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.066370526	0.07353408198105171	25796608	0		2026-07-15T06:00:12.942717+00:00	4										
+caat-sc	r03	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.06097431	0.06982824904844165	25788416	0		2026-07-15T06:01:15.733423+00:00	4										
+caat-sc	r01	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.073035419	0.07720890897326171	25845760	0		2026-07-15T05:59:10.134458+00:00	2	2									
+caat-sc	r02	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.064241852	0.07259031699504703	25821184	0		2026-07-15T06:00:12.861168+00:00	2	2									
+caat-sc	r03	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.070802918	0.08395163901150227	25812992	0		2026-07-15T06:01:15.659928+00:00	2	2									
+caat-sc	r01	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.057854612	0.06556585099315271	25821184	0		2026-07-15T05:59:10.111008+00:00	4										
+caat-sc	r02	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.077270463	0.08888764498988166	25849856	0		2026-07-15T06:00:12.772120+00:00	4										
+caat-sc	r03	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.067470041	0.07611034403089434	25849856	0		2026-07-15T06:01:15.614138+00:00	4										
+caat-sc	r01	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.060169039	0.06573722994653508	25939968	0		2026-07-15T05:59:10.152083+00:00	3	2									
+caat-sc	r02	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.063313673	0.09324408101383597	25821184	0		2026-07-15T06:00:12.811757+00:00	3	2									
+caat-sc	r03	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.063914842	0.07556656998349354	25829376	0		2026-07-15T06:01:15.685524+00:00	3	2									
+caat-sc	r01	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.072545754	0.07584588299505413	25755648	0		2026-07-15T05:59:10.070611+00:00	1	2									
+caat-sc	r02	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.081524409	0.08856989204650745	25808896	0		2026-07-15T06:00:12.704572+00:00	1	2									
+caat-sc	r03	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.072838065	0.0795082279946655	25821184	0		2026-07-15T06:01:15.555755+00:00	1	2									
+caat-sc	r01	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.066235144	0.07617748400662094	25841664	0		2026-07-15T05:59:10.164293+00:00	1	1									
+caat-sc	r02	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.065102298	0.08689731196500361	25853952	0		2026-07-15T06:00:12.870720+00:00	1	1									
+caat-sc	r03	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.063269915	0.07626432803226635	25767936	0		2026-07-15T06:01:15.668486+00:00	1	1									
+caat-sc	r01	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.067849856	0.1226971970172599	25817088	0		2026-07-15T05:59:09.817568+00:00	2	2									
+caat-sc	r02	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.071694046	0.07834992097923532	25780224	0		2026-07-15T06:00:12.467916+00:00	2	2									
+caat-sc	r03	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.065511152	0.07686562300659716	25776128	0		2026-07-15T06:01:15.310158+00:00	2	2									
+caat-sc	r01	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.072549361	0.13271744101075456	25763840	0		2026-07-15T05:59:09.784094+00:00	3										
+caat-sc	r02	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.0732017	0.07978321396512911	25825280	0		2026-07-15T06:00:12.431935+00:00	3										
+caat-sc	r03	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.066668524	0.07740754802944139	25792512	0		2026-07-15T06:01:15.238070+00:00	3										
+caat-sc	r01	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.073955014	0.08471008902415633	25792512	0		2026-07-15T05:59:09.848701+00:00	2										
+caat-sc	r02	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.064189481	0.07186595897655934	25829376	0		2026-07-15T06:00:12.506525+00:00	2										
+caat-sc	r03	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.071262848	0.07968402199912816	25849856	0		2026-07-15T06:01:15.346188+00:00	2										
+caat-sc	r01	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.070764559	0.0747563440236263	25755648	0		2026-07-15T05:59:09.927907+00:00	2	2									
+caat-sc	r02	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.064584154	0.06839316297555342	25821184	0		2026-07-15T06:00:12.537368+00:00	2	2									
+caat-sc	r03	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.063842233	0.07087926397798583	25788416	0		2026-07-15T06:01:15.362693+00:00	2	2									
+caat-sc	r01	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.066253526	0.06972014298662543	25751552	0		2026-07-15T05:59:09.705617+00:00	1	1									
+caat-sc	r02	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.077572436	0.08256388898007572	25784320	0		2026-07-15T06:00:12.353677+00:00	1	1									
+caat-sc	r03	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.084219523	0.08755616802955046	25796608	0		2026-07-15T06:01:15.161699+00:00	1	1									
+caat-sc	r01	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.057991496	0.06067438604077324	25821184	42		2026-07-15T05:59:09.687482+00:00	0										
+caat-sc	r02	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.071477902	0.07811773900175467	25759744	42		2026-07-15T06:00:12.338090+00:00	0										
+caat-sc	r03	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.073030895	0.08381077199010178	25825280	42		2026-07-15T06:01:15.141337+00:00	0										
+caat-sc	r01	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.066465516	0.06891243596328422	25788416	42		2026-07-15T05:59:09.675473+00:00	0										
+caat-sc	r02	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.076693684	0.08270428702235222	25825280	42		2026-07-15T06:00:12.328731+00:00	0										
+caat-sc	r03	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.068115494	0.07551845797570422	25751552	42		2026-07-15T06:01:15.122404+00:00	0										
+caat-sc	r01	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.068836639	0.07318536000093445	25829376	0		2026-07-15T05:59:10.049896+00:00	2										
+caat-sc	r02	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.071639438	0.0811430350295268	25780224	0		2026-07-15T06:00:12.683967+00:00	2										
+caat-sc	r03	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.072038917	0.08248600701335818	25825280	0		2026-07-15T06:01:15.511444+00:00	2										
+caat-sc	r01	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.065970692	0.07092572399415076	25772032	0		2026-07-15T05:59:09.738020+00:00	1	1									
+caat-sc	r02	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.076043922	0.08533375401748344	25735168	0		2026-07-15T06:00:12.387358+00:00	1	1									
+caat-sc	r03	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.073732098	0.07653007301269099	25821184	0		2026-07-15T06:01:15.194327+00:00	1	1									
+caat-sc	r01	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.058698627	0.061989117006305605	25870336	0		2026-07-15T05:59:10.019035+00:00	2	2									
+caat-sc	r02	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.077237748	0.08393368200631812	25726976	0		2026-07-15T06:00:12.638373+00:00	2	2									
+caat-sc	r03	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.069912597	0.08448503498220816	25812992	0		2026-07-15T06:01:15.466915+00:00	2	2									
+caat-sc	r01	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.076023421	0.08327426301548257	25751552	0		2026-07-15T05:59:09.657240+00:00	1										
+caat-sc	r02	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.067448302	0.07470347505295649	25821184	0		2026-07-15T06:00:12.301890+00:00	1										
+caat-sc	r03	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.071173509	0.07720231998246163	25812992	0		2026-07-15T06:01:15.095951+00:00	1										
+caat-sc	r01	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.069911752	0.07631546998163685	25825280	0		2026-07-15T05:59:09.647452+00:00	2										
+caat-sc	r02	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.059708028	0.06830842996714637	25825280	0		2026-07-15T06:00:12.288870+00:00	2										
+caat-sc	r03	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.066242851	0.07364843401592225	25829376	0		2026-07-15T06:01:15.079589+00:00	2										
+caat-sc	r01	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.079014132	0.0817315120366402	25821184	0		2026-07-15T05:59:09.638406+00:00	1										
+caat-sc	r02	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.077768409	0.08317240601172671	25780224	0		2026-07-15T06:00:12.276072+00:00	1										
+caat-sc	r03	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.072448367	0.07979384501231834	25812992	0		2026-07-15T06:01:15.071011+00:00	1										
+caat-sc	r01	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.067026634	0.07217020698590204	25792512	0		2026-07-15T05:59:09.715995+00:00	1										
+caat-sc	r02	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.071045348	0.07852647401159629	25796608	0		2026-07-15T06:00:12.372362+00:00	1										
+caat-sc	r03	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.066999864	0.0742000340251252	25825280	0		2026-07-15T06:01:15.179476+00:00	1										
+caat-sc	r01	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.067350051	0.07294551300583407	25739264	0		2026-07-15T05:59:09.609329+00:00	1										
+caat-sc	r02	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.070486203	0.07654431101400405	25747456	0		2026-07-15T06:00:12.245938+00:00	1										
+caat-sc	r03	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.064793528	0.0720008880016394	25690112	0		2026-07-15T06:01:15.050541+00:00	1										
+caat-sc	r01	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.063863859	0.07099328300682828	25952256	0		2026-07-15T05:59:10.192992+00:00	0	1									
+caat-sc	r02	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.067903237	0.07278789498377591	25821184	0		2026-07-15T06:00:12.924753+00:00	0	1									
+caat-sc	r03	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.070537676	0.08001737500308082	25927680	0		2026-07-15T06:01:15.679952+00:00	0	1									
+caat-sc	r01	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.069522856	0.07410478399833664	25821184	0		2026-07-15T05:59:10.096287+00:00	0	1									
+caat-sc	r02	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.063638561	0.07199714198941365	25894912	0		2026-07-15T06:00:12.731299+00:00	0	1									
+caat-sc	r03	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.063100773	0.0711757600074634	25829376	0		2026-07-15T06:01:15.568389+00:00	0	1									
+caat-sc	r01	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	OUT OF MEMORY	error	42.094886575	42.10632069298299	3999997952		9	2026-07-15T05:59:10.583902+00:00											
+caat-sc	r02	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	OUT OF MEMORY	error	56.074761749	56.08242233801866	3999997952		9	2026-07-15T06:00:13.314757+00:00											
+caat-sc	r03	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	TIMEOUT	error	61.242568425	61.28293724596733	3449442304		9	2026-07-15T06:01:16.213103+00:00											
+caat-sc	r01	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	OUT OF MEMORY	error	42.222485923	42.41832474002149	3999997952		9	2026-07-15T05:59:10.885187+00:00											
+caat-sc	r02	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	OUT OF MEMORY	error	40.337747246	40.3530496530002	3999997952		9	2026-07-15T06:00:13.627704+00:00											
+caat-sc	r03	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	OUT OF MEMORY	error	46.794612174	46.82308684301097	3999997952		9	2026-07-15T06:01:16.597696+00:00											
+caat-sc	r01	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	OUT OF MEMORY	error	25.839765191	25.893925268028397	3999997952		9	2026-07-15T05:59:10.599425+00:00											
+caat-sc	r02	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	OUT OF MEMORY	error	41.334603612	41.43306653603213	3999997952		9	2026-07-15T06:00:13.394138+00:00											
+caat-sc	r03	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	OUT OF MEMORY	error	45.944991896	46.00510264799232	3999997952		9	2026-07-15T06:01:16.196377+00:00											
+caat-sc	r01	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	3.602918439	3.6139379590167664	57593856	42		2026-07-15T05:59:10.491240+00:00	0										
+caat-sc	r02	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	3.627131952	3.642990252992604	57200640	42		2026-07-15T06:00:13.206086+00:00	0										
+caat-sc	r03	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	3.636138257	3.6531871010083705	56401920	42		2026-07-15T06:01:16.139630+00:00	0										
+caat-sc	r01	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	OUT OF MEMORY	error	46.404091421	46.41415940603474	3999997952		9	2026-07-15T05:59:10.703066+00:00											
+caat-sc	r02	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	OUT OF MEMORY	error	50.507119648	50.5617984450073	3999997952		9	2026-07-15T06:00:13.444899+00:00											
+caat-sc	r03	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	OUT OF MEMORY	error	45.836194879	45.90600245795213	3999997952		9	2026-07-15T06:01:16.414401+00:00											
+caat-sc	r01	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	OUT OF MEMORY	error	47.675922064	47.6822812060127	3999997952		9	2026-07-15T05:59:10.551270+00:00											
+caat-sc	r02	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	OUT OF MEMORY	error	39.324795602	39.334144818014465	3999997952		9	2026-07-15T06:00:13.250324+00:00											
+caat-sc	r03	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	OUT OF MEMORY	error	59.483121093	59.55406109703472	3999997952		9	2026-07-15T06:01:16.148420+00:00											
+caat-sc	r01	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.072541812	0.07756313803838566	25792512	42		2026-07-15T05:59:10.565295+00:00	0										
+caat-sc	r02	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.071821695	0.07984551304252818	25833472	42		2026-07-15T06:00:13.285624+00:00	0										
+caat-sc	r03	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.066070894	0.07054514705669135	25919488	42		2026-07-15T06:01:16.180230+00:00	0										
+caat-sc	r01	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.07725329	0.08910440100589767	25817088	0		2026-07-15T05:59:10.629726+00:00	2										
+caat-sc	r02	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.062132009	0.0660498520010151	25874432	0		2026-07-15T06:00:13.293320+00:00	2										
+caat-sc	r03	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.085554996	0.09026390797225758	25804800	0		2026-07-15T06:01:16.160046+00:00	2										
+caat-sc	r01	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.06706204	0.07389612897532061	25739264	0		2026-07-15T05:59:09.667333+00:00	2										
+caat-sc	r02	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.072060587	0.0779335760162212	25788416	0		2026-07-15T06:00:12.312926+00:00	2										
+caat-sc	r03	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.076138463	0.0809727240120992	25829376	0		2026-07-15T06:01:15.108091+00:00	2										
+caat-sc	r01	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.066035433	0.07073089602636173	25788416	0		2026-07-15T05:59:09.629092+00:00	1										
+caat-sc	r02	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.060142806	0.0746990479528904	25690112	0		2026-07-15T06:00:12.267841+00:00	1										
+caat-sc	r03	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.072085453	0.08342348498990759	25690112	0		2026-07-15T06:01:15.053779+00:00	1										
+caat-sc	r01	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.059219923	0.0679980720160529	25829376	42		2026-07-15T05:59:10.100246+00:00	0										
+caat-sc	r02	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.067042347	0.09256855101557449	25792512	42		2026-07-15T06:00:12.746638+00:00	0										
+caat-sc	r03	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.08529948	0.09250549599528313	25825280	42		2026-07-15T06:01:15.602313+00:00	0										
+caat-sc	r01	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.059435909	0.06845950405113399	25878528	0		2026-07-15T05:59:10.235589+00:00	6	2									
+caat-sc	r02	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.078912407	0.08389107399852946	25874432	0		2026-07-15T06:00:12.961153+00:00	6	2									
+caat-sc	r03	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.077116031	0.08581791998585686	25825280	0		2026-07-15T06:01:15.786231+00:00	6	2									
+caat-sc	r01	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.080817133	0.08360717503819615	25833472	0		2026-07-15T05:59:10.254227+00:00	1										
+caat-sc	r02	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.063275241	0.06996859301580116	25800704	0		2026-07-15T06:00:12.978615+00:00	1										
+caat-sc	r03	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.064562064	0.08850207197247073	25853952	0		2026-07-15T06:01:15.785485+00:00	1										
+caat-sc	r01	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.063558563	0.07302153104683384	25698304	42		2026-07-15T05:59:09.616730+00:00	0										
+caat-sc	r02	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.076460463	0.08249863499077037	25681920	42		2026-07-15T06:00:12.255850+00:00	0										
+caat-sc	r03	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.06906965	0.07574482698692009	25796608	42		2026-07-15T06:01:15.043238+00:00	0										
+caat-sc	r01	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.06411312	0.07089324702974409	26042368	0		2026-07-15T05:59:11.084063+00:00	1										
+caat-sc	r02	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.068909571	0.07425595400854945	26083328	0		2026-07-15T06:00:13.824820+00:00	1										
+caat-sc	r03	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.076196148	0.08531152998330072	26099712	0		2026-07-15T06:01:16.786743+00:00	1										
+caat-sc	r01	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.063476008	0.0721721209702082	26112000	42		2026-07-15T05:59:11.095917+00:00	1										
+caat-sc	r02	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.081048022	0.08820335898781195	26124288	42		2026-07-15T06:00:13.862004+00:00	1										
+caat-sc	r03	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.079831994	0.08956040296470746	26087424	42		2026-07-15T06:01:16.850412+00:00	1										
+caat-sc	r01	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.069257393	0.0728519270196557	26050560	42		2026-07-15T05:59:11.089829+00:00	1										
+caat-sc	r02	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.075753674	0.08504245599033311	26087424	42		2026-07-15T06:00:13.867492+00:00	1										
+caat-sc	r03	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.072805803	0.07761302404105663	26095616	42		2026-07-15T06:01:16.812131+00:00	1										
+caat-sc	r01	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.068432622	0.07629882195033133	26095616	0		2026-07-15T05:59:11.115972+00:00	1										
+caat-sc	r02	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.068527698	0.07760574796702713	26185728	0		2026-07-15T06:00:13.873570+00:00	1										
+caat-sc	r03	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.069989766	0.07919410796603188	26116096	0		2026-07-15T06:01:16.872628+00:00	1										
+caat-sc	r01	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.074669514	0.08205723494756967	26140672	0		2026-07-15T05:59:11.135634+00:00	1										
+caat-sc	r02	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.067071705	0.0740722079644911	26083328	0		2026-07-15T06:00:13.879068+00:00	1										
+caat-sc	r03	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.068352828	0.07815214298898354	26152960	0		2026-07-15T06:01:16.899079+00:00	1										
+caat-sc	r01	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.074685403	0.08201990299858153	26161152	0		2026-07-15T05:59:11.111975+00:00	0	1									
+caat-sc	r02	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.067845186	0.07237485103541985	26132480	0		2026-07-15T06:00:13.884152+00:00	0	1									
+caat-sc	r03	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.080985972	0.08852974197361618	26169344	0		2026-07-15T06:01:16.861214+00:00	0	1									
+caat-sc	r01	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.154716102	0.1633950660470873	25821184	42		2026-07-15T05:59:11.009583+00:00	0										
+caat-sc	r02	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.132074737	0.1401673709624447	25939968	42		2026-07-15T06:00:13.727138+00:00	0										
+caat-sc	r03	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.125761309	0.1362079679965973	25878528	42		2026-07-15T06:01:16.685605+00:00	0										
+caat-sc	r01	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.070052277	0.07632985396776348	25907200	0		2026-07-15T05:59:10.771833+00:00	4	6									
+caat-sc	r02	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.066341455	0.08515281695872545	25825280	0		2026-07-15T06:00:13.530632+00:00	4	6									
+caat-sc	r03	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.078024686	0.09009966597659513	25894912	0		2026-07-15T06:01:16.454437+00:00	4	6									
+caat-sc	r01	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.062429124	0.07059033395489678	25862144	0		2026-07-15T05:59:10.753368+00:00	4	6									
+caat-sc	r02	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.073425975	0.08122202899539843	25796608	0		2026-07-15T06:00:13.506902+00:00	4	6									
+caat-sc	r03	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.068337182	0.0812897440046072	25927680	0		2026-07-15T06:01:16.461980+00:00	4	6									
+caat-sc	r01	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.074177065	0.07832976203644648	25907200	0		2026-07-15T05:59:10.749359+00:00	6	25									
+caat-sc	r02	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.066071678	0.07493867899756879	25874432	0		2026-07-15T06:00:13.513606+00:00	6	25									
+caat-sc	r03	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.069032067	0.0770595109788701	25825280	0		2026-07-15T06:01:16.437497+00:00	6	25									
+caat-sc	r01	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.069826806	0.08029540599090979	25821184	0		2026-07-15T05:59:10.429051+00:00	2										
+caat-sc	r02	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.062817161	0.07251125102629885	25841664	0		2026-07-15T06:00:13.118826+00:00	2										
+caat-sc	r03	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.074772859	0.08339046302717179	25927680	0		2026-07-15T06:01:15.984208+00:00	2										
+caat-sc	r01	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.077415035	0.08664706099079922	25972736	42		2026-07-15T05:59:10.578463+00:00	1										
+caat-sc	r02	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.076731852	0.08430957497330382	25935872	42		2026-07-15T06:00:13.338868+00:00	1										
+caat-sc	r03	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.079454908	0.11632012797053903	25997312	42		2026-07-15T06:01:16.170017+00:00	1										
+caat-sc	r01	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	true	correct	4.661249094	4.666882204008289	25911296	0		2026-07-15T05:59:10.724640+00:00	3432										
+caat-sc	r02	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	true	correct	4.844696584	4.852960897027515	25890816	0		2026-07-15T06:00:13.481938+00:00	3432										
+caat-sc	r03	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	true	correct	5.171433914	5.231686640996486	25915392	0		2026-07-15T06:01:16.424111+00:00	3432										
+caat-sc	r01	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.057853555	0.06387973902747035	25841664	0		2026-07-15T05:59:10.467749+00:00	0	1									
+caat-sc	r02	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.070105226	0.07559000799665228	25833472	0		2026-07-15T06:00:13.152059+00:00	0	1									
+caat-sc	r03	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.070223117	0.07909864594694227	25817088	0		2026-07-15T06:01:16.052251+00:00	0	1									
+caat-sc	r01	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.069282181	0.0743719480233267	25739264	0		2026-07-15T05:59:10.518821+00:00	0	1									
+caat-sc	r02	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.081226874	0.08608428301522508	25866240	0		2026-07-15T06:00:13.196128+00:00	0	1									
+caat-sc	r03	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.070733686	0.08451095200143754	25788416	0		2026-07-15T06:01:16.084753+00:00	0	1									
+caat-sc	r01	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.064211663	0.07067699800245464	25731072	0		2026-07-15T05:59:10.268349+00:00	0	1									
+caat-sc	r02	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.0626043	0.07086879701819271	25825280	0		2026-07-15T06:00:13.003563+00:00	0	1									
+caat-sc	r03	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.062472344	0.07092892599757761	25739264	0		2026-07-15T06:01:15.844368+00:00	0	1									
+caat-sc	r01	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.055654168	0.06502594501944259	25743360	0		2026-07-15T05:59:10.296350+00:00	0	1									
+caat-sc	r02	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.063135411	0.0776973629835993	25694208	0		2026-07-15T06:00:13.008738+00:00	0	1									
+caat-sc	r03	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.073157167	0.08821379899745807	25821184	0		2026-07-15T06:01:15.863943+00:00	0	1									
+caat-sc	r01	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.069464155	0.07675575203029439	25792512	0		2026-07-15T05:59:10.868025+00:00	0	1									
+caat-sc	r02	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.062339271	0.0706416160101071	25853952	0		2026-07-15T06:00:13.603764+00:00	0	1									
+caat-sc	r03	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.076857353	0.0852666690479964	25776128	0		2026-07-15T06:01:16.568597+00:00	0	1									
+caat-sc	r01	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.067532419	0.07411127799423411	25841664	0		2026-07-15T05:59:10.386941+00:00	0	1									
+caat-sc	r02	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.068401471	0.08208436699351296	25800704	0		2026-07-15T06:00:13.068232+00:00	0	1									
+caat-sc	r03	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.06040116	0.07761324098100886	25825280	0		2026-07-15T06:01:15.929001+00:00	0	1									
+caat-sc	r01	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.070872735	0.07424156600609422	25763840	0		2026-07-15T05:59:10.354109+00:00	0	1									
+caat-sc	r02	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.063192455	0.06991053296951577	25817088	0		2026-07-15T06:00:13.058855+00:00	0	1									
+caat-sc	r03	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.062718065	0.07048773398855701	25837568	0		2026-07-15T06:01:15.921159+00:00	0	1									
+caat-sc	r01	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.065280656	0.07336503203259781	25808896	0		2026-07-15T05:59:10.360677+00:00	0	1									
+caat-sc	r02	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.079182234	0.0895687629817985	25763840	0		2026-07-15T06:00:13.038632+00:00	0	1									
+caat-sc	r03	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.06946512	0.07384700299007818	25821184	0		2026-07-15T06:01:15.853787+00:00	0	1									
+caat-sc	r01	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.062224379	0.06950649397913367	25812992	0		2026-07-15T05:59:10.534220+00:00	0	1									
+caat-sc	r02	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.082015467	0.09199278696905822	25862144	0		2026-07-15T06:00:13.228284+00:00	0	1									
+caat-sc	r03	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.072960949	0.08205189200816676	25890816	0		2026-07-15T06:01:16.107730+00:00	0	1									
+caat-sc	r01	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.061238344	0.06820693996269256	25837568	0		2026-07-15T05:59:10.800272+00:00	1										
+caat-sc	r02	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.063079706	0.07342771498952061	25960448	0		2026-07-15T06:00:13.551797+00:00	1										
+caat-sc	r03	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.07305438	0.0829280250472948	25911296	0		2026-07-15T06:01:16.501190+00:00	1										
+caat-sc	r01	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.060818938	0.06884205900132656	25899008	42		2026-07-15T05:59:10.839194+00:00	1										
+caat-sc	r02	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.068852219	0.08713543403428048	25956352	42		2026-07-15T06:00:13.536349+00:00	1										
+caat-sc	r03	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.074995475	0.09172599099110812	25960448	42		2026-07-15T06:01:16.533391+00:00	1										
+caat-sc	r01	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.071970592	0.07519232702907175	25976832	42		2026-07-15T05:59:10.850748+00:00	1										
+caat-sc	r02	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.071137773	0.08507276599993929	25952256	42		2026-07-15T06:00:13.575085+00:00	1										
+caat-sc	r03	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.069560974	0.07675311004277319	25890816	42		2026-07-15T06:01:16.519589+00:00	1										
+caat-sc	r01	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.064422796	0.06777015898842365	25837568	42		2026-07-15T05:59:10.781973+00:00	1										
+caat-sc	r02	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.063110201	0.07047367095947266	25903104	42		2026-07-15T06:00:13.529613+00:00	1										
+caat-sc	r03	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.065055604	0.07589912001276389	25927680	42		2026-07-15T06:01:16.483314+00:00	1										
+caat-sc	r01	c/pthread/butterfly.yml	unreach-call	true	true	correct	23.135912033	23.16935043403646	25948160	0		2026-07-15T05:59:10.856783+00:00	64560										
+caat-sc	r02	c/pthread/butterfly.yml	unreach-call	true	true	correct	24.612923852	24.68568143696757	25956352	0		2026-07-15T06:00:13.618204+00:00	64560										
+caat-sc	r03	c/pthread/butterfly.yml	unreach-call	true	true	correct	24.792305618	24.862234410014935	26071040	0		2026-07-15T06:01:16.532777+00:00	64560										
+caat-sc	r01	c/pthread/fib_safe-5.yml	unreach-call	true	true	correct	6.213511833	6.22433205798734	25821184	0		2026-07-15T05:59:10.622313+00:00	2772										
+caat-sc	r02	c/pthread/fib_safe-5.yml	unreach-call	true	true	correct	6.30879982	6.314344986982178	25911296	0		2026-07-15T06:00:13.351572+00:00	2772										
+caat-sc	r03	c/pthread/fib_safe-5.yml	unreach-call	true	true	correct	6.655537062	6.664100544992834	25837568	0		2026-07-15T06:01:16.195788+00:00	2772										
+caat-sc	r01	c/pthread/fib_safe-6.yml	unreach-call	true	true	correct	32.873883875	32.92934272898128	25890816	0		2026-07-15T05:59:10.631945+00:00	12012										
+caat-sc	r02	c/pthread/fib_safe-6.yml	unreach-call	true	true	correct	35.335395897	35.342991455981974	25837568	0		2026-07-15T06:00:13.346336+00:00	12012										
+caat-sc	r03	c/pthread/fib_safe-6.yml	unreach-call	true	true	correct	35.098771485	35.12469616997987	25849856	0		2026-07-15T06:01:16.228912+00:00	12012										
+caat-sc	r01	c/pthread/fib_unsafe-5.yml	unreach-call	false	false(unreach-call)	correct	1.653804748	1.7090457750018686	25817088	42		2026-07-15T05:59:10.670118+00:00	632										
+caat-sc	r02	c/pthread/fib_unsafe-5.yml	unreach-call	false	false(unreach-call)	correct	1.775002561	1.8543637369875796	25882624	42		2026-07-15T06:00:13.347022+00:00	632										
+caat-sc	r03	c/pthread/fib_unsafe-5.yml	unreach-call	false	false(unreach-call)	correct	1.704689926	1.7235774979926646	25825280	42		2026-07-15T06:01:16.333217+00:00	632										
+caat-sc	r01	c/pthread/fib_unsafe-6.yml	unreach-call	false	false(unreach-call)	correct	9.363595665	9.445494175015483	25837568	42		2026-07-15T05:59:10.693365+00:00	2942										
+caat-sc	r02	c/pthread/fib_unsafe-6.yml	unreach-call	false	false(unreach-call)	correct	9.828742699	9.837556047947146	25833472	42		2026-07-15T06:00:13.429623+00:00	2942										
+caat-sc	r03	c/pthread/fib_unsafe-6.yml	unreach-call	false	false(unreach-call)	correct	10.064874353	10.076348190021235	25862144	42		2026-07-15T06:01:16.361819+00:00	2942										
+caat-sc	r01	c/pthread/fib_unsafe-7.yml	unreach-call	false	false(unreach-call)	correct	48.384760065	48.54619114601519	25829376	42		2026-07-15T05:59:10.687085+00:00	13238										
+caat-sc	r02	c/pthread/fib_unsafe-7.yml	unreach-call	false	false(unreach-call)	correct	49.960628352	49.96851153502939	25817088	42		2026-07-15T06:00:13.401498+00:00	13238										
+caat-sc	r03	c/pthread/fib_unsafe-7.yml	unreach-call	false	false(unreach-call)	correct	51.928032104	52.00865815702127	25866240	42		2026-07-15T06:01:16.270117+00:00	13238										
+caat-sc	r01	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.060112145	0.07246421702438965	25952256	42		2026-07-15T05:59:10.714098+00:00	1										
+caat-sc	r02	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.071199056	0.08752567495685071	25931776	42		2026-07-15T06:00:13.462487+00:00	1										
+caat-sc	r03	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.066526825	0.07820844504749402	25870336	42		2026-07-15T06:01:16.405576+00:00	1										
+caat-sc	r01	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	0.10179781	0.10827631497522816	26054656	42		2026-07-15T05:59:10.946412+00:00	2										
+caat-sc	r02	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	0.105614115	0.11658125300891697	26030080	42		2026-07-15T06:00:13.689704+00:00	2										
+caat-sc	r03	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	0.109888276	0.13006406603381038	25972736	42		2026-07-15T06:01:16.621243+00:00	2										
+caat-sc	r01	c/pthread/queue_longer.yml	unreach-call	false	TIMEOUT	error	61.031786686	61.0441483319737	402186240		9	2026-07-15T05:59:10.930104+00:00											
+caat-sc	r02	c/pthread/queue_longer.yml	unreach-call	false	TIMEOUT	error	60.973158481	61.04329977405723	399953920		9	2026-07-15T06:00:13.701593+00:00											
+caat-sc	r03	c/pthread/queue_longer.yml	unreach-call	false	TIMEOUT	error	60.990927055	61.042597558000125	397139968		9	2026-07-15T06:01:16.653335+00:00											
+caat-sc	r01	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.071762818	0.08006992598529905	25980928	0		2026-07-15T05:59:10.912139+00:00	2										
+caat-sc	r02	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.068953448	0.07931656495202333	25939968	0		2026-07-15T06:00:13.654491+00:00	2										
+caat-sc	r03	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.073517874	0.08315720403334126	26058752	0		2026-07-15T06:01:16.611291+00:00	2										
+caat-sc	r01	c/pthread/queue_ok_longer.yml	unreach-call	true	true	correct	2.582880393	2.6347177870338783	164474880	0		2026-07-15T05:59:10.897720+00:00	2										
+caat-sc	r02	c/pthread/queue_ok_longer.yml	unreach-call	true	true	correct	2.625011179	2.7639941460220143	164548608	0		2026-07-15T06:00:13.646840+00:00	2										
+caat-sc	r03	c/pthread/queue_ok_longer.yml	unreach-call	true	true	correct	2.653311116	2.685980477021076	164519936	0		2026-07-15T06:01:16.625607+00:00	2										
+caat-sc	r01	c/pthread/queue_ok_longest.yml	unreach-call	true	true	correct	15.021256928	15.07555125100771	613183488	0		2026-07-15T05:59:10.935305+00:00	2										
+caat-sc	r02	c/pthread/queue_ok_longest.yml	unreach-call	true	true	correct	16.05543791	16.110876221966464	613048320	0		2026-07-15T06:00:13.637164+00:00	2										
+caat-sc	r03	c/pthread/queue_ok_longest.yml	unreach-call	true	true	correct	21.932184471	22.006403763021808	613126144	0		2026-07-15T06:01:16.620907+00:00	2										
+caat-sc	r01	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	0.158322152	0.16452820604899898	25976832	42		2026-07-15T05:59:11.033498+00:00	162										
+caat-sc	r02	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	0.176870064	0.18083565001143143	25989120	42		2026-07-15T06:00:13.801068+00:00	162										
+caat-sc	r03	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	0.167124681	0.17552113300189376	26054656	42		2026-07-15T06:01:16.758395+00:00	162										
+caat-sc	r01	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.078195496	0.08626929501770064	26013696	42		2026-07-15T05:59:10.955688+00:00	1										
+caat-sc	r02	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.071788121	0.07505476201185957	26025984	42		2026-07-15T06:00:13.717604+00:00	1										
+caat-sc	r03	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.079750543	0.09111417201347649	26042368	42		2026-07-15T06:01:16.645491+00:00	1										
+caat-sc	r01	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.075446776	0.08325911196880043	25985024	0		2026-07-15T05:59:10.977062+00:00	4										
+caat-sc	r02	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.083005019	0.09017929999390617	26034176	0		2026-07-15T06:00:13.717727+00:00	4										
+caat-sc	r03	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.082416273	0.09081500000320375	26116096	0		2026-07-15T06:01:16.671772+00:00	4										
+caat-sc	r01	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.059025404	0.06521288800286129	25853952	42		2026-07-15T05:59:10.449756+00:00	0										
+caat-sc	r02	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.065786319	0.0725142770097591	25821184	42		2026-07-15T06:00:13.078322+00:00	0										
+caat-sc	r03	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.072219448	0.0832614689716138	25890816	42		2026-07-15T06:01:15.994579+00:00	0										
+caat-sc	r01	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.070557323	0.07977526396280155	25825280	0		2026-07-15T05:59:10.433634+00:00	6										
+caat-sc	r02	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.069103731	0.0770927969715558	25833472	0		2026-07-15T06:00:13.106378+00:00	6										
+caat-sc	r03	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.072242261	0.08095671504270285	25829376	0		2026-07-15T06:01:15.961162+00:00	6										
+caat-sc	r01	c/pthread/triangular-1.yml	unreach-call	true	true	correct	6.388958773	6.4437500310014	25923584	0		2026-07-15T05:59:10.475123+00:00	16632										
+caat-sc	r02	c/pthread/triangular-1.yml	unreach-call	true	true	correct	6.944556628	7.061130221991334	25845760	0		2026-07-15T06:00:13.142185+00:00	16632										
+caat-sc	r03	c/pthread/triangular-1.yml	unreach-call	true	true	correct	7.386073503	7.396189886028878	25841664	0		2026-07-15T06:01:16.023820+00:00	16632										
+caat-sc	r01	c/pthread/triangular-2.yml	unreach-call	false	false(unreach-call)	correct	1.548940318	1.5804267330095172	25907200	42		2026-07-15T05:59:10.497681+00:00	3638										
+caat-sc	r02	c/pthread/triangular-2.yml	unreach-call	false	false(unreach-call)	correct	1.625523859	1.631475206988398	25821184	42		2026-07-15T06:00:13.159125+00:00	3638										
+caat-sc	r03	c/pthread/triangular-2.yml	unreach-call	false	false(unreach-call)	correct	1.576575809	1.6111656409921125	25849856	42		2026-07-15T06:01:16.051385+00:00	3638										
+caat-sc	r01	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.084100044	0.092059426009655	26091520	42		2026-07-15T05:59:11.061642+00:00	4										
+caat-sc	r02	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.087323187	0.09756490302970633	26198016	42		2026-07-15T06:00:13.832959+00:00	4										
+caat-sc	r03	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.080136182	0.09035812900401652	26083328	42		2026-07-15T06:01:16.767217+00:00	4										
+caat-tso	r01	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.060459696	0.06925185903673992	26001408	0		2026-07-15T06:02:20.451582+00:00	2										
+caat-tso	r02	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.088620572	0.09428244398441166	26021888	0		2026-07-15T06:03:23.313480+00:00	2										
+caat-tso	r03	c/goblint-regression/13-privatized_01-priv_nr_true.yml	unreach-call	true	true	correct	0.069831349	0.07634559698635712	25931776	0		2026-07-15T06:04:26.371820+00:00	2										
+caat-tso	r01	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.082095064	0.08581066899932921	25960448	0		2026-07-15T06:02:20.223313+00:00	2										
+caat-tso	r02	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.067767555	0.07858228700933978	25952256	0		2026-07-15T06:03:23.140395+00:00	2										
+caat-tso	r03	c/goblint-regression/13-privatized_18-first-reads_true.yml	unreach-call	true	true	correct	0.075922047	0.08673164300853387	26021888	0		2026-07-15T06:04:26.070263+00:00	2										
+caat-tso	r01	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.084513674	0.08820632100105286	26030080	42		2026-07-15T06:02:20.205950+00:00	0										
+caat-tso	r02	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.076997608	0.08220373501535505	25931776	42		2026-07-15T06:03:23.108601+00:00	0										
+caat-tso	r03	c/goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.084847894	0.09190943703288212	25952256	42		2026-07-15T06:04:26.018302+00:00	0										
+caat-tso	r01	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.072128681	0.07632625696714967	26038272	42		2026-07-15T06:02:20.194083+00:00	0										
+caat-tso	r02	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.074140842	0.0806816770345904	25960448	42		2026-07-15T06:03:23.074402+00:00	0										
+caat-tso	r03	c/goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.081275817	0.08948018297087401	25923584	42		2026-07-15T06:04:26.003312+00:00	0										
+caat-tso	r01	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.084327805	0.09056015399983153	25960448	0		2026-07-15T06:02:20.478966+00:00	3										
+caat-tso	r02	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.091235709	0.09552291897125542	25972736	0		2026-07-15T06:03:23.320797+00:00	3										
+caat-tso	r03	c/goblint-regression/13-privatized_19-publish-precision_true.yml	unreach-call	true	true	correct	0.088001561	0.10185666201869026	25960448	0		2026-07-15T06:04:26.420423+00:00	3										
+caat-tso	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.073874774	0.07813363202149048	25972736	42		2026-07-15T06:02:20.379701+00:00	0										
+caat-tso	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.075789919	0.08410835999529809	25939968	42		2026-07-15T06:03:23.253556+00:00	0										
+caat-tso	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.089733838	0.10085000697290525	26009600	42		2026-07-15T06:04:26.346850+00:00	0										
+caat-tso	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.082138697	0.08943865000037476	26001408	42		2026-07-15T06:02:20.345334+00:00	0										
+caat-tso	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.068703892	0.0765723239746876	25956352	42		2026-07-15T06:03:23.225408+00:00	0										
+caat-tso	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.068483994	0.1225295799667947	26013696	42		2026-07-15T06:04:26.194864+00:00	0										
+caat-tso	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.06130153	0.0681561179808341	25972736	42		2026-07-15T06:02:20.401899+00:00	0										
+caat-tso	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.073813161	0.08509966300334781	26030080	42		2026-07-15T06:03:23.259373+00:00	0										
+caat-tso	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml	unreach-call	false	false(unreach-call)	correct	0.077701143	0.08519682299811393	26009600	42		2026-07-15T06:04:26.327197+00:00	0										
+caat-tso	r01	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.064724224	0.0760259369853884	25952256	42		2026-07-15T06:02:20.385129+00:00	0										
+caat-tso	r02	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.07318967	0.08360327902482823	26038272	42		2026-07-15T06:03:23.243664+00:00	0										
+caat-tso	r03	c/goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml	unreach-call	false	false(unreach-call)	correct	0.087518629	0.11724675202276558	25956352	42		2026-07-15T06:04:26.236703+00:00	0										
+caat-tso	r01	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.060842117	0.06397185398964211	25960448	0		2026-07-15T06:02:20.597907+00:00	2										
+caat-tso	r02	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.066327086	0.07498381700133905	26042368	0		2026-07-15T06:03:23.494577+00:00	2										
+caat-tso	r03	c/goblint-regression/13-privatized_20-publish-regression_true.yml	unreach-call	true	true	correct	0.077101912	0.08736072696046904	25927680	0		2026-07-15T06:04:26.552930+00:00	2										
+caat-tso	r01	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.06679411	0.07624873699387535	26013696	0		2026-07-15T06:02:20.689054+00:00	7										
+caat-tso	r02	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.079359209	0.09267201798502356	25972736	0		2026-07-15T06:03:23.633353+00:00	7										
+caat-tso	r03	c/goblint-regression/13-privatized_24-multiple-protecting_true.yml	unreach-call	true	true	correct	0.083736176	0.09629103698534891	25976832	0		2026-07-15T06:04:26.661202+00:00	7										
+caat-tso	r01	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.080043104	0.08709176501724869	25972736	0		2026-07-15T06:02:20.516335+00:00	2										
+caat-tso	r02	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.079713844	0.08383382100146264	26005504	0		2026-07-15T06:03:23.384674+00:00	2										
+caat-tso	r03	c/goblint-regression/13-privatized_25-struct_nr_true.yml	unreach-call	true	true	correct	0.065180051	0.07355850702151656	26050560	0		2026-07-15T06:04:26.441947+00:00	2										
+caat-tso	r01	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.104040033	0.10781147703528404	26112000	0		2026-07-15T06:02:20.774014+00:00	26										
+caat-tso	r02	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.094491319	0.10471926297759637	26017792	0		2026-07-15T06:03:23.706947+00:00	26										
+caat-tso	r03	c/goblint-regression/13-privatized_27-multiple-protecting2_true.yml	unreach-call	true	true	correct	0.094393737	0.10689343098783866	26103808	0		2026-07-15T06:04:26.762100+00:00	26										
+caat-tso	r01	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.064967777	0.07451121899066493	26005504	0		2026-07-15T06:02:20.707829+00:00	4										
+caat-tso	r02	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.069263374	0.07469138503074646	26009600	0		2026-07-15T06:03:23.591945+00:00	4										
+caat-tso	r03	c/goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml	unreach-call	true	true	correct	0.072525177	0.08233009098330513	25956352	0		2026-07-15T06:04:26.647202+00:00	4										
+caat-tso	r01	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.078421115	0.08214428403880447	25956352	0		2026-07-15T06:02:20.637777+00:00	2	2									
+caat-tso	r02	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.064280576	0.07436759601114318	25911296	0		2026-07-15T06:03:23.514457+00:00	2	2									
+caat-tso	r03	c/goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.078377051	0.09029459196608514	26042368	0		2026-07-15T06:04:26.597311+00:00	2	2									
+caat-tso	r01	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.064810727	0.07044216402573511	25960448	0		2026-07-15T06:02:20.577013+00:00	4										
+caat-tso	r02	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.088358512	0.09660474199336022	25952256	0		2026-07-15T06:03:23.441467+00:00	4										
+caat-tso	r03	c/goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml	unreach-call	true	true	correct	0.078194168	0.09245067997835577	26001408	0		2026-07-15T06:04:26.536268+00:00	4										
+caat-tso	r01	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.090759451	0.09658522298559546	26021888	0		2026-07-15T06:02:20.624918+00:00	3	2									
+caat-tso	r02	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.06483898	0.07566969096660614	25956352	0		2026-07-15T06:03:23.507528+00:00	3	2									
+caat-tso	r03	c/goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml	unreach-call	true	true	correct	0.06959007	0.08670509001240134	25952256	0		2026-07-15T06:04:26.585872+00:00	3	2									
+caat-tso	r01	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.082728701	0.09000530396588147	25931776	0		2026-07-15T06:02:20.497461+00:00	1	2									
+caat-tso	r02	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.071191789	0.07926752202911302	26025984	0		2026-07-15T06:03:23.356638+00:00	1	2									
+caat-tso	r03	c/goblint-regression/13-privatized_33-traces-v-matters_true.yml	unreach-call	true	true	correct	0.079417767	0.0969720299472101	25952256	0		2026-07-15T06:04:26.440563+00:00	1	2									
+caat-tso	r01	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.083184225	0.09096433297963813	25956352	0		2026-07-15T06:02:20.664449+00:00	1	1									
+caat-tso	r02	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.079782772	0.09046041104011238	26017792	0		2026-07-15T06:03:23.555342+00:00	1	1									
+caat-tso	r03	c/goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml	unreach-call	true	true	correct	0.077243349	0.09112846601055935	25956352	0		2026-07-15T06:04:26.659379+00:00	1	1									
+caat-tso	r01	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.060125663	0.06566630600718781	25903104	0		2026-07-15T06:02:20.232660+00:00	2	2									
+caat-tso	r02	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.075821016	0.08385955402627587	26042368	0		2026-07-15T06:03:23.154904+00:00	2	2									
+caat-tso	r03	c/goblint-regression/13-privatized_35-traces-ex-2_true.yml	unreach-call	true	true	correct	0.078357223	0.08637754898518324	25899008	0		2026-07-15T06:04:26.133206+00:00	2	2									
+caat-tso	r01	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.072618826	0.08198363601695746	26001408	0		2026-07-15T06:02:20.214862+00:00	3										
+caat-tso	r02	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.062548207	0.07265758101129904	25956352	0		2026-07-15T06:03:23.100545+00:00	3										
+caat-tso	r03	c/goblint-regression/13-privatized_36-traces-ex-3_true.yml	unreach-call	true	true	correct	0.076239322	0.08591179602080956	25968640	0		2026-07-15T06:04:26.037921+00:00	3										
+caat-tso	r01	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.083229214	0.08738480700412765	25997312	0		2026-07-15T06:02:20.245155+00:00	2										
+caat-tso	r02	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.07771219	0.08584129100199789	26009600	0		2026-07-15T06:03:23.166358+00:00	2										
+caat-tso	r03	c/goblint-regression/13-privatized_37-traces-ex-4_true.yml	unreach-call	true	true	correct	0.071380268	0.10131230199476704	25948160	0		2026-07-15T06:04:26.163445+00:00	2										
+caat-tso	r01	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.061641292	0.06942159304162487	25964544	0		2026-07-15T06:02:20.279958+00:00	2	2									
+caat-tso	r02	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.089716481	0.09486009599640965	25886720	0		2026-07-15T06:03:23.211625+00:00	2	2									
+caat-tso	r03	c/goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml	unreach-call	true	true	correct	0.078057205	0.15622824296588078	25952256	0		2026-07-15T06:04:26.157155+00:00	2	2									
+caat-tso	r01	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.0845177	0.0935063409851864	25952256	0		2026-07-15T06:02:20.154901+00:00	1	1									
+caat-tso	r02	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.086620383	0.0940561179886572	25960448	0		2026-07-15T06:03:22.950428+00:00	1	1									
+caat-tso	r03	c/goblint-regression/13-privatized_40-traces-ex-6_true.yml	unreach-call	true	true	correct	0.083499038	0.09198215900687501	25952256	0		2026-07-15T06:04:25.957422+00:00	1	1									
+caat-tso	r01	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.062638134	0.07040935999248177	25952256	42		2026-07-15T06:02:20.135436+00:00	0										
+caat-tso	r02	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.073630543	0.09722585399867967	25890816	42		2026-07-15T06:03:22.938592+00:00	0										
+caat-tso	r03	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.081695364	0.08556443499401212	25890816	42		2026-07-15T06:04:25.944975+00:00	0										
+caat-tso	r01	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.070732726	0.07872051099548116	25956352	42		2026-07-15T06:02:20.120825+00:00	0										
+caat-tso	r02	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.090526323	0.09732530900510028	25956352	42		2026-07-15T06:03:22.919397+00:00	0										
+caat-tso	r03	c/goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.075035734	0.08442514599300921	25976832	42		2026-07-15T06:04:25.927489+00:00	0										
+caat-tso	r01	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.072767217	0.08162969799013808	25931776	0		2026-07-15T06:02:20.457218+00:00	2										
+caat-tso	r02	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.074296916	0.08725424500880763	25985024	0		2026-07-15T06:03:23.347976+00:00	2										
+caat-tso	r03	c/goblint-regression/13-privatized_42-traces-ex-mini_true.yml	unreach-call	true	true	correct	0.079671397	0.09383761900244281	25956352	0		2026-07-15T06:04:26.404812+00:00	2										
+caat-tso	r01	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.082854382	0.08733023999957368	25890816	0		2026-07-15T06:02:20.187414+00:00	1	1									
+caat-tso	r02	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.086541828	0.0944711429765448	25915392	0		2026-07-15T06:03:23.032474+00:00	1	1									
+caat-tso	r03	c/goblint-regression/13-privatized_44-traces-mine2_true.yml	unreach-call	true	true	correct	0.082065055	0.08980253298068419	25907200	0		2026-07-15T06:04:25.989381+00:00	1	1									
+caat-tso	r01	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.06327726	0.07394099602242932	26017792	0		2026-07-15T06:02:20.429135+00:00	2	2									
+caat-tso	r02	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.062761406	0.07573981501627713	25919488	0		2026-07-15T06:03:23.288477+00:00	2	2									
+caat-tso	r03	c/goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml	unreach-call	true	true	correct	0.080014739	0.09960544598288834	25993216	0		2026-07-15T06:04:26.357749+00:00	2	2									
+caat-tso	r01	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.085457173	0.08764960803091526	25948160	0		2026-07-15T06:02:20.090770+00:00	1										
+caat-tso	r02	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.082460328	0.0975775410188362	25952256	0		2026-07-15T06:03:22.887411+00:00	1										
+caat-tso	r03	c/goblint-regression/13-privatized_46-refine-protected1_true.yml	unreach-call	true	true	correct	0.078551638	0.08523327601142228	25956352	0		2026-07-15T06:04:25.895213+00:00	1										
+caat-tso	r01	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.060026243	0.06576143897837028	25919488	0		2026-07-15T06:02:20.082246+00:00	2										
+caat-tso	r02	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.064903205	0.07684536004671827	25960448	0		2026-07-15T06:03:22.876947+00:00	2										
+caat-tso	r03	c/goblint-regression/13-privatized_47-refine-protected2_true.yml	unreach-call	true	true	correct	0.077433001	0.08485825796378776	25960448	0		2026-07-15T06:04:25.879683+00:00	2										
+caat-tso	r01	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.086781478	0.08886410400737077	25960448	0		2026-07-15T06:02:20.071282+00:00	1										
+caat-tso	r02	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.079778075	0.08613894699374214	25952256	0		2026-07-15T06:03:22.861642+00:00	1										
+caat-tso	r03	c/goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml	unreach-call	true	true	correct	0.089703171	0.09734489698894322	25956352	0		2026-07-15T06:04:25.867665+00:00	1										
+caat-tso	r01	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.070277173	0.07719970599282533	25960448	0		2026-07-15T06:02:20.171532+00:00	1										
+caat-tso	r02	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.063186312	0.08247365296119824	25985024	0		2026-07-15T06:03:22.987700+00:00	1										
+caat-tso	r03	c/goblint-regression/13-privatized_58-singlethreaded-lock_true.yml	unreach-call	true	true	correct	0.067508073	0.07397430296987295	25960448	0		2026-07-15T06:04:25.975781+00:00	1										
+caat-tso	r01	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.070452243	0.07454060699092224	25956352	0		2026-07-15T06:02:20.041059+00:00	1										
+caat-tso	r02	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.074052955	0.08322336798300967	25833472	0		2026-07-15T06:03:22.823736+00:00	1										
+caat-tso	r03	c/goblint-regression/13-privatized_66-mine-W-init_true.yml	unreach-call	true	true	correct	0.069727904	0.07726123399334028	25903104	0		2026-07-15T06:04:25.826927+00:00	1										
+caat-tso	r01	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.062412532	0.07060678501147777	25976832	0		2026-07-15T06:02:20.699145+00:00	0	1									
+caat-tso	r02	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.072517833	0.08326743700308725	26075136	0		2026-07-15T06:03:23.577686+00:00	0	1									
+caat-tso	r03	c/goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml	unreach-call	true	true	correct	0.085575346	0.09781204099999741	26083328	0		2026-07-15T06:04:26.622853+00:00	0	1									
+caat-tso	r01	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.08535313	0.09242028096923605	26087424	0		2026-07-15T06:02:20.539573+00:00	0	1									
+caat-tso	r02	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.071653202	0.07709834101842716	26013696	0		2026-07-15T06:03:23.392105+00:00	0	1									
+caat-tso	r03	c/goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml	unreach-call	true	true	correct	0.070406449	0.07944147498346865	26066944	0		2026-07-15T06:04:26.490193+00:00	0	1									
+caat-tso	r01	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	TIMEOUT	error	61.078404373	61.152536066947505	1657028608		9	2026-07-15T06:02:21.094231+00:00											
+caat-tso	r02	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	OUT OF MEMORY	error	51.119076845	51.143785183958244	3999997952		9	2026-07-15T06:03:24.043468+00:00											
+caat-tso	r03	c/goblint-regression/28-race_reach_01-simple_racing.yml	unreach-call	false	TIMEOUT	error	61.09661378	61.16105301602511	1657061376		9	2026-07-15T06:04:27.151788+00:00											
+caat-tso	r01	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	OUT OF MEMORY	error	50.875183368	50.927021932031494	3999997952		9	2026-07-15T06:02:21.470491+00:00											
+caat-tso	r02	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	TIMEOUT	error	61.094355773	61.15002025204012	1657053184		9	2026-07-15T06:03:24.387697+00:00											
+caat-tso	r03	c/goblint-regression/28-race_reach_06-cond_racing1.yml	unreach-call	false	TIMEOUT	error	61.047480251	61.13756676798221	1657118720		9	2026-07-15T06:04:27.522142+00:00											
+caat-tso	r01	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	OUT OF MEMORY	error	49.04962288	49.13459600805072	3999997952		9	2026-07-15T06:02:21.145658+00:00											
+caat-tso	r02	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	OUT OF MEMORY	error	51.815845145	51.943513726000674	3999997952		9	2026-07-15T06:03:24.088453+00:00											
+caat-tso	r03	c/goblint-regression/28-race_reach_11-ptr_racing.yml	unreach-call	false	OUT OF MEMORY	error	57.328516583	57.46512717800215	3999997952		9	2026-07-15T06:04:27.172402+00:00											
+caat-tso	r01	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	5.388579443	5.40070746204583	57163776	42		2026-07-15T06:02:21.048585+00:00	0										
+caat-tso	r02	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	4.419109623	4.466600165993441	56844288	42		2026-07-15T06:03:23.935320+00:00	0										
+caat-tso	r03	c/goblint-regression/28-race_reach_21-deref_read_racing.yml	unreach-call	false	false(unreach-call)	correct	4.469277062	4.52989849698497	57348096	42		2026-07-15T06:04:27.067331+00:00	0										
+caat-tso	r01	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	OUT OF MEMORY	error	50.458743752	50.556006846018136	3999997952		9	2026-07-15T06:02:21.313282+00:00											
+caat-tso	r02	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	TIMEOUT	error	61.14384551	61.15480669302633	1657126912		9	2026-07-15T06:03:24.194446+00:00											
+caat-tso	r03	c/goblint-regression/28-race_reach_24-sound_lock_racing.yml	unreach-call	false	OUT OF MEMORY	error	58.276352009	58.37432406202424	3999997952		9	2026-07-15T06:04:27.307993+00:00											
+caat-tso	r01	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	TIMEOUT	error	61.142468845	61.17934777698247	1963585536		9	2026-07-15T06:02:21.087125+00:00											
+caat-tso	r02	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	TIMEOUT	error	61.120852624	61.173495477007236	1657065472		9	2026-07-15T06:03:23.989258+00:00											
+caat-tso	r03	c/goblint-regression/28-race_reach_37-indirect_racing.yml	unreach-call	false	TIMEOUT	error	61.152678205	61.16424533998361	1657044992		9	2026-07-15T06:04:27.139321+00:00											
+caat-tso	r01	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.073364654	0.08248615503543988	26017792	42		2026-07-15T06:02:21.108018+00:00	0										
+caat-tso	r02	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.076477166	0.08488293003756553	26038272	42		2026-07-15T06:03:24.004726+00:00	0										
+caat-tso	r03	c/goblint-regression/28-race_reach_45-escape_racing.yml	unreach-call	false	false(unreach-call)	correct	0.078305719	0.08896817796630785	25985024	42		2026-07-15T06:04:27.128916+00:00	0										
+caat-tso	r01	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.065711803	0.06898143596481532	25968640	0		2026-07-15T06:02:21.125765+00:00	2										
+caat-tso	r02	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.067406327	0.076979810022749	25997312	0		2026-07-15T06:03:24.049522+00:00	2										
+caat-tso	r03	c/goblint-regression/28-race_reach_46-escape_racefree.yml	unreach-call	true	true	correct	0.070410684	0.0801757100271061	25972736	0		2026-07-15T06:04:27.116501+00:00	2										
+caat-tso	r01	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.066556968	0.07187947700731456	25956352	0		2026-07-15T06:02:20.102229+00:00	2										
+caat-tso	r02	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.077912285	0.0842351220198907	25956352	0		2026-07-15T06:03:22.902845+00:00	2										
+caat-tso	r03	c/goblint-regression/36-apron_11-traces-max-simple_true.yml	unreach-call	true	true	correct	0.077959695	0.0835491269826889	25985024	0		2026-07-15T06:04:25.911498+00:00	2										
+caat-tso	r01	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.058343946	0.06332723301602527	25939968	0		2026-07-15T06:02:20.064348+00:00	1										
+caat-tso	r02	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.074383021	0.08014638698659837	25956352	0		2026-07-15T06:03:22.847740+00:00	1										
+caat-tso	r03	c/goblint-regression/36-apron_16-traces-unprot2_true.yml	unreach-call	true	true	correct	0.067979928	0.07152213098015636	25956352	0		2026-07-15T06:04:25.853577+00:00	1										
+caat-tso	r01	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.066476773	0.07936245296150446	25960448	42		2026-07-15T06:02:20.551135+00:00	0										
+caat-tso	r02	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.076244314	0.08367099100723863	25935872	42		2026-07-15T06:03:23.454103+00:00	0										
+caat-tso	r03	c/goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml	unreach-call	false	false(unreach-call)	correct	0.089721919	0.10112215101253241	25899008	42		2026-07-15T06:04:26.515966+00:00	0										
+caat-tso	r01	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.07674852	0.08294792502420023	26071040	0		2026-07-15T06:02:20.739665+00:00	6	2									
+caat-tso	r02	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.081180896	0.0920757909771055	26103808	0		2026-07-15T06:03:23.620130+00:00	6	2									
+caat-tso	r03	c/goblint-regression/36-apron_21-traces-cluster-based_true.yml	unreach-call	true	true	correct	0.09227936	0.10134923504665494	26042368	0		2026-07-15T06:04:26.714760+00:00	6	2									
+caat-tso	r01	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.075362217	0.08349817502312362	26034176	0		2026-07-15T06:02:20.749455+00:00	1										
+caat-tso	r02	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.069730849	0.07696827501058578	25997312	0		2026-07-15T06:03:23.683117+00:00	1										
+caat-tso	r03	c/goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml	unreach-call	true	true	correct	0.070838942	0.07603282801574096	26030080	0		2026-07-15T06:04:26.751764+00:00	1										
+caat-tso	r01	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.081371345	0.09009386203251779	25923584	42		2026-07-15T06:02:20.050682+00:00	0										
+caat-tso	r02	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.085967631	0.09578089002752677	25964544	42		2026-07-15T06:03:22.835003+00:00	0										
+caat-tso	r03	c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml	unreach-call	false	false(unreach-call)	correct	0.078424598	0.08228462300030515	25821184	42		2026-07-15T06:04:25.841297+00:00	0										
+caat-tso	r01	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.070164937	0.0769220600486733	26165248	0		2026-07-15T06:02:21.683477+00:00	1										
+caat-tso	r02	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.08181104	0.10964822198729962	26198016	0		2026-07-15T06:03:24.632638+00:00	1										
+caat-tso	r03	c/ldv-races/race-1_1-join.yml	unreach-call	true	true	correct	0.085955077	0.10717105597723275	26173440	0		2026-07-15T06:04:27.786337+00:00	1										
+caat-tso	r01	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.083133926	0.09305185795528814	26189824	42		2026-07-15T06:02:21.710955+00:00	1										
+caat-tso	r02	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.075338862	0.11221446102717891	26157056	42		2026-07-15T06:03:24.642910+00:00	1										
+caat-tso	r03	c/ldv-races/race-1_2-join.yml	unreach-call	false	false(unreach-call)	correct	0.075487417	0.08573903801152483	26214400	42		2026-07-15T06:04:27.825416+00:00	1										
+caat-tso	r01	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.086097174	0.09191334998467937	26267648	42		2026-07-15T06:02:21.715417+00:00	1										
+caat-tso	r02	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.078946648	0.19923913199454546	26214400	42		2026-07-15T06:03:24.650826+00:00	1										
+caat-tso	r03	c/ldv-races/race-1_3-join.yml	unreach-call	false	false(unreach-call)	correct	0.093012859	0.10032076598145068	26275840	42		2026-07-15T06:04:27.786038+00:00	1										
+caat-tso	r01	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.081222493	0.0893715110141784	26320896	0		2026-07-15T06:02:21.745728+00:00	1										
+caat-tso	r02	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.084109968	0.09296938695479184	26238976	0		2026-07-15T06:03:24.676274+00:00	1										
+caat-tso	r03	c/ldv-races/race-2_1-container_of.yml	unreach-call	true	true	correct	0.093214227	0.11224084399873391	26324992	0		2026-07-15T06:04:27.845884+00:00	1										
+caat-tso	r01	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.08227681	0.09707109798910096	26222592	0		2026-07-15T06:02:21.745820+00:00	1										
+caat-tso	r02	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.086327219	0.11911068699555472	26296320	0		2026-07-15T06:03:24.689825+00:00	1										
+caat-tso	r03	c/ldv-races/race-3_1-container_of-global.yml	unreach-call	true	true	correct	0.076330567	0.08652063400950283	26300416	0		2026-07-15T06:04:27.857730+00:00	1										
+caat-tso	r01	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.086088275	0.09965967497555539	26304512	0		2026-07-15T06:02:21.715827+00:00	0	1									
+caat-tso	r02	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.075285747	0.1269443220226094	26271744	0		2026-07-15T06:03:24.671015+00:00	0	1									
+caat-tso	r03	c/ldv-races/race-4_1-thread_local_vars.yml	unreach-call	true	true	correct	0.087096748	0.09968749003019184	26353664	0		2026-07-15T06:04:27.832693+00:00	0	1									
+caat-tso	r01	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.15605047	0.20663900102954358	26103808	42		2026-07-15T06:02:21.601847+00:00	0										
+caat-tso	r02	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.159948677	0.16817011695820838	26021888	42		2026-07-15T06:03:24.516775+00:00	0										
+caat-tso	r03	c/pthread-C-DAC/pthread-demo-datarace-3.yml	unreach-call	false	false(unreach-call)	correct	0.180235075	0.18820284900721163	26107904	42		2026-07-15T06:04:27.657174+00:00	0										
+caat-tso	r01	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.075944964	0.08495559298899025	26075136	0		2026-07-15T06:02:21.344901+00:00	4	6									
+caat-tso	r02	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.08009423	0.09376352501567453	25997312	0		2026-07-15T06:03:24.310572+00:00	4	6									
+caat-tso	r03	c/pthread-atomic/dekker-unfair.yml	unreach-call	true	true	correct	0.083321805	0.09656120801810175	25976832	0		2026-07-15T06:04:27.387143+00:00	4	6									
+caat-tso	r01	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.069062994	0.0733565419795923	26091520	0		2026-07-15T06:02:21.353675+00:00	4	6									
+caat-tso	r02	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.078671686	0.09288290998665616	25956352	0		2026-07-15T06:03:24.277157+00:00	4	6									
+caat-tso	r03	c/pthread-atomic/dekker.yml	unreach-call	true	true	correct	0.080178349	0.09672410000348464	25960448	0		2026-07-15T06:04:27.366370+00:00	4	6									
+caat-tso	r01	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.078250656	0.08630941604496911	26091520	0		2026-07-15T06:02:21.309264+00:00	6	25									
+caat-tso	r02	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.083472578	0.09086414199555293	26050560	0		2026-07-15T06:03:24.267786+00:00	6	25									
+caat-tso	r03	c/pthread-atomic/szymanski.yml	unreach-call	true	true	correct	0.072785096	0.09294818295165896	25952256	0		2026-07-15T06:04:27.356563+00:00	6	25									
+caat-tso	r01	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.064421833	0.07407205697381869	26083328	0		2026-07-15T06:02:20.934212+00:00	2										
+caat-tso	r02	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.094275998	0.10077831899980083	26112000	0		2026-07-15T06:03:23.822937+00:00	2										
+caat-tso	r03	c/pthread-atomic/time_var_mutex.yml	unreach-call	true	true	correct	0.070676282	0.08446854900103062	26091520	0		2026-07-15T06:04:26.961165+00:00	2										
+caat-tso	r01	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.068200608	0.07301740004913881	26152960	42		2026-07-15T06:02:21.164693+00:00	1										
+caat-tso	r02	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.074216296	0.08239136799238622	26087424	42		2026-07-15T06:03:24.076843+00:00	1										
+caat-tso	r03	c/pthread-deagle/circular_buffer_bad.yml	unreach-call	false	false(unreach-call)	correct	0.086989553	0.0974486920167692	26099712	42		2026-07-15T06:04:27.188107+00:00	1										
+caat-tso	r01	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	true	correct	7.953201653	8.052379772008862	26144768	0		2026-07-15T06:02:21.300659+00:00	3432										
+caat-tso	r02	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	true	correct	7.807201153	7.918114433996379	26087424	0		2026-07-15T06:03:24.236860+00:00	3432										
+caat-tso	r03	c/pthread-deagle/circular_buffer_ok.yml	unreach-call	true	true	correct	8.297732709	8.483593026991002	26087424	0		2026-07-15T06:04:27.364752+00:00	3432										
+caat-tso	r01	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.082666621	0.09109665500000119	25993216	0		2026-07-15T06:02:20.973476+00:00	0	1									
+caat-tso	r02	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.076370808	0.09130887495120987	25952256	0		2026-07-15T06:03:23.867024+00:00	0	1									
+caat-tso	r03	c/pthread-ext/01b_inc.yml	unreach-call	true	true	correct	0.077173573	0.09259543800726533	25960448	0		2026-07-15T06:04:26.982484+00:00	0	1									
+caat-tso	r01	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.079976861	0.09264061402063817	25964544	0		2026-07-15T06:02:21.012294+00:00	0	1									
+caat-tso	r02	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.063996202	0.07178943703183904	26058752	0		2026-07-15T06:03:23.902362+00:00	0	1									
+caat-tso	r03	c/pthread-ext/02_inc_cas.yml	unreach-call	true	true	correct	0.068235381	0.08217053004773334	25956352	0		2026-07-15T06:04:27.056728+00:00	0	1									
+caat-tso	r01	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.075902369	0.08383992896415293	26009600	0		2026-07-15T06:02:20.802598+00:00	0	1									
+caat-tso	r02	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.075992099	0.08200875000329688	25903104	0		2026-07-15T06:03:23.699533+00:00	0	1									
+caat-tso	r03	c/pthread-ext/14_spin2003.yml	unreach-call	true	true	correct	0.079327515	0.0865803940105252	25939968	0		2026-07-15T06:04:26.790951+00:00	0	1									
+caat-tso	r01	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.061758224	0.06850513303652406	25853952	0		2026-07-15T06:02:20.784421+00:00	0	1									
+caat-tso	r02	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.073266149	0.08314692100975662	25878528	0		2026-07-15T06:03:23.716148+00:00	0	1									
+caat-tso	r03	c/pthread-ext/29_conditionals_vs.yml	unreach-call	true	true	correct	0.088314331	0.09927954903105274	25923584	0		2026-07-15T06:04:26.830726+00:00	0	1									
+caat-tso	r01	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.074007772	0.08199123002123088	25989120	0		2026-07-15T06:02:21.420758+00:00	0	1									
+caat-tso	r02	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.087045784	0.09647755097830668	25980928	0		2026-07-15T06:03:24.361742+00:00	0	1									
+caat-tso	r03	c/pthread-ext/43_NetBSD_sysmon_power_sliced.yml	unreach-call	true	true	correct	0.070280104	0.08668592100730166	25989120	0		2026-07-15T06:04:27.495200+00:00	0	1									
+caat-tso	r01	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.063652047	0.0712259630090557	25956352	0		2026-07-15T06:02:20.878075+00:00	0	1									
+caat-tso	r02	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.063987068	0.07517416100017726	26034176	0		2026-07-15T06:03:23.812879+00:00	0	1									
+caat-tso	r03	c/pthread-ext/45_monabsex1_vs.yml	unreach-call	true	true	correct	0.086326848	0.0978265090379864	25985024	0		2026-07-15T06:04:26.896675+00:00	0	1									
+caat-tso	r01	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.070833796	0.07919167599175125	25956352	0		2026-07-15T06:02:20.840564+00:00	0	1									
+caat-tso	r02	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.063413244	0.07388919196091592	25993216	0		2026-07-15T06:03:23.771895+00:00	0	1									
+caat-tso	r03	c/pthread-ext/46_monabsex2_vs.yml	unreach-call	true	true	correct	0.076372426	0.08758701098849997	25915392	0		2026-07-15T06:04:26.868509+00:00	0	1									
+caat-tso	r01	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.072632469	0.08211523195495829	26005504	0		2026-07-15T06:02:20.816766+00:00	0	1									
+caat-tso	r02	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.073583177	0.08957527199527249	25968640	0		2026-07-15T06:03:23.740023+00:00	0	1									
+caat-tso	r03	c/pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml	unreach-call	true	true	correct	0.065732789	0.07823404698865488	25993216	0		2026-07-15T06:04:26.850469+00:00	0	1									
+caat-tso	r01	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.079170626	0.08560837799450383	25964544	0		2026-07-15T06:02:21.069721+00:00	0	1									
+caat-tso	r02	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.073827479	0.08831282600294799	26034176	0		2026-07-15T06:03:23.960660+00:00	0	1									
+caat-tso	r03	c/pthread-ext/48_ticket_lock_low_contention_vs.yml	unreach-call	true	true	correct	0.089334241	0.10049815103411674	25939968	0		2026-07-15T06:04:27.084169+00:00	0	1									
+caat-tso	r01	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.081362325	0.08634530002018437	26095616	0		2026-07-15T06:02:21.384603+00:00	1										
+caat-tso	r02	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.06718005	0.07997059501940385	26087424	0		2026-07-15T06:03:24.300517+00:00	1										
+caat-tso	r03	c/pthread-theta/exponential-nondet.yml	unreach-call	true	true	correct	0.080276838	0.09317139099584892	25993216	0		2026-07-15T06:04:27.454511+00:00	1										
+caat-tso	r01	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.077837152	0.08856213296530768	26107904	42		2026-07-15T06:02:21.396225+00:00	1										
+caat-tso	r02	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.081041526	0.08726286195451394	26083328	42		2026-07-15T06:03:24.343750+00:00	1										
+caat-tso	r03	c/pthread-theta/unwind2-1.yml	unreach-call	false	false(unreach-call)	correct	0.080819985	0.09162254497641698	26066944	42		2026-07-15T06:04:27.441447+00:00	1										
+caat-tso	r01	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.077379851	0.0866055850056	26132480	42		2026-07-15T06:02:21.407735+00:00	1										
+caat-tso	r02	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.072528532	0.0781755470088683	26120192	42		2026-07-15T06:03:24.351574+00:00	1										
+caat-tso	r03	c/pthread-theta/unwind2-100.yml	unreach-call	false	false(unreach-call)	correct	0.073457058	0.08398651203606278	26034176	42		2026-07-15T06:04:27.464159+00:00	1										
+caat-tso	r01	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.074571695	0.08119178499327973	26107904	42		2026-07-15T06:02:21.377711+00:00	1										
+caat-tso	r02	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.077150346	0.08865661098388955	26001408	42		2026-07-15T06:03:24.310292+00:00	1										
+caat-tso	r03	c/pthread-theta/unwind3-1.yml	unreach-call	false	false(unreach-call)	correct	0.073773466	0.0823576109833084	26038272	42		2026-07-15T06:04:27.411606+00:00	1										
+caat-tso	r01	c/pthread/butterfly.yml	unreach-call	true	true	correct	36.050027992	36.1486389679485	26214400	0		2026-07-15T06:02:21.434730+00:00	64560										
+caat-tso	r02	c/pthread/butterfly.yml	unreach-call	true	true	correct	38.68898811	38.737370810005814	26157056	0		2026-07-15T06:03:24.371593+00:00	64560										
+caat-tso	r03	c/pthread/butterfly.yml	unreach-call	true	true	correct	38.527899047	38.56432797800517	26185728	0		2026-07-15T06:04:27.485119+00:00	64560										
+caat-tso	r01	c/pthread/fib_safe-5.yml	unreach-call	true	true	correct	10.825793664	10.83494123001583	25956352	0		2026-07-15T06:02:21.256122+00:00	2772										
+caat-tso	r02	c/pthread/fib_safe-5.yml	unreach-call	true	true	correct	10.604951399	10.796799891977571	25952256	0		2026-07-15T06:03:24.116667+00:00	2772										
+caat-tso	r03	c/pthread/fib_safe-5.yml	unreach-call	true	true	correct	10.952739713	11.132898221025243	26083328	0		2026-07-15T06:04:27.208125+00:00	2772										
+caat-tso	r01	c/pthread/fib_safe-6.yml	unreach-call	true	TIMEOUT (true)	error	60.287103935	60.3137614330044	25989120	0		2026-07-15T06:02:21.220268+00:00	12012										
+caat-tso	r02	c/pthread/fib_safe-6.yml	unreach-call	true	TIMEOUT	error	60.863363832	61.01658073195722	25956352		9	2026-07-15T06:03:24.101338+00:00											
+caat-tso	r03	c/pthread/fib_safe-6.yml	unreach-call	true	true	correct	58.71414305	58.79268327401951	25960448	0		2026-07-15T06:04:27.222000+00:00	12012										
+caat-tso	r01	c/pthread/fib_unsafe-5.yml	unreach-call	false	false(unreach-call)	correct	2.810590936	2.895328255952336	25993216	42		2026-07-15T06:02:21.235305+00:00	632										
+caat-tso	r02	c/pthread/fib_unsafe-5.yml	unreach-call	false	false(unreach-call)	correct	2.850607573	2.8594171629520133	26058752	42		2026-07-15T06:03:24.140624+00:00	632										
+caat-tso	r03	c/pthread/fib_unsafe-5.yml	unreach-call	false	false(unreach-call)	correct	3.012511688	3.0469679480302148	26038272	42		2026-07-15T06:04:27.259937+00:00	632										
+caat-tso	r01	c/pthread/fib_unsafe-6.yml	unreach-call	false	false(unreach-call)	correct	16.367728733	16.53688740899088	26042368	42		2026-07-15T06:02:21.238208+00:00	2942										
+caat-tso	r02	c/pthread/fib_unsafe-6.yml	unreach-call	false	false(unreach-call)	correct	17.136046844	17.152055023005232	26021888	42		2026-07-15T06:03:24.168949+00:00	2942										
+caat-tso	r03	c/pthread/fib_unsafe-6.yml	unreach-call	false	false(unreach-call)	correct	16.759730042	16.943243907007854	25980928	42		2026-07-15T06:04:27.253280+00:00	2942										
+caat-tso	r01	c/pthread/fib_unsafe-7.yml	unreach-call	false	TIMEOUT	error	61.010194626	61.02831800398417	26071040		9	2026-07-15T06:02:21.257062+00:00											
+caat-tso	r02	c/pthread/fib_unsafe-7.yml	unreach-call	false	TIMEOUT	error	60.964522215	61.01965903904056	25989120		9	2026-07-15T06:03:24.161964+00:00											
+caat-tso	r03	c/pthread/fib_unsafe-7.yml	unreach-call	false	TIMEOUT	error	60.954185639	61.01223109802231	26042368		9	2026-07-15T06:04:27.291723+00:00											
+caat-tso	r01	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.066134712	0.07314277696423233	26030080	42		2026-07-15T06:02:21.285190+00:00	1										
+caat-tso	r02	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.072394317	0.08346155303297564	26095616	42		2026-07-15T06:03:24.237222+00:00	1										
+caat-tso	r03	c/pthread/lazy01.yml	unreach-call	false	false(unreach-call)	correct	0.079859213	0.0903710910351947	26054656	42		2026-07-15T06:04:27.334917+00:00	1										
+caat-tso	r01	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	0.121352889	0.1292201800388284	26136576	42		2026-07-15T06:02:21.541899+00:00	2										
+caat-tso	r02	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	0.150285908	0.16823587898397818	26165248	42		2026-07-15T06:03:24.481051+00:00	2										
+caat-tso	r03	c/pthread/queue.yml	unreach-call	false	false(unreach-call)	correct	0.126592619	0.14136394002707675	26234880	42		2026-07-15T06:04:27.628906+00:00	2										
+caat-tso	r01	c/pthread/queue_longer.yml	unreach-call	false	TIMEOUT	error	61.026736045	61.047186743002385	420106240		9	2026-07-15T06:02:21.521131+00:00											
+caat-tso	r02	c/pthread/queue_longer.yml	unreach-call	false	TIMEOUT	error	61.041067542	61.052055027044844	415240192		9	2026-07-15T06:03:24.463376+00:00											
+caat-tso	r03	c/pthread/queue_longer.yml	unreach-call	false	TIMEOUT	error	61.014971947	61.04832363198511	414433280		9	2026-07-15T06:04:27.608928+00:00											
+caat-tso	r01	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.0739482	0.08351207699161023	26222592	0		2026-07-15T06:02:21.478187+00:00	2										
+caat-tso	r02	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.078807345	0.08729042299091816	26226688	0		2026-07-15T06:03:24.388818+00:00	2										
+caat-tso	r03	c/pthread/queue_ok.yml	unreach-call	true	true	correct	0.081551117	0.0942706000059843	26116096	0		2026-07-15T06:04:27.540706+00:00	2										
+caat-tso	r01	c/pthread/queue_ok_longer.yml	unreach-call	true	true	correct	3.679416697	3.6909207419957966	313208832	0		2026-07-15T06:02:21.487441+00:00	2										
+caat-tso	r02	c/pthread/queue_ok_longer.yml	unreach-call	true	true	correct	3.672250763	3.681210602982901	313176064	0		2026-07-15T06:03:24.406192+00:00	2										
+caat-tso	r03	c/pthread/queue_ok_longer.yml	unreach-call	true	true	correct	3.677467912	3.7002292369725183	313212928	0		2026-07-15T06:04:27.573590+00:00	2										
+caat-tso	r01	c/pthread/queue_ok_longest.yml	unreach-call	true	true	correct	25.389742767	25.466693661001045	1205428224	0		2026-07-15T06:02:21.508186+00:00	2										
+caat-tso	r02	c/pthread/queue_ok_longest.yml	unreach-call	true	true	correct	26.013571277	26.08379658794729	1205432320	0		2026-07-15T06:03:24.439846+00:00	2										
+caat-tso	r03	c/pthread/queue_ok_longest.yml	unreach-call	true	true	correct	27.38651204	27.513669297040906	1205391360	0		2026-07-15T06:04:27.589453+00:00	2										
+caat-tso	r01	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	0.197044006	0.2210531539749354	26210304	42		2026-07-15T06:02:21.637317+00:00	162										
+caat-tso	r02	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	0.203275298	0.21192058402812108	26128384	42		2026-07-15T06:03:24.568515+00:00	162										
+caat-tso	r03	c/pthread/reorder_2.yml	unreach-call	false	false(unreach-call)	correct	0.236836646	0.2775484240264632	26152960	42		2026-07-15T06:04:27.731177+00:00	162										
+caat-tso	r01	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.086305425	0.16549021104583517	26243072	42		2026-07-15T06:02:21.557827+00:00	1										
+caat-tso	r02	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.090942756	0.09970472200075164	26238976	42		2026-07-15T06:03:24.492390+00:00	1										
+caat-tso	r03	c/pthread/singleton.yml	unreach-call	false	false(unreach-call)	correct	0.090617002	0.10340237303171307	26263552	42		2026-07-15T06:04:27.619041+00:00	1										
+caat-tso	r01	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.070514004	0.12701182602904737	26218496	0		2026-07-15T06:02:21.566628+00:00	4										
+caat-tso	r02	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.074788365	0.08362906496040523	26210304	0		2026-07-15T06:03:24.511442+00:00	4										
+caat-tso	r03	c/pthread/singleton_with-uninit-problems.yml	unreach-call	true	true	correct	0.089786842	0.09960374602815136	26226688	0		2026-07-15T06:04:27.644449+00:00	4										
+caat-tso	r01	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.062360498	0.07210779696470127	26087424	42		2026-07-15T06:02:20.927239+00:00	0										
+caat-tso	r02	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.088006419	0.09949264000169933	26062848	42		2026-07-15T06:03:23.845406+00:00	0										
+caat-tso	r03	c/pthread/stateful01-1.yml	unreach-call	false	false(unreach-call)	correct	0.090028055	0.10223698895424604	26021888	42		2026-07-15T06:04:26.875793+00:00	0										
+caat-tso	r01	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.060232571	0.0674475790001452	26087424	0		2026-07-15T06:02:20.941984+00:00	6										
+caat-tso	r02	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.081192346	0.08810539700789377	26095616	0		2026-07-15T06:03:23.834318+00:00	6										
+caat-tso	r03	c/pthread/stateful01-2.yml	unreach-call	true	true	correct	0.068572155	0.08201877999817953	26075136	0		2026-07-15T06:04:26.915249+00:00	6										
+caat-tso	r01	c/pthread/triangular-1.yml	unreach-call	true	true	correct	9.878993812	9.88757188001182	26071040	0		2026-07-15T06:02:20.952547+00:00	16632										
+caat-tso	r02	c/pthread/triangular-1.yml	unreach-call	true	true	correct	10.145624171	10.219659463968128	26136576	0		2026-07-15T06:03:23.892124+00:00	16632										
+caat-tso	r03	c/pthread/triangular-1.yml	unreach-call	true	true	correct	10.640970933	10.750240313995164	26083328	0		2026-07-15T06:04:27.006757+00:00	16632										
+caat-tso	r01	c/pthread/triangular-2.yml	unreach-call	false	false(unreach-call)	correct	2.326368035	2.4213886039797217	25993216	42		2026-07-15T06:02:21.011439+00:00	3638										
+caat-tso	r02	c/pthread/triangular-2.yml	unreach-call	false	false(unreach-call)	correct	2.398000936	2.4660577489994466	26005504	42		2026-07-15T06:03:23.876987+00:00	3638										
+caat-tso	r03	c/pthread/triangular-2.yml	unreach-call	false	false(unreach-call)	correct	2.609769068	2.6472088919836096	26062848	42		2026-07-15T06:04:27.038968+00:00	3638										
+caat-tso	r01	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.098507381	0.10176120896358043	26353664	42		2026-07-15T06:02:21.657847+00:00	4										
+caat-tso	r02	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.100507733	0.1231133829569444	26247168	42		2026-07-15T06:03:24.599348+00:00	4										
+caat-tso	r03	c/pthread/twostage_3.yml	unreach-call	false	false(unreach-call)	correct	0.093858637	0.10208976204739884	26300416	42		2026-07-15T06:04:27.753977+00:00	4										

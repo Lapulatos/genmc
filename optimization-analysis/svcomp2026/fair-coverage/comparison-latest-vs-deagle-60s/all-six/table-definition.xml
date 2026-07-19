@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<table>
+  <column title="status"/>
+  <column title="category"/>
+  <column title="cputime"/>
+  <column title="walltime"/>
+  <column title="memory" displayUnit="MB" sourceUnit="B"/>
+  <column title="terminationreason" displayTitle="termination"/>
+
+  <result filename="raw/adapted-previous-caat-sc.2026-07-15_17-40-56.results.previous-caat-sc.unreach-call.xml.bz2"/>
+  <result filename="raw/adapted-genmc.2026-07-16_12-35-26.results.genmc.unreach-call.xml.bz2"/>
+  <result filename="raw/adapted-caat-sc.2026-07-16_12-35-25.results.caat-sc.unreach-call.xml.bz2"/>
+  <result filename="raw/adapted-caat-tso.2026-07-16_12-35-26.results.caat-tso.unreach-call.xml.bz2"/>
+  <result filename="raw/adapted-caat-pso.2026-07-16_12-35-26.results.caat-pso.unreach-call.xml.bz2"/>
+  <result filename="raw/adapted-deagle.2026-07-16_12-35-27.results.deagle.unreach-call.xml.bz2"/>
+</table>

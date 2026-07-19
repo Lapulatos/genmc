@@ -1,0 +1,27 @@
+{
+  "design": {
+    "cells": 240,
+    "repetitions": 2,
+    "tasks": 60
+  },
+  "metrics": {},
+  "repeatable_differences": {},
+  "repeatable_oom_regressions": {},
+  "repeatable_terminal_gains": {},
+  "safe_execution_count_mismatches": [],
+  "status_counts": {
+    "baseline": {
+      "ERROR (compilation)": 40,
+      "OUT OF MEMORY": 52,
+      "TIMEOUT": 28
+    },
+    "no-retain": {
+      "ERROR (compilation)": 38,
+      "OUT OF MEMORY": 54,
+      "TIMEOUT": 28
+    }
+  },
+  "status_transitions": {
+    "ERROR (compilation) -> OUT OF MEMORY": 2
+  }
+}

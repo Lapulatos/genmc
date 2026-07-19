@@ -1,0 +1,22 @@
+{
+  "wide-before": {
+    "caat-pso": 27,
+    "caat-sc": 26,
+    "caat-tso": 27
+  },
+  "wide-after": {
+    "caat-pso": 29,
+    "caat-sc": 26,
+    "caat-tso": 26
+  },
+  "v2-micro-before": {
+    "caat-pso": 28,
+    "caat-sc": 27,
+    "caat-tso": 25
+  },
+  "v2-micro-after": {
+    "caat-pso": 28,
+    "caat-sc": 26,
+    "caat-tso": 27
+  }
+}

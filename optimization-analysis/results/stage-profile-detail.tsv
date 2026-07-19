@@ -1,0 +1,10 @@
+stage	model	program	status	initialize	unchanged	insert	rollback	rollback_insert	rebuild	evicted	oracle	eval_ops	value_changes	queue_pushes	offline_evals	adapter_ns	sync_ns	offline_ns	copy_ns	worklist_ns	checkpoint_ns	rollback_ns	materialize_ns	equality_ns	insert_attempt_ns	history_ns	rebuild_ns	profiled_queries
+stage-3b	sc	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	63	67	63	18	1310999	10503624	2037540	196749	889000	109914	21667	3925376	27204	3415588	878873	2038832	22
+stage-3b	sc	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	187	204	187	25	1780876	14084248	2141376	167667	2782332	160291	26915	4274502	19622	4701670	2593833	2143000	35
+stage-3b	sc	correct/data-structures/fcombiner-async/variants/main0.c	0	1	8	20	0	176	122	0	0	4489	5090	4489	123	58276364	1264634619	59996076	8319220	461032868	6458536	3816128	182089289	693746	171238254	840551002	60005337	327
+stage-3b	tso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	185	164	185	18	1103582	11003751	2344958	456874	2415666	161167	11917	2824293	12709	4464458	1105040	2346500	22
+stage-3b	tso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	455	415	455	25	1540497	18889503	3304252	342541	5667749	252835	40749	4543128	18082	6529085	4111292	3305623	35
+stage-3b	tso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	1	0	3	3	0	0	246	239	246	4	987999	22602167	1090832	456541	12042542	174208	89000	2961624	8417	4729999	13580250	1091041	10
+stage-3b	pso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	192	167	192	18	984833	11420042	2262330	313416	3022209	207877	16958	2670788	12418	4460546	1724168	2263498	22
+stage-3b	pso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	498	455	498	25	1670043	19790166	3823001	361210	6356708	278087	43250	4443084	19540	6390540	4693003	3824380	35
+stage-3b	pso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	1	0	3	3	0	0	260	257	260	4	1214626	24364416	1104918	711582	12871708	178998	105750	3062793	7667	5310375	14614750	1105499	10

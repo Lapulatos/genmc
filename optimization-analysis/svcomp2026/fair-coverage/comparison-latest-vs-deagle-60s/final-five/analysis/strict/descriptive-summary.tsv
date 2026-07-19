@@ -1,0 +1,6 @@
+backend	runs	tasks	solved_runs	timeout_runs	oom_runs	other_failures	median_wall_seconds_solved	median_memory_bytes_solved
+Deagle	725	725	618	16	10	81	0.357270097	12935168
+GenMC	725	725	439	210	50	26	0.115766198	25788416
+GenMC+CAAT-PSO	725	725	384	274	41	26	0.102152036	26023936
+GenMC+CAAT-SC	725	725	428	240	31	26	0.104394326	25899008
+GenMC+CAAT-TSO	725	725	415	253	31	26	0.107533301	26025984

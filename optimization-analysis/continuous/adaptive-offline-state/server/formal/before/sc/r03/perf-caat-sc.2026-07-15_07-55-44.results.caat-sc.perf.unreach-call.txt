@@ -1,0 +1,145 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /workspace/experiments/caat-optimization/adaptive-offline-state/definitions/perf-caat-sc.xml
+name:                    perf-caat-sc
+run sets:                caat-sc.perf.unreach-call
+date:                    Wed, 2026-07-15 07:55:44 UTC
+tool:                    GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /workspace/experiments/caat-optimization/cost-selector/build-tests/bin/genmc
+options:                 --disable-estimation --disable-mm-detector --nthreads=1 --v1
+parallel runs:           24
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    e21a1b8d834c
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.7450880001 MB
+------------------------------------------------------------
+
+
+
+caat-sc.perf.unreach-call
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --svcomp-backend=caat-sc' and propertyfile 'None'
+
+inputfile                                                                                            status                       cpu time   wall time        host
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+goblint-regression/13-privatized_66-mine-W-init_true.yml                                             true                             0.06        0.06        None
+goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml                               false(unreach-call)              0.06        0.07        None
+goblint-regression/36-apron_16-traces-unprot2_true.yml                                               true                             0.07        0.07        None
+goblint-regression/13-privatized_57-singlethreaded-unlock_true.yml                                   true                             0.07        0.08        None
+goblint-regression/13-privatized_47-refine-protected2_true.yml                                       true                             0.06        0.06        None
+goblint-regression/13-privatized_46-refine-protected1_true.yml                                       true                             0.07        0.08        None
+goblint-regression/36-apron_11-traces-max-simple_true.yml                                            true                             0.06        0.07        None
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_pos.yml                                    false(unreach-call)              0.07        0.08        None
+goblint-regression/13-privatized_41-traces-ex-7_unknown_1_neg.yml                                    false(unreach-call)              0.06        0.07        None
+goblint-regression/13-privatized_40-traces-ex-6_true.yml                                             true                             0.06        0.06        None
+goblint-regression/13-privatized_58-singlethreaded-lock_true.yml                                     true                             0.06        0.06        None
+goblint-regression/13-privatized_44-traces-mine2_true.yml                                            true                             0.06        0.07        None
+goblint-regression/13-privatized_18-first-reads_unknown_2_pos.yml                                    false(unreach-call)              0.07        0.07        None
+goblint-regression/13-privatized_18-first-reads_unknown_1_neg.yml                                    false(unreach-call)              0.06        0.07        None
+goblint-regression/13-privatized_36-traces-ex-3_true.yml                                             true                             0.06        0.06        None
+goblint-regression/13-privatized_18-first-reads_true.yml                                             true                             0.07        0.07        None
+goblint-regression/13-privatized_35-traces-ex-2_true.yml                                             true                             0.06        0.07        None
+goblint-regression/13-privatized_37-traces-ex-4_true.yml                                             true                             0.07        0.09        None
+goblint-regression/13-privatized_38-traces-ex-4-switch_true.yml                                      true                             0.06        0.07        None
+goblint-regression/13-privatized_19-publish-precision_unknown_1_pos.yml                              false(unreach-call)              0.06        0.06        None
+goblint-regression/13-privatized_19-publish-precision_unknown_2_pos.yml                              false(unreach-call)              0.06        0.07        None
+goblint-regression/13-privatized_19-publish-precision_unknown_1_neg.yml                              false(unreach-call)              0.06        0.06        None
+goblint-regression/13-privatized_19-publish-precision_unknown_2_neg.yml                              false(unreach-call)              0.06        0.09        None
+goblint-regression/13-privatized_45-traces-per-global-and-current-lock-mine-incomparable_true.yml    true                             0.06        0.08        None
+goblint-regression/13-privatized_01-priv_nr_true.yml                                                 true                             0.06        0.07        None
+goblint-regression/13-privatized_19-publish-precision_true.yml                                       true                             0.06        0.07        None
+goblint-regression/13-privatized_42-traces-ex-mini_true.yml                                          true                             0.06        0.07        None
+goblint-regression/13-privatized_33-traces-v-matters_true.yml                                        true                             0.06        0.06        None
+goblint-regression/13-privatized_25-struct_nr_true.yml                                               true                             0.06        0.06        None
+goblint-regression/13-privatized_69-refine-protected-loop-interval_true.yml                          true                             0.06        0.07        None
+goblint-regression/36-apron_17-traces-rpb-litmus_unknown_1_neg.yml                                   false(unreach-call)              0.06        0.07        None
+goblint-regression/13-privatized_31-traces-mine-vs-mutex_true.yml                                    true                             0.06        0.06        None
+goblint-regression/13-privatized_20-publish-regression_true.yml                                      true                             0.06        0.07        None
+goblint-regression/13-privatized_30-traces-oplus-vs-meet_true.yml                                    true                             0.06        0.07        None
+goblint-regression/13-privatized_32-traces-mine-vs-oplus-vs-meet_true.yml                            true                             0.06        0.08        None
+goblint-regression/13-privatized_34-traces-minepp-L-needs-to-be-um_true.yml                          true                             0.06        0.09        None
+goblint-regression/13-privatized_68-pfscan_protected_loop_minimal_interval_true.yml                  true                             0.07        0.08        None
+goblint-regression/13-privatized_29-multiple-protecting2-vesal_true.yml                              true                             0.06        0.08        None
+goblint-regression/13-privatized_24-multiple-protecting_true.yml                                     true                             0.06        0.08        None
+goblint-regression/36-apron_21-traces-cluster-based_true.yml                                         true                             0.06        0.07        None
+goblint-regression/36-apron_22-traces-write-centered-vs-meet-mutex_true_no-overflow.yml              true                             0.07        0.07        None
+goblint-regression/13-privatized_27-multiple-protecting2_true.yml                                    true                             0.07        0.08        None
+pthread-ext/14_spin2003.yml                                                                          true                             0.05        0.07        None
+pthread-ext/29_conditionals_vs.yml                                                                   true                             0.06        0.06        None
+pthread-ext/48_ticket_lock_low_contention_vs-pthread.yml                                             true                             0.06        0.06        None
+pthread-ext/46_monabsex2_vs.yml                                                                      true                             0.06        0.07        None
+pthread-ext/45_monabsex1_vs.yml                                                                      true                             0.06        0.07        None
+pthread/stateful01-1.yml                                                                             false(unreach-call)              0.06        0.07        None
+pthread/stateful01-2.yml                                                                             true                             0.06        0.09        None
+pthread-atomic/time_var_mutex.yml                                                                    true                             0.06        0.09        None
+pthread-ext/01b_inc.yml                                                                              true                             0.06        0.07        None
+pthread/triangular-1.yml                                                                             true                             6.11        6.15        None
+pthread/triangular-2.yml                                                                             false(unreach-call)              1.42        1.44        None
+pthread-ext/02_inc_cas.yml                                                                           true                             0.06        0.07        None
+goblint-regression/28-race_reach_21-deref_read_racing.yml                                            false(unreach-call)              3.26        3.26        None
+pthread-ext/48_ticket_lock_low_contention_vs.yml                                                     true                             0.06        0.07        None
+goblint-regression/28-race_reach_37-indirect_racing.yml                                              OUT OF MEMORY                   38.72       38.84        None
+goblint-regression/28-race_reach_45-escape_racing.yml                                                false(unreach-call)              0.06        0.07        None
+goblint-regression/28-race_reach_46-escape_racefree.yml                                              true                             0.06        0.07        None
+goblint-regression/28-race_reach_01-simple_racing.yml                                                OUT OF MEMORY                   43.87       43.92        None
+goblint-regression/28-race_reach_11-ptr_racing.yml                                                   OUT OF MEMORY                   43.93       44.00        None
+pthread-deagle/circular_buffer_bad.yml                                                               false(unreach-call)              0.06        0.07        None
+pthread/fib_safe-5.yml                                                                               true                             5.52        5.60        None
+pthread/fib_safe-6.yml                                                                               true                            30.42       30.52        None
+pthread/fib_unsafe-5.yml                                                                             false(unreach-call)              1.46        1.49        None
+pthread/fib_unsafe-6.yml                                                                             false(unreach-call)              8.32        8.39        None
+pthread/fib_unsafe-7.yml                                                                             false(unreach-call)             44.04       44.10        None
+goblint-regression/28-race_reach_24-sound_lock_racing.yml                                            OUT OF MEMORY                   42.22       42.24        None
+pthread/lazy01.yml                                                                                   false(unreach-call)              0.06        0.07        None
+pthread-deagle/circular_buffer_ok.yml                                                                true                             4.33        4.36        None
+pthread-atomic/szymanski.yml                                                                         true                             0.06        0.08        None
+pthread-atomic/dekker.yml                                                                            true                             0.06        0.07        None
+pthread-atomic/dekker-unfair.yml                                                                     true                             0.06        0.08        None
+pthread-theta/unwind3-1.yml                                                                          false(unreach-call)              0.06        0.07        None
+pthread-theta/exponential-nondet.yml                                                                 true                             0.06        0.07        None
+pthread-theta/unwind2-1.yml                                                                          false(unreach-call)              0.06        0.07        None
+pthread-theta/unwind2-100.yml                                                                        false(unreach-call)              0.06        0.08        None
+pthread/butterfly.yml                                                                                true                            22.02       22.07        None
+pthread-ext/43_NetBSD_sysmon_power_sliced.yml                                                        true                             0.06        0.08        None
+goblint-regression/28-race_reach_06-cond_racing1.yml                                                 OUT OF MEMORY                   32.59       32.78        None
+pthread/queue_ok.yml                                                                                 true                             0.07        0.09        None
+pthread/queue_ok_longer.yml                                                                          true                             2.51        2.61        None
+pthread/queue_ok_longest.yml                                                                         true                            16.12       16.17        None
+pthread/queue_longer.yml                                                                             TIMEOUT                         60.90       61.08        None
+pthread/queue.yml                                                                                    false(unreach-call)              0.09        0.15        None
+pthread/singleton.yml                                                                                false(unreach-call)              0.07        0.14        None
+pthread/singleton_with-uninit-problems.yml                                                           true                             0.07        0.12        None
+pthread-C-DAC/pthread-demo-datarace-3.yml                                                            false(unreach-call)              0.11        0.49        None
+pthread/reorder_2.yml                                                                                false(unreach-call)              0.15        0.24        None
+pthread/twostage_3.yml                                                                               false(unreach-call)              0.07        0.15        None
+ldv-races/race-1_1-join.yml                                                                          true                             0.07        0.08        None
+ldv-races/race-1_3-join.yml                                                                          false(unreach-call)              0.06        0.12        None
+ldv-races/race-1_2-join.yml                                                                          false(unreach-call)              0.06        0.15        None
+ldv-races/race-4_1-thread_local_vars.yml                                                             true                             0.07        0.16        None
+ldv-races/race-2_1-container_of.yml                                                                  true                             0.06        0.11        None
+ldv-races/race-3_1-container_of-global.yml                                                           true                             0.07        0.15        None
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                                                            done                           413.00       62.53           -
+
+Statistics:             96 Files
+  correct:              90
+    correct true:       61
+    correct false:      29
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:               6
+  Score:               151 (max: 157)

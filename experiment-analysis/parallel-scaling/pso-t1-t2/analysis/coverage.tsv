@@ -1,0 +1,5 @@
+model	method	threads	runs	solved	completion_rate	true	false	timeout	oom	aborted	other
+pso	caat	1	480	395	0.8229166666666666	270	125	85	0	0	0
+pso	caat	2	480	392	0.8166666666666667	270	122	85	0	3	0
+pso	cat	1	480	410	0.8541666666666666	280	130	70	0	0	0
+pso	cat	2	480	404	0.8416666666666667	280	124	75	0	1	0

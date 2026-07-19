@@ -1,0 +1,62 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/svcomp2026-caat/source/genmc/optimization-analysis/core-direction-review-20260718/decisive-diagnostic-15.xml
+name:                    decisive-diagnostic-15
+run sets:                recursive-caat-observation-only.pthread-wmm-15
+date:                    Sun, 2026-07-19 03:29:21 UTC
+tool:                    GenMC SV-COMP fair-coverage adapter
+tool executable:         /data3/sujie/svcomp2026-caat/source/genmc/optimization-analysis/continuous/candidate-equivalence-quotient/formal-wrapper.sh
+options:                 --disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --cat-stats
+parallel runs:           4
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    a6d6deecfd1c
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.736896 MB
+------------------------------------------------------------
+
+
+
+recursive-caat-observation-only.pthread-wmm-15
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --cat-stats' and propertyfile 'None'
+
+inputfile                                                             status                       cpu time   wall time        host
+-----------------------------------------------------------------------------------------------------------------------------------
+rfi005.yml                                                            ERROR (1)                        0.03        0.04        None
+safe029_power.oepc_pso.oepc_rmo.oepc.yml                              ERROR (1)                        0.02        0.03        None
+mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml                     ERROR (1)                        0.02        0.02        None
+safe029_tso.yml                                                       ERROR (1)                        0.02        0.02        None
+safe010_tso.yml                                                       ERROR (1)                        0.02        0.02        None
+safe004_power.oepc_pso.oepc_rmo.oepc.yml                              ERROR (1)                        0.02        0.03        None
+mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml              ERROR (1)                        0.02        0.02        None
+mix035.oepc.yml                                                       ERROR (1)                        0.02        0.02        None
+rfi002_tso.yml                                                        ERROR (1)                        0.02        0.02        None
+safe017_tso.yml                                                       ERROR (1)                        0.02        0.02        None
+safe035_power.yml                                                     ERROR (1)                        0.02        0.02        None
+mix023_tso.yml                                                        ERROR (1)                        0.02        0.02        None
+mix014_tso.oepc.yml                                                   ERROR (1)                        0.02        0.02        None
+mix008_tso.oepc.yml                                                   ERROR (1)                        0.02        0.02        None
+safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml    ERROR (1)                        0.02        0.03        None
+-----------------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                             done                             0.32        0.73           -
+
+Statistics:             15 Files
+  correct:               0
+    correct true:        0
+    correct false:       0
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:              15
+  Score:                 0 (max: 20)

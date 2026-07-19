@@ -1,0 +1,109 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/experiments/caat-optimization/rejection-kernel-census/definitions/fair-baseline-timeout-oom-pso.xml
+name:                    fair-baseline-timeout-oom-pso
+run sets:                caat-pso.baseline-timeout-oom.unreach-call
+date:                    Wed, 2026-07-15 20:33:28 UTC
+tool:                    GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/rejection-kernel-census/build-final/bin/genmc
+options:                 --disable-estimation --disable-mm-detector --nthreads=1 --v1
+parallel runs:           24
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    cb204c6537e6
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.7450880001 MB
+------------------------------------------------------------
+
+
+
+caat-pso.baseline-timeout-oom.unreach-call
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --svcomp-backend=caat-sc' and propertyfile 'None'
+
+inputfile                                                                                              status                       cpu time   wall time        host
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+goblint-regression/28-race_reach_01-simple_racing.yml                                                  OUT OF MEMORY                   42.35       42.42        None
+goblint-regression/28-race_reach_03-munge_racing.yml                                                   OUT OF MEMORY                   11.55       11.62        None
+goblint-regression/28-race_reach_05-lockfuns_racefree.yml                                              OUT OF MEMORY                   49.68       49.72        None
+goblint-regression/28-race_reach_07-cond_racing2.yml                                                   OUT OF MEMORY                   38.37       38.42        None
+goblint-regression/28-race_reach_10-ptrmunge_racefree.yml                                              OUT OF MEMORY                   11.25       11.27        None
+goblint-regression/28-race_reach_12-ptr_racefree.yml                                                   OUT OF MEMORY                   49.84       49.97        None
+goblint-regression/28-race_reach_20-callback_racefree.yml                                              OUT OF MEMORY                   46.68       46.72        None
+goblint-regression/28-race_reach_27-funptr_racing.yml                                                  OUT OF MEMORY                   35.25       35.30        None
+goblint-regression/28-race_reach_37-indirect_racing.yml                                                OUT OF MEMORY                   33.18       33.21        None
+goblint-regression/28-race_reach_42-trylock2_racefree.yml                                              OUT OF MEMORY                   41.46       41.55        None
+goblint-regression/28-race_reach_60-invariant_racefree.yml                                             OUT OF MEMORY                   47.31       47.35        None
+goblint-regression/28-race_reach_70-funloop_racefree.yml                                               OUT OF MEMORY                   52.20       52.27        None
+goblint-regression/28-race_reach_73-funloop_hard_racefree.yml                                          OUT OF MEMORY                   51.65       51.73        None
+goblint-regression/28-race_reach_79-equ_racefree.yml                                                   OUT OF MEMORY                   51.84       51.88        None
+goblint-regression/28-race_reach_82-list_racefree.yml                                                  OUT OF MEMORY                   13.35       13.77        None
+goblint-regression/28-race_reach_84-list2_racing2.yml                                                  OUT OF MEMORY                   22.77       22.81        None
+weaver/chl-word-subst.wvr.yml                                                                          OUT OF MEMORY                   14.96       15.02        None
+weaver/chl-word-symm.wvr.yml                                                                           OUT OF MEMORY                   14.56       14.59        None
+weaver/mult-comm.wvr.yml                                                                               OUT OF MEMORY                   11.18       11.20        None
+weaver/mult-flipped-dist.wvr.yml                                                                       OUT OF MEMORY                   11.68       11.74        None
+weaver/parallel-min-max-1.wvr.yml                                                                      OUT OF MEMORY                   15.36       15.40        None
+weaver/popl20-bad-buffer-mult-alt2.wvr.yml                                                             OUT OF MEMORY                   14.83       14.93        None
+weaver/popl20-horseshoe.wvr.yml                                                                        OUT OF MEMORY                   14.89       14.94        None
+weaver/popl20-more-buffer-mult.wvr.yml                                                                 OUT OF MEMORY                   15.01       15.11        None
+weaver/popl20-more-buffer-mult3.wvr.yml                                                                OUT OF MEMORY                   15.32       15.34        None
+weaver/popl20-more-queue-add-2-nl.wvr.yml                                                              OUT OF MEMORY                   15.01       15.04        None
+libvsync/rec_ticketlock.yml                                                                            OUT OF MEMORY                   14.31       14.38        None
+libvsync/rwlock.yml                                                                                    TIMEOUT                         60.98       61.02        None
+libvsync/ticketlock.yml                                                                                OUT OF MEMORY                   13.98       14.01        None
+libvsync/ttaslock.yml                                                                                  TIMEOUT                         60.93       61.01        None
+pthread-wmm/mix001.oepc.yml                                                                            TIMEOUT                         60.72       61.02        None
+pthread-wmm/mix008_tso.oepc.yml                                                                        TIMEOUT                         60.96       61.02        None
+pthread-wmm/mix018_power.oepc_pso.oepc_rmo.oepc.yml                                                    TIMEOUT                         60.97       61.01        None
+pthread-wmm/mix027_tso.yml                                                                             TIMEOUT                         60.75       61.04        None
+pthread-wmm/mix036_pso.opt_tso.opt.yml                                                                 TIMEOUT                         60.96       61.01        None
+pthread-wmm/mix045_power.oepc_pso.oepc_rmo.oepc.yml                                                    TIMEOUT                         60.97       61.02        None
+pthread-wmm/mix056_power.opt_pso.opt_rmo.opt_tso.oepc_tso.opt.yml                                      TIMEOUT                         60.90       61.01        None
+pthread-wmm/safe007_pso.oepc_pso.opt_tso.oepc_tso.opt-thin001_pso.oepc_pso.opt_tso.oepc_tso.opt.yml    TIMEOUT                         60.96       61.01        None
+pthread-wmm/safe016_rmo.opt.yml                                                                        TIMEOUT                         60.56       61.01        None
+pthread-wmm/safe027_power.opt.yml                                                                      TIMEOUT                         60.96       61.02        None
+pthread/fib_safe-10.yml                                                                                TIMEOUT                         60.97       61.01        None
+pthread/fib_safe-7.yml                                                                                 TIMEOUT                         60.96       61.01        None
+pthread/fib_unsafe-12.yml                                                                              TIMEOUT                         60.97       61.01        None
+pthread/stack_longest-1.yml                                                                            TIMEOUT                         61.01       61.06        None
+pthread/triangular-longer-2.yml                                                                        TIMEOUT                         60.93       61.01        None
+pthread-ext/25_stack.yml                                                                               OUT OF MEMORY                   29.51       29.55        None
+pthread-ext/25_stack_longer-2.yml                                                                      OUT OF MEMORY                   28.40       28.43        None
+pthread-ext/26_stack_cas.yml                                                                           OUT OF MEMORY                   25.73       25.76        None
+pthread-ext/26_stack_cas_longer-2.yml                                                                  OUT OF MEMORY                   25.65       25.75        None
+pthread-ext/28_buggy_simple_loop1_vf.yml                                                               TIMEOUT                         60.96       61.01        None
+weaver/popl20-bad-threaded-sum-2.wvr.yml                                                               OUT OF MEMORY                   26.12       26.15        None
+weaver/popl20-more-nonblocking-counter-alt2.wvr.yml                                                    OUT OF MEMORY                   25.17       25.20        None
+weaver/popl20-mult-equiv.wvr.yml                                                                       OUT OF MEMORY                   21.32       21.34        None
+weaver/spaghetti.wvr.yml                                                                               TIMEOUT                         60.98       61.02        None
+pthread-theta/exponential-4.yml                                                                        TIMEOUT                         60.93       61.01        None
+pthread-theta/exponential-64.yml                                                                       TIMEOUT                         61.00       61.03        None
+goblint-regression/13-privatized_04-priv_multi_true.yml                                                TIMEOUT                         61.05       61.08        None
+ldv-linux-3.14-races/linux-3.14--drivers--net--irda--nsc-ircc.ko.cil.yml                               TIMEOUT                         60.92       61.02        None
+pthread-C-DAC/pthread-demo-datarace-1.yml                                                              TIMEOUT                         60.98       61.01        None
+pthread-complex/safestack_relacy.yml                                                                   TIMEOUT                         60.98       61.02        None
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                                                              done                          2475.22      137.83           -
+
+Statistics:             60 Files
+  correct:               0
+    correct true:        0
+    correct false:       0
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:              60
+  Score:                 0 (max: 97)

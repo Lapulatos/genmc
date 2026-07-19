@@ -1,0 +1,941 @@
+{
+  "archives": [
+    "oracle-pso.2026-07-15_07-50-04.logfiles.zip",
+    "oracle-sc.2026-07-15_07-47-47.logfiles.zip",
+    "oracle-tso.2026-07-15_07-49-00.logfiles.zip"
+  ],
+  "distributions": {
+    "adapter_ns": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "adaptive_offline": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "base_facts_added": {
+      "max": 688084,
+      "median": 325,
+      "min": 0,
+      "p90": 14541,
+      "p95": 77243,
+      "p99": 497734,
+      "sum": 4924583
+    },
+    "base_facts_removed": {
+      "max": 672819,
+      "median": 378,
+      "min": 0,
+      "p90": 8305,
+      "p95": 62013,
+      "p99": 487341,
+      "sum": 4512311
+    },
+    "checkpoint_ns": {
+      "max": 2006851,
+      "median": 2114,
+      "min": 0,
+      "p90": 27192,
+      "p95": 124352,
+      "p99": 1326211,
+      "sum": 10621036
+    },
+    "copy_ns": {
+      "max": 71797694,
+      "median": 30944,
+      "min": 0,
+      "p90": 785396,
+      "p95": 4272977,
+      "p99": 39452652,
+      "sum": 353517823
+    },
+    "equality_ns": {
+      "max": 7822847,
+      "median": 2317,
+      "min": 0,
+      "p90": 40322,
+      "p95": 158759,
+      "p99": 3614906,
+      "sum": 28788528
+    },
+    "eval_ops": {
+      "max": 16107,
+      "median": 0,
+      "min": 0,
+      "p90": 656,
+      "p95": 1351,
+      "p99": 5849,
+      "sum": 82089
+    },
+    "evicted": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "history_ns": {
+      "max": 1496503656,
+      "median": 31291,
+      "min": 0,
+      "p90": 11382712,
+      "p95": 72106443,
+      "p99": 1247462005,
+      "sum": 7271547207
+    },
+    "initialize": {
+      "max": 1,
+      "median": 1,
+      "min": 0,
+      "p90": 1,
+      "p95": 1,
+      "p99": 1,
+      "sum": 189
+    },
+    "insert": {
+      "max": 23,
+      "median": 0,
+      "min": 0,
+      "p90": 3,
+      "p95": 6,
+      "p99": 23,
+      "sum": 234
+    },
+    "insert_attempt_ns": {
+      "max": 1549163475,
+      "median": 95806,
+      "min": 0,
+      "p90": 10457724,
+      "p95": 31325242,
+      "p99": 1321075316,
+      "sum": 6598971388
+    },
+    "materialize_ns": {
+      "max": 669729543,
+      "median": 96745,
+      "min": 0,
+      "p90": 5324984,
+      "p95": 14108407,
+      "p99": 619352863,
+      "sum": 3317232229
+    },
+    "max_active_events": {
+      "max": 432,
+      "median": 21,
+      "min": 0,
+      "p90": 56,
+      "p95": 99,
+      "p99": 432,
+      "sum": 7419
+    },
+    "max_base_relation_density_ppm": {
+      "max": 852352,
+      "median": 614958,
+      "min": 0,
+      "p90": 740740,
+      "p95": 783081,
+      "p99": 852352,
+      "sum": 122292577
+    },
+    "max_base_relation_pairs": {
+      "max": 113314,
+      "median": 230,
+      "min": 0,
+      "p90": 1798,
+      "p95": 7528,
+      "p99": 113314,
+      "sum": 645514
+    },
+    "max_changed_primitives": {
+      "max": 10,
+      "median": 6,
+      "min": 0,
+      "p90": 10,
+      "p95": 10,
+      "p99": 10,
+      "sum": 1269
+    },
+    "max_current_base_bytes": {
+      "max": 218456,
+      "median": 1472,
+      "min": 0,
+      "p90": 3648,
+      "p95": 12928,
+      "p99": 193984,
+      "sum": 1477904
+    },
+    "max_history_base_bytes": {
+      "max": 218456,
+      "median": 1544,
+      "min": 0,
+      "p90": 8848,
+      "p95": 25856,
+      "p99": 193984,
+      "sum": 1729056
+    },
+    "max_inactive_events": {
+      "max": 210,
+      "median": 9,
+      "min": 0,
+      "p90": 25,
+      "p95": 46,
+      "p99": 210,
+      "sum": 3201
+    },
+    "max_stable_events": {
+      "max": 433,
+      "median": 21,
+      "min": 0,
+      "p90": 57,
+      "p95": 101,
+      "p99": 433,
+      "sum": 7644
+    },
+    "monotone_primitive_queries": {
+      "max": 23,
+      "median": 0,
+      "min": 0,
+      "p90": 3,
+      "p95": 6,
+      "p99": 23,
+      "sum": 234
+    },
+    "offline_evals": {
+      "max": 6323,
+      "median": 8,
+      "min": 0,
+      "p90": 66,
+      "p95": 356,
+      "p99": 6323,
+      "sum": 37656
+    },
+    "offline_ns": {
+      "max": 2783280909,
+      "median": 169756,
+      "min": 0,
+      "p90": 15088924,
+      "p95": 45179701,
+      "p99": 1440008838,
+      "sum": 11247949873
+    },
+    "oracle": {
+      "max": 6452,
+      "median": 10,
+      "min": 0,
+      "p90": 91,
+      "p95": 432,
+      "p99": 6452,
+      "sum": 39879
+    },
+    "peak_snapshot_equivalent_bytes": {
+      "max": 1431576,
+      "median": 8568,
+      "min": 0,
+      "p90": 54832,
+      "p95": 155984,
+      "p99": 654848,
+      "sum": 9517504
+    },
+    "peak_undo_bytes": {
+      "max": 74840,
+      "median": 0,
+      "min": 0,
+      "p90": 13432,
+      "p95": 27624,
+      "p99": 63480,
+      "sum": 1120424
+    },
+    "primitive_change_queries": {
+      "max": 6345,
+      "median": 9,
+      "min": 0,
+      "p90": 87,
+      "p95": 425,
+      "p99": 6345,
+      "sum": 39156
+    },
+    "profiled_queries": {
+      "max": 6452,
+      "median": 10,
+      "min": 0,
+      "p90": 91,
+      "p95": 432,
+      "p99": 6452,
+      "sum": 39879
+    },
+    "queue_pushes": {
+      "max": 16107,
+      "median": 0,
+      "min": 0,
+      "p90": 656,
+      "p95": 1351,
+      "p99": 5849,
+      "sum": 82089
+    },
+    "rebuild": {
+      "max": 6322,
+      "median": 7,
+      "min": 0,
+      "p90": 65,
+      "p95": 355,
+      "p99": 6322,
+      "sum": 37467
+    },
+    "rebuild_ns": {
+      "max": 2783796043,
+      "median": 171088,
+      "min": 0,
+      "p90": 15147712,
+      "p95": 45207786,
+      "p99": 1440525885,
+      "sum": 11253764592
+    },
+    "replace": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "retained_snapshot_equivalent_bytes": {
+      "max": 1431576,
+      "median": 7280,
+      "min": 0,
+      "p90": 22696,
+      "p95": 84600,
+      "p99": 654848,
+      "sum": 8120032
+    },
+    "retained_undo_bytes": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "retracting_primitive_queries": {
+      "max": 6322,
+      "median": 8,
+      "min": 0,
+      "p90": 85,
+      "p95": 422,
+      "p99": 6322,
+      "sum": 38922
+    },
+    "rollback": {
+      "max": 0,
+      "median": 0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "rollback_insert": {
+      "max": 240,
+      "median": 0,
+      "min": 0,
+      "p90": 11,
+      "p95": 18,
+      "p99": 240,
+      "sum": 1455
+    },
+    "rollback_ns": {
+      "max": 98163835,
+      "median": 0,
+      "min": 0,
+      "p90": 1145773,
+      "p95": 2407182,
+      "p99": 50748315,
+      "sum": 373909267
+    },
+    "sync_ns": {
+      "max": 15741860195,
+      "median": 864645,
+      "min": 0,
+      "p90": 95428762,
+      "p95": 318562706,
+      "p99": 13357204125,
+      "sum": 70607296725
+    },
+    "unchanged": {
+      "max": 106,
+      "median": 0,
+      "min": 0,
+      "p90": 3,
+      "p95": 5,
+      "p99": 106,
+      "sum": 534
+    },
+    "value_changes": {
+      "max": 15683,
+      "median": 0,
+      "min": 0,
+      "p90": 621,
+      "p95": 1284,
+      "p99": 6434,
+      "sum": 81911
+    },
+    "worklist_ns": {
+      "max": 188097602,
+      "median": 0,
+      "min": 0,
+      "p90": 3709177,
+      "p95": 6227709,
+      "p99": 75029697,
+      "sum": 785170407
+    }
+  },
+  "logs": 288,
+  "logs_with_stats": 237,
+  "logs_without_stats": 51,
+  "timing_share_of_sync": {
+    "adapter_ns": 0.0,
+    "checkpoint_ns": 0.000150424056615092,
+    "copy_ns": 0.0050068171336012865,
+    "equality_ns": 0.00040772737854736217,
+    "history_ns": 0.10298577546908627,
+    "insert_attempt_ns": 0.09346019029310175,
+    "materialize_ns": 0.046981436520929204,
+    "offline_ns": 0.15930293885642313,
+    "rebuild_ns": 0.15938529180391872,
+    "rollback_ns": 0.005295617936716865,
+    "worklist_ns": 0.011120244555715924
+  },
+  "timing_totals_ns": {
+    "adapter_ns": 0,
+    "checkpoint_ns": 10621036,
+    "copy_ns": 353517823,
+    "equality_ns": 28788528,
+    "history_ns": 7271547207,
+    "insert_attempt_ns": 6598971388,
+    "materialize_ns": 3317232229,
+    "offline_ns": 11247949873,
+    "rebuild_ns": 11253764592,
+    "rollback_ns": 373909267,
+    "sync_ns": 70607296725,
+    "worklist_ns": 785170407
+  },
+  "top_tasks": {
+    "checkpoint_ns": [
+      {
+        "log": "caat-tso.r01.reorder_2.yml.log",
+        "value": 2006851
+      },
+      {
+        "log": "caat-pso.r01.reorder_2.yml.log",
+        "value": 1645687
+      },
+      {
+        "log": "caat-sc.r01.reorder_2.yml.log",
+        "value": 1326211
+      },
+      {
+        "log": "caat-pso.r01.queue.yml.log",
+        "value": 1093777
+      },
+      {
+        "log": "caat-tso.r01.queue.yml.log",
+        "value": 1009949
+      },
+      {
+        "log": "caat-sc.r01.queue.yml.log",
+        "value": 617552
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 458070
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 414799
+      },
+      {
+        "log": "caat-sc.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 204511
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 153078
+      }
+    ],
+    "copy_ns": [
+      {
+        "log": "caat-tso.r01.queue.yml.log",
+        "value": 71797694
+      },
+      {
+        "log": "caat-pso.r01.queue.yml.log",
+        "value": 64193371
+      },
+      {
+        "log": "caat-tso.r01.reorder_2.yml.log",
+        "value": 39452652
+      },
+      {
+        "log": "caat-pso.r01.reorder_2.yml.log",
+        "value": 36869081
+      },
+      {
+        "log": "caat-sc.r01.queue.yml.log",
+        "value": 23080755
+      },
+      {
+        "log": "caat-sc.r01.reorder_2.yml.log",
+        "value": 20141645
+      },
+      {
+        "log": "caat-sc.r01.pthread-demo-datarace-3.yml.log",
+        "value": 10810292
+      },
+      {
+        "log": "caat-pso.r01.pthread-demo-datarace-3.yml.log",
+        "value": 9724959
+      },
+      {
+        "log": "caat-tso.r01.pthread-demo-datarace-3.yml.log",
+        "value": 9350950
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 9105005
+      }
+    ],
+    "history_ns": [
+      {
+        "log": "caat-sc.r01.queue.yml.log",
+        "value": 1496503656
+      },
+      {
+        "log": "caat-tso.r01.queue.yml.log",
+        "value": 1265666888
+      },
+      {
+        "log": "caat-pso.r01.queue.yml.log",
+        "value": 1247462005
+      },
+      {
+        "log": "caat-sc.r01.reorder_2.yml.log",
+        "value": 518860169
+      },
+      {
+        "log": "caat-pso.r01.reorder_2.yml.log",
+        "value": 462429850
+      },
+      {
+        "log": "caat-tso.r01.reorder_2.yml.log",
+        "value": 462247430
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 404264273
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 394185372
+      },
+      {
+        "log": "caat-sc.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 243234133
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 140096251
+      }
+    ],
+    "max_active_events": [
+      {
+        "log": "caat-pso.r01.queue_ok.yml.log",
+        "value": 432
+      },
+      {
+        "log": "caat-sc.r01.queue_ok.yml.log",
+        "value": 432
+      },
+      {
+        "log": "caat-tso.r01.queue_ok.yml.log",
+        "value": 432
+      },
+      {
+        "log": "caat-pso.r01.pthread-demo-datarace-3.yml.log",
+        "value": 262
+      },
+      {
+        "log": "caat-sc.r01.pthread-demo-datarace-3.yml.log",
+        "value": 262
+      },
+      {
+        "log": "caat-tso.r01.pthread-demo-datarace-3.yml.log",
+        "value": 262
+      },
+      {
+        "log": "caat-pso.r01.queue.yml.log",
+        "value": 202
+      },
+      {
+        "log": "caat-sc.r01.queue.yml.log",
+        "value": 202
+      },
+      {
+        "log": "caat-tso.r01.queue.yml.log",
+        "value": 202
+      },
+      {
+        "log": "caat-pso.r01.twostage_3.yml.log",
+        "value": 99
+      }
+    ],
+    "max_history_base_bytes": [
+      {
+        "log": "caat-pso.r01.queue_ok.yml.log",
+        "value": 218456
+      },
+      {
+        "log": "caat-tso.r01.queue_ok.yml.log",
+        "value": 218456
+      },
+      {
+        "log": "caat-sc.r01.queue_ok.yml.log",
+        "value": 193984
+      },
+      {
+        "log": "caat-pso.r01.pthread-demo-datarace-3.yml.log",
+        "value": 94480
+      },
+      {
+        "log": "caat-tso.r01.pthread-demo-datarace-3.yml.log",
+        "value": 94480
+      },
+      {
+        "log": "caat-sc.r01.pthread-demo-datarace-3.yml.log",
+        "value": 83840
+      },
+      {
+        "log": "caat-pso.r01.queue.yml.log",
+        "value": 59168
+      },
+      {
+        "log": "caat-tso.r01.queue.yml.log",
+        "value": 59168
+      },
+      {
+        "log": "caat-sc.r01.queue.yml.log",
+        "value": 52480
+      },
+      {
+        "log": "caat-pso.r01.twostage_3.yml.log",
+        "value": 29216
+      }
+    ],
+    "offline_ns": [
+      {
+        "log": "caat-tso.r01.queue.yml.log",
+        "value": 2783280909
+      },
+      {
+        "log": "caat-pso.r01.queue.yml.log",
+        "value": 2706644202
+      },
+      {
+        "log": "caat-sc.r01.queue.yml.log",
+        "value": 1440008838
+      },
+      {
+        "log": "caat-pso.r01.reorder_2.yml.log",
+        "value": 1325082579
+      },
+      {
+        "log": "caat-tso.r01.reorder_2.yml.log",
+        "value": 1284265408
+      },
+      {
+        "log": "caat-sc.r01.reorder_2.yml.log",
+        "value": 712067752
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 148915273
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 145676232
+      },
+      {
+        "log": "caat-sc.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 66980635
+      },
+      {
+        "log": "caat-tso.r01.queue_ok.yml.log",
+        "value": 47680591
+      }
+    ],
+    "peak_snapshot_equivalent_bytes": [
+      {
+        "log": "caat-pso.r01.queue_ok.yml.log",
+        "value": 1431576
+      },
+      {
+        "log": "caat-tso.r01.queue_ok.yml.log",
+        "value": 1358872
+      },
+      {
+        "log": "caat-sc.r01.queue_ok.yml.log",
+        "value": 654848
+      },
+      {
+        "log": "caat-pso.r01.pthread-demo-datarace-3.yml.log",
+        "value": 619120
+      },
+      {
+        "log": "caat-tso.r01.pthread-demo-datarace-3.yml.log",
+        "value": 587704
+      },
+      {
+        "log": "caat-pso.r01.queue.yml.log",
+        "value": 387768
+      },
+      {
+        "log": "caat-tso.r01.queue.yml.log",
+        "value": 368104
+      },
+      {
+        "log": "caat-sc.r01.pthread-demo-datarace-3.yml.log",
+        "value": 283112
+      },
+      {
+        "log": "caat-pso.r01.twostage_3.yml.log",
+        "value": 191856
+      },
+      {
+        "log": "caat-tso.r01.twostage_3.yml.log",
+        "value": 182160
+      }
+    ],
+    "peak_undo_bytes": [
+      {
+        "log": "caat-pso.r01.twostage_3.yml.log",
+        "value": 74840
+      },
+      {
+        "log": "caat-tso.r01.twostage_3.yml.log",
+        "value": 69976
+      },
+      {
+        "log": "caat-pso.r01.reorder_2.yml.log",
+        "value": 63480
+      },
+      {
+        "log": "caat-tso.r01.reorder_2.yml.log",
+        "value": 59528
+      },
+      {
+        "log": "caat-pso.r01.dekker-unfair.yml.log",
+        "value": 39856
+      },
+      {
+        "log": "caat-pso.r01.dekker.yml.log",
+        "value": 39856
+      },
+      {
+        "log": "caat-tso.r01.dekker-unfair.yml.log",
+        "value": 38016
+      },
+      {
+        "log": "caat-tso.r01.dekker.yml.log",
+        "value": 38016
+      },
+      {
+        "log": "caat-sc.r01.twostage_3.yml.log",
+        "value": 35704
+      },
+      {
+        "log": "caat-sc.r01.reorder_2.yml.log",
+        "value": 31640
+      }
+    ],
+    "rebuild_ns": [
+      {
+        "log": "caat-tso.r01.queue.yml.log",
+        "value": 2783796043
+      },
+      {
+        "log": "caat-pso.r01.queue.yml.log",
+        "value": 2707218118
+      },
+      {
+        "log": "caat-sc.r01.queue.yml.log",
+        "value": 1440525885
+      },
+      {
+        "log": "caat-pso.r01.reorder_2.yml.log",
+        "value": 1325857776
+      },
+      {
+        "log": "caat-tso.r01.reorder_2.yml.log",
+        "value": 1285342010
+      },
+      {
+        "log": "caat-sc.r01.reorder_2.yml.log",
+        "value": 713188734
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 149074654
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 145815805
+      },
+      {
+        "log": "caat-sc.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 67107992
+      },
+      {
+        "log": "caat-tso.r01.queue_ok.yml.log",
+        "value": 47686083
+      }
+    ],
+    "rollback_ns": [
+      {
+        "log": "caat-pso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 98163835
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 92519454
+      },
+      {
+        "log": "caat-sc.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 50748315
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 35224535
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 29680802
+      },
+      {
+        "log": "caat-sc.r01.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 16256392
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_29-multiple-protecting2-vesal_true.yml.log",
+        "value": 3836073
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_29-multiple-protecting2-vesal_true.yml.log",
+        "value": 3053208
+      },
+      {
+        "log": "caat-pso.r01.szymanski.yml.log",
+        "value": 2941306
+      },
+      {
+        "log": "caat-pso.r01.dekker-unfair.yml.log",
+        "value": 2511783
+      }
+    ],
+    "sync_ns": [
+      {
+        "log": "caat-tso.r01.queue.yml.log",
+        "value": 15741860195
+      },
+      {
+        "log": "caat-pso.r01.queue.yml.log",
+        "value": 15463722493
+      },
+      {
+        "log": "caat-sc.r01.queue.yml.log",
+        "value": 13357204125
+      },
+      {
+        "log": "caat-pso.r01.reorder_2.yml.log",
+        "value": 6598570052
+      },
+      {
+        "log": "caat-tso.r01.reorder_2.yml.log",
+        "value": 6532770213
+      },
+      {
+        "log": "caat-sc.r01.reorder_2.yml.log",
+        "value": 5158757743
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 1215631576
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 1200012564
+      },
+      {
+        "log": "caat-sc.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 821473444
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 354211768
+      }
+    ],
+    "worklist_ns": [
+      {
+        "log": "caat-pso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 188097602
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 183711997
+      },
+      {
+        "log": "caat-sc.r01.13-privatized_27-multiple-protecting2_true.yml.log",
+        "value": 75029697
+      },
+      {
+        "log": "caat-pso.r01.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 68033139
+      },
+      {
+        "log": "caat-tso.r01.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 59048094
+      },
+      {
+        "log": "caat-pso.r01.reorder_2.yml.log",
+        "value": 27533508
+      },
+      {
+        "log": "caat-tso.r01.reorder_2.yml.log",
+        "value": 25375110
+      },
+      {
+        "log": "caat-sc.r01.13-privatized_24-multiple-protecting_true.yml.log",
+        "value": 23477089
+      },
+      {
+        "log": "caat-sc.r01.dekker.yml.log",
+        "value": 13479160
+      },
+      {
+        "log": "caat-sc.r01.reorder_2.yml.log",
+        "value": 9889276
+      }
+    ]
+  }
+}

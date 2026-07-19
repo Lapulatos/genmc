@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="60 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/>
+  <option name="--disable-mm-detector"/>
+  <option name="--svcomp-backend=caat-sc"/>
+  <option name="--cat-stats"/>
+
+  <column title="complete">Number of complete executions explored: ([0-9]+)</column>
+  <column title="blocked">Number of blocked executions seen: ([0-9]+)</column>
+  <column title="consistency ns">consistency-total-ns=([0-9]+)</column>
+  <column title="materialize ns">materialize-ns=([0-9]+)</column>
+  <column title="offline total ns">offline-ns=([0-9]+)</column>
+  <column title="offline evaluation ns">offline-evaluation-ns=([0-9]+)</column>
+  <column title="offline check ns">offline-check-ns=([0-9]+)</column>
+  <column title="offline composition ns">offline-compose-ns=([0-9]+)</column>
+  <column title="equality ns">equality-ns=([0-9]+)</column>
+
+  <rundefinition name="recursive-caat-observation-only">
+    <tasks name="pthread-wmm-283">
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/*.yml</include>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

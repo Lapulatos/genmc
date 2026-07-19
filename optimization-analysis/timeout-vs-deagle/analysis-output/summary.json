@@ -1,0 +1,175 @@
+{
+  "caat_sc_rss_mb": {
+    "at_least_512_mb": 0,
+    "max": 111.833088,
+    "median": 26.284032,
+    "p90": 26.542899199999997,
+    "under_64_mb": 190
+  },
+  "comparison": {
+    "caat_sc_timeouts_total": 240,
+    "deagle_correct_total": 615,
+    "native_genmc_timeouts_total": 210,
+    "primary_cohort_definition": "latest CAAT-SC TIMEOUT and Deagle category correct",
+    "primary_cohort_tasks": 200,
+    "tasks_total": 725
+  },
+  "deagle_bounded_true_incomplete": 11,
+  "deagle_cpu_s": {
+    "max": 54.802629358,
+    "median": 0.27881807999999997,
+    "p90": 0.9231161392999793,
+    "under_1_s": 180
+  },
+  "deagle_unwind_mode": {
+    "fallback_bound_3": 12,
+    "no_loops": 179,
+    "suggested_finite_bound": 9
+  },
+  "expected": {
+    "false": 154,
+    "true": 46
+  },
+  "families": {
+    "goblint-regression": 1,
+    "pthread": 8,
+    "pthread-ext": 4,
+    "pthread-theta": 1,
+    "pthread-wmm": 179,
+    "weaver": 7
+  },
+  "family_coverage": {
+    "goblint-regression": {
+      "all_tasks": 103,
+      "primary_rate": 0.009708737864077669,
+      "primary_tasks": 1
+    },
+    "pthread": {
+      "all_tasks": 42,
+      "primary_rate": 0.19047619047619047,
+      "primary_tasks": 8
+    },
+    "pthread-ext": {
+      "all_tasks": 35,
+      "primary_rate": 0.11428571428571428,
+      "primary_tasks": 4
+    },
+    "pthread-theta": {
+      "all_tasks": 13,
+      "primary_rate": 0.07692307692307693,
+      "primary_tasks": 1
+    },
+    "pthread-wmm": {
+      "all_tasks": 283,
+      "primary_rate": 0.6325088339222615,
+      "primary_tasks": 179
+    },
+    "weaver": {
+      "all_tasks": 174,
+      "primary_rate": 0.040229885057471264,
+      "primary_tasks": 7
+    }
+  },
+  "family_expected": {
+    "goblint-regression": {
+      "true": 1
+    },
+    "pthread": {
+      "false": 4,
+      "true": 4
+    },
+    "pthread-ext": {
+      "false": 1,
+      "true": 3
+    },
+    "pthread-theta": {
+      "true": 1
+    },
+    "pthread-wmm": {
+      "false": 149,
+      "true": 30
+    },
+    "weaver": {
+      "true": 7
+    }
+  },
+  "mechanism_clusters": {
+    "finite non-WMM exploration explosion": 7,
+    "loop or repeated-thread/state-space explosion": 3,
+    "loop-free weak-memory encoding / explicit-schedule explosion": 179,
+    "unbounded loop / Deagle bounded-TRUE caveat": 11
+  },
+  "native_genmc_status": {
+    "TIMEOUT": 192,
+    "false(unreach-call)": 7,
+    "true": 1
+  },
+  "previous_caat_status": {
+    "TIMEOUT": 200
+  },
+  "semantic_comparability": {
+    "has_nondet_seed_mismatch": 190,
+    "nondet_by_expected": {
+      "false": {
+        "all": 154,
+        "has_nondet": 150
+      },
+      "true": {
+        "all": 46,
+        "has_nondet": 40
+      }
+    },
+    "strict_expected": {
+      "false": 4,
+      "true": 5
+    },
+    "strict_native_genmc_status": {
+      "TIMEOUT": 8,
+      "true": 1
+    },
+    "strict_tasks": 9,
+    "strict_tasks_list": [
+      "pthread-theta/exponential-4.yml",
+      "pthread/fib_safe-10.yml",
+      "pthread/fib_safe-11.yml",
+      "pthread/fib_safe-7.yml",
+      "pthread/fib_unsafe-10.yml",
+      "pthread/fib_unsafe-11.yml",
+      "pthread/fib_unsafe-12.yml",
+      "pthread/triangular-longer-1.yml",
+      "pthread/triangular-longer-2.yml"
+    ]
+  },
+  "source_features": {
+    "atomic_begin_calls": {
+      "max": 22,
+      "median": 18.0,
+      "p90": 22.0
+    },
+    "loop_tokens": {
+      "max": 4,
+      "median": 0.0,
+      "p90": 0.0
+    },
+    "nondet_calls": {
+      "max": 10,
+      "median": 3.0,
+      "p90": 7.0
+    },
+    "pthread_create_calls": {
+      "max": 5,
+      "median": 3.0,
+      "p90": 4.0
+    },
+    "source_loc": {
+      "max": 333,
+      "median": 211.5,
+      "p90": 235.0
+    },
+    "weak_encoding_identifiers": {
+      "max": 626,
+      "median": 223.0,
+      "p90": 310.0
+    }
+  }
+}

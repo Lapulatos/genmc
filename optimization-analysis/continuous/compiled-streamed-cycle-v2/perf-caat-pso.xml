@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="pipeline.tools.genmc_svcomp" timelimit="60 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/><option name="--disable-mm-detector"/>
+  <option name="--nthreads=1"/><option name="--v1"/><option name="--cat-stats"/>
+  <column title="executions">Number of complete executions explored: (.*)</column>
+  <column title="snapshot-bytes">peak-snapshot-equivalent-bytes=([0-9]+)</column>
+  <column title="base-bytes">max-current-base-bytes=([0-9]+)</column>
+  <column title="lazy-checks">lazy-cycle-checks=([0-9]+)</column>
+  <column title="lazy-candidates">lazy-edge-candidates=([0-9]+)</column>
+  <rundefinition name="caat-pso.lazy-cycle"><option name="--svcomp-backend=caat-pso"/>
+    <tasks name="unreach-call"><includesfile>/data3/sujie/experiments/caat-optimization/packed-from-read/definitions/paired-pso.set</includesfile><propertyfile>/data3/sujie/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile></tasks>
+  </rundefinition>
+</benchmark>

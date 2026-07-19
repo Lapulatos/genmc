@@ -1,0 +1,52 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/experiments/caat-optimization/sc-rvf-exploration/source/optimization-analysis/core-direction-review-20260718/incremental-history-reason-3.xml
+name:                    incremental-history-reason-3
+run sets:                incremental-history-reason.medium-3
+date:                    Sat, 2026-07-18 14:29:50 UTC
+tool:                    GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/sc-rvf-exploration/source/optimization-analysis/continuous/candidate-equivalence-quotient/formal-wrapper.sh
+options:                 --disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --cat-stats --cat-disable-adaptive-offline
+parallel runs:           3
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    cc5bb84f5ad3
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.736896 MB
+------------------------------------------------------------
+
+
+
+incremental-history-reason.medium-3
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --cat-stats --cat-disable-adaptive-offline' and propertyfile 'None'
+
+inputfile                                                   status                       cpu time   wall time        host
+-------------------------------------------------------------------------------------------------------------------------
+safe004_power.oepc_pso.oepc_rmo.oepc.yml                    false(unreach-call)             18.45       18.46        None
+mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml    false(unreach-call)             35.94       35.95        None
+rfi002_tso.yml                                              true                            14.95       14.96        None
+-------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                   done                            69.35       36.10           -
+
+Statistics:              3 Files
+  correct:               3
+    correct true:        1
+    correct false:       2
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:               0
+  Score:                 4 (max: 4)

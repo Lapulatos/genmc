@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="820" height="341" viewBox="0 0 820 341">
+<rect width="100%" height="100%" fill="white"/>
+<text x="16" y="28" font-size="16" font-weight="bold">Run coverage and failure modes</text>
+<rect x="150" y="38" width="13" height="13" fill="#009E73"/>
+<text x="168" y="49" font-size="11">solved</text>
+<rect x="242" y="38" width="13" height="13" fill="#E69F00"/>
+<text x="260" y="49" font-size="11">timeout</text>
+<rect x="334" y="38" width="13" height="13" fill="#D55E00"/>
+<text x="352" y="49" font-size="11">OOM</text>
+<rect x="426" y="38" width="13" height="13" fill="#777777"/>
+<text x="444" y="49" font-size="11">other</text>
+<text x="140" y="89" text-anchor="end" font-size="12">Deagle</text>
+<rect x="150.00" y="70" width="543.84" height="25" fill="#009E73"><title>solved: 618/725</title></rect>
+<text x="421.92" y="87" text-anchor="middle" font-size="10" fill="white">618</text>
+<rect x="693.84" y="70" width="14.08" height="25" fill="#E69F00"><title>timeout: 16/725</title></rect>
+<rect x="707.92" y="70" width="8.80" height="25" fill="#D55E00"><title>OOM: 10/725</title></rect>
+<rect x="716.72" y="70" width="71.28" height="25" fill="#777777"><title>other: 81/725</title></rect>
+<text x="752.36" y="87" text-anchor="middle" font-size="10" fill="white">81</text>
+<text x="796" y="89" font-size="11">n=725</text>
+<text x="140" y="143" text-anchor="end" font-size="12">GenMC</text>
+<rect x="150.00" y="124" width="386.32" height="25" fill="#009E73"><title>solved: 439/725</title></rect>
+<text x="343.16" y="141" text-anchor="middle" font-size="10" fill="white">439</text>
+<rect x="536.32" y="124" width="184.80" height="25" fill="#E69F00"><title>timeout: 210/725</title></rect>
+<text x="628.72" y="141" text-anchor="middle" font-size="10" fill="white">210</text>
+<rect x="721.12" y="124" width="44.00" height="25" fill="#D55E00"><title>OOM: 50/725</title></rect>
+<text x="743.12" y="141" text-anchor="middle" font-size="10" fill="white">50</text>
+<rect x="765.12" y="124" width="22.88" height="25" fill="#777777"><title>other: 26/725</title></rect>
+<text x="796" y="143" font-size="11">n=725</text>
+<text x="140" y="197" text-anchor="end" font-size="12">GenMC+CAAT</text>
+<rect x="150.00" y="178" width="367.84" height="25" fill="#009E73"><title>solved: 418/725</title></rect>
+<text x="333.92" y="195" text-anchor="middle" font-size="10" fill="white">418</text>
+<rect x="517.84" y="178" width="197.12" height="25" fill="#E69F00"><title>timeout: 224/725</title></rect>
+<text x="616.40" y="195" text-anchor="middle" font-size="10" fill="white">224</text>
+<rect x="714.96" y="178" width="50.16" height="25" fill="#D55E00"><title>OOM: 57/725</title></rect>
+<text x="740.04" y="195" text-anchor="middle" font-size="10" fill="white">57</text>
+<rect x="765.12" y="178" width="22.88" height="25" fill="#777777"><title>other: 26/725</title></rect>
+<text x="796" y="197" font-size="11">n=725</text>
+<text x="140" y="251" text-anchor="end" font-size="12">GenMC+CAT</text>
+<rect x="150.00" y="232" width="333.52" height="25" fill="#009E73"><title>solved: 379/725</title></rect>
+<text x="316.76" y="249" text-anchor="middle" font-size="10" fill="white">379</text>
+<rect x="483.52" y="232" width="222.64" height="25" fill="#E69F00"><title>timeout: 253/725</title></rect>
+<text x="594.84" y="249" text-anchor="middle" font-size="10" fill="white">253</text>
+<rect x="706.16" y="232" width="58.96" height="25" fill="#D55E00"><title>OOM: 67/725</title></rect>
+<text x="735.64" y="249" text-anchor="middle" font-size="10" fill="white">67</text>
+<rect x="765.12" y="232" width="22.88" height="25" fill="#777777"><title>other: 26/725</title></rect>
+<text x="796" y="251" font-size="11">n=725</text>
+<text x="469.0" y="323" text-anchor="middle" font-size="12">Fraction of repeated runs</text>
+</svg>

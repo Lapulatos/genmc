@@ -1,0 +1,504 @@
+{
+  "cache": {
+    "pso": {
+      "capacity-drops": 0,
+      "duplicates": 0,
+      "empty-skipped": 0,
+      "explained": 3092,
+      "explanation-failures": 0,
+      "explanation-ns": 106096501136,
+      "hit_rate": 0.8914450863286624,
+      "hits": 6568688,
+      "learned": 3092,
+      "lookup-ns": 2335057101,
+      "negative-skipped": 0,
+      "queries": 7368584,
+      "records": 332,
+      "rejected": 1660,
+      "stored-literals": 18640,
+      "tasks_with_hits": 200
+    },
+    "sc": {
+      "capacity-drops": 0,
+      "duplicates": 0,
+      "empty-skipped": 0,
+      "explained": 0,
+      "explanation-failures": 0,
+      "explanation-ns": 0,
+      "hit_rate": 0,
+      "hits": 0,
+      "learned": 0,
+      "lookup-ns": 0,
+      "negative-skipped": 0,
+      "queries": 0,
+      "records": 0,
+      "rejected": 0,
+      "stored-literals": 0,
+      "tasks_with_hits": 0
+    },
+    "tso": {
+      "capacity-drops": 0,
+      "duplicates": 0,
+      "empty-skipped": 0,
+      "explained": 0,
+      "explanation-failures": 0,
+      "explanation-ns": 0,
+      "hit_rate": 0,
+      "hits": 0,
+      "learned": 0,
+      "lookup-ns": 0,
+      "negative-skipped": 0,
+      "queries": 0,
+      "records": 0,
+      "rejected": 0,
+      "stored-literals": 0,
+      "tasks_with_hits": 0
+    }
+  },
+  "formal": {
+    "cpu": {
+      "all": {
+        "bootstrap_95ci": [
+          1.007884103456559,
+          1.09054953488872
+        ],
+        "geomean_ratio": 1.043425454777589,
+        "iqr_ratio": [
+          1.0020832767658892,
+          1.0484566638333674
+        ],
+        "mean_ratio": 1.06741324364978,
+        "median_ratio": 1.0237208759543024,
+        "sign_test": {
+          "census_faster": 20,
+          "census_slower": 61,
+          "holm_p_across_four_groups": 1.6968644684897813e-05,
+          "p": 5.656214894965938e-06,
+          "ties": 0
+        },
+        "std_ratio": 0.3264073160459929,
+        "tasks": 81
+      },
+      "pso": {
+        "bootstrap_95ci": [
+          1.0191306354545482,
+          1.2910379046475884
+        ],
+        "geomean_ratio": 1.1311566554656425,
+        "iqr_ratio": [
+          1.0100175405898857,
+          1.126589827898437
+        ],
+        "mean_ratio": 1.7684900751625594,
+        "median_ratio": 1.0476584988614213,
+        "sign_test": {
+          "census_faster": 15,
+          "census_slower": 66,
+          "holm_p_across_four_groups": 3.450242219992142e-08,
+          "p": 8.625605549980354e-09,
+          "ties": 0
+        },
+        "std_ratio": 5.535050757076641,
+        "tasks": 81
+      },
+      "sc": {
+        "bootstrap_95ci": [
+          0.9933949187555992,
+          1.0096816562312996
+        ],
+        "geomean_ratio": 1.001789156237247,
+        "iqr_ratio": [
+          0.9923753609089152,
+          1.0251500339363917
+        ],
+        "mean_ratio": 1.0025415861326712,
+        "median_ratio": 1.0016513831542095,
+        "sign_test": {
+          "census_faster": 43,
+          "census_slower": 47,
+          "holm_p_across_four_groups": 0.7520332015985947,
+          "p": 0.7520332015985947,
+          "ties": 0
+        },
+        "std_ratio": 0.03842892313413261,
+        "tasks": 90
+      },
+      "tso": {
+        "bootstrap_95ci": [
+          0.9950776344609797,
+          1.007612010749991
+        ],
+        "geomean_ratio": 1.0013793157370068,
+        "iqr_ratio": [
+          0.9871561514434212,
+          1.018326502244745
+        ],
+        "mean_ratio": 1.0018277611455155,
+        "median_ratio": 0.996724394926398,
+        "sign_test": {
+          "census_faster": 52,
+          "census_slower": 37,
+          "holm_p_across_four_groups": 0.27473594271130397,
+          "p": 0.13736797135565199,
+          "ties": 0
+        },
+        "std_ratio": 0.030171074725460306,
+        "tasks": 89
+      }
+    },
+    "design": {
+      "cells": 2304,
+      "repetitions": 4,
+      "tasks": 96
+    },
+    "opposite_terminal_mismatches": [],
+    "rss": {
+      "all": {
+        "bootstrap_95ci": [
+          1.0003821735487295,
+          1.047282720157903
+        ],
+        "geomean_ratio": 1.0180804353661277,
+        "iqr_ratio": [
+          0.9996536402211971,
+          1.0005785970370749
+        ],
+        "mean_ratio": 1.0264807319747682,
+        "median_ratio": 1.0000776912827083,
+        "sign_test": {
+          "census_faster": 38,
+          "census_slower": 43,
+          "holm_p_across_four_groups": 1.0,
+          "p": 0.6569924675863579,
+          "ties": 0
+        },
+        "std_ratio": 0.17503106570782526,
+        "tasks": 81
+      },
+      "pso": {
+        "bootstrap_95ci": [
+          1.0012529854459156,
+          1.1482319728002173
+        ],
+        "geomean_ratio": 1.0553771911345387,
+        "iqr_ratio": [
+          0.9993700291361525,
+          1.0011798945960828
+        ],
+        "mean_ratio": 1.2139380607015398,
+        "median_ratio": 1.0003142183817753,
+        "sign_test": {
+          "census_faster": 31,
+          "census_slower": 47,
+          "holm_p_across_four_groups": 0.35512970088832024,
+          "p": 0.08878242522208006,
+          "ties": 3
+        },
+        "std_ratio": 1.5876971348997542,
+        "tasks": 81
+      },
+      "sc": {
+        "bootstrap_95ci": [
+          0.9996522174198406,
+          1.000205641310026
+        ],
+        "geomean_ratio": 0.9999206151681859,
+        "iqr_ratio": [
+          0.9992870980388191,
+          1.0006729662675218
+        ],
+        "mean_ratio": 0.9999215283454774,
+        "median_ratio": 0.9997791798515119,
+        "sign_test": {
+          "census_faster": 51,
+          "census_slower": 37,
+          "holm_p_across_four_groups": 0.4963215388019691,
+          "p": 0.1654405129339897,
+          "ties": 2
+        },
+        "std_ratio": 0.001359324929388735,
+        "tasks": 90
+      },
+      "tso": {
+        "bootstrap_95ci": [
+          0.9996528511428328,
+          1.00025391534555
+        ],
+        "geomean_ratio": 0.9999556928564668,
+        "iqr_ratio": [
+          0.9988974641675854,
+          1.000702521270783
+        ],
+        "mean_ratio": 0.9999567294193322,
+        "median_ratio": 0.9999217833398514,
+        "sign_test": {
+          "census_faster": 45,
+          "census_slower": 40,
+          "holm_p_across_four_groups": 1.0,
+          "p": 0.6646454904132143,
+          "ties": 4
+        },
+        "std_ratio": 0.0014480884145541457,
+        "tasks": 89
+      }
+    },
+    "safe_execution_count_mismatches": [],
+    "status_counts": {
+      "pso": {
+        "baseline": {
+          "OUT OF MEMORY": 20,
+          "TIMEOUT": 36,
+          "false(unreach-call)": 104,
+          "true": 224
+        },
+        "cache": {
+          "OUT OF MEMORY": 28,
+          "TIMEOUT": 24,
+          "false(unreach-call)": 108,
+          "true": 224
+        }
+      },
+      "sc": {
+        "baseline": {
+          "OUT OF MEMORY": 20,
+          "TIMEOUT": 4,
+          "false(unreach-call)": 116,
+          "true": 244
+        },
+        "cache": {
+          "OUT OF MEMORY": 20,
+          "TIMEOUT": 4,
+          "false(unreach-call)": 116,
+          "true": 244
+        }
+      },
+      "tso": {
+        "baseline": {
+          "OUT OF MEMORY": 20,
+          "TIMEOUT": 4,
+          "TIMEOUT (false(unreach-call))": 4,
+          "false(unreach-call)": 112,
+          "true": 244
+        },
+        "cache": {
+          "OUT OF MEMORY": 20,
+          "TIMEOUT": 4,
+          "TIMEOUT (false(unreach-call))": 3,
+          "false(unreach-call)": 113,
+          "true": 244
+        }
+      }
+    },
+    "status_mismatches": [
+      [
+        "tso",
+        "04",
+        "pthread/fib_unsafe-7.yml",
+        "TIMEOUT (false(unreach-call))",
+        "false(unreach-call)"
+      ],
+      [
+        "pso",
+        "01",
+        "pthread/fib_unsafe-5.yml",
+        "TIMEOUT",
+        "false(unreach-call)"
+      ],
+      [
+        "pso",
+        "01",
+        "pthread/queue_ok_longer.yml",
+        "true",
+        "OUT OF MEMORY"
+      ],
+      [
+        "pso",
+        "01",
+        "pthread/queue_ok_longest.yml",
+        "TIMEOUT",
+        "OUT OF MEMORY"
+      ],
+      [
+        "pso",
+        "01",
+        "pthread/triangular-1.yml",
+        "TIMEOUT",
+        "true"
+      ],
+      [
+        "pso",
+        "02",
+        "pthread/fib_unsafe-5.yml",
+        "TIMEOUT",
+        "false(unreach-call)"
+      ],
+      [
+        "pso",
+        "02",
+        "pthread/queue_ok_longer.yml",
+        "true",
+        "OUT OF MEMORY"
+      ],
+      [
+        "pso",
+        "02",
+        "pthread/queue_ok_longest.yml",
+        "TIMEOUT",
+        "OUT OF MEMORY"
+      ],
+      [
+        "pso",
+        "02",
+        "pthread/triangular-1.yml",
+        "TIMEOUT",
+        "true"
+      ],
+      [
+        "pso",
+        "03",
+        "pthread/fib_unsafe-5.yml",
+        "TIMEOUT",
+        "false(unreach-call)"
+      ],
+      [
+        "pso",
+        "03",
+        "pthread/queue_ok_longer.yml",
+        "true",
+        "OUT OF MEMORY"
+      ],
+      [
+        "pso",
+        "03",
+        "pthread/queue_ok_longest.yml",
+        "TIMEOUT",
+        "OUT OF MEMORY"
+      ],
+      [
+        "pso",
+        "03",
+        "pthread/triangular-1.yml",
+        "TIMEOUT",
+        "true"
+      ],
+      [
+        "pso",
+        "04",
+        "pthread/fib_unsafe-5.yml",
+        "TIMEOUT",
+        "false(unreach-call)"
+      ],
+      [
+        "pso",
+        "04",
+        "pthread/queue_ok_longer.yml",
+        "true",
+        "OUT OF MEMORY"
+      ],
+      [
+        "pso",
+        "04",
+        "pthread/queue_ok_longest.yml",
+        "TIMEOUT",
+        "OUT OF MEMORY"
+      ],
+      [
+        "pso",
+        "04",
+        "pthread/triangular-1.yml",
+        "TIMEOUT",
+        "true"
+      ]
+    ],
+    "wall": {
+      "all": {
+        "bootstrap_95ci": [
+          1.0046206951001961,
+          1.0855790111328008
+        ],
+        "geomean_ratio": 1.039291811526223,
+        "iqr_ratio": [
+          0.9960315509793339,
+          1.0376459668867166
+        ],
+        "mean_ratio": 1.0622664393950159,
+        "median_ratio": 1.019156129545136,
+        "sign_test": {
+          "census_faster": 23,
+          "census_slower": 58,
+          "holm_p_across_four_groups": 0.00037983345589342603,
+          "p": 0.00012661115196447534,
+          "ties": 0
+        },
+        "std_ratio": 0.3184305986848032,
+        "tasks": 81
+      },
+      "pso": {
+        "bootstrap_95ci": [
+          1.01454725483618,
+          1.2823544339870274
+        ],
+        "geomean_ratio": 1.1246696689103917,
+        "iqr_ratio": [
+          1.0039856457172316,
+          1.1104221837700765
+        ],
+        "mean_ratio": 1.7336507604598401,
+        "median_ratio": 1.0531864741737884,
+        "sign_test": {
+          "census_faster": 18,
+          "census_slower": 63,
+          "holm_p_across_four_groups": 2.0817614258925663e-06,
+          "p": 5.204403564731416e-07,
+          "ties": 0
+        },
+        "std_ratio": 5.297469135139756,
+        "tasks": 81
+      },
+      "sc": {
+        "bootstrap_95ci": [
+          0.9927286570786585,
+          1.0062143141760318
+        ],
+        "geomean_ratio": 0.9995410115594814,
+        "iqr_ratio": [
+          0.9879584979371843,
+          1.0160649643226243
+        ],
+        "mean_ratio": 1.0000818759906809,
+        "median_ratio": 0.9962829592011131,
+        "sign_test": {
+          "census_faster": 51,
+          "census_slower": 39,
+          "holm_p_across_four_groups": 0.49221289943255586,
+          "p": 0.24610644971627793,
+          "ties": 0
+        },
+        "std_ratio": 0.0329995236638813,
+        "tasks": 90
+      },
+      "tso": {
+        "bootstrap_95ci": [
+          0.9921601990644846,
+          1.0039076712201174
+        ],
+        "geomean_ratio": 0.9980061413239806,
+        "iqr_ratio": [
+          0.9805753630228842,
+          1.0166948141917052
+        ],
+        "mean_ratio": 0.9984063168654751,
+        "median_ratio": 0.9983081103955508,
+        "sign_test": {
+          "census_faster": 48,
+          "census_slower": 41,
+          "holm_p_across_four_groups": 0.5250147872924269,
+          "p": 0.5250147872924269,
+          "ties": 0
+        },
+        "std_ratio": 0.028412376423460055,
+        "tasks": 89
+      }
+    }
+  }
+}

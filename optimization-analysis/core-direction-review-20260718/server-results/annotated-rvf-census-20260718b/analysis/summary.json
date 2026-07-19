@@ -1,0 +1,28 @@
+{
+  "logs": 725,
+  "gate_counts": {
+    "native-fallback reason=assume is not covered by exactly one supported annotated plain load": 342,
+    "not-recorded": 275,
+    "native-fallback reason=non-atomic store instruction": 54,
+    "native-fallback reason=non-atomic load instruction": 31,
+    "native-fallback reason=control-flow loop outside the current RVF performance gate": 16,
+    "native-fallback reason=modeled call to __VERIFIER_malloc": 4,
+    "enabled": 2,
+    "native-fallback reason=atomic read-modify-write instruction": 1
+  },
+  "counter_totals": {
+    "rvf-loads-attempted": 0,
+    "rvf-loads-reduced": 0,
+    "rvf-annotated-groups-rejected": 0,
+    "rvf-owned-read-revisits-suppressed": 0,
+    "rvf-fail-open": 0
+  },
+  "tasks_with_nonzero_counter": {
+    "rvf-loads-attempted": 0,
+    "rvf-loads-reduced": 0,
+    "rvf-annotated-groups-rejected": 0,
+    "rvf-owned-read-revisits-suppressed": 0,
+    "rvf-fail-open": 0
+  },
+  "retain_gate": false
+}

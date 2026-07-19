@@ -1,0 +1,141 @@
+{
+  "common_solved_verdict_mismatches": 0,
+  "correct": {
+    "after": 778,
+    "before": 777,
+    "by_backend_after": {
+      "caat-pso": 241,
+      "caat-sc": 270,
+      "caat-tso": 267
+    },
+    "by_backend_before": {
+      "caat-pso": 240,
+      "caat-sc": 270,
+      "caat-tso": 267
+    }
+  },
+  "cputime": {
+    "all": {
+      "after_over_before_geomean": 0.9920325676564044,
+      "median_ratio": 1.0020315532801578,
+      "model_task_pairs": 288,
+      "task_bootstrap_95ci": [
+        0.9836967824962252,
+        1.0004211025670047
+      ]
+    },
+    "caat-pso": {
+      "after_over_before_geomean": 0.978881235930546,
+      "median_ratio": 0.9999824095600007,
+      "model_task_pairs": 96,
+      "task_bootstrap_95ci": [
+        0.9635864947705118,
+        0.9942381194326556
+      ]
+    },
+    "caat-sc": {
+      "after_over_before_geomean": 1.002397009619586,
+      "median_ratio": 1.008295775775715,
+      "model_task_pairs": 96,
+      "task_bootstrap_95ci": [
+        0.9875089152617297,
+        1.0179863071959512
+      ]
+    },
+    "caat-tso": {
+      "after_over_before_geomean": 0.9949655040083377,
+      "median_ratio": 1.0095948529479526,
+      "model_task_pairs": 96,
+      "task_bootstrap_95ci": [
+        0.9820417422856768,
+        1.007598857458275
+      ]
+    }
+  },
+  "memory": {
+    "all": {
+      "after_over_before_geomean": 1.006567110009659,
+      "median_ratio": 1.0,
+      "model_task_pairs": 288,
+      "task_bootstrap_95ci": [
+        1.0024310933512903,
+        1.0116288504414364
+      ]
+    },
+    "caat-pso": {
+      "after_over_before_geomean": 1.009830929373339,
+      "median_ratio": 1.0,
+      "model_task_pairs": 96,
+      "task_bootstrap_95ci": [
+        0.9998959102347221,
+        1.0224858298829613
+      ]
+    },
+    "caat-sc": {
+      "after_over_before_geomean": 1.0061278676799421,
+      "median_ratio": 1.0,
+      "model_task_pairs": 96,
+      "task_bootstrap_95ci": [
+        1.0001651244194234,
+        1.0139783463817338
+      ]
+    },
+    "caat-tso": {
+      "after_over_before_geomean": 1.003751853275755,
+      "median_ratio": 1.0,
+      "model_task_pairs": 96,
+      "task_bootstrap_95ci": [
+        0.9997981039994773,
+        1.0087695509268906
+      ]
+    }
+  },
+  "rows": {
+    "after": 864,
+    "before": 864,
+    "paired": 864
+  },
+  "safe_execution_count_mismatches": 0,
+  "status_changes": {
+    "TIMEOUT (true) -> TIMEOUT": 1,
+    "TIMEOUT -> true": 1
+  },
+  "walltime": {
+    "all": {
+      "after_over_before_geomean": 0.9904010612027204,
+      "median_ratio": 1.0000051988993657,
+      "model_task_pairs": 288,
+      "task_bootstrap_95ci": [
+        0.9827810213011012,
+        0.997902003445983
+      ]
+    },
+    "caat-pso": {
+      "after_over_before_geomean": 0.981866733168986,
+      "median_ratio": 0.9999972208068286,
+      "model_task_pairs": 96,
+      "task_bootstrap_95ci": [
+        0.9674378136382474,
+        0.9962701017439657
+      ]
+    },
+    "caat-sc": {
+      "after_over_before_geomean": 0.9993534217283289,
+      "median_ratio": 1.008536629149072,
+      "model_task_pairs": 96,
+      "task_bootstrap_95ci": [
+        0.986142937717014,
+        1.0130695349737873
+      ]
+    },
+    "caat-tso": {
+      "after_over_before_geomean": 0.9900602888735719,
+      "median_ratio": 0.9991909127467707,
+      "model_task_pairs": 96,
+      "task_bootstrap_95ci": [
+        0.9784888823235619,
+        1.0016700804160281
+      ]
+    }
+  }
+}

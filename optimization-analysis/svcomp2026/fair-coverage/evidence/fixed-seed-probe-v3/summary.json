@@ -1,0 +1,30 @@
+[
+  {
+    "classification": "unsupported-external",
+    "exit_code": 17,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-driver-races__char_generic_nvram_read_nvram_nvram_unlocked_ioctl.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition"
+    ],
+    "seconds": 0.16760979202808812,
+    "source": "c/pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.i",
+    "task": "c/pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.yml"
+  },
+  {
+    "classification": "unsupported-external",
+    "exit_code": 17,
+    "has_abort_assume": true,
+    "has_nondet": true,
+    "log": "pthread-driver-races__char_generic_nvram_read_nvram_write_nvram.log",
+    "rewrite_rules": [
+      "fixed-seed-nondet-cast",
+      "abort-assume-definition"
+    ],
+    "seconds": 0.15488155302591622,
+    "source": "c/pthread-driver-races/char_generic_nvram_read_nvram_write_nvram.i",
+    "task": "c/pthread-driver-races/char_generic_nvram_read_nvram_write_nvram.yml"
+  }
+]

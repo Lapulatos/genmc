@@ -1,0 +1,78 @@
+{
+  "by_backend": {
+    "caat-pso": {
+      "category": {
+        "correct": 79,
+        "error": 17
+      },
+      "completed": 79,
+      "runs": 96,
+      "status": {
+        "OUT OF MEMORY": 5,
+        "TIMEOUT": 12,
+        "false(unreach-call)": 25,
+        "true": 54
+      }
+    },
+    "caat-sc": {
+      "category": {
+        "correct": 79,
+        "error": 17
+      },
+      "completed": 79,
+      "runs": 96,
+      "status": {
+        "OUT OF MEMORY": 5,
+        "TIMEOUT": 12,
+        "false(unreach-call)": 25,
+        "true": 54
+      }
+    },
+    "caat-tso": {
+      "category": {
+        "correct": 79,
+        "error": 17
+      },
+      "completed": 79,
+      "runs": 96,
+      "status": {
+        "OUT OF MEMORY": 5,
+        "TIMEOUT": 12,
+        "false(unreach-call)": 25,
+        "true": 54
+      }
+    }
+  },
+  "metadata": [
+    {
+      "backend": "caat-pso",
+      "date": "2026-07-15 03:55:27 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/oracle/psooracle-pso.2026-07-15_03-55-27.results.caat-pso.r01.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r01",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-sc",
+      "date": "2026-07-15 03:53:18 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/oracle/scoracle-sc.2026-07-15_03-53-18.results.caat-sc.r01.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r01",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    },
+    {
+      "backend": "caat-tso",
+      "date": "2026-07-15 03:54:22 UTC",
+      "file": "optimization-analysis/continuous/violation-frontier/server/oracle/tsooracle-tso.2026-07-15_03-54-22.results.caat-tso.r01.unreach-call.xml.bz2",
+      "memlimit": "4000000000B",
+      "repetition": "r01",
+      "timelimit": "60s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    }
+  ]
+}

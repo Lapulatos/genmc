@@ -1,0 +1,300 @@
+{
+  "all_observed": {
+    "cputime_seconds": {
+      "all": {
+        "after_over_before_geomean": 1.0045941460576593,
+        "median_ratio": 1.0018925662093565,
+        "model_task_pairs": 288,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          1.0002009975315467,
+          1.008919845917798
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 1.0054015164456103,
+        "median_ratio": 1.00163174169418,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.998141455368703,
+          1.0129155171494173
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 0.995954550941378,
+        "median_ratio": 0.9993793626587645,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9893090640622152,
+          1.0023886157100081
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 1.0124949668619219,
+        "median_ratio": 1.0045092116683882,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          1.0043044831176864,
+          1.0209483236158816
+        ]
+      }
+    },
+    "memory_bytes": {
+      "all": {
+        "after_over_before_geomean": 1.0004360753557275,
+        "median_ratio": 1.0001572701853243,
+        "model_task_pairs": 288,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          1.000050152571335,
+          1.0009243419778606
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 1.0004786812729367,
+        "median_ratio": 1.0000781481149623,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9995340815621875,
+          1.0017483640716898
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 1.0003778996076382,
+        "median_ratio": 1.0003154207714084,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          1.000019310432445,
+          1.0006997065493246
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 1.000451647906553,
+        "median_ratio": 1.0000786051591737,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9999924061565588,
+          1.0010863869694016
+        ]
+      }
+    },
+    "walltime_seconds": {
+      "all": {
+        "after_over_before_geomean": 0.9935215451081182,
+        "median_ratio": 0.9959822009783259,
+        "model_task_pairs": 288,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9768313423714108,
+          1.0114361911933754
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 0.9864979224373148,
+        "median_ratio": 0.9999101227994264,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.960617040371219,
+          1.0111969509647623
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 0.9851891588166476,
+        "median_ratio": 0.9821472415633188,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9534316654114553,
+          1.0202823042310998
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 1.0090578592421997,
+        "median_ratio": 0.9996361272167632,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9814125803645501,
+          1.041405820387431
+        ]
+      }
+    }
+  },
+  "common_solved_verdict_mismatches": 0,
+  "correct": {
+    "after": 1554,
+    "before": 1554,
+    "by_model_after": {
+      "pso": 480,
+      "sc": 540,
+      "tso": 534
+    },
+    "by_model_before": {
+      "pso": 480,
+      "sc": 540,
+      "tso": 534
+    }
+  },
+  "peak_combined_task_overlap": {
+    "pso/r01": 47,
+    "pso/r02": 46,
+    "pso/r03": 47,
+    "pso/r04": 47,
+    "pso/r05": 47,
+    "pso/r06": 47,
+    "sc/r01": 46,
+    "sc/r02": 45,
+    "sc/r03": 46,
+    "sc/r04": 46,
+    "sc/r05": 47,
+    "sc/r06": 46,
+    "tso/r01": 46,
+    "tso/r02": 46,
+    "tso/r03": 47,
+    "tso/r04": 46,
+    "tso/r05": 46,
+    "tso/r06": 46
+  },
+  "rows": {
+    "after": 1728,
+    "before": 1728,
+    "paired": 1728
+  },
+  "safe_execution_count_mismatches": 0,
+  "status_changes": {},
+  "strict_common_solved": {
+    "cputime_seconds": {
+      "all": {
+        "after_over_before_geomean": 1.0056834116124476,
+        "median_ratio": 1.002840914325852,
+        "model_task_pairs": 259,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          1.0012880452037431,
+          1.0102344510381256
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 1.0062700030533434,
+        "median_ratio": 1.0029319065661402,
+        "model_task_pairs": 80,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9980583969644125,
+          1.014884535113258
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 0.9970936121789747,
+        "median_ratio": 0.999974758526273,
+        "model_task_pairs": 90,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9908510116936221,
+          1.0031043627870462
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 1.013913407188947,
+        "median_ratio": 1.0045160260745638,
+        "model_task_pairs": 89,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          1.0057181760278768,
+          1.022436180964184
+        ]
+      }
+    },
+    "memory_bytes": {
+      "all": {
+        "after_over_before_geomean": 1.0003454019631814,
+        "median_ratio": 1.0002355342702363,
+        "model_task_pairs": 259,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          1.000171015132681,
+          1.0005384819731786
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 1.000297911619018,
+        "median_ratio": 1.0000788705856545,
+        "model_task_pairs": 80,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9999443427083062,
+          1.0007336370783455
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 1.00052373088023,
+        "median_ratio": 1.0003558007311957,
+        "model_task_pairs": 90,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          1.0002698744201366,
+          1.0008016918624194
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 1.0002077838523293,
+        "median_ratio": 1.0000789079144639,
+        "model_task_pairs": 89,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9999315261988082,
+          1.0005099048281245
+        ]
+      }
+    },
+    "walltime_seconds": {
+      "all": {
+        "after_over_before_geomean": 0.9961428514473034,
+        "median_ratio": 0.9958047590981528,
+        "model_task_pairs": 259,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9774465037541723,
+          1.0157746576473916
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 0.9842954718940646,
+        "median_ratio": 0.9982275528686375,
+        "model_task_pairs": 80,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9533366875208859,
+          1.0138794475735318
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 0.9909878589854771,
+        "median_ratio": 0.9827927736018269,
+        "model_task_pairs": 90,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9578715064239575,
+          1.0290764230560911
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 1.0122106747977515,
+        "median_ratio": 1.000932234928222,
+        "model_task_pairs": 89,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9825356804521906,
+          1.04650491982355
+        ]
+      }
+    }
+  }
+}

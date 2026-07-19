@@ -1,0 +1,10 @@
+c/weaver/test-easy8.wvr.yml
+c/weaver/parallel-misc-3.wvr.yml
+c/pthread-wmm/safe033_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml
+c/pthread-wmm/mix034_pso.opt_tso.opt.yml
+c/weaver/chl-sre-trans.wvr.yml
+c/weaver/chl-sre-subst.wvr.yml
+c/pthread-wmm/safe006_rmo.oepc_rmo.opt-thin000_rmo.oepc_rmo.opt.yml
+c/pthread-wmm/safe018_rmo.oepc.yml
+c/pthread-wmm/safe006_power.oepc-thin000_power.oepc.yml
+c/pthread-wmm/mix012_pso.opt_tso.opt.yml

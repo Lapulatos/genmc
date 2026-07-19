@@ -1,0 +1,241 @@
+{
+  "design": {
+    "cells": 768,
+    "repetitions": 4,
+    "tasks": 96
+  },
+  "metrics": {
+    "cpu": {
+      "bootstrap_95ci": [
+        0.9883120293794283,
+        1.002011884468913
+      ],
+      "geomean_ratio": 0.9952770005248253,
+      "improved": 50,
+      "median_ratio": 0.9955788725356722,
+      "regressed": 37,
+      "tasks": 87
+    },
+    "rss": {
+      "bootstrap_95ci": [
+        0.9994934676894892,
+        1.0002957185652854
+      ],
+      "geomean_ratio": 0.999916207027356,
+      "improved": 42,
+      "median_ratio": 1.0,
+      "regressed": 43,
+      "tasks": 87
+    },
+    "wall": {
+      "bootstrap_95ci": [
+        0.9891292868912442,
+        1.0045185990723513
+      ],
+      "geomean_ratio": 0.99699570600451,
+      "improved": 47,
+      "median_ratio": 0.9981703721949151,
+      "regressed": 40,
+      "tasks": 87
+    }
+  },
+  "profile": {
+    "checkpoint-ns": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 1.0911260138114511,
+        "improved": 72,
+        "median_ratio": 0.2621740016299918,
+        "reduced_to_zero": 16,
+        "regressed": 1,
+        "tasks": 73
+      },
+      "total_ratio": 0.4109602305204651,
+      "totals": {
+        "baseline": 430701890,
+        "no-retain": 177001348
+      }
+    },
+    "history-ns": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 0.16583700364436016,
+        "improved": 1,
+        "median_ratio": 0.16583700364436016,
+        "reduced_to_zero": 0,
+        "regressed": 0,
+        "tasks": 1
+      },
+      "total_ratio": 0.16580990147901914,
+      "totals": {
+        "baseline": 775756893,
+        "no-retain": 128628174
+      }
+    },
+    "max-history-base-bytes": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 0.7347890706267761,
+        "improved": 30,
+        "median_ratio": 1.0,
+        "reduced_to_zero": 16,
+        "regressed": 0,
+        "tasks": 73
+      },
+      "total_ratio": 0.20613750759262217,
+      "totals": {
+        "baseline": 368094176,
+        "no-retain": 75878016
+      }
+    },
+    "max-preventive-history-base-bytes": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 0.0,
+        "improved": 73,
+        "median_ratio": 0.0,
+        "reduced_to_zero": 73,
+        "regressed": 0,
+        "tasks": 73
+      },
+      "total_ratio": 0.0,
+      "totals": {
+        "baseline": 294929504,
+        "no-retain": 0
+      }
+    },
+    "offline-evals": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 1.0,
+        "improved": 0,
+        "median_ratio": 1.0,
+        "reduced_to_zero": 0,
+        "regressed": 0,
+        "tasks": 73
+      },
+      "total_ratio": 1.0,
+      "totals": {
+        "baseline": 1840736,
+        "no-retain": 1840736
+      }
+    },
+    "peak-snapshot-equivalent-bytes": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 0.7354784740706204,
+        "improved": 30,
+        "median_ratio": 1.0,
+        "reduced_to_zero": 16,
+        "regressed": 0,
+        "tasks": 73
+      },
+      "total_ratio": 0.20614827031527425,
+      "totals": {
+        "baseline": 2372133568,
+        "no-retain": 489011232
+      }
+    },
+    "peak-undo-bytes": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 0.0,
+        "improved": 1,
+        "median_ratio": 0.0,
+        "reduced_to_zero": 1,
+        "regressed": 0,
+        "tasks": 1
+      },
+      "total_ratio": 0.0,
+      "totals": {
+        "baseline": 1295580096,
+        "no-retain": 0
+      }
+    },
+    "preventive-retentions": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 0.0,
+        "improved": 73,
+        "median_ratio": 0.0,
+        "reduced_to_zero": 73,
+        "regressed": 0,
+        "tasks": 73
+      },
+      "total_ratio": 0.0,
+      "totals": {
+        "baseline": 1231328,
+        "no-retain": 0
+      }
+    },
+    "preventive-suppressed-retentions": {
+      "paired_ratio": null,
+      "total_ratio": null,
+      "totals": {
+        "baseline": 0,
+        "no-retain": 1231328
+      }
+    },
+    "retained-snapshot-equivalent-bytes": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 0.7354784740706204,
+        "improved": 30,
+        "median_ratio": 1.0,
+        "reduced_to_zero": 16,
+        "regressed": 0,
+        "tasks": 73
+      },
+      "total_ratio": 0.20614827031527425,
+      "totals": {
+        "baseline": 2372133568,
+        "no-retain": 489011232
+      }
+    },
+    "retained-undo-bytes": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 0.0,
+        "improved": 1,
+        "median_ratio": 0.0,
+        "reduced_to_zero": 1,
+        "regressed": 0,
+        "tasks": 1
+      },
+      "total_ratio": 0.0,
+      "totals": {
+        "baseline": 1295580096,
+        "no-retain": 0
+      }
+    },
+    "rollback-ns": {
+      "paired_ratio": null,
+      "total_ratio": null,
+      "totals": {
+        "baseline": 0,
+        "no-retain": 0
+      }
+    },
+    "sync-ns": {
+      "paired_ratio": {
+        "arithmetic_mean_ratio": 0.9629550149286475,
+        "improved": 69,
+        "median_ratio": 0.9665925438833857,
+        "reduced_to_zero": 0,
+        "regressed": 4,
+        "tasks": 73
+      },
+      "total_ratio": 0.9966456021895003,
+      "totals": {
+        "baseline": 776120046600,
+        "no-retain": 773516631215
+      }
+    }
+  },
+  "safe_execution_count_mismatches": [],
+  "status_counts": {
+    "baseline": {
+      "OUT OF MEMORY": 20,
+      "TIMEOUT": 16,
+      "false(unreach-call)": 112,
+      "true": 236
+    },
+    "no-retain": {
+      "OUT OF MEMORY": 20,
+      "TIMEOUT": 16,
+      "false(unreach-call)": 112,
+      "true": 236
+    }
+  },
+  "status_transitions": {}
+}

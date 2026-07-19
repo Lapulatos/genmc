@@ -1,0 +1,73 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/experiments/caat-optimization/product-eog-cycle/definitions/pilot.xml
+name:                    pilot
+run sets:                caat-sc.lazy-pilot.unreach-call, caat-tso.lazy-pilot.unreach-call, caat-pso.lazy-pilot.unreach-call
+date:                    Thu, 2026-07-16 14:03:12 UTC
+tool:                    GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/product-eog-cycle/build-before/bin/genmc
+options:                 --disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats
+parallel runs:           3
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    511f4e2e7932
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.7450880001 MB
+------------------------------------------------------------
+
+
+
+caat-sc.lazy-pilot.unreach-call
+Run set 1 of 3 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats --svcomp-backend=caat-sc' and propertyfile 'None'
+
+inputfile               status                       cpu time   wall time        host
+-------------------------------------------------------------------------------------
+fib_unsafe-7.yml        false(unreach-call)             23.38       23.42        None
+queue_ok_longer.yml     true                             0.39        0.40        None
+-------------------------------------------------------------------------------------
+Run set 1               done                            23.78       23.59           -
+
+
+caat-tso.lazy-pilot.unreach-call
+Run set 2 of 3 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats --svcomp-backend=caat-tso' and propertyfile 'None'
+
+inputfile               status                       cpu time   wall time        host
+-------------------------------------------------------------------------------------
+fib_unsafe-7.yml        false(unreach-call)             47.10       47.16        None
+queue_ok_longer.yml     true                             1.07        1.08        None
+-------------------------------------------------------------------------------------
+Run set 2               done                            48.17       47.32           -
+
+
+caat-pso.lazy-pilot.unreach-call
+Run set 3 of 3 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats --svcomp-backend=caat-pso' and propertyfile 'None'
+
+inputfile               status                       cpu time   wall time        host
+-------------------------------------------------------------------------------------
+fib_unsafe-7.yml        TIMEOUT                         60.93       61.01        None
+queue_ok_longer.yml     true                             4.15        4.16        None
+-------------------------------------------------------------------------------------
+Run set 3               done                            65.09       61.16           -
+
+Statistics:              6 Files
+  correct:               5
+    correct true:        3
+    correct false:       2
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:               1
+  Score:                 8 (max: 9)

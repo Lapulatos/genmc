@@ -1,0 +1,724 @@
+{
+  "archives": [
+    "perf-caat-pso.2026-07-15_19-34-29.logfiles.zip",
+    "perf-caat-sc.2026-07-15_19-32-22.logfiles.zip",
+    "perf-caat-tso.2026-07-15_19-33-25.logfiles.zip"
+  ],
+  "distributions": {
+    "adapter_ns": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "adaptive_offline": {
+      "max": 347444,
+      "median": 1.0,
+      "min": 0,
+      "p90": 215,
+      "p95": 4121,
+      "p99": 152056,
+      "sum": 1054311
+    },
+    "checkpoint_ns": {
+      "max": 74041755,
+      "median": 1095.5,
+      "min": 0,
+      "p90": 59115,
+      "p95": 1367189,
+      "p99": 39129810,
+      "sum": 215031439
+    },
+    "copy_ns": {
+      "max": 1612901984,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 144378107,
+      "sum": 2282304096
+    },
+    "equality_ns": {
+      "max": 133958207,
+      "median": 1012.0,
+      "min": 0,
+      "p90": 1643141,
+      "p95": 9473927,
+      "p99": 73377342,
+      "sum": 654802126
+    },
+    "eval_ops": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "evicted": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "history_ns": {
+      "max": 3403914821,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 653108483,
+      "sum": 5078719487
+    },
+    "initialize": {
+      "max": 1,
+      "median": 1.0,
+      "min": 0,
+      "p90": 1,
+      "p95": 1,
+      "p99": 1,
+      "sum": 186
+    },
+    "insert": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "insert_attempt_ns": {
+      "max": 5463753023,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 826154610,
+      "sum": 7908302441
+    },
+    "materialize_ns": {
+      "max": 16112198302,
+      "median": 48360.0,
+      "min": 0,
+      "p90": 301407070,
+      "p95": 1846281831,
+      "p99": 11203403604,
+      "sum": 106944417406
+    },
+    "max_active_events": {
+      "max": 8032,
+      "median": 17.0,
+      "min": 0,
+      "p90": 99,
+      "p95": 262,
+      "p99": 8029,
+      "sum": 42025
+    },
+    "max_base_relation_density_ppm": {
+      "max": 872781,
+      "median": 581632.0,
+      "min": 0,
+      "p90": 740484,
+      "p95": 770196,
+      "p99": 872781,
+      "sum": 117257087
+    },
+    "max_base_relation_pairs": {
+      "max": 37515954,
+      "median": 158.0,
+      "min": 0,
+      "p90": 7528,
+      "p95": 38441,
+      "p99": 20822988,
+      "sum": 90710404
+    },
+    "max_current_base_bytes": {
+      "max": 72879408,
+      "median": 1268.0,
+      "min": 0,
+      "p90": 14608,
+      "p95": 89920,
+      "p99": 64745856,
+      "sum": 247172648
+    },
+    "max_history_base_bytes": {
+      "max": 72879408,
+      "median": 1268.0,
+      "min": 0,
+      "p90": 14608,
+      "p95": 89920,
+      "p99": 64745856,
+      "sum": 247172648
+    },
+    "max_inactive_events": {
+      "max": 4010,
+      "median": 0.0,
+      "min": 0,
+      "p90": 41,
+      "p95": 76,
+      "p99": 168,
+      "sum": 7188
+    },
+    "max_stable_events": {
+      "max": 8033,
+      "median": 18.0,
+      "min": 0,
+      "p90": 101,
+      "p95": 262,
+      "p99": 8029,
+      "sum": 42284
+    },
+    "offline_evals": {
+      "max": 347445,
+      "median": 2.0,
+      "min": 0,
+      "p90": 216,
+      "p95": 4122,
+      "p99": 152057,
+      "sum": 1054517
+    },
+    "offline_ns": {
+      "max": 33562842394,
+      "median": 67087.5,
+      "min": 0,
+      "p90": 173120007,
+      "p95": 2722655795,
+      "p99": 28508966171,
+      "sum": 208210246699
+    },
+    "oracle": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "peak_snapshot_equivalent_bytes": {
+      "max": 469650816,
+      "median": 6592.0,
+      "min": 0,
+      "p90": 94304,
+      "p95": 409056,
+      "p99": 210424176,
+      "sum": 1301021624
+    },
+    "peak_undo_bytes": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "profiled_queries": {
+      "max": 391668,
+      "median": 3.0,
+      "min": 0,
+      "p90": 322,
+      "p95": 6177,
+      "p99": 196280,
+      "sum": 1261169
+    },
+    "queue_pushes": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "rebuild": {
+      "max": 16,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 1,
+      "sum": 20
+    },
+    "rebuild_ns": {
+      "max": 33566170045,
+      "median": 67898.0,
+      "min": 0,
+      "p90": 173237498,
+      "p95": 2733773290,
+      "p99": 28508973163,
+      "sum": 208292410574
+    },
+    "replace": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "retained_snapshot_equivalent_bytes": {
+      "max": 469650816,
+      "median": 6592.0,
+      "min": 0,
+      "p90": 94304,
+      "p95": 409056,
+      "p99": 210424176,
+      "sum": 1301021624
+    },
+    "retained_undo_bytes": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "rollback": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "rollback_insert": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "rollback_ns": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "sync_ns": {
+      "max": 50971932371,
+      "median": 134342.0,
+      "min": 0,
+      "p90": 494826434,
+      "p95": 4177137104,
+      "p99": 42313098090,
+      "sum": 339800305474
+    },
+    "unchanged": {
+      "max": 44223,
+      "median": 0.0,
+      "min": 0,
+      "p90": 6,
+      "p95": 2055,
+      "p99": 44223,
+      "sum": 206652
+    },
+    "value_changes": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    },
+    "worklist_ns": {
+      "max": 0,
+      "median": 0.0,
+      "min": 0,
+      "p90": 0,
+      "p95": 0,
+      "p99": 0,
+      "sum": 0
+    }
+  },
+  "logs": 288,
+  "logs_with_stats": 262,
+  "logs_without_stats": 26,
+  "timing_share_of_sync": {
+    "adapter_ns": 0.0,
+    "checkpoint_ns": 0.000632817085611635,
+    "copy_ns": 0.006716604014867879,
+    "equality_ns": 0.0019270204159663492,
+    "history_ns": 0.014946188703142885,
+    "insert_attempt_ns": 0.0232733823766533,
+    "materialize_ns": 0.31472725504710564,
+    "offline_ns": 0.6127429650440126,
+    "rebuild_ns": 0.6129847655182217,
+    "rollback_ns": 0.0,
+    "worklist_ns": 0.0
+  },
+  "timing_totals_ns": {
+    "adapter_ns": 0,
+    "checkpoint_ns": 215031439,
+    "copy_ns": 2282304096,
+    "equality_ns": 654802126,
+    "history_ns": 5078719487,
+    "insert_attempt_ns": 7908302441,
+    "materialize_ns": 106944417406,
+    "offline_ns": 208210246699,
+    "rebuild_ns": 208292410574,
+    "rollback_ns": 0,
+    "sync_ns": 339800305474,
+    "worklist_ns": 0
+  },
+  "top_tasks": {
+    "checkpoint_ns": [
+      {
+        "log": "caat-pso.perf.butterfly.yml.log",
+        "value": 74041755
+      },
+      {
+        "log": "caat-pso.perf.triangular-2.yml.log",
+        "value": 46390237
+      },
+      {
+        "log": "caat-tso.perf.butterfly.yml.log",
+        "value": 39129810
+      },
+      {
+        "log": "caat-sc.perf.butterfly.yml.log",
+        "value": 14255325
+      },
+      {
+        "log": "caat-tso.perf.fib_unsafe-7.yml.log",
+        "value": 6689195
+      },
+      {
+        "log": "caat-tso.perf.triangular-1.yml.log",
+        "value": 6255445
+      },
+      {
+        "log": "caat-tso.perf.fib_safe-6.yml.log",
+        "value": 5416485
+      },
+      {
+        "log": "caat-sc.perf.fib_unsafe-7.yml.log",
+        "value": 3547520
+      },
+      {
+        "log": "caat-sc.perf.fib_safe-6.yml.log",
+        "value": 3261841
+      },
+      {
+        "log": "caat-sc.perf.triangular-1.yml.log",
+        "value": 2850798
+      }
+    ],
+    "copy_ns": [
+      {
+        "log": "caat-pso.perf.queue_ok_longer.yml.log",
+        "value": 1612901984
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longest.yml.log",
+        "value": 391472281
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longest.yml.log",
+        "value": 144378107
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longer.yml.log",
+        "value": 96086005
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longer.yml.log",
+        "value": 37465719
+      }
+    ],
+    "history_ns": [
+      {
+        "log": "caat-pso.perf.queue_ok_longer.yml.log",
+        "value": 3403914821
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longest.yml.log",
+        "value": 683686399
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longest.yml.log",
+        "value": 653108483
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longer.yml.log",
+        "value": 171389503
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longer.yml.log",
+        "value": 166620281
+      }
+    ],
+    "max_active_events": [
+      {
+        "log": "caat-pso.perf.queue_ok_longer.yml.log",
+        "value": 8032
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longest.yml.log",
+        "value": 8029
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longest.yml.log",
+        "value": 8029
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longer.yml.log",
+        "value": 4029
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longer.yml.log",
+        "value": 4029
+      },
+      {
+        "log": "caat-pso.perf.queue_ok.yml.log",
+        "value": 432
+      },
+      {
+        "log": "caat-sc.perf.fib_unsafe-7.yml.log",
+        "value": 315
+      },
+      {
+        "log": "caat-tso.perf.fib_unsafe-7.yml.log",
+        "value": 315
+      },
+      {
+        "log": "caat-sc.perf.fib_unsafe-6.yml.log",
+        "value": 277
+      },
+      {
+        "log": "caat-sc.perf.fib_safe-6.yml.log",
+        "value": 277
+      }
+    ],
+    "max_history_base_bytes": [
+      {
+        "log": "caat-pso.perf.queue_ok_longer.yml.log",
+        "value": 72879408
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longest.yml.log",
+        "value": 72843120
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longest.yml.log",
+        "value": 64745856
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longer.yml.log",
+        "value": 18277560
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longer.yml.log",
+        "value": 16244928
+      },
+      {
+        "log": "caat-pso.perf.queue_ok.yml.log",
+        "value": 218456
+      },
+      {
+        "log": "caat-tso.perf.fib_unsafe-7.yml.log",
+        "value": 115000
+      },
+      {
+        "log": "caat-sc.perf.fib_unsafe-7.yml.log",
+        "value": 102080
+      },
+      {
+        "log": "caat-tso.perf.fib_unsafe-6.yml.log",
+        "value": 101320
+      },
+      {
+        "log": "caat-tso.perf.fib_safe-6.yml.log",
+        "value": 101320
+      }
+    ],
+    "offline_ns": [
+      {
+        "log": "caat-tso.perf.fib_unsafe-7.yml.log",
+        "value": 33562842394
+      },
+      {
+        "log": "caat-pso.perf.butterfly.yml.log",
+        "value": 31189797268
+      },
+      {
+        "log": "caat-pso.perf.queue_ok_longer.yml.log",
+        "value": 28508966171
+      },
+      {
+        "log": "caat-pso.perf.triangular-2.yml.log",
+        "value": 25936676964
+      },
+      {
+        "log": "caat-tso.perf.fib_safe-6.yml.log",
+        "value": 21998469332
+      },
+      {
+        "log": "caat-tso.perf.butterfly.yml.log",
+        "value": 12896970951
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longest.yml.log",
+        "value": 11779465250
+      },
+      {
+        "log": "caat-tso.perf.fib_unsafe-6.yml.log",
+        "value": 6398582915
+      },
+      {
+        "log": "caat-sc.perf.fib_unsafe-7.yml.log",
+        "value": 5782577988
+      },
+      {
+        "log": "caat-tso.perf.fib_safe-5.yml.log",
+        "value": 3934927927
+      }
+    ],
+    "peak_snapshot_equivalent_bytes": [
+      {
+        "log": "caat-pso.perf.queue_ok_longer.yml.log",
+        "value": 469650816
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longest.yml.log",
+        "value": 445138256
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longest.yml.log",
+        "value": 210424176
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longer.yml.log",
+        "value": 111689336
+      },
+      {
+        "log": "caat-sc.perf.queue_ok_longer.yml.log",
+        "value": 52796160
+      },
+      {
+        "log": "caat-pso.perf.queue_ok.yml.log",
+        "value": 1407320
+      },
+      {
+        "log": "caat-tso.perf.fib_unsafe-7.yml.log",
+        "value": 702616
+      },
+      {
+        "log": "caat-tso.perf.fib_unsafe-6.yml.log",
+        "value": 619016
+      },
+      {
+        "log": "caat-tso.perf.fib_safe-6.yml.log",
+        "value": 619016
+      },
+      {
+        "log": "caat-pso.perf.pthread-demo-datarace-3.yml.log",
+        "value": 608632
+      }
+    ],
+    "peak_undo_bytes": [],
+    "rebuild_ns": [
+      {
+        "log": "caat-tso.perf.fib_unsafe-7.yml.log",
+        "value": 33566170045
+      },
+      {
+        "log": "caat-pso.perf.butterfly.yml.log",
+        "value": 31212825010
+      },
+      {
+        "log": "caat-pso.perf.queue_ok_longer.yml.log",
+        "value": 28508973163
+      },
+      {
+        "log": "caat-pso.perf.triangular-2.yml.log",
+        "value": 25949571023
+      },
+      {
+        "log": "caat-tso.perf.fib_safe-6.yml.log",
+        "value": 22001386317
+      },
+      {
+        "log": "caat-tso.perf.butterfly.yml.log",
+        "value": 12909826082
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longest.yml.log",
+        "value": 11779466498
+      },
+      {
+        "log": "caat-tso.perf.fib_unsafe-6.yml.log",
+        "value": 6399347834
+      },
+      {
+        "log": "caat-sc.perf.fib_unsafe-7.yml.log",
+        "value": 5785501088
+      },
+      {
+        "log": "caat-tso.perf.fib_safe-5.yml.log",
+        "value": 3935689606
+      }
+    ],
+    "rollback_ns": [],
+    "sync_ns": [
+      {
+        "log": "caat-tso.perf.fib_unsafe-7.yml.log",
+        "value": 50971932371
+      },
+      {
+        "log": "caat-pso.perf.butterfly.yml.log",
+        "value": 44138087877
+      },
+      {
+        "log": "caat-pso.perf.queue_ok_longer.yml.log",
+        "value": 42313098090
+      },
+      {
+        "log": "caat-pso.perf.triangular-2.yml.log",
+        "value": 36461923407
+      },
+      {
+        "log": "caat-tso.perf.fib_safe-6.yml.log",
+        "value": 33474184834
+      },
+      {
+        "log": "caat-sc.perf.fib_unsafe-7.yml.log",
+        "value": 21346612982
+      },
+      {
+        "log": "caat-tso.perf.butterfly.yml.log",
+        "value": 19272444194
+      },
+      {
+        "log": "caat-tso.perf.queue_ok_longest.yml.log",
+        "value": 16342886335
+      },
+      {
+        "log": "caat-sc.perf.fib_safe-6.yml.log",
+        "value": 13999203346
+      },
+      {
+        "log": "caat-tso.perf.fib_unsafe-6.yml.log",
+        "value": 9686916818
+      }
+    ],
+    "worklist_ns": []
+  }
+}

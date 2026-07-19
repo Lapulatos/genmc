@@ -1,0 +1,10 @@
+stage	model	program	status	initialize	unchanged	insert	rollback	rollback_insert	rebuild	evicted	oracle	eval_ops	value_changes	queue_pushes	offline_evals	adapter_ns	sync_ns	offline_ns	copy_ns	worklist_ns	checkpoint_ns	rollback_ns	materialize_ns	equality_ns	insert_attempt_ns	history_ns	rebuild_ns	profiled_queries
+stage-5	sc	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	63	67	63	18	0	10070458	1510003	101875	903916	66704	4208	5397957	2582	1526044	1519583	1512083	22
+stage-5	sc	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	187	204	187	25	0	16698665	2064663	125170	2617833	122331	18667	8234293	5415	2661333	3540291	2067293	35
+stage-5	sc	correct/data-structures/fcombiner-async/variants/main0.c	0	1	8	20	0	176	122	0	0	4489	5090	4489	123	0	1288173380	62042337	7538084	437691339	5051166	2701091	359657622	346217	100776119	758198534	62051088	327
+stage-5	tso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	185	164	185	18	0	15174626	2454916	275209	2404125	158917	13333	7688416	8793	3403250	1384625	2457211	22
+stage-5	tso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	455	415	455	25	0	25280463	3539125	379169	5404875	244538	42209	11998164	14292	5109705	4261165	3541375	35
+stage-5	tso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	1	0	3	3	0	0	246	239	246	4	0	26795751	1161292	532916	10885792	223000	81209	9235500	10000	4078875	12003624	1162750	10
+stage-5	pso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	192	167	192	18	0	14615412	2390250	284707	2354333	158794	13209	7239582	8373	3262956	1481877	2397207	22
+stage-5	pso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	498	455	498	25	0	25338628	3560665	385499	5917251	252458	42584	11501543	13541	5483705	4411376	3562916	35
+stage-5	pso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	1	0	3	3	0	0	260	257	260	4	0	26200332	1259166	449126	11391582	174583	80167	8410249	7873	3807918	12484832	1260916	10

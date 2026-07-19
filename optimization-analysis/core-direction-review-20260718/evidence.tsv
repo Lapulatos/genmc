@@ -1,0 +1,7 @@
+family	mechanism	search_space_changed	full_725	cpu_ratio	ci_low	ci_high	coverage_delta	decision	primary_reason
+V9	preventive pruning before descendant exploration	yes	no	0.96105	0.93854	0.98130	positive	retain opt-in	67.82% fewer offered RF+CO and 73.97% fewer work pops versus V8
+V10	candidate-level conflict-core reuse	no	yes	1.049916	1.025769	1.077275	negative	reject	zero direct checks avoided; same accepted search space
+V11	focus-directed exact root reach	no	yes	1.108462	1.067238	1.154924	negative	reject	internal enumeration fell but completed search did not
+V11.1	sparse base intersection	no	yes	1.099922	1.056791	1.148091	negative	reject	base visits fell 16.12B to 2.73B without search reduction
+V12	structural cursor indexes	no	yes	0.998008	0.988150	1.009684	neutral	reject	two-run median has no reproducible end-to-end gain
+SC-RVF	coarser value/causal equivalence	yes	yes	1.00281	0.99650	1.00864	neutral	revise	bounded cohort reduced executions but formal workload activation was zero

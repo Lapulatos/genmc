@@ -1,0 +1,153 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /workspace/experiments/caat-optimization/cost-selector/definitions/heldout-before-tso.xml
+name:                    heldout-before-tso
+run sets:                caat-tso.r05.unreach-call
+date:                    Wed, 2026-07-15 06:34:14 UTC
+tool:                    GenMC SV-COMP adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/cost-selector/build-tests/bin/genmc
+options:                 --disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-static-offline
+parallel runs:           24
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    fe090e0239da
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.7450880001 MB
+------------------------------------------------------------
+
+
+
+genmc-tso.r01.unreach-call
+Run set 1 of 15: skipped
+
+
+cat-tso.r01.unreach-call
+Run set 2 of 15: skipped
+
+
+caat-tso.r01.unreach-call
+Run set 3 of 15: skipped
+
+
+cat-tso.r02.unreach-call
+Run set 4 of 15: skipped
+
+
+caat-tso.r02.unreach-call
+Run set 5 of 15: skipped
+
+
+genmc-tso.r02.unreach-call
+Run set 6 of 15: skipped
+
+
+caat-tso.r03.unreach-call
+Run set 7 of 15: skipped
+
+
+genmc-tso.r03.unreach-call
+Run set 8 of 15: skipped
+
+
+cat-tso.r03.unreach-call
+Run set 9 of 15: skipped
+
+
+genmc-tso.r04.unreach-call
+Run set 10 of 15: skipped
+
+
+cat-tso.r04.unreach-call
+Run set 11 of 15: skipped
+
+
+caat-tso.r04.unreach-call
+Run set 12 of 15: skipped
+
+
+cat-tso.r05.unreach-call
+Run set 13 of 15: skipped
+
+
+caat-tso.r05.unreach-call
+Run set 14 of 15 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-static-offline --svcomp-backend=caat-tso' and propertyfile 'None'
+
+inputfile                                                    status                       cpu time   wall time        host
+--------------------------------------------------------------------------------------------------------------------------
+pthread/stateful01-2.yml                                     true                             0.07        0.08        None
+pthread-atomic/time_var_mutex.yml                            true                             0.07        0.08        None
+pthread-ext/01b_inc.yml                                      true                             0.08        0.09        None
+pthread/triangular-1.yml                                     true                            10.58       10.94        None
+pthread/triangular-2.yml                                     false(unreach-call)              2.48        2.78        None
+pthread-ext/02_inc_cas.yml                                   true                             0.07        0.07        None
+goblint-regression/28-race_reach_21-deref_read_racing.yml    false(unreach-call)              5.05        5.37        None
+pthread-ext/48_ticket_lock_low_contention_vs.yml             true                             0.08        0.09        None
+goblint-regression/28-race_reach_37-indirect_racing.yml      TIMEOUT                         60.75       61.17        None
+goblint-regression/28-race_reach_45-escape_racing.yml        false(unreach-call)              0.08        0.08        None
+goblint-regression/28-race_reach_46-escape_racefree.yml      true                             0.07        0.08        None
+goblint-regression/28-race_reach_01-simple_racing.yml        TIMEOUT                         60.48       61.17        None
+goblint-regression/28-race_reach_11-ptr_racing.yml           TIMEOUT                         60.34       61.17        None
+pthread-deagle/circular_buffer_bad.yml                       false(unreach-call)              0.07        0.09        None
+pthread/fib_safe-5.yml                                       true                            11.04       11.69        None
+pthread/fib_safe-6.yml                                       TIMEOUT                         61.01       62.19        None
+pthread/fib_unsafe-5.yml                                     false(unreach-call)              2.98        3.22        None
+pthread/fib_unsafe-6.yml                                     false(unreach-call)             17.18       17.49        None
+pthread/fib_unsafe-7.yml                                     TIMEOUT                         60.61       61.01        None
+goblint-regression/28-race_reach_24-sound_lock_racing.yml    TIMEOUT                         60.72       61.12        None
+pthread/lazy01.yml                                           false(unreach-call)              0.07        0.09        None
+pthread-deagle/circular_buffer_ok.yml                        true                             8.19        8.79        None
+pthread-atomic/szymanski.yml                                 true                             0.07        0.11        None
+pthread-atomic/dekker.yml                                    true                             0.07        0.09        None
+pthread-atomic/dekker-unfair.yml                             true                             0.07        0.13        None
+pthread-theta/unwind3-1.yml                                  false(unreach-call)              0.07        0.10        None
+pthread-theta/exponential-nondet.yml                         true                             0.07        0.12        None
+pthread-theta/unwind2-1.yml                                  false(unreach-call)              0.07        0.13        None
+pthread-theta/unwind2-100.yml                                false(unreach-call)              0.07        0.09        None
+pthread/butterfly.yml                                        true                            38.97       39.34        None
+pthread-ext/43_NetBSD_sysmon_power_sliced.yml                true                             0.07        0.08        None
+goblint-regression/28-race_reach_06-cond_racing1.yml         TIMEOUT                         60.44       61.13        None
+pthread/queue_ok.yml                                         true                             0.08        0.09        None
+pthread/queue_ok_longer.yml                                  true                             3.83        3.90        None
+pthread/queue_ok_longest.yml                                 true                            28.15       28.41        None
+pthread/queue_longer.yml                                     TIMEOUT                         60.05       61.05        None
+pthread/queue.yml                                            false(unreach-call)              0.11        0.13        None
+pthread/singleton.yml                                        false(unreach-call)              0.07        0.19        None
+pthread/singleton_with-uninit-problems.yml                   true                             0.07        0.24        None
+pthread-C-DAC/pthread-demo-datarace-3.yml                    false(unreach-call)              0.16        0.37        None
+pthread/reorder_2.yml                                        false(unreach-call)              0.20        0.48        None
+pthread/twostage_3.yml                                       false(unreach-call)              0.09        0.20        None
+ldv-races/race-1_1-join.yml                                  true                             0.07        0.21        None
+ldv-races/race-1_3-join.yml                                  false(unreach-call)              0.07        0.10        None
+ldv-races/race-1_2-join.yml                                  false(unreach-call)              0.08        0.09        None
+ldv-races/race-4_1-thread_local_vars.yml                     true                             0.08        0.12        None
+ldv-races/race-2_1-container_of.yml                          true                             0.08        0.16        None
+ldv-races/race-3_1-container_of-global.yml                   true                             0.08        0.11        None
+--------------------------------------------------------------------------------------------------------------------------
+Run set 14                                                   done                           615.42       62.56           -
+
+
+genmc-tso.r05.unreach-call
+Run set 15 of 15: skipped
+
+Statistics:             48 Files
+  correct:              40
+    correct true:       23
+    correct false:      17
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:               8
+  Score:                63 (max: 72)

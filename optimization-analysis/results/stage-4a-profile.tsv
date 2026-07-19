@@ -1,0 +1,10 @@
+stage	model	program	status	initialize	unchanged	insert	rollback	rollback_insert	rebuild	evicted	oracle	eval_ops	value_changes	queue_pushes	offline_evals	adapter_ns	sync_ns	offline_ns	copy_ns	worklist_ns	checkpoint_ns	rollback_ns	materialize_ns	equality_ns	insert_attempt_ns	history_ns	rebuild_ns	profiled_queries
+stage-4a	sc	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	63	67	63	18	0	5077789	1368543	95167	857792	87833	6167	791291	2541	1666919	1090044	1369626	22
+stage-4a	sc	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	187	204	187	25	0	10234584	2154999	181625	2769502	139330	22542	1310420	5833	3203836	3285828	2156249	35
+stage-4a	sc	correct/data-structures/fcombiner-async/variants/main0.c	0	1	8	20	0	176	122	0	0	4489	5090	4489	123	0	1045354123	55875337	7396718	436251664	5901786	3194211	55135503	236861	98620999	826346959	55881257	327
+stage-4a	tso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	185	164	185	18	0	7520626	2125378	242626	2221834	163788	10084	789083	2207	2829252	1521459	2126250	22
+stage-4a	tso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	455	415	455	25	0	14203249	3150877	309543	5373584	252168	42416	1330379	5793	4708999	4627376	3152004	35
+stage-4a	tso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	1	0	3	3	0	0	246	239	246	4	0	18192748	1091501	418708	10469583	169919	82126	934459	7209	3458833	12470334	1091959	10
+stage-4a	pso	correct/data-structures/ms-queue-dynamic/variants/main0.c	0	1	0	3	0	1	17	0	0	192	167	192	18	0	8005002	2378084	248580	2314584	175544	8167	886832	3832	2892123	1587875	2379087	22
+stage-4a	pso	correct/data-structures/treiber-stack-dynamic/variants/main0.c	0	1	1	5	0	4	24	0	0	498	455	498	25	0	14659212	3113041	344999	5810792	238212	45624	1286170	4627	5131831	4715002	3114042	35
+stage-4a	pso	correct/data-structures/fcombiner-async/variants/main0.c	42	1	2	1	0	3	3	0	0	260	257	260	4	0	19626749	1205333	652206	11252251	178334	88542	1061875	7291	3746541	13366833	1205917	10

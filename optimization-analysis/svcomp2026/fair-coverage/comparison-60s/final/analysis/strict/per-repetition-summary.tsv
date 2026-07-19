@@ -1,0 +1,5 @@
+backend	repetition	runs	solved	timeouts	ooms	total_cpu_seconds_observed	total_wall_seconds_observed	maximum_peak_rss_bytes	median_peak_rss_bytes
+Deagle	r01	725	618	16	10	2934.41047	2947.9601	3.99999795e+09	12845056
+GenMC	r01	725	439	210	50	14766.9021	14859.7178	3.99999795e+09	26058752
+GenMC+CAAT	r01	725	418	224	57	15901.6172	15964.4229	3.99999795e+09	26189824
+GenMC+CAT	r01	725	379	253	67	17620.9926	17806.2352	3.99999795e+09	26091520

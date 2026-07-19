@@ -1,0 +1,7 @@
+model	method	threads	runs	solved	completion_rate	true	false	timeout	oom	aborted	other
+sc	caat	1	480	450	0.9375	305	145	30	0	0	0
+sc	caat	2	480	445	0.9270833333333334	305	140	31	0	4	0
+sc	cat	1	480	445	0.9270833333333334	285	160	35	0	0	0
+sc	cat	2	480	417	0.86875	285	132	60	0	3	0
+sc	genmc	1	480	480	1.0	305	175	0	0	0	0
+sc	genmc	2	480	471	0.98125	305	166	0	0	9	0

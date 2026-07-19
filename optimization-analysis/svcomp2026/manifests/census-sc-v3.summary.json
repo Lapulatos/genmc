@@ -1,0 +1,34 @@
+{
+  "by_backend": {
+    "genmc-sc": {
+      "category": {
+        "correct": 96,
+        "error": 611,
+        "wrong": 18
+      },
+      "completed": 114,
+      "runs": 725,
+      "status": {
+        "ABORTED": 320,
+        "ERROR (compilation)": 159,
+        "ERROR (unsupported external)": 78,
+        "OUT OF MEMORY": 2,
+        "SEGMENTATION FAULT": 5,
+        "TIMEOUT": 47,
+        "false(unreach-call)": 41,
+        "true": 73
+      }
+    }
+  },
+  "metadata": [
+    {
+      "backend": "genmc-sc",
+      "date": "2026-07-14 17:51:51 CST",
+      "file": "/home/lapulatos/svcomp2026-caat/results/census-sc-v3.2026-07-14_17-51-51.results.genmc-sc.unreach-call.xml",
+      "memlimit": "4000000000B",
+      "timelimit": "10s",
+      "tool": "GenMC SV-COMP adapter",
+      "version": "GenMC (https://plv.mpi-sws.org/genmc):   GenMC v0.17.0 (commit #unknown)   Built with LLVM 15.0.7 (Release)"
+    }
+  ]
+}

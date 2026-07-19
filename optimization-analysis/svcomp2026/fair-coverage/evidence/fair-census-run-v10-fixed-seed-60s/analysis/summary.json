@@ -1,0 +1,27 @@
+{
+  "category": {
+    "correct": 408,
+    "error": 286,
+    "wrong": 31
+  },
+  "duplicates": [],
+  "interpretation": {
+    "benchmark-consistent": 408,
+    "conditional-input-miss": 31,
+    "unknown": 286
+  },
+  "rows": 725,
+  "status": {
+    "ABORTED": 2,
+    "ERROR (compilation)": 13,
+    "ERROR (unsupported external)": 2,
+    "ERROR (unsupported property: invalid memory access)": 7,
+    "ERROR (unsupported property: uninitialized memory)": 1,
+    "OUT OF MEMORY": 50,
+    "SEGMENTATION FAULT": 1,
+    "TIMEOUT": 210,
+    "false(unreach-call)": 138,
+    "true": 301
+  },
+  "unique_tasks": 725
+}

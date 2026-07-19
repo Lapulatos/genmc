@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="60 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/><option name="--disable-mm-detector"/><option name="--nthreads=1"/><option name="--v1"/><option name="--cat-stats"/>
+  <column title="executions">Number of complete executions explored: (.*)</column>
+  <column title="rf offered">rf-offered=([0-9]+)</column><column title="rf queued">rf-queued=([0-9]+)</column>
+  <column title="co offered">co-offered=([0-9]+)</column><column title="co queued">co-queued=([0-9]+)</column>
+  <column title="back offered">backward-offered=([0-9]+)</column><column title="back queued">backward-queued=([0-9]+)</column>
+  <column title="work added">work-added=([0-9]+)</column><column title="work popped">work-popped=([0-9]+)</column>
+  <column title="peak work">max-retained-work=([0-9]+)</column><column title="validity queries">validity-queries=([0-9]+)</column>
+  <column title="realized prefixes">realized-revisit-prefixes=([0-9]+)</column><column title="rejected prefixes">inconsistent-revisit-prefixes=([0-9]+)</column>
+  <column title="rvf attempted">rvf-loads-attempted=([0-9]+)</column><column title="rvf reduced">rvf-loads-reduced=([0-9]+)</column>
+  <column title="rvf disabled">rvf-quotient-disabled-loads=([0-9]+)</column><column title="rvf bypass">rvf-singleton-bypass=([0-9]+)</column>
+  <column title="rvf visible">rvf-visible-sources=([0-9]+)</column><column title="rvf groups">rvf-value-groups=([0-9]+)</column>
+  <column title="rvf verify">rvf-verify-calls=([0-9]+)</column><column title="rvf verify states">rvf-verify-states-expanded=([0-9]+)</column>
+  <column title="rvf reps">rvf-representatives-queued=([0-9]+)</column><column title="rvf parents">rvf-parent-continuations-queued=([0-9]+)</column>
+  <column title="rvf fail open">rvf-fail-open=([0-9]+)</column>
+  <rundefinition name="caat-full.candidate-equivalence"><option name="--svcomp-backend=caat-sc"/><tasks name="unreach-call"><includesfile>/data3/sujie/experiments/caat-optimization/rvf-opportunity-census/definitions/fair-census-all.set</includesfile><propertyfile>/data3/sujie/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile></tasks></rundefinition>
+</benchmark>

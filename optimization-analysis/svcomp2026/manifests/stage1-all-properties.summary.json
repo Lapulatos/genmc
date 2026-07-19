@@ -1,0 +1,26 @@
+{
+  "by_property": {
+    "coverage-branches": 315,
+    "coverage-error-call": 26,
+    "def-behavior": 3,
+    "no-data-race": 1030,
+    "no-overflow": 669,
+    "unreach-call": 725,
+    "valid-memsafety": 752
+  },
+  "by_stage1_classification": {
+    "executed_aborted": 698,
+    "executed_compilation_error": 378,
+    "executed_correct": 288,
+    "executed_crash": 12,
+    "executed_oom": 2,
+    "executed_timeout": 103,
+    "executed_unsupported_feature": 200,
+    "executed_wrong": 74,
+    "property_adapter_unsupported": 1765
+  },
+  "dynamically_executed_yaml_files": 1030,
+  "not_dynamically_executed_yaml_files": 30,
+  "property_rows": 3520,
+  "yaml_files": 1060
+}

@@ -1,0 +1,2 @@
+c/pthread-driver-races/char_generic_nvram_read_nvram_nvram_unlocked_ioctl.yml
+c/pthread-driver-races/char_generic_nvram_read_nvram_write_nvram.yml

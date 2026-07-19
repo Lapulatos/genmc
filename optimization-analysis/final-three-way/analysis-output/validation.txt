@@ -1,0 +1,5 @@
+rows=300
+semantic_contract_ok=TRUE
+models=sc,tso
+programs=5
+repetitions=10

@@ -1,0 +1,8 @@
+/data3/sujie/svcomp2026-caat/sv-benchmarks/c/pthread/butterfly.yml
+/data3/sujie/svcomp2026-caat/sv-benchmarks/c/pthread-atomic/szymanski.yml
+/data3/sujie/svcomp2026-caat/sv-benchmarks/c/pthread/triangular-2.yml
+/data3/sujie/svcomp2026-caat/sv-benchmarks/c/pthread/fib_safe-5.yml
+/data3/sujie/svcomp2026-caat/sv-benchmarks/c/pthread/fib_unsafe-5.yml
+/data3/sujie/svcomp2026-caat/sv-benchmarks/c/pthread/reorder_2.yml
+/data3/sujie/svcomp2026-caat/sv-benchmarks/c/pthread/queue.yml
+/data3/sujie/svcomp2026-caat/sv-benchmarks/c/pthread-deagle/circular_buffer_bad.yml

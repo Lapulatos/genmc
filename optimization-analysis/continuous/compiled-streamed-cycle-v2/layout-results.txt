@@ -1,0 +1,21 @@
+GCC 13, genmc15noble:sujie, 2026-07-17
+
+before
+ModelAnalysis=176
+FixedPointStatistics=48
+CaatEvaluationResult=144
+IncrementalStatistics=184
+IncrementalCaatEvaluator=496
+LazyCycleStatistics=24
+candidate-only metadata
+LazyStreamTerm=12
+LazyCyclePlan=32
+OptionalPredicateId=8
+OptionalLazyCyclePlan=40
+after
+ModelAnalysis=176
+FixedPointStatistics=48
+CaatEvaluationResult=144
+IncrementalStatistics=184
+IncrementalCaatEvaluator=496
+LazyCycleStatistics=24

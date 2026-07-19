@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE result
+  PUBLIC '+//IDN sosy-lab.org//DTD BenchExec result 3.0//EN'
+  'https://www.sosy-lab.org/benchexec/result-3.0.dtd'>
+<result benchmarkname="smoke3b" date="2026-07-14 17:23:08 CST" starttime="2026-07-14T17:23:08.134141+08:00" tool="GenMC SV-COMP adapter" version="GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)" toolmodule="pipeline.tools.genmc_svcomp" generator="BenchExec 3.25" memlimit="4000000000B" timelimit="20s" cpuCores="1" options="--disable-estimation --disable-mm-detector --nthreads=1 --v1 --svcomp-backend=genmc-sc" block="unreach-call" name="genmc-sc.unreach-call" endtime="2026-07-14T17:23:08.615767+08:00">
+  <columns>
+    <column title="status"/>
+    <column title="cputime"/>
+    <column title="walltime"/>
+  </columns>
+  <systeminfo hostname="lapulatos-ThinkStation-P348">
+    <os name="Linux-6.8.0-64-generic-x86_64-with-glibc2.39"/>
+    <cpu model="11th Gen Intel Core i7-11700 @ 2.50GHz" cores="16" frequency="4800000000Hz" turboboostActive="true"/>
+    <ram size="50191818752B"/>
+    <environment>
+      <var name="DBUS_SESSION_BUS_ADDRESS">unix:path=/run/user/1000/bus</var>
+      <var name="GENMC_BINARY">/home/lapulatos/svcomp2026-caat/build/genmc-caat/bin/genmc</var>
+      <var name="GENMC_EXPERIMENT_ROOT">/home/lapulatos/svcomp2026-caat</var>
+      <var name="GLFW_IM_MODULE">ibus</var>
+      <var name="GTK_IM_MODULE">ibus</var>
+      <var name="INVOCATION_ID">ca4e7e33adc64d7fb0bd371e190d1279</var>
+      <var name="LANG">en_GB.UTF-8</var>
+      <var name="LANGUAGE">en_GB:en</var>
+      <var name="LC_ADDRESS">zh_CN.UTF-8</var>
+      <var name="LC_ALL">C.UTF-8</var>
+      <var name="LC_CTYPE">C.UTF-8</var>
+      <var name="LC_IDENTIFICATION">zh_CN.UTF-8</var>
+      <var name="LC_MEASUREMENT">zh_CN.UTF-8</var>
+      <var name="LC_MONETARY">zh_CN.UTF-8</var>
+      <var name="LC_NAME">zh_CN.UTF-8</var>
+      <var name="LC_NUMERIC">zh_CN.UTF-8</var>
+      <var name="LC_PAPER">zh_CN.UTF-8</var>
+      <var name="LC_TELEPHONE">zh_CN.UTF-8</var>
+      <var name="LC_TIME">zh_CN.UTF-8</var>
+      <var name="LOGNAME">lapulatos</var>
+      <var name="OLDPWD">/home/lapulatos</var>
+      <var name="PAPERSIZE">a4</var>
+      <var name="PATH">/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin</var>
+      <var name="PWD">/home/lapulatos</var>
+      <var name="PYTHONPATH">/home/lapulatos/svcomp2026-caat</var>
+      <var name="QT_IM_MODULE">ibus</var>
+      <var name="SDL_IM_MODULE">ibus</var>
+      <var name="SHELL">/usr/bin/zsh</var>
+      <var name="SHLVL">0</var>
+      <var name="SSH_CLIENT">192.168.31.1 61125 9322</var>
+      <var name="SSH_CONNECTION">192.168.31.1 61125 192.168.31.31 9322</var>
+      <var name="USER">lapulatos</var>
+      <var name="XDG_RUNTIME_DIR">/run/user/1000</var>
+      <var name="XDG_SESSION_CLASS">user</var>
+      <var name="XDG_SESSION_ID">3613</var>
+      <var name="XDG_SESSION_TYPE">tty</var>
+      <var name="XMODIFIERS">@im=ibus</var>
+    </environment>
+  </systeminfo>
+  <run name="../sv-benchmarks/c/goblint-regression/13-privatized_66-mine-W-init_true.yml" files="[../sv-benchmarks/c/goblint-regression/13-privatized_66-mine-W-init_true.c]" properties="unreach-call" propertyFile="../sv-benchmarks/c/properties/unreach-call.prp" expectedVerdict="true">
+    <column title="cputime" value="0.030208s"/>
+    <column title="memory" value="25882624B"/>
+    <column title="status" value="true"/>
+    <column title="walltime" value="0.031129803974181414s"/>
+    <column title="blkio-read" value="0B" hidden="true"/>
+    <column title="blkio-write" value="24576B" hidden="true"/>
+    <column title="category" value="correct" hidden="true"/>
+    <column title="cpuCores" value="0" hidden="true"/>
+    <column title="memoryNodes" value="0" hidden="true"/>
+    <column title="pressure-cpu-some" value="0.003896" hidden="true"/>
+    <column title="pressure-io-some" value="0" hidden="true"/>
+    <column title="pressure-memory-some" value="0" hidden="true"/>
+    <column title="returnvalue" value="0" hidden="true"/>
+    <column title="starttime" value="2026-07-14T17:23:08.135623+08:00" hidden="true"/>
+  </run>
+  <run name="../sv-benchmarks/c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.yml" files="[../sv-benchmarks/c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_pos.c]" properties="unreach-call" propertyFile="../sv-benchmarks/c/properties/unreach-call.prp" expectedVerdict="false">
+    <column title="cputime" value="0.045655s"/>
+    <column title="memory" value="25890816B"/>
+    <column title="status" value="false(unreach-call)"/>
+    <column title="walltime" value="0.06008601584471762s"/>
+    <column title="blkio-read" value="0B" hidden="true"/>
+    <column title="blkio-write" value="24576B" hidden="true"/>
+    <column title="category" value="correct" hidden="true"/>
+    <column title="cpuCores" value="0" hidden="true"/>
+    <column title="memoryNodes" value="0" hidden="true"/>
+    <column title="pressure-cpu-some" value="0.001719" hidden="true"/>
+    <column title="pressure-io-some" value="0" hidden="true"/>
+    <column title="pressure-memory-some" value="0" hidden="true"/>
+    <column title="returnvalue" value="42" hidden="true"/>
+    <column title="starttime" value="2026-07-14T17:23:08.275089+08:00" hidden="true"/>
+  </run>
+  <run name="../sv-benchmarks/c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_neg.yml" files="[../sv-benchmarks/c/goblint-regression/36-apron_41-threadenter-no-locals_unknown_1_neg.c]" properties="unreach-call" propertyFile="../sv-benchmarks/c/properties/unreach-call.prp" expectedVerdict="false">
+    <column title="cputime" value="0.045506s"/>
+    <column title="memory" value="25886720B"/>
+    <column title="status" value="true"/>
+    <column title="walltime" value="0.06806607102043927s"/>
+    <column title="blkio-read" value="0B" hidden="true"/>
+    <column title="blkio-write" value="24576B" hidden="true"/>
+    <column title="category" value="wrong" hidden="true"/>
+    <column title="cpuCores" value="0" hidden="true"/>
+    <column title="memoryNodes" value="0" hidden="true"/>
+    <column title="pressure-cpu-some" value="0.003566" hidden="true"/>
+    <column title="pressure-io-some" value="0" hidden="true"/>
+    <column title="pressure-memory-some" value="0" hidden="true"/>
+    <column title="returnvalue" value="0" hidden="true"/>
+    <column title="starttime" value="2026-07-14T17:23:08.442969+08:00" hidden="true"/>
+  </run>
+  <column title="cputime" value="0.127127s"/>
+  <column title="walltime" value="0.481656159972772s"/>
+</result>

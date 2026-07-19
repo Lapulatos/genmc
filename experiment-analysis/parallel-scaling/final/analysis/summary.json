@@ -1,0 +1,26 @@
+{
+  "actual_cells": 160,
+  "duplicate_rows": 0,
+  "expected_cells": 160,
+  "expected_runs": 15360,
+  "false_alarms": 0,
+  "formal_runs": 15360,
+  "formal_xml_files": 160,
+  "missed_bugs": 0,
+  "missing_cells": [],
+  "oracle": {
+    "cells_with_oracle_count": 216,
+    "expected_runs": 288,
+    "expected_xml_files": 12,
+    "oracle_checks": 2444,
+    "runs": 288,
+    "solved": 214,
+    "verdict_errors": 0,
+    "xml_files": 12
+  },
+  "safe_execution_mismatches": 0,
+  "safe_missing_execution_counts": 0,
+  "tasks": 96,
+  "unexpected_cells": [],
+  "verdict_errors": 0
+}

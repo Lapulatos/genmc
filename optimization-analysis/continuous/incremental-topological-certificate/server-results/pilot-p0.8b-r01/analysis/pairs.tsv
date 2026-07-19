@@ -1,0 +1,7 @@
+repetition	model	task	before_status	after_status	before_category	after_category	before_cpu	after_cpu	cpu_ratio	before_rss	after_rss	rss_ratio	before_executions	after_executions	before_snapshot	after_snapshot	before_base	after_base	before_lazy_checks	after_lazy_checks	full_check_ratio	before_candidates	after_candidates	candidate_ratio
+r01	pso	fib_unsafe-7.yml	TIMEOUT	TIMEOUT	error	error	60.938383476	60.944614114	1.0001022448848262	26095616.0	26087424.0	0.9996860775388479												
+r01	pso	queue_ok_longer.yml	true	true	correct	correct	3.979942361	3.97552504	0.9988901042780705	117452800.0	125558784.0	1.0690148212728858	2	2	44133960	44133960	5872240	5872240	34.0	34.0	1.0	49930431.0	49930431.0	1.0
+r01	sc	fib_unsafe-7.yml	false(unreach-call)	false(unreach-call)	correct	correct	22.852007957	22.784690362	0.9970541934377639	25882624.0	25944064.0	1.002373793321728	13238	13238	319136	319136	102080	102080	0.0	0.0		0.0	0.0	
+r01	sc	queue_ok_longer.yml	true	true	correct	correct	0.455641401	0.450873203	0.9895351959028851	79355904.0	79360000.0	1.0000516155672552	2	2	23936072	23936072	2830196	2830196	0.0	0.0		0.0	0.0	
+r01	tso	fib_unsafe-7.yml	false(unreach-call)	false(unreach-call)	correct	correct	44.535620996	45.479429168	1.0211922086386709	26087424.0	26087424.0	1.0	13238	13238	281448	281448	115000	115000	35572.0	35572.0	1.0	455400086.0	455400086.0	1.0
+r01	tso	queue_ok_longer.yml	true	true	correct	correct	1.082695609	1.096682535	1.0129186133976462	55459840.0	55463936.0	1.0000738552437223	2	2	13851760	13851760	2864444	2864444	4.0	4.0	1.0	15503664.0	15503664.0	1.0

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="pipeline.tools.genmc_svcomp" timelimit="60 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/>
+  <option name="--disable-mm-detector"/>
+  <option name="--nthreads=1"/>
+  <option name="--v1"/>
+  <option name="--cat-stats"/>
+  <column title="executions">Number of complete executions explored: (.*)</column>
+  <column title="blocked">Number of blocked executions seen: (.*)</column>
+  <column title="prefix-queries">preventive-prefix-queries=([0-9]+)</column>
+  <column title="prefix-inconsistent">preventive-prefix-inconsistent=([0-9]+)</column>
+  <column title="rf-candidates">preventive-rf-candidates=([0-9]+)</column>
+  <column title="rf-pruned">preventive-rf-pruned=([0-9]+)</column>
+  <column title="co-candidates">preventive-co-candidates=([0-9]+)</column>
+  <column title="co-pruned">preventive-co-pruned=([0-9]+)</column>
+  <column title="all-pruned-fallbacks">preventive-all-pruned-fallbacks=([0-9]+)</column>
+  <column title="lookup-ns">preventive-lookup-ns=([0-9]+)</column>
+  <column title="profiled-queries">profiled-queries=([0-9]+)</column>
+  <column title="offline-evals">offline-evals=([0-9]+)</column>
+  <column title="max-history-base-bytes">max-history-base-bytes=([0-9]+)</column>
+  <rundefinition name="caat-pso.preventive-pruning">
+    <option name="--svcomp-backend=caat-pso"/>
+    <tasks name="unreach-call">
+      <includesfile>/data3/sujie/experiments/caat-optimization/rejection-kernel-census/definitions/paired-pso.set</includesfile>
+      <propertyfile>/data3/sujie/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

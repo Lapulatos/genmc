@@ -1,0 +1,54 @@
+{
+  "cells": 2304,
+  "pairs": 1152,
+  "expected_cells": 2304,
+  "expected_pairs": 1152,
+  "common_terminal_pairs": 1076,
+  "terminal_verdict_mismatches": 0,
+  "execution_mismatches": 0,
+  "candidate_mismatches": 0,
+  "lazy_check_mismatches": 0,
+  "snapshot_mismatches": 0,
+  "base_mismatches": 0,
+  "coverage_gains": 0,
+  "coverage_losses": 0,
+  "new_oom": 0,
+  "task_model_count": 269,
+  "cpu_geomean_of_task_model_medians": 0.9994230750774373,
+  "cpu_four_repetition_model_task_bootstrap_95_ci": [
+    0.9947562485594036,
+    1.0041374846656772
+  ],
+  "by_model": {
+    "sc": {
+      "task_model_count": 95,
+      "cpu_geomean": 0.9940995562346483,
+      "cpu_bootstrap_95_ci": [
+        0.9890137007796437,
+        0.9991368861724513
+      ]
+    },
+    "tso": {
+      "task_model_count": 90,
+      "cpu_geomean": 1.004601190458431,
+      "cpu_bootstrap_95_ci": [
+        0.994940564897723,
+        1.0145637057747392
+      ]
+    },
+    "pso": {
+      "task_model_count": 84,
+      "cpu_geomean": 0.9999262820764617,
+      "cpu_bootstrap_95_ci": [
+        0.9914324384391965,
+        1.0087104863585046
+      ]
+    }
+  },
+  "cell_cpu_geomean": 0.9979918443418648,
+  "cell_wall_geomean": 0.9993708100308187,
+  "memory_ratio_p90": 1.0026765331190035,
+  "memory_p90_candidate_over_baseline": 0.9998438232078714,
+  "large_task_rss_max_ratio": 1.0031720856463124,
+  "formal_pass": false
+}

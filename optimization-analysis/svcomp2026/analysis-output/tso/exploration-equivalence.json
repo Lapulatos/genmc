@@ -1,0 +1,10 @@
+{
+  "backends": [
+    "genmc-tso",
+    "cat-tso",
+    "caat-tso"
+  ],
+  "common_solved_task_repetitions": 410,
+  "missing_execution_counts": 0,
+  "verdict_execution_blocked_mismatches": 0
+}

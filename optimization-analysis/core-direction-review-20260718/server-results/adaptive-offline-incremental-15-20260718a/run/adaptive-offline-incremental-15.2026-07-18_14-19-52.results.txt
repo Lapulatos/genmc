@@ -1,0 +1,88 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/experiments/caat-optimization/sc-rvf-exploration/source/optimization-analysis/core-direction-review-20260718/adaptive-offline-incremental-15.xml
+name:                    adaptive-offline-incremental-15
+run sets:                baseline-adaptive-offline.pthread-wmm-15, candidate-incremental.pthread-wmm-15
+date:                    Sat, 2026-07-18 14:19:52 UTC
+tool:                    GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/sc-rvf-exploration/source/optimization-analysis/continuous/candidate-equivalence-quotient/formal-wrapper.sh
+options:                 --disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --cat-stats
+parallel runs:           4
+resource limits:
+- memory:                4000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                4000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    31f4dccd4e0c
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.736896 MB
+------------------------------------------------------------
+
+
+
+baseline-adaptive-offline.pthread-wmm-15
+Run set 1 of 2 with options '--disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --cat-stats' and propertyfile 'None'
+
+inputfile                                                             status                       cpu time   wall time        host
+-----------------------------------------------------------------------------------------------------------------------------------
+rfi005.yml                                                            false(unreach-call)              0.10        0.10        None
+safe029_power.oepc_pso.oepc_rmo.oepc.yml                              false(unreach-call)              0.11        0.11        None
+mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml                     false(unreach-call)              0.14        0.14        None
+safe029_tso.yml                                                       true                             0.20        0.21        None
+safe010_tso.yml                                                       true                             0.23        0.23        None
+safe004_power.oepc_pso.oepc_rmo.oepc.yml                              false(unreach-call)             12.56       12.56        None
+mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml              false(unreach-call)             25.22       25.22        None
+mix035.oepc.yml                                                       false(unreach-call)             46.72       46.73        None
+rfi002_tso.yml                                                        true                             9.50        9.51        None
+safe017_tso.yml                                                       true                            48.30       48.33        None
+safe035_power.yml                                                     TIMEOUT                         61.00       61.01        None
+mix023_tso.yml                                                        TIMEOUT                         61.00       61.01        None
+mix014_tso.oepc.yml                                                   TIMEOUT                         61.00       61.01        None
+mix008_tso.oepc.yml                                                   TIMEOUT                         60.97       61.01        None
+safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml    TIMEOUT                         61.00       61.01        None
+-----------------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                             done                           448.06      135.31           -
+
+
+candidate-incremental.pthread-wmm-15
+Run set 2 of 2 with options '--disable-estimation --disable-mm-detector --svcomp-backend=caat-sc --cat-stats --cat-disable-adaptive-offline' and propertyfile 'None'
+
+inputfile                                                             status                       cpu time   wall time        host
+-----------------------------------------------------------------------------------------------------------------------------------
+rfi005.yml                                                            false(unreach-call)              0.10        0.10        None
+safe029_power.oepc_pso.oepc_rmo.oepc.yml                              false(unreach-call)              0.11        0.11        None
+mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml                     false(unreach-call)              0.13        0.14        None
+safe029_tso.yml                                                       true                             0.31        0.31        None
+safe010_tso.yml                                                       true                             0.25        0.25        None
+safe004_power.oepc_pso.oepc_rmo.oepc.yml                              false(unreach-call)             18.59       18.59        None
+mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml              false(unreach-call)             36.59       36.60        None
+mix035.oepc.yml                                                       TIMEOUT                         61.00       61.01        None
+rfi002_tso.yml                                                        true                            14.99       15.00        None
+safe017_tso.yml                                                       true                            56.83       56.89        None
+safe035_power.yml                                                     TIMEOUT                         61.00       61.01        None
+mix023_tso.yml                                                        TIMEOUT                         61.00       61.01        None
+mix014_tso.oepc.yml                                                   TIMEOUT                         61.00       61.01        None
+mix008_tso.oepc.yml                                                   TIMEOUT                         60.97       61.01        None
+safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml    TIMEOUT                         61.00       61.01        None
+-----------------------------------------------------------------------------------------------------------------------------------
+Run set 2                                                             done                           493.88      141.33           -
+
+Statistics:             30 Files
+  correct:              19
+    correct true:        8
+    correct false:      11
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:              11
+  Score:                27 (max: 40)

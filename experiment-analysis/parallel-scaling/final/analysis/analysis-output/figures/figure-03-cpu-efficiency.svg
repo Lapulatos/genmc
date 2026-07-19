@@ -1,0 +1,91 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="620" viewBox="0 0 1040 620">
+<rect width="100%" height="100%" fill="white"/>
+<text x="520.0" y="34" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700">Total CPU efficiency relative to nthreads=1</text>
+<text x="243.33333333333334" y="62" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="600">SC</text>
+<line x1="90.0" y1="540.0" x2="378.6666666666667" y2="540.0" stroke="#E5E9EF"/>
+<text x="82.0" y="544.0" text-anchor="end" font-family="sans-serif" font-size="12">0.69</text>
+<line x1="90.0" y1="446.0" x2="378.6666666666667" y2="446.0" stroke="#E5E9EF"/>
+<text x="82.0" y="450.0" text-anchor="end" font-family="sans-serif" font-size="12">0.76</text>
+<line x1="90.0" y1="352.0" x2="378.6666666666667" y2="352.0" stroke="#E5E9EF"/>
+<text x="82.0" y="356.0" text-anchor="end" font-family="sans-serif" font-size="12">0.83</text>
+<line x1="90.0" y1="258.0" x2="378.6666666666667" y2="258.0" stroke="#E5E9EF"/>
+<text x="82.0" y="262.0" text-anchor="end" font-family="sans-serif" font-size="12">0.90</text>
+<line x1="90.0" y1="164.0" x2="378.6666666666667" y2="164.0" stroke="#E5E9EF"/>
+<text x="82.0" y="168.0" text-anchor="end" font-family="sans-serif" font-size="12">0.97</text>
+<line x1="90.0" y1="70.0" x2="378.6666666666667" y2="70.0" stroke="#E5E9EF"/>
+<text x="82.0" y="74.0" text-anchor="end" font-family="sans-serif" font-size="12">1.04</text>
+<line x1="90.0" y1="124.23076923076923" x2="378.6666666666667" y2="124.23076923076923" stroke="#555" stroke-dasharray="6 5"/>
+<polyline points="90.0,124.2 186.2,365.5 282.4,415.7 378.7,483.2" fill="none" stroke="#375A7F" stroke-width="3"/>
+<circle cx="90.0" cy="124.23076923076923" r="4" fill="#375A7F"/>
+<circle cx="186.22222222222223" cy="365.5068496348347" r="4" fill="#375A7F"/>
+<circle cx="282.44444444444446" cy="415.65587264168227" r="4" fill="#375A7F"/>
+<circle cx="378.6666666666667" cy="483.19177182570417" r="4" fill="#375A7F"/>
+<polyline points="90.0,124.2 186.2,272.9 282.4,349.3 378.7,437.9" fill="none" stroke="#D9822B" stroke-width="3"/>
+<circle cx="90.0" cy="124.23076923076923" r="4" fill="#D9822B"/>
+<circle cx="186.22222222222223" cy="272.8604272609516" r="4" fill="#D9822B"/>
+<circle cx="282.44444444444446" cy="349.2737133698972" r="4" fill="#D9822B"/>
+<circle cx="378.6666666666667" cy="437.90768998091903" r="4" fill="#D9822B"/>
+<polyline points="90.0,124.2 186.2,340.9 282.4,353.1 378.7,455.6" fill="none" stroke="#2D8C6F" stroke-width="3"/>
+<circle cx="90.0" cy="124.23076923076923" r="4" fill="#2D8C6F"/>
+<circle cx="186.22222222222223" cy="340.8679859359793" r="4" fill="#2D8C6F"/>
+<circle cx="282.44444444444446" cy="353.1259846454824" r="4" fill="#2D8C6F"/>
+<circle cx="378.6666666666667" cy="455.62215172152474" r="4" fill="#2D8C6F"/>
+<text x="90.0" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">1</text>
+<text x="186.22222222222223" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">2</text>
+<text x="282.44444444444446" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">4</text>
+<text x="378.6666666666667" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">8</text>
+<text x="550.0" y="62" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="600">TSO</text>
+<line x1="396.6666666666667" y1="540.0" x2="685.3333333333334" y2="540.0" stroke="#E5E9EF"/>
+<line x1="396.6666666666667" y1="446.0" x2="685.3333333333334" y2="446.0" stroke="#E5E9EF"/>
+<line x1="396.6666666666667" y1="352.0" x2="685.3333333333334" y2="352.0" stroke="#E5E9EF"/>
+<line x1="396.6666666666667" y1="258.0" x2="685.3333333333334" y2="258.0" stroke="#E5E9EF"/>
+<line x1="396.6666666666667" y1="164.0" x2="685.3333333333334" y2="164.0" stroke="#E5E9EF"/>
+<line x1="396.6666666666667" y1="70.0" x2="685.3333333333334" y2="70.0" stroke="#E5E9EF"/>
+<line x1="396.6666666666667" y1="124.23076923076923" x2="685.3333333333334" y2="124.23076923076923" stroke="#555" stroke-dasharray="6 5"/>
+<polyline points="396.7,124.2 492.9,378.7 589.1,395.1 685.3,485.8" fill="none" stroke="#375A7F" stroke-width="3"/>
+<circle cx="396.6666666666667" cy="124.23076923076923" r="4" fill="#375A7F"/>
+<circle cx="492.8888888888889" cy="378.6797524349538" r="4" fill="#375A7F"/>
+<circle cx="589.1111111111111" cy="395.0601404715216" r="4" fill="#375A7F"/>
+<circle cx="685.3333333333334" cy="485.7692307692308" r="4" fill="#375A7F"/>
+<polyline points="396.7,124.2 492.9,229.8 589.1,339.0 685.3,462.5" fill="none" stroke="#D9822B" stroke-width="3"/>
+<circle cx="396.6666666666667" cy="124.23076923076923" r="4" fill="#D9822B"/>
+<circle cx="492.8888888888889" cy="229.78673633166102" r="4" fill="#D9822B"/>
+<circle cx="589.1111111111111" cy="338.9602987563211" r="4" fill="#D9822B"/>
+<circle cx="685.3333333333334" cy="462.54313033594565" r="4" fill="#D9822B"/>
+<polyline points="396.7,124.2 492.9,357.7 589.1,380.3 685.3,478.6" fill="none" stroke="#2D8C6F" stroke-width="3"/>
+<circle cx="396.6666666666667" cy="124.23076923076923" r="4" fill="#2D8C6F"/>
+<circle cx="492.8888888888889" cy="357.73803091172425" r="4" fill="#2D8C6F"/>
+<circle cx="589.1111111111111" cy="380.25314085672596" r="4" fill="#2D8C6F"/>
+<circle cx="685.3333333333334" cy="478.5698308032105" r="4" fill="#2D8C6F"/>
+<text x="396.6666666666667" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">1</text>
+<text x="492.8888888888889" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">2</text>
+<text x="589.1111111111111" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">4</text>
+<text x="685.3333333333334" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">8</text>
+<text x="856.6666666666667" y="62" text-anchor="middle" font-family="sans-serif" font-size="17" font-weight="600">PSO</text>
+<line x1="703.3333333333334" y1="540.0" x2="992.0" y2="540.0" stroke="#E5E9EF"/>
+<line x1="703.3333333333334" y1="446.0" x2="992.0" y2="446.0" stroke="#E5E9EF"/>
+<line x1="703.3333333333334" y1="352.0" x2="992.0" y2="352.0" stroke="#E5E9EF"/>
+<line x1="703.3333333333334" y1="258.0" x2="992.0" y2="258.0" stroke="#E5E9EF"/>
+<line x1="703.3333333333334" y1="164.0" x2="992.0" y2="164.0" stroke="#E5E9EF"/>
+<line x1="703.3333333333334" y1="70.0" x2="992.0" y2="70.0" stroke="#E5E9EF"/>
+<line x1="703.3333333333334" y1="124.23076923076923" x2="992.0" y2="124.23076923076923" stroke="#555" stroke-dasharray="6 5"/>
+<polyline points="703.3,124.2 799.6,239.7 895.8,348.7 992.0,480.3" fill="none" stroke="#D9822B" stroke-width="3"/>
+<circle cx="703.3333333333334" cy="124.23076923076923" r="4" fill="#D9822B"/>
+<circle cx="799.5555555555557" cy="239.68272683862955" r="4" fill="#D9822B"/>
+<circle cx="895.7777777777778" cy="348.71603853783427" r="4" fill="#D9822B"/>
+<circle cx="992.0" cy="480.32235992736406" r="4" fill="#D9822B"/>
+<polyline points="703.3,124.2 799.6,282.7 895.8,363.5 992.0,474.3" fill="none" stroke="#2D8C6F" stroke-width="3"/>
+<circle cx="703.3333333333334" cy="124.23076923076923" r="4" fill="#2D8C6F"/>
+<circle cx="799.5555555555557" cy="282.6692633455234" r="4" fill="#2D8C6F"/>
+<circle cx="895.7777777777778" cy="363.50622498821485" r="4" fill="#2D8C6F"/>
+<circle cx="992.0" cy="474.3077063703729" r="4" fill="#2D8C6F"/>
+<text x="703.3333333333334" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">1</text>
+<text x="799.5555555555557" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">2</text>
+<text x="895.7777777777778" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">4</text>
+<text x="992.0" y="564" text-anchor="middle" font-family="sans-serif" font-size="13">8</text>
+<text x="24" y="305.0" transform="rotate(-90 24 305.0)" text-anchor="middle" font-family="sans-serif" font-size="15">Baseline CPU / parallel CPU</text>
+<text x="520.0" y="600" text-anchor="middle" font-family="sans-serif" font-size="15">nthreads</text>
+<line x1="710" y1="52" x2="732" y2="52" stroke="#375A7F" stroke-width="4"/><text x="738" y="57" font-family="sans-serif" font-size="13">GENMC</text>
+<line x1="805" y1="52" x2="827" y2="52" stroke="#D9822B" stroke-width="4"/><text x="833" y="57" font-family="sans-serif" font-size="13">CAT</text>
+<line x1="900" y1="52" x2="922" y2="52" stroke="#2D8C6F" stroke-width="4"/><text x="928" y="57" font-family="sans-serif" font-size="13">CAAT</text>
+</svg>

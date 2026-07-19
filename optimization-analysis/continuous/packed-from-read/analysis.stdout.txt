@@ -1,0 +1,303 @@
+{
+  "all_observed": {
+    "cputime_seconds": {
+      "all": {
+        "after_over_before_geomean": 0.9909285732179778,
+        "median_ratio": 0.9971282126271976,
+        "model_task_pairs": 288,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9857281763463315,
+          0.9960799514809098
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 1.0003099697884545,
+        "median_ratio": 0.998790748875699,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9900572043017376,
+          1.0108714389840452
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 0.9812236086652623,
+        "median_ratio": 0.9878797291074435,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9726191204542045,
+          0.9895284139651038
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 0.9913441950502339,
+        "median_ratio": 0.9976723328779228,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.983729580573389,
+          0.9985224951553626
+        ]
+      }
+    },
+    "memory_bytes": {
+      "all": {
+        "after_over_before_geomean": 0.9990956831252444,
+        "median_ratio": 1.0,
+        "model_task_pairs": 288,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.997427597543677,
+          1.0000475299038976
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 0.997482240571255,
+        "median_ratio": 1.0,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9927952167058026,
+          1.0000462314919043
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 1.000105414223003,
+        "median_ratio": 1.0,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9997080766041262,
+          1.0006478277945259
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 0.9997013921922526,
+        "median_ratio": 0.9999607473700738,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9991202947019577,
+          1.0001062371857672
+        ]
+      }
+    },
+    "walltime_seconds": {
+      "all": {
+        "after_over_before_geomean": 0.9913192112926391,
+        "median_ratio": 0.9983117814266794,
+        "model_task_pairs": 288,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9864192695952965,
+          0.9962373867135419
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 0.998892171645652,
+        "median_ratio": 0.9999606854980647,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9893995289816088,
+          1.008638474153127
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 0.9835101092956078,
+        "median_ratio": 0.9909243323804025,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9751043623557727,
+          0.9918028653050407
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 0.9916150971052684,
+        "median_ratio": 0.9982200298407162,
+        "model_task_pairs": 96,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9842292690284556,
+          0.9984363086544403
+        ]
+      }
+    }
+  },
+  "common_solved_verdict_mismatches": 0,
+  "correct": {
+    "after": 1556,
+    "before": 1554,
+    "by_model_after": {
+      "pso": 482,
+      "sc": 540,
+      "tso": 534
+    },
+    "by_model_before": {
+      "pso": 480,
+      "sc": 540,
+      "tso": 534
+    }
+  },
+  "peak_combined_task_overlap": {
+    "pso/r01": 47,
+    "pso/r02": 48,
+    "pso/r03": 47,
+    "pso/r04": 48,
+    "pso/r05": 46,
+    "pso/r06": 47,
+    "sc/r01": 45,
+    "sc/r02": 43,
+    "sc/r03": 46,
+    "sc/r04": 46,
+    "sc/r05": 46,
+    "sc/r06": 46,
+    "tso/r01": 45,
+    "tso/r02": 46,
+    "tso/r03": 44,
+    "tso/r04": 45,
+    "tso/r05": 46,
+    "tso/r06": 46
+  },
+  "rows": {
+    "after": 1728,
+    "before": 1728,
+    "paired": 1728
+  },
+  "safe_execution_count_mismatches": 0,
+  "status_changes": {
+    "TIMEOUT -> TIMEOUT (true)": 2,
+    "TIMEOUT -> true": 2
+  },
+  "strict_common_solved": {
+    "cputime_seconds": {
+      "all": {
+        "after_over_before_geomean": 0.9958321088570012,
+        "median_ratio": 0.9975528040004974,
+        "model_task_pairs": 259,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9910049983478112,
+          1.0007232108639357
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 1.005901009313428,
+        "median_ratio": 1.0041420208467668,
+        "model_task_pairs": 80,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9950251591520524,
+          1.017443818576097
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 0.9867137347682293,
+        "median_ratio": 0.9902461305479688,
+        "model_task_pairs": 90,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9790334102745255,
+          0.9943395849685732
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 0.9960901977775355,
+        "median_ratio": 0.9985524985049672,
+        "model_task_pairs": 89,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9902634769248791,
+          1.0019523094557283
+        ]
+      }
+    },
+    "memory_bytes": {
+      "all": {
+        "after_over_before_geomean": 0.9999710830402273,
+        "median_ratio": 1.0,
+        "model_task_pairs": 259,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9998283486753486,
+          1.000112227782296
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 1.0001113622363573,
+        "median_ratio": 1.000117764069303,
+        "model_task_pairs": 80,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9998488578420061,
+          1.0003641295268682
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 0.9998780358962832,
+        "median_ratio": 0.999920969548465,
+        "model_task_pairs": 90,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9996370747483236,
+          1.0001252008010133
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 0.999939095731386,
+        "median_ratio": 0.9999214639126679,
+        "model_task_pairs": 89,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9997063407649753,
+          1.0001733650906355
+        ]
+      }
+    },
+    "walltime_seconds": {
+      "all": {
+        "after_over_before_geomean": 0.9966015922899483,
+        "median_ratio": 0.9985820089128308,
+        "model_task_pairs": 259,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9922038656928887,
+          1.001032517101423
+        ]
+      },
+      "pso": {
+        "after_over_before_geomean": 1.005205003980849,
+        "median_ratio": 1.0044893433404323,
+        "model_task_pairs": 80,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9955567531738924,
+          1.015312659152836
+        ]
+      },
+      "sc": {
+        "after_over_before_geomean": 0.9892135759060431,
+        "median_ratio": 0.9929970882993282,
+        "model_task_pairs": 90,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9818230459211118,
+          0.996301381512695
+        ]
+      },
+      "tso": {
+        "after_over_before_geomean": 0.9964002558321234,
+        "median_ratio": 0.9985820089128308,
+        "model_task_pairs": 89,
+        "required_repetitions": 6,
+        "task_bootstrap_95ci": [
+          0.9909880249111678,
+          1.0016959874106008
+        ]
+      }
+    }
+  }
+}

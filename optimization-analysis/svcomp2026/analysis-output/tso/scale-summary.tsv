@@ -1,0 +1,10 @@
+source_line_bin	backend	tasks	all_repetitions_solved	paired_with_baseline	wall_ratio_geomean
+0001-0050	caat-tso	32	32	32	1.00993
+0001-0050	cat-tso	32	32	32	1.00603
+0001-0050	genmc-tso	32	32	32	1
+0051-0100	caat-tso	10	10	10	1.01082
+0051-0100	cat-tso	10	10	10	1.14817
+0051-0100	genmc-tso	10	10	10	1
+0501-plus	caat-tso	54	47	47	1.74872
+0501-plus	cat-tso	54	40	40	1.66822
+0501-plus	genmc-tso	54	54	54	1

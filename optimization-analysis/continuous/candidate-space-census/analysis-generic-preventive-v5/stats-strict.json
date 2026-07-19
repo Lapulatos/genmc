@@ -1,0 +1,310 @@
+{
+  "counters": {
+    "all-pruned-fallbacks": 0,
+    "co-candidates": 9487796,
+    "co-pruned": 9062444,
+    "lookup-ns": 7883964739,
+    "prefix-inconsistent": 0,
+    "prefix-queries": 1231328,
+    "prune_rate": 0.7856473265114268,
+    "records_with_final_stats": 348,
+    "rf-candidates": 8570108,
+    "rf-pruned": 5124700
+  },
+  "design": {
+    "cells": 768,
+    "repetitions": 4,
+    "tasks": 96
+  },
+  "metrics": {
+    "cpu": {
+      "bootstrap_95ci": [
+        0.9564309086796707,
+        1.112317260624478
+      ],
+      "faster": 23,
+      "geomean_ratio": 1.0237519005569327,
+      "median_ratio": 1.0200698105479866,
+      "slower": 60,
+      "tasks": 83
+    },
+    "rss": {
+      "bootstrap_95ci": [
+        1.0001476120184305,
+        1.0719202985022322
+      ],
+      "faster": 27,
+      "geomean_ratio": 1.0236173593697364,
+      "median_ratio": 1.0004722550177096,
+      "slower": 54,
+      "tasks": 83
+    },
+    "wall": {
+      "bootstrap_95ci": [
+        0.9550627637153429,
+        1.1105181499393555
+      ],
+      "faster": 28,
+      "geomean_ratio": 1.0229600000829586,
+      "median_ratio": 1.0183362945347267,
+      "slower": 55,
+      "tasks": 83
+    }
+  },
+  "safe_execution_count_mismatches": [],
+  "status_counts": {
+    "baseline": {
+      "TIMEOUT": 48,
+      "false(unreach-call)": 108,
+      "true": 228
+    },
+    "pruning": {
+      "OUT OF MEMORY": 20,
+      "TIMEOUT": 16,
+      "false(unreach-call)": 112,
+      "true": 236
+    }
+  },
+  "status_mismatches": [
+    [
+      "01",
+      "goblint-regression/28-race_reach_01-simple_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "01",
+      "goblint-regression/28-race_reach_06-cond_racing1.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "01",
+      "goblint-regression/28-race_reach_11-ptr_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "01",
+      "goblint-regression/28-race_reach_24-sound_lock_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "01",
+      "goblint-regression/28-race_reach_37-indirect_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "01",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "01",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "01",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "01",
+      "pthread/queue_ok_longest.yml",
+      "true",
+      "TIMEOUT"
+    ],
+    [
+      "01",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "02",
+      "goblint-regression/28-race_reach_01-simple_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "02",
+      "goblint-regression/28-race_reach_06-cond_racing1.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "02",
+      "goblint-regression/28-race_reach_11-ptr_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "02",
+      "goblint-regression/28-race_reach_24-sound_lock_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "02",
+      "goblint-regression/28-race_reach_37-indirect_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "02",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "02",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "02",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "02",
+      "pthread/queue_ok_longest.yml",
+      "true",
+      "TIMEOUT"
+    ],
+    [
+      "02",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "03",
+      "goblint-regression/28-race_reach_01-simple_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "03",
+      "goblint-regression/28-race_reach_06-cond_racing1.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "03",
+      "goblint-regression/28-race_reach_11-ptr_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "03",
+      "goblint-regression/28-race_reach_24-sound_lock_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "03",
+      "goblint-regression/28-race_reach_37-indirect_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "03",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "03",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "03",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "03",
+      "pthread/queue_ok_longest.yml",
+      "true",
+      "TIMEOUT"
+    ],
+    [
+      "03",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "04",
+      "goblint-regression/28-race_reach_01-simple_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "04",
+      "goblint-regression/28-race_reach_06-cond_racing1.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "04",
+      "goblint-regression/28-race_reach_11-ptr_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "04",
+      "goblint-regression/28-race_reach_24-sound_lock_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "04",
+      "goblint-regression/28-race_reach_37-indirect_racing.yml",
+      "TIMEOUT",
+      "OUT OF MEMORY"
+    ],
+    [
+      "04",
+      "pthread-deagle/circular_buffer_ok.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "04",
+      "pthread/fib_safe-5.yml",
+      "TIMEOUT",
+      "true"
+    ],
+    [
+      "04",
+      "pthread/fib_unsafe-6.yml",
+      "TIMEOUT",
+      "false(unreach-call)"
+    ],
+    [
+      "04",
+      "pthread/queue_ok_longest.yml",
+      "true",
+      "TIMEOUT"
+    ],
+    [
+      "04",
+      "pthread/triangular-1.yml",
+      "TIMEOUT",
+      "true"
+    ]
+  ]
+}

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="15 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/>
+  <option name="--disable-mm-detector"/>
+  <column title="built">Finite skeleton IR: built=(true|false)</column>
+  <column title="blocks">Finite skeleton representation: blocks=([0-9]+)</column>
+  <column title="cfg edges">cfg-edges=([0-9]+)</column>
+  <column title="value vars">value-vars=([0-9]+)</column>
+  <column title="value bits">value-bits=([0-9]+)</column>
+  <column title="error events">error-events=([0-9]+)</column>
+  <column title="rf reads">rf-reads=([0-9]+)</column>
+  <column title="rf no source">rf-reads-without-source=([0-9]+)</column>
+  <column title="rf selectors">rf-selectors=([0-9]+)</column>
+  <column title="rf pairs">rf-pairs=([0-9]+)</column>
+  <column title="rf load activation">rf-load-activations=([0-9]+)</column>
+  <column title="rf store activation">rf-store-activations=([0-9]+)</column>
+  <column title="rf value">rf-value=([0-9]+)</column>
+  <column title="co ranks">co-ranks=([0-9]+)</column>
+  <column title="co rank bits">co-rank-bits=([0-9]+)</column>
+  <column title="co pairs">co-pairs=([0-9]+)</column>
+  <column title="co before vars">co-before-vars=([0-9]+)</column>
+  <column title="po pairs">po-pairs=([0-9]+)</column>
+  <column title="potential fr">potential-fr=([0-9]+)</column>
+  <column title="max rf sources">max-rf-sources=([0-9]+)</column>
+  <column title="max writes address">max-writes-address=([0-9]+)</column>
+  <rundefinition name="finite-representation.pthread-wmm">
+    <option name="--svcomp-backend=caat-sc"/>
+    <tasks name="unreach-call">
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/*.yml</include>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

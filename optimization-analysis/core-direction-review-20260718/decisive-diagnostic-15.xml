@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="60 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/>
+  <option name="--disable-mm-detector"/>
+  <option name="--svcomp-backend=caat-sc"/>
+  <option name="--cat-stats"/>
+
+  <column title="complete">Complete executions: ([0-9]+)</column>
+  <column title="blocked">Blocked executions: ([0-9]+)</column>
+  <column title="work added">work-added=([0-9]+)</column>
+  <column title="work popped">work-popped=([0-9]+)</column>
+  <column title="realized prefixes">realized-revisit-prefixes=([0-9]+)</column>
+  <column title="inconsistent prefixes">inconsistent-revisit-prefixes=([0-9]+)</column>
+  <column title="valid queries">validity-queries=([0-9]+)</column>
+  <column title="rf candidate ns">rf-candidate-ns=([0-9]+)</column>
+  <column title="co candidate ns">co-candidate-ns=([0-9]+)</column>
+  <column title="validity ns">validity-ns=([0-9]+)</column>
+  <column title="restore ns">restore-revisit-ns=([0-9]+)</column>
+  <column title="consistency ns">consistency-total-ns=([0-9]+)</column>
+  <column title="consistent">consistency-accepted=([0-9]+)</column>
+  <column title="inconsistent">consistency-rejected=([0-9]+)</column>
+  <column title="materialize ns">materialize-ns=([0-9]+)</column>
+  <column title="offline total ns">offline-ns=([0-9]+)</column>
+  <column title="offline evaluation ns">offline-evaluation-ns=([0-9]+)</column>
+  <column title="init base copy ns">initialization-base-copy-ns=([0-9]+)</column>
+  <column title="equality ns">equality-ns=([0-9]+)</column>
+  <column title="history base copy ns">history-base-copy-ns=([0-9]+)</column>
+  <column title="insert ns">insert-attempt-ns=([0-9]+)</column>
+  <column title="history ns">history-ns=([0-9]+)</column>
+  <column title="rebuild ns">rebuild-ns=([0-9]+)</column>
+  <column title="preventive lookup ns">preventive-lookup-ns=([0-9]+)</column>
+
+  <rundefinition name="recursive-caat-observation-only">
+    <tasks name="pthread-wmm-15">
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/rfi005.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe029_power.oepc_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe029_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe010_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe004_power.oepc_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix035.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/rfi002_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe017_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe035_power.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix023_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix014_tso.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix008_tso.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml</include>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

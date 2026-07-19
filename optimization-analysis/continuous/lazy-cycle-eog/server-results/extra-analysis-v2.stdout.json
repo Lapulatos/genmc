@@ -1,0 +1,139 @@
+{
+  "activation": {
+    "all": {
+      "candidate_over_unique": 1.3043015112903908,
+      "lazy_cycle_checks": 7034520,
+      "lazy_edge_candidates": 6180631972,
+      "lazy_unique_edges": 4738652772,
+      "profiles": 1152,
+      "profiles_with_lazy_checks": 512
+    },
+    "pso": {
+      "candidate_over_unique": 1.198672473806694,
+      "lazy_cycle_checks": 5246664,
+      "lazy_edge_candidates": 1835165208,
+      "lazy_unique_edges": 1530998040,
+      "profiles": 384,
+      "profiles_with_lazy_checks": 272
+    },
+    "sc": {
+      "candidate_over_unique": null,
+      "lazy_cycle_checks": 0,
+      "lazy_edge_candidates": 0,
+      "lazy_unique_edges": 0,
+      "profiles": 384,
+      "profiles_with_lazy_checks": 0
+    },
+    "tso": {
+      "candidate_over_unique": 1.3547177383678588,
+      "lazy_cycle_checks": 1787856,
+      "lazy_edge_candidates": 4345466764,
+      "lazy_unique_edges": 3207654732,
+      "profiles": 384,
+      "profiles_with_lazy_checks": 240
+    }
+  },
+  "large_copy": {
+    "all": {
+      "after_over_before_geomean": 0.20126327964284996,
+      "four_repetition_model_tasks": 5,
+      "task_bootstrap_95ci": [
+        0.06871750894394664,
+        0.5894699670449026
+      ]
+    },
+    "pso": {
+      "after_over_before_geomean": 0.10583576876264601,
+      "four_repetition_model_tasks": 1,
+      "task_bootstrap_95ci": [
+        0.10583576876264601,
+        0.10583576876264601
+      ]
+    },
+    "sc": {
+      "after_over_before_geomean": 0.9055636612262516,
+      "four_repetition_model_tasks": 2,
+      "task_bootstrap_95ci": [
+        0.8572703916446354,
+        0.9565774725524725
+      ]
+    },
+    "tso": {
+      "after_over_before_geomean": 0.06168451328981798,
+      "four_repetition_model_tasks": 2,
+      "task_bootstrap_95ci": [
+        0.042696802680690475,
+        0.08911625557204833
+      ]
+    }
+  },
+  "large_offline": {
+    "all": {
+      "after_over_before_geomean": 0.6833374406526526,
+      "four_repetition_model_tasks": 10,
+      "task_bootstrap_95ci": [
+        0.4465940844094597,
+        0.9744644094310115
+      ]
+    },
+    "pso": {
+      "after_over_before_geomean": 0.14850910485986674,
+      "four_repetition_model_tasks": 1,
+      "task_bootstrap_95ci": [
+        0.14850910485986674,
+        0.14850910485986674
+      ]
+    },
+    "sc": {
+      "after_over_before_geomean": 0.9979034486914921,
+      "four_repetition_model_tasks": 7,
+      "task_bootstrap_95ci": [
+        0.9373778956448702,
+        1.0864523843198268
+      ]
+    },
+    "tso": {
+      "after_over_before_geomean": 0.3894840804027176,
+      "four_repetition_model_tasks": 2,
+      "task_bootstrap_95ci": [
+        0.3302996072705662,
+        0.4592734764073961
+      ]
+    }
+  },
+  "large_peak_snapshot": {
+    "all": {
+      "after_over_before_geomean": 0.5773210906035184,
+      "four_repetition_model_tasks": 10,
+      "task_bootstrap_95ci": [
+        0.33329964165563597,
+        1.0
+      ]
+    },
+    "pso": {
+      "after_over_before_geomean": 0.13474405177165844,
+      "four_repetition_model_tasks": 1,
+      "task_bootstrap_95ci": [
+        0.13474405177165844,
+        0.13474405177165844
+      ]
+    },
+    "sc": {
+      "after_over_before_geomean": 1.0,
+      "four_repetition_model_tasks": 7,
+      "task_bootstrap_95ci": [
+        1.0,
+        1.0
+      ]
+    },
+    "tso": {
+      "after_over_before_geomean": 0.1747158540892029,
+      "four_repetition_model_tasks": 2,
+      "task_bootstrap_95ci": [
+        0.17372601679910085,
+        0.17571133116705195
+      ]
+    }
+  },
+  "profiles": 2304
+}

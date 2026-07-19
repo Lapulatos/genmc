@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="850" height="450" viewBox="0 0 850 450">
+<rect width="100%" height="100%" fill="white"/>
+<text x="425" y="28" text-anchor="middle" font-family="sans-serif" font-size="18">P0.2 cache/baseline ratios (four-repetition task bootstrap)</text>
+<line x1="180.0" y1="52" x2="180.0" y2="390" stroke="#e5e7eb"/>
+<text x="180.0" y="418" text-anchor="middle" font-family="sans-serif" font-size="12">0.9</text>
+<line x1="306.66666666666663" y1="52" x2="306.66666666666663" y2="390" stroke="#111827"/>
+<text x="306.66666666666663" y="418" text-anchor="middle" font-family="sans-serif" font-size="12">1.0</text>
+<line x1="433.33333333333337" y1="52" x2="433.33333333333337" y2="390" stroke="#e5e7eb"/>
+<text x="433.33333333333337" y="418" text-anchor="middle" font-family="sans-serif" font-size="12">1.1</text>
+<line x1="559.9999999999999" y1="52" x2="559.9999999999999" y2="390" stroke="#e5e7eb"/>
+<text x="559.9999999999999" y="418" text-anchor="middle" font-family="sans-serif" font-size="12">1.2</text>
+<line x1="686.6666666666666" y1="52" x2="686.6666666666666" y2="390" stroke="#e5e7eb"/>
+<text x="686.6666666666666" y="418" text-anchor="middle" font-family="sans-serif" font-size="12">1.3</text>
+<text x="15" y="74" font-family="sans-serif" font-size="12">ALL cpu</text>
+<line x1="316.6531977116415" y1="70" x2="421.3627441923786" y2="70" stroke="#b91c1c" stroke-width="3"/>
+<circle cx="361.67224271827934" cy="70" r="5" fill="#b91c1c"/>
+<text x="15" y="99" font-family="sans-serif" font-size="12">ALL wall</text>
+<line x1="312.5195471269151" y1="95" x2="415.0667474348809" y2="95" stroke="#1d4ed8" stroke-width="3"/>
+<circle cx="356.4362945998825" cy="95" r="5" fill="#1d4ed8"/>
+<text x="15" y="124" font-family="sans-serif" font-size="12">ALL rss</text>
+<line x1="307.15075316172397" y1="120" x2="366.5581122000103" y2="120" stroke="#047857" stroke-width="3"/>
+<circle cx="329.5685514637617" cy="120" r="5" fill="#047857"/>
+<text x="15" y="149" font-family="sans-serif" font-size="12">SC cpu</text>
+<line x1="298.3002304237589" y1="145" x2="318.9300978929794" y2="145" stroke="#b91c1c" stroke-width="3"/>
+<circle cx="308.9329312338461" cy="145" r="5" fill="#b91c1c"/>
+<text x="15" y="174" font-family="sans-serif" font-size="12">SC wall</text>
+<line x1="297.4562989663008" y1="170" x2="314.5381312896402" y2="170" stroke="#1d4ed8" stroke-width="3"/>
+<circle cx="306.0852813086764" cy="170" r="5" fill="#1d4ed8"/>
+<text x="15" y="199" font-family="sans-serif" font-size="12">SC rss</text>
+<line x1="306.22614206513134" y1="195" x2="306.9271456593662" y2="195" stroke="#047857" stroke-width="3"/>
+<circle cx="306.5661125463687" cy="195" r="5" fill="#047857"/>
+<text x="15" y="224" font-family="sans-serif" font-size="12">TSO cpu</text>
+<line x1="300.43167031724096" y1="220" x2="316.3085469499887" y2="220" stroke="#b91c1c" stroke-width="3"/>
+<circle cx="308.4137999335419" cy="220" r="5" fill="#b91c1c"/>
+<text x="15" y="249" font-family="sans-serif" font-size="12">TSO wall</text>
+<line x1="296.73625214834715" y1="245" x2="311.616383545482" y2="245" stroke="#1d4ed8" stroke-width="3"/>
+<circle cx="304.1411123437087" cy="245" r="5" fill="#1d4ed8"/>
+<text x="15" y="274" font-family="sans-serif" font-size="12">TSO rss</text>
+<line x1="306.22694478092143" y1="270" x2="306.98829277103005" y2="270" stroke="#047857" stroke-width="3"/>
+<circle cx="306.6105442848579" cy="270" r="5" fill="#047857"/>
+<text x="15" y="299" font-family="sans-serif" font-size="12">PSO cpu</text>
+<line x1="330.89880490909434" y1="295" x2="675.3146792202785" y2="295" stroke="#b91c1c" stroke-width="3"/>
+<circle cx="472.7984302564804" cy="295" r="5" fill="#b91c1c"/>
+<text x="15" y="324" font-family="sans-serif" font-size="12">PSO wall</text>
+<line x1="325.0931894591613" y1="320" x2="664.315616383568" y2="320" stroke="#1d4ed8" stroke-width="3"/>
+<circle cx="464.58158061982937" cy="320" r="5" fill="#1d4ed8"/>
+<text x="15" y="349" font-family="sans-serif" font-size="12">PSO rss</text>
+<line x1="308.25378156482634" y1="345" x2="494.4271655469418" y2="345" stroke="#047857" stroke-width="3"/>
+<circle cx="376.81110877041556" cy="345" r="5" fill="#047857"/>
+</svg>

@@ -1,0 +1,4 @@
+backend	runs	tasks	solved_runs	timeout_runs	oom_runs	other_failures	median_wall_seconds_solved	median_memory_bytes_solved
+caat-sc	480	96	450	5	25	0	0.0634840516	26052608
+cat-sc	480	96	425	30	25	0	0.063747593	26025984
+genmc-sc	480	96	480	0	0	0	0.0638637955	25944064

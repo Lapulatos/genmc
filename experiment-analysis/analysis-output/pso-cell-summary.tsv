@@ -1,0 +1,6 @@
+program	real_seconds.caat	peak_rss_bytes.caat	real_seconds.cat	peak_rss_bytes.cat	time_ratio_caat_vs_cat	rss_ratio_caat_vs_cat
+correct/data-structures/fcombiner-async/variants/main0.c	0.11	54444032	0.08	54452224	1.375	0.999849556190763
+correct/data-structures/ms-queue-dynamic/variants/main0.c	0.07	53755904	0.06	53805056	1.16666666666667	0.999086479902558
+correct/data-structures/treiber-stack-dynamic/variants/main0.c	0.08	53501952	0.06	53518336	1.33333333333333	0.999693861931731
+correct/litmus/RMWFix/variants/rmwfix0.c	0.05	52584448	0.05	52584448	1	1
+correct/litmus/SB/variants/sb0.c	0.05	52592640	0.05	52600832	1	0.999844261018533

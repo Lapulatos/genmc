@@ -1,0 +1,506 @@
+diff --git a/genmc/genmc/CAT/CaatEvaluator.cpp b/genmc/genmc/CAT/CaatEvaluator.cpp
+index 53ad755..56e4799 100644
+--- a/genmc/genmc/CAT/CaatEvaluator.cpp
++++ b/genmc/genmc/CAT/CaatEvaluator.cpp
+@@ -29,15 +29,19 @@ namespace {
+ class Evaluation {
+ public:
+ 	Evaluation(const NormalizedModel &model, const ModelAnalysis &analysis,
+-		   std::size_t eventCount, const BaseValues &base, bool enableLazyCycles)
++		   std::size_t eventCount, const BaseValues &base, bool enableLazyCycles,
++		   std::vector<std::optional<LazyTopologicalOrder>> *lazyOrders)
+ 		: model_(model), analysis_(analysis), eventCount_(eventCount), base_(base),
+ 		  values_(model.predicates().size()), counts_(model.predicates().size()),
+-		  dependents_(model.predicates().size()), enableLazyCycles_(enableLazyCycles)
++		  dependents_(model.predicates().size()), enableLazyCycles_(enableLazyCycles),
++		  lazyOrders_(lazyOrders)
+ 	{
+ 		VERIFY(analysis.componentOf().size() == model.predicates().size(),
+ 		       "CAAT analysis/model predicate count mismatch");
+ 		for (const auto &dependency : analysis.dependencies())
+ 			dependents_[dependency.source].push_back(dependency.target);
++		if (lazyOrders_)
++			lazyOrders_->assign(model.checks().size(), std::nullopt);
+ 	}
+ 
+ 	auto run() -> CaatEvaluationResult
+@@ -241,15 +245,19 @@ private:
+ 			const auto &check = model_.checks()[checkIndex];
+ 			if (enableLazyCycles_ && analysis_.lazyCycleRoots()[checkIndex]) {
+ 				LazyCycleStatistics lazyStatistics;
++				LazyTopologicalOrder order;
+ 				auto witness = findLazyCycle(model_,
+ 							 *analysis_.lazyCycleRoots()[checkIndex], values_,
+-							 eventCount_, &lazyStatistics);
++							 eventCount_, &lazyStatistics,
++							 lazyOrders_ ? &order : nullptr);
+ 				statistics_.lazyCycleChecks += lazyStatistics.checks;
+ 				statistics_.lazyEdgeCandidates += lazyStatistics.emittedCandidates;
+ 				statistics_.lazyDepthFallbacks += lazyStatistics.depthFallbacks;
+ 				if (!witness.empty())
+ 					violations_.push_back({check.name, check.kind, check.span,
+ 							   std::move(witness)});
++				else if (lazyOrders_)
++					(*lazyOrders_)[checkIndex] = std::move(order);
+ 				continue;
+ 			}
+ 			const auto &value = *values_[check.predicate];
+@@ -296,16 +304,18 @@ private:
+ 	std::vector<EvaluationError> errors_;
+ 	FixedPointStatistics statistics_;
+ 	bool enableLazyCycles_{};
++	std::vector<std::optional<LazyTopologicalOrder>> *lazyOrders_{};
+ };
+ 
+ } /* namespace */
+ 
+ auto CaatEvaluator::evaluate(const NormalizedModel &model, const ModelAnalysis &analysis,
+ 			     std::size_t eventCount, const BaseValues &base,
+-			     bool enableLazyCycles) const
++			     bool enableLazyCycles,
++			     std::vector<std::optional<LazyTopologicalOrder>> *lazyOrders) const
+ 	-> CaatEvaluationResult
+ {
+-	return Evaluation(model, analysis, eventCount, base, enableLazyCycles).run();
++	return Evaluation(model, analysis, eventCount, base, enableLazyCycles, lazyOrders).run();
+ }
+ 
+ } /* namespace cat */
+diff --git a/genmc/genmc/CAT/CaatEvaluator.hpp b/genmc/genmc/CAT/CaatEvaluator.hpp
+index 1b0d81f..1af6be6 100644
+--- a/genmc/genmc/CAT/CaatEvaluator.hpp
++++ b/genmc/genmc/CAT/CaatEvaluator.hpp
+@@ -16,6 +16,7 @@
+ 
+ #include "genmc/CAT/Analysis.hpp"
+ #include "genmc/CAT/Evaluator.hpp"
++#include "genmc/CAT/LazyCycle.hpp"
+ 
+ #include <cstddef>
+ #include <optional>
+@@ -70,7 +71,9 @@ public:
+ 	 */
+ 	[[nodiscard]] auto evaluate(const NormalizedModel &model, const ModelAnalysis &analysis,
+ 				    std::size_t eventCount, const BaseValues &base,
+-				    bool enableLazyCycles = false) const
++				    bool enableLazyCycles = false,
++				    std::vector<std::optional<LazyTopologicalOrder>> *lazyOrders =
++					    nullptr) const
+ 		-> CaatEvaluationResult;
+ };
+ 
+diff --git a/genmc/genmc/CAT/IncrementalEvaluator.cpp b/genmc/genmc/CAT/IncrementalEvaluator.cpp
+index a558711..35e1c16 100644
+--- a/genmc/genmc/CAT/IncrementalEvaluator.cpp
++++ b/genmc/genmc/CAT/IncrementalEvaluator.cpp
+@@ -237,21 +237,38 @@ auto findCycle(const Relation &relation) -> std::vector<std::size_t>
+ /** Recompute small axiom witnesses from the final incrementally maintained values. */
+ auto violations(const NormalizedModel &model, const ModelAnalysis &analysis,
+ 		const std::vector<std::optional<Value>> &values, std::size_t eventCount,
+-		bool enableLazyCycles, FixedPointStatistics *statistics) -> std::vector<Violation>
++		bool enableLazyCycles, FixedPointStatistics *statistics,
++		std::vector<std::optional<LazyTopologicalOrder>> *lazyOrders)
++	-> std::vector<Violation>
+ {
+ 	std::vector<Violation> result;
+ 	for (std::size_t checkIndex = 0; checkIndex < model.checks().size(); ++checkIndex) {
+ 		const auto &check = model.checks()[checkIndex];
+ 		if (enableLazyCycles && analysis.lazyCycleRoots()[checkIndex]) {
+ 			LazyCycleStatistics lazyStatistics;
+-			auto witness = findLazyCycle(model, *analysis.lazyCycleRoots()[checkIndex],
+-						 values, eventCount, &lazyStatistics);
++			auto *cached = lazyOrders ? &(*lazyOrders)[checkIndex] : nullptr;
++			if (cached && *cached &&
++			    validateLazyTopologicalOrder(model,
++						 *analysis.lazyCycleRoots()[checkIndex], values,
++						 eventCount, **cached, &lazyStatistics)) {
++				statistics->lazyEdgeCandidates += lazyStatistics.emittedCandidates;
++				continue;
++			}
++			LazyTopologicalOrder nextOrder;
++			auto witness = findLazyCycle(
++				model, *analysis.lazyCycleRoots()[checkIndex], values, eventCount,
++				&lazyStatistics, cached ? &nextOrder : nullptr);
+ 			statistics->lazyCycleChecks += lazyStatistics.checks;
+ 			statistics->lazyEdgeCandidates += lazyStatistics.emittedCandidates;
+ 			statistics->lazyDepthFallbacks += lazyStatistics.depthFallbacks;
+-			if (!witness.empty())
++			if (!witness.empty()) {
++				if (cached)
++					cached->reset();
+ 				result.push_back({check.name, check.kind, check.span,
+ 						  std::move(witness)});
++			} else if (cached) {
++				*cached = std::move(nextOrder);
++			}
+ 			continue;
+ 		}
+ 		const auto &value = *values[check.predicate];
+@@ -292,7 +309,12 @@ IncrementalCaatEvaluator::IncrementalCaatEvaluator(const NormalizedModel &model,
+ 						   const ModelAnalysis &analysis, bool profiling,
+ 						   bool enableLazyCycles)
+ 	: model_(model), analysis_(analysis), dependents_(model.predicates().size()),
+-	  profiling_(profiling), enableLazyCycles_(enableLazyCycles)
++	  profiling_(profiling), enableLazyCycles_(enableLazyCycles),
++	  lazyOrders_(enableLazyCycles
++			? std::make_unique<
++				  std::vector<std::optional<LazyTopologicalOrder>>>(
++				  model.checks().size())
++			: nullptr)
+ {
+ 	VERIFY(analysis_.componentOf().size() == model_.predicates().size(),
+ 	       "incremental CAAT analysis/model predicate count mismatch");
+@@ -327,7 +349,7 @@ auto IncrementalCaatEvaluator::initialize(std::size_t eventCount, const BaseValu
+ 	/* Compute into a temporary first. An evaluation error is a valid published
+ 	 * result, but an exception or assertion cannot leave a mixed old/new state. */
+ 	auto next = CaatEvaluator().evaluate(model_, analysis_, eventCount, base,
+-					     enableLazyCycles_);
++					     enableLazyCycles_, lazyOrders_.get());
+ 	eventCount_ = eventCount;
+ 	base_ = base;
+ 	result_ = std::move(next);
+@@ -502,7 +524,8 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
+ 				.count());
+ 
+ 	CaatEvaluationResult nextResult{violations(model_, analysis_, values, eventCount,
+-						enableLazyCycles_, &updateStatistics),
++					enableLazyCycles_, &updateStatistics,
++					lazyOrders_.get()),
+ 					{},
+ 					std::move(values),
+ 					std::move(counts),
+@@ -578,7 +601,8 @@ auto IncrementalCaatEvaluator::tryReplace(std::size_t eventCount, const BaseValu
+ 		}
+ 	}
+ 	result_ = CaatEvaluationResult{violations(model_, analysis_, values, eventCount,
+-					       enableLazyCycles_, &updateStatistics),
++					       enableLazyCycles_, &updateStatistics,
++					       lazyOrders_.get()),
+ 				       {},
+ 				       std::move(values),
+ 				       std::move(counts),
+diff --git a/genmc/genmc/CAT/IncrementalEvaluator.hpp b/genmc/genmc/CAT/IncrementalEvaluator.hpp
+index 7342a97..600b0d0 100644
+--- a/genmc/genmc/CAT/IncrementalEvaluator.hpp
++++ b/genmc/genmc/CAT/IncrementalEvaluator.hpp
+@@ -19,6 +19,7 @@
+ #include <cstddef>
+ #include <cstdint>
+ #include <optional>
++#include <memory>
+ #include <string>
+ #include <vector>
+ 
+@@ -234,6 +235,8 @@ private:
+ 	bool supportsReplacements_{true};
+ 	bool profiling_{};
+ 	bool enableLazyCycles_{};
++	/** Query-persistent exact negative-cycle certificates; never checkpointed. */
++	std::unique_ptr<std::vector<std::optional<LazyTopologicalOrder>>> lazyOrders_;
+ };
+ 
+ } /* namespace cat */
+diff --git a/genmc/genmc/CAT/LazyCycle.cpp b/genmc/genmc/CAT/LazyCycle.cpp
+index fd69fb2..7501ef7 100644
+--- a/genmc/genmc/CAT/LazyCycle.cpp
++++ b/genmc/genmc/CAT/LazyCycle.cpp
+@@ -46,12 +46,18 @@ public:
+ 		: model_(model), values_(values), eventCount_(eventCount), statistics_(statistics)
+ 	{}
+ 
+-	[[nodiscard]] auto cycle(PredicateId root) -> std::vector<std::size_t>
++	[[nodiscard]] auto cycle(PredicateId root, LazyTopologicalOrder *order)
++		-> std::vector<std::size_t>
+ 	{
+ 		if (statistics_)
+ 			++statistics_->checks;
++		if (order)
++			order->ranks.clear();
+ 		std::vector<std::uint8_t> color(eventCount_);
+ 		std::vector<std::size_t> parent(eventCount_, eventCount_);
++		std::vector<std::size_t> finishOrder;
++		if (order)
++			finishOrder.reserve(eventCount_);
+ 		std::vector<std::size_t> witness;
+ 		bool depthExceeded{};
+ 		auto visit = [&](auto &self, std::size_t event, std::size_t depth) -> bool {
+@@ -81,6 +87,8 @@ public:
+ 			if (emit(root, event, consume))
+ 				return true;
+ 			color[event] = 2;
++			if (order)
++				finishOrder.push_back(event);
+ 			return false;
+ 		};
+ 		for (std::size_t event = 0; event < eventCount_; ++event) {
+@@ -90,12 +98,49 @@ public:
+ 		if (depthExceeded) {
+ 			if (statistics_)
+ 				++statistics_->depthFallbacks;
+-			return bufferedCycle(root);
++			return bufferedCycle(root, order);
+ 		}
++		if (witness.empty() && order)
++			publishOrder(finishOrder, *order);
+ 		return witness;
+ 	}
+ 
++	[[nodiscard]] auto validates(PredicateId root, LazyTopologicalOrder &order) const
++		-> bool
++	{
++		if (eventCount_ > std::numeric_limits<std::uint32_t>::max())
++			return false;
++		for (auto event = order.ranks.size(); event < eventCount_; ++event)
++			order.ranks.push_back(static_cast<std::uint32_t>(event));
++		for (std::size_t from = 0; from < eventCount_; ++from) {
++			auto validate = [&](std::size_t target) -> bool {
++				VERIFY(target < eventCount_, "lazy CAT successor is out of range");
++				if (statistics_)
++					++statistics_->emittedCandidates;
++				return order.ranks[from] >= order.ranks[target];
++			};
++			if (emit(root, from, validate))
++				return false;
++		}
++		return true;
++	}
++
+ private:
++	void publishOrder(const std::vector<std::size_t> &finishOrder,
++			  LazyTopologicalOrder &order) const
++	{
++		if (eventCount_ > std::numeric_limits<std::uint32_t>::max() ||
++		    finishOrder.size() != eventCount_) {
++			order.ranks.clear();
++			return;
++		}
++		order.ranks.resize(eventCount_);
++		for (std::size_t index = 0; index < finishOrder.size(); ++index) {
++			order.ranks[finishOrder[index]] =
++				static_cast<std::uint32_t>(eventCount_ - index - 1);
++		}
++	}
++
+ 	[[nodiscard]] auto value(PredicateId id) const -> const Value &
+ 	{
+ 		VERIFY(values_.at(id).has_value(), "lazy CAT leaf has no materialized value");
+@@ -206,7 +251,8 @@ private:
+ 	}
+ 
+ 	/** Exact heap-frame fallback for event paths too deep for recursive streaming. */
+-	[[nodiscard]] auto bufferedCycle(PredicateId root) const -> std::vector<std::size_t>
++	[[nodiscard]] auto bufferedCycle(PredicateId root, LazyTopologicalOrder *order) const
++		-> std::vector<std::size_t>
+ 	{
+ 		std::vector<std::uint32_t> seen(eventCount_);
+ 		std::uint32_t generation{};
+@@ -239,6 +285,9 @@ private:
+ 		};
+ 		std::vector<std::uint8_t> color(eventCount_);
+ 		std::vector<std::size_t> parent(eventCount_, eventCount_);
++		std::vector<std::size_t> finishOrder;
++		if (order)
++			finishOrder.reserve(eventCount_);
+ 		std::vector<Frame> stack;
+ 		stack.reserve(std::min(eventCount_, maxStreamingDepth));
+ 		for (std::size_t start = 0; start < eventCount_; ++start) {
+@@ -250,6 +299,8 @@ private:
+ 				auto &frame = stack.back();
+ 				if (frame.next == frame.successors.size()) {
+ 					color[frame.event] = 2;
++					if (order)
++						finishOrder.push_back(frame.event);
+ 					stack.pop_back();
+ 					continue;
+ 				}
+@@ -268,9 +319,13 @@ private:
+ 					witness.push_back(parent[witness.back()]);
+ 				std::ranges::reverse(witness);
+ 				witness.push_back(target);
++				if (order)
++					order->ranks.clear();
+ 				return witness;
+ 			}
+ 		}
++		if (order)
++			publishOrder(finishOrder, *order);
+ 		return {};
+ 	}
+ 
+@@ -284,10 +339,19 @@ private:
+ 
+ auto findLazyCycle(const NormalizedModel &model, PredicateId root,
+ 		   const std::vector<std::optional<Value>> &values, std::size_t eventCount,
+-		   LazyCycleStatistics *statistics)
++		   LazyCycleStatistics *statistics, LazyTopologicalOrder *order)
+ 	-> std::vector<std::size_t>
+ {
+-	return LazyRelation(model, values, eventCount, statistics).cycle(root);
++	return LazyRelation(model, values, eventCount, statistics).cycle(root, order);
++}
++
++auto validateLazyTopologicalOrder(const NormalizedModel &model, PredicateId root,
++				  const std::vector<std::optional<Value>> &values,
++				  std::size_t eventCount,
++				  LazyTopologicalOrder &order,
++				  LazyCycleStatistics *statistics) -> bool
++{
++	return LazyRelation(model, values, eventCount, statistics).validates(root, order);
+ }
+ 
+ } /* namespace cat */
+diff --git a/genmc/genmc/CAT/LazyCycle.hpp b/genmc/genmc/CAT/LazyCycle.hpp
+index 34bda02..2e2f5fa 100644
+--- a/genmc/genmc/CAT/LazyCycle.hpp
++++ b/genmc/genmc/CAT/LazyCycle.hpp
+@@ -12,6 +12,7 @@
+ #include "genmc/CAT/Normalized.hpp"
+ 
+ #include <cstddef>
++#include <cstdint>
+ #include <optional>
+ #include <vector>
+ 
+@@ -24,6 +25,11 @@ struct LazyCycleStatistics {
+ 	std::size_t depthFallbacks{};
+ };
+ 
++/** Exact strict ordering certificate for one acyclic lazy relation. */
++struct LazyTopologicalOrder {
++	std::vector<std::uint32_t> ranks;
++};
++
+ /**
+  * Find one deterministic cycle in an analyzer-certified positive relation DAG.
+  *
+@@ -33,9 +39,22 @@ struct LazyCycleStatistics {
+  */
+ [[nodiscard]] auto findLazyCycle(const NormalizedModel &model, PredicateId root,
+ 				 const std::vector<std::optional<Value>> &values,
+-				 std::size_t eventCount, LazyCycleStatistics *statistics = nullptr)
++				 std::size_t eventCount, LazyCycleStatistics *statistics = nullptr,
++				 LazyTopologicalOrder *order = nullptr)
+ 	-> std::vector<std::size_t>;
+ 
++/**
++ * Validate acyclicity by checking every extensional edge against a strict order.
++ *
++ * Newly appended stable event IDs receive provisional increasing ranks before every
++ * edge is checked. False means only that the certificate is invalid for this graph;
++ * callers must run the complete lazy cycle check before publishing a verdict.
++ */
++[[nodiscard]] auto validateLazyTopologicalOrder(
++	const NormalizedModel &model, PredicateId root,
++	const std::vector<std::optional<Value>> &values, std::size_t eventCount,
++	LazyTopologicalOrder &order, LazyCycleStatistics *statistics = nullptr) -> bool;
++
+ } /* namespace cat */
+ 
+ #endif /* GENMC_CAT_LAZY_CYCLE_HPP */
+diff --git a/tests/unit/CatEvaluatorTest.cpp b/tests/unit/CatEvaluatorTest.cpp
+index 7dde2f9..b5f31a1 100644
+--- a/tests/unit/CatEvaluatorTest.cpp
++++ b/tests/unit/CatEvaluatorTest.cpp
+@@ -594,8 +594,9 @@ acyclic order as cycle
+ 			     {"loc", loc}};
+ 	const auto materialized = cat::CaatEvaluator().evaluate(
+ 		*analyzed.model, *analyzed.analysis, size, base, false);
++	std::vector<std::optional<cat::LazyTopologicalOrder>> lazyOrders;
+ 	const auto lazy = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
+-						       size, base, true);
++						       size, base, true, &lazyOrders);
+ 	const auto repeated = cat::CaatEvaluator().evaluate(
+ 		*analyzed.model, *analyzed.analysis, size, base, true);
+ 	RC_ASSERT(materialized.errors.empty());
+@@ -605,6 +606,14 @@ acyclic order as cycle
+ 	RC_ASSERT(materialized.violations.size() == lazy.violations.size());
+ 	RC_ASSERT(lazy.violations.size() == repeated.violations.size());
+ 	const auto root = *analyzed.analysis->lazyCycleRoots()[0];
++	RC_ASSERT(lazyOrders.size() == 1);
++	if (lazy.consistent()) {
++		RC_ASSERT(lazyOrders[0].has_value());
++		RC_ASSERT(cat::validateLazyTopologicalOrder(
++			*analyzed.model, root, lazy.values, size, *lazyOrders[0]));
++	} else {
++		RC_ASSERT(!lazyOrders[0].has_value());
++	}
+ 	RC_ASSERT(materialized.values[root].has_value());
+ 	const auto &rootRelation = std::get<cat::Relation>(*materialized.values[root]);
+ 	for (std::size_t index = 0; index < materialized.violations.size(); ++index) {
+@@ -808,6 +817,76 @@ acyclic order as cycle
+ 	EXPECT_GT(incremental.statistics().lazyCycleChecks, 0U);
+ }
+ 
++/* A strict topological certificate skips complete DFS while valid, fails closed when an
++ * insertion violates its order, and remains valid when rollback deletes edges. */
++TEST(IncrementalCaatEvaluatorTest, ReusesLazyTopologicalOrderAcrossInsertionAndRollback)
++{
++	auto analyzed = analyzeModel(R"CAT(IncrementalLazyOrder
++let order = po | (rf ; co)
++acyclic order as cycle
++)CAT");
++	ASSERT_NE(analyzed.model, nullptr);
++	ASSERT_TRUE(analyzed.analysis->lazyCycleRoots()[0].has_value());
++	constexpr std::size_t size = 3;
++	cat::BaseValues empty{{"po", cat::Relation(size)},
++			      {"rf", cat::Relation(size)},
++			      {"co", cat::Relation(size)}};
++	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis, true,
++						 true);
++	incremental.initialize(size, empty);
++	ASSERT_TRUE(incremental.result().consistent());
++	ASSERT_EQ(incremental.statistics().lazyCycleChecks, 1U);
++	const auto root = incremental.checkpoint();
++
++	auto firstBranch = empty;
++	std::get<cat::Relation>(firstBranch["po"]).insert(2, 1);
++	ASSERT_TRUE(incremental.tryInsert(size, firstBranch).applied());
++	EXPECT_TRUE(incremental.result().consistent());
++	EXPECT_EQ(incremental.statistics().lazyCycleChecks, 1U);
++
++	auto longer = firstBranch;
++	std::get<cat::Relation>(longer["po"]).insert(1, 0);
++	ASSERT_TRUE(incremental.tryInsert(size, longer).applied());
++	EXPECT_TRUE(incremental.result().consistent());
++	EXPECT_EQ(incremental.statistics().lazyCycleChecks, 1U);
++
++	const auto restored = incremental.rollback(root);
++	ASSERT_TRUE(restored.restored) << restored.reason;
++	EXPECT_TRUE(incremental.result().consistent());
++	auto secondBranch = empty;
++	std::get<cat::Relation>(secondBranch["po"]).insert(2, 0);
++	ASSERT_TRUE(incremental.tryInsert(size, secondBranch).applied());
++	EXPECT_EQ(incremental.statistics().lazyCycleChecks, 1U);
++	constexpr std::size_t grownSize = 4;
++	auto grown = secondBranch;
++	for (auto &[name, value] : grown) {
++		(void)name;
++		std::get<cat::Relation>(value).grow(grownSize);
++	}
++	std::get<cat::Relation>(grown["po"]).insert(0, 3);
++	ASSERT_TRUE(incremental.tryInsert(grownSize, grown).applied());
++	EXPECT_TRUE(incremental.result().consistent());
++	EXPECT_EQ(incremental.statistics().lazyCycleChecks, 1U);
++
++	/* This edge is acyclic but contradicts the cached order, so validation cannot
++	 * decide and the complete DFS must construct a replacement certificate. */
++	auto reordered = grown;
++	std::get<cat::Relation>(reordered["po"]).insert(0, 1);
++	ASSERT_TRUE(incremental.tryInsert(grownSize, reordered).applied());
++	EXPECT_TRUE(incremental.result().consistent());
++	EXPECT_EQ(incremental.statistics().lazyCycleChecks, 2U);
++
++	auto cyclic = reordered;
++	std::get<cat::Relation>(cyclic["po"]).insert(1, 2);
++	ASSERT_TRUE(incremental.tryInsert(grownSize, cyclic).applied());
++	EXPECT_FALSE(incremental.result().consistent());
++	EXPECT_EQ(incremental.statistics().lazyCycleChecks, 3U);
++	const auto materialized =
++		cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis, grownSize,
++					      cyclic);
++	EXPECT_EQ(incremental.result().consistent(), materialized.consistent());
++}
++
+ /* Reinitialization atomically replaces the old universe, bases, and result. */
+ TEST(IncrementalCaatEvaluatorTest, ReinitializesAfterFallback)
+ {

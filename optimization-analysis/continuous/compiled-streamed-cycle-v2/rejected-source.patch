@@ -1,0 +1,591 @@
+diff --git a/genmc/genmc/CAT/Analysis.cpp b/genmc/genmc/CAT/Analysis.cpp
+index 2aad1db..8f3eb25 100644
+--- a/genmc/genmc/CAT/Analysis.cpp
++++ b/genmc/genmc/CAT/Analysis.cpp
+@@ -45,7 +45,7 @@ public:
+ 		buildLazyCyclePlans();
+ 		std::shared_ptr<const ModelAnalysis> analysis = std::make_shared<ModelAnalysis>(
+ 			std::move(dependencies_), std::move(strata_), std::move(componentOf_),
+-			std::move(domainIndependent_), std::move(lazyCycleRoots_),
++			std::move(domainIndependent_), std::move(lazyCyclePlans_),
+ 			std::move(lazyCycleElided_));
+ 		return {std::move(analysis), {}};
+ 	}
+@@ -377,6 +377,78 @@ private:
+ 			std::ranges::fill(lazyCycleRoots_, std::nullopt);
+ 			std::ranges::fill(lazyCycleElided_, false);
+ 		}
++		lazyCyclePlans_.resize(lazyCycleRoots_.size());
++		for (std::size_t index = 0; index < lazyCycleRoots_.size(); ++index) {
++			if (!lazyCycleRoots_[index])
++				continue;
++			const auto root = *lazyCycleRoots_[index];
++			lazyCyclePlans_[index] = {root, compileLazyStream(root)};
++		}
++	}
++
++	/** Compile ordered union/filter terms, leaving unsupported terms exact. */
++	[[nodiscard]] auto compileLazyStream(PredicateId root) const
++		-> std::vector<LazyStreamTerm>
++	{
++		std::vector<LazyStreamTerm> terms;
++		bool removesDispatch{};
++		const auto resolveAlias = [&](PredicateId id) {
++			while (model_.predicates()[id].kind == Predicate::Kind::Alias)
++				id = model_.predicates()[id].operands[0];
++			return id;
++		};
++		auto append = [&](auto &self, PredicateId id) -> void {
++			id = resolveAlias(id);
++			const auto &predicate = model_.predicates()[id];
++			if (predicate.kind == Predicate::Kind::Union) {
++				removesDispatch = true;
++				self(self, predicate.operands[0]);
++				self(self, predicate.operands[1]);
++				return;
++			}
++			if (predicate.kind == Predicate::Kind::Base &&
++			    predicate.type == ValueType::Relation) {
++				terms.push_back({LazyStreamTerm::Kind::Base, id, {}});
++				return;
++			}
++			if (predicate.kind == Predicate::Kind::Identity) {
++				terms.push_back(
++					{LazyStreamTerm::Kind::Identity, predicate.operands[0], {}});
++				return;
++			}
++			if (predicate.kind == Predicate::Kind::Intersection) {
++				const auto cheap = [&](PredicateId operand) {
++					const auto kind = model_.predicates()[operand].kind;
++					return kind == Predicate::Kind::Base ||
++					       kind == Predicate::Kind::Identity;
++				};
++				const auto candidate = cheap(predicate.operands[1])
++						       ? predicate.operands[0]
++						       : predicate.operands[1];
++				const auto filter = candidate == predicate.operands[0]
++						    ? predicate.operands[1]
++						    : predicate.operands[0];
++				const auto resolvedCandidate = resolveAlias(candidate);
++				const auto resolvedFilter = resolveAlias(filter);
++				const auto filterKind = model_.predicates()[resolvedFilter].kind;
++				if (model_.predicates()[resolvedCandidate].kind ==
++					    Predicate::Kind::Base &&
++				    model_.predicates()[resolvedCandidate].type ==
++					    ValueType::Relation &&
++				    (filterKind == Predicate::Kind::Base ||
++				     filterKind == Predicate::Kind::Identity)) {
++					removesDispatch = true;
++					terms.push_back({LazyStreamTerm::Kind::FilteredBase,
++							 resolvedCandidate, resolvedFilter});
++					return;
++				}
++			}
++			terms.push_back({LazyStreamTerm::Kind::Generic, id, {}});
++		};
++		append(append, root);
++		if (!removesDispatch)
++			terms.clear();
++		return terms;
+ 	}
+ 
+ 	const NormalizedModel &model_;
+@@ -392,6 +464,7 @@ private:
+ 	std::vector<std::uint32_t> componentOf_;
+ 	std::vector<bool> domainIndependent_;
+ 	std::vector<std::optional<PredicateId>> lazyCycleRoots_;
++	std::vector<std::optional<LazyCyclePlan>> lazyCyclePlans_;
+ 	std::vector<bool> lazyCycleElided_;
+ 	std::vector<Diagnostic> diagnostics_;
+ };
+diff --git a/genmc/genmc/CAT/Analysis.hpp b/genmc/genmc/CAT/Analysis.hpp
+index 5ff88a4..7fb23b0 100644
+--- a/genmc/genmc/CAT/Analysis.hpp
++++ b/genmc/genmc/CAT/Analysis.hpp
+@@ -30,6 +30,24 @@ struct Dependency {
+ 	bool negative{};
+ };
+ 
++/** One ordered action in an immutable lazy-cycle successor stream. */
++struct LazyStreamTerm {
++	/** Directly compiled action or exact interpreter fallback. */
++	enum class Kind : std::uint8_t { Base, FilteredBase, Identity, Generic };
++
++	Kind kind{Kind::Generic};
++	PredicateId predicate{};
++	PredicateId filter{};
++
++	auto operator==(const LazyStreamTerm &) const -> bool = default;
++};
++
++/** Analyzer-certified root and optional compiled successor stream. */
++struct LazyCyclePlan {
++	PredicateId root{};
++	std::vector<LazyStreamTerm> terms;
++};
++
+ /**
+  * Immutable CAAT admissibility and stratification result.
+  *
+@@ -51,12 +69,12 @@ public:
+ 	ModelAnalysis(std::vector<Dependency> dependencies,
+ 		      std::vector<std::vector<PredicateId>> strata,
+ 		      std::vector<std::uint32_t> componentOf, std::vector<bool> domainIndependent,
+-		      std::vector<std::optional<PredicateId>> lazyCycleRoots,
++		      std::vector<std::optional<LazyCyclePlan>> lazyCyclePlans,
+ 		      std::vector<bool> lazyCycleElided)
+ 		: dependencies_(std::move(dependencies)), strata_(std::move(strata)),
+ 		  componentOf_(std::move(componentOf)),
+ 		  domainIndependent_(std::move(domainIndependent)),
+-		  lazyCycleRoots_(std::move(lazyCycleRoots)),
++		  lazyCyclePlans_(std::move(lazyCyclePlans)),
+ 		  lazyCycleElided_(std::move(lazyCycleElided))
+ 	{}
+ 
+@@ -80,11 +98,11 @@ public:
+ 	{
+ 		return domainIndependent_;
+ 	}
+-	/** Per-check root admitted for exact lazy cycle evaluation, if any. */
+-	[[nodiscard]] auto lazyCycleRoots() const
+-		-> const std::vector<std::optional<PredicateId>> &
++	/** Per-check exact lazy-cycle plan, if the check was admitted. */
++	[[nodiscard]] auto lazyCyclePlans() const
++		-> const std::vector<std::optional<LazyCyclePlan>> &
+ 	{
+-		return lazyCycleRoots_;
++		return lazyCyclePlans_;
+ 	}
+ 	/** Derived predicates whose only observable consumer is an admitted plan. */
+ 	[[nodiscard]] auto lazyCycleElided() const -> const std::vector<bool> &
+@@ -97,7 +115,7 @@ private:
+ 	std::vector<std::vector<PredicateId>> strata_;
+ 	std::vector<std::uint32_t> componentOf_;
+ 	std::vector<bool> domainIndependent_;
+-	std::vector<std::optional<PredicateId>> lazyCycleRoots_;
++	std::vector<std::optional<LazyCyclePlan>> lazyCyclePlans_;
+ 	std::vector<bool> lazyCycleElided_;
+ };
+ 
+diff --git a/genmc/genmc/CAT/CaatEvaluator.cpp b/genmc/genmc/CAT/CaatEvaluator.cpp
+index 53ad755..deefa0b 100644
+--- a/genmc/genmc/CAT/CaatEvaluator.cpp
++++ b/genmc/genmc/CAT/CaatEvaluator.cpp
+@@ -239,11 +239,11 @@ private:
+ 	{
+ 		for (std::size_t checkIndex = 0; checkIndex < model_.checks().size(); ++checkIndex) {
+ 			const auto &check = model_.checks()[checkIndex];
+-			if (enableLazyCycles_ && analysis_.lazyCycleRoots()[checkIndex]) {
++			if (enableLazyCycles_ && analysis_.lazyCyclePlans()[checkIndex]) {
+ 				LazyCycleStatistics lazyStatistics;
+-				auto witness = findLazyCycle(model_,
+-							 *analysis_.lazyCycleRoots()[checkIndex], values_,
+-							 eventCount_, &lazyStatistics);
++				auto witness = findLazyCycle(
++					model_, *analysis_.lazyCyclePlans()[checkIndex], values_,
++					eventCount_, &lazyStatistics);
+ 				statistics_.lazyCycleChecks += lazyStatistics.checks;
+ 				statistics_.lazyEdgeCandidates += lazyStatistics.emittedCandidates;
+ 				statistics_.lazyDepthFallbacks += lazyStatistics.depthFallbacks;
+diff --git a/genmc/genmc/CAT/IncrementalEvaluator.cpp b/genmc/genmc/CAT/IncrementalEvaluator.cpp
+index a558711..91b3f01 100644
+--- a/genmc/genmc/CAT/IncrementalEvaluator.cpp
++++ b/genmc/genmc/CAT/IncrementalEvaluator.cpp
+@@ -242,9 +242,9 @@ auto violations(const NormalizedModel &model, const ModelAnalysis &analysis,
+ 	std::vector<Violation> result;
+ 	for (std::size_t checkIndex = 0; checkIndex < model.checks().size(); ++checkIndex) {
+ 		const auto &check = model.checks()[checkIndex];
+-		if (enableLazyCycles && analysis.lazyCycleRoots()[checkIndex]) {
++		if (enableLazyCycles && analysis.lazyCyclePlans()[checkIndex]) {
+ 			LazyCycleStatistics lazyStatistics;
+-			auto witness = findLazyCycle(model, *analysis.lazyCycleRoots()[checkIndex],
++			auto witness = findLazyCycle(model, *analysis.lazyCyclePlans()[checkIndex],
+ 						 values, eventCount, &lazyStatistics);
+ 			statistics->lazyCycleChecks += lazyStatistics.checks;
+ 			statistics->lazyEdgeCandidates += lazyStatistics.emittedCandidates;
+diff --git a/genmc/genmc/CAT/LazyCycle.cpp b/genmc/genmc/CAT/LazyCycle.cpp
+index fd69fb2..a95c6c7 100644
+--- a/genmc/genmc/CAT/LazyCycle.cpp
++++ b/genmc/genmc/CAT/LazyCycle.cpp
+@@ -46,7 +46,8 @@ public:
+ 		: model_(model), values_(values), eventCount_(eventCount), statistics_(statistics)
+ 	{}
+ 
+-	[[nodiscard]] auto cycle(PredicateId root) -> std::vector<std::size_t>
++	[[nodiscard]] auto cycle(PredicateId root, const LazyCyclePlan *plan)
++		-> std::vector<std::size_t>
+ 	{
+ 		if (statistics_)
+ 			++statistics_->checks;
+@@ -78,7 +79,7 @@ public:
+ 				}
+ 				return false;
+ 			};
+-			if (emit(root, event, consume))
++			if (emitRoot(root, plan, event, consume))
+ 				return true;
+ 			color[event] = 2;
+ 			return false;
+@@ -90,11 +91,26 @@ public:
+ 		if (depthExceeded) {
+ 			if (statistics_)
+ 				++statistics_->depthFallbacks;
+-			return bufferedCycle(root);
++			return bufferedCycle(root, plan);
+ 		}
+ 		return witness;
+ 	}
+ 
++	[[nodiscard]] auto successorSequence(PredicateId root, const LazyCyclePlan *plan,
++					    std::size_t source) const
++		-> std::vector<std::size_t>
++	{
++		VERIFY(source < eventCount_, "lazy CAT source is out of range");
++		std::vector<std::size_t> result;
++		auto collect = [&](std::size_t target) -> bool {
++			result.push_back(target);
++			return false;
++		};
++		const auto interrupted = emitRoot(root, plan, source, collect);
++		VERIFY(!interrupted, "lazy CAT successor collection interrupted");
++		return result;
++	}
++
+ private:
+ 	[[nodiscard]] auto value(PredicateId id) const -> const Value &
+ 	{
+@@ -175,6 +191,47 @@ private:
+ 		}
+ 	}
+ 
++	/** Execute an ordered compiled stream, interpreting unsupported terms exactly. */
++	[[nodiscard]] auto emitRoot(PredicateId root, const LazyCyclePlan *plan,
++				    std::size_t from, SuccessorConsumer consumer) const -> bool
++	{
++		if (!plan || plan->terms.empty())
++			return emit(root, from, consumer);
++		for (const auto &term : plan->terms) {
++			switch (term.kind) {
++			case LazyStreamTerm::Kind::Base: {
++				const auto &relation = std::get<Relation>(value(term.predicate));
++				for (auto target = relation.nextSuccessor(from, 0);
++				     target < eventCount_;
++				     target = relation.nextSuccessor(from, target + 1)) {
++					if (consumer(target))
++						return true;
++				}
++				break;
++			}
++			case LazyStreamTerm::Kind::FilteredBase: {
++				const auto &relation = std::get<Relation>(value(term.predicate));
++				for (auto target = relation.nextSuccessor(from, 0);
++				     target < eventCount_;
++				     target = relation.nextSuccessor(from, target + 1)) {
++					if (contains(term.filter, from, target) && consumer(target))
++						return true;
++				}
++				break;
++			}
++			case LazyStreamTerm::Kind::Identity:
++				if (setContains(term.predicate, from) && consumer(from))
++					return true;
++				break;
++			case LazyStreamTerm::Kind::Generic:
++				if (emit(term.predicate, from, consumer))
++					return true;
++				break;
++			}
++		}
++		return false;
++	}
++
+ 	[[nodiscard]] auto contains(PredicateId id, std::size_t from, std::size_t target) const
+ 		-> bool
+ 	{
+@@ -206,7 +263,8 @@ private:
+ 	}
+ 
+ 	/** Exact heap-frame fallback for event paths too deep for recursive streaming. */
+-	[[nodiscard]] auto bufferedCycle(PredicateId root) const -> std::vector<std::size_t>
++	[[nodiscard]] auto bufferedCycle(PredicateId root, const LazyCyclePlan *plan) const
++		-> std::vector<std::size_t>
+ 	{
+ 		std::vector<std::uint32_t> seen(eventCount_);
+ 		std::uint32_t generation{};
+@@ -226,7 +284,7 @@ private:
+ 				}
+ 				return false;
+ 			};
+-			const auto interrupted = emit(root, from, collect);
++			const auto interrupted = emitRoot(root, plan, from, collect);
+ 			VERIFY(!interrupted, "buffered lazy CAT successor collection interrupted");
+ 			std::ranges::sort(result);
+ 			return result;
+@@ -287,7 +345,36 @@ auto findLazyCycle(const NormalizedModel &model, PredicateId root,
+ 		   LazyCycleStatistics *statistics)
+ 	-> std::vector<std::size_t>
+ {
+-	return LazyRelation(model, values, eventCount, statistics).cycle(root);
++	return LazyRelation(model, values, eventCount, statistics).cycle(root, nullptr);
++}
++
++auto findLazyCycle(const NormalizedModel &model, const LazyCyclePlan &plan,
++		   const std::vector<std::optional<Value>> &values, std::size_t eventCount,
++		   LazyCycleStatistics *statistics) -> std::vector<std::size_t>
++{
++	return LazyRelation(model, values, eventCount, statistics).cycle(plan.root, &plan);
++}
++
++namespace detail {
++
++auto lazySuccessorSequence(const NormalizedModel &model, PredicateId root,
++			   const std::vector<std::optional<Value>> &values,
++			   std::size_t eventCount, std::size_t source)
++	-> std::vector<std::size_t>
++{
++	return LazyRelation(model, values, eventCount, nullptr)
++		.successorSequence(root, nullptr, source);
+ }
+ 
++auto lazySuccessorSequence(const NormalizedModel &model, const LazyCyclePlan &plan,
++			   const std::vector<std::optional<Value>> &values,
++			   std::size_t eventCount, std::size_t source)
++	-> std::vector<std::size_t>
++{
++	return LazyRelation(model, values, eventCount, nullptr)
++		.successorSequence(plan.root, &plan, source);
++}
++
++} /* namespace detail */
++
+ } /* namespace cat */
+diff --git a/genmc/genmc/CAT/LazyCycle.hpp b/genmc/genmc/CAT/LazyCycle.hpp
+index 34bda02..ee401d2 100644
+--- a/genmc/genmc/CAT/LazyCycle.hpp
++++ b/genmc/genmc/CAT/LazyCycle.hpp
+@@ -8,6 +8,7 @@
+ #ifndef GENMC_CAT_LAZY_CYCLE_HPP
+ #define GENMC_CAT_LAZY_CYCLE_HPP
+ 
++#include "genmc/CAT/Analysis.hpp"
+ #include "genmc/CAT/Evaluator.hpp"
+ #include "genmc/CAT/Normalized.hpp"
+ 
+@@ -36,6 +37,29 @@ struct LazyCycleStatistics {
+ 				 std::size_t eventCount, LazyCycleStatistics *statistics = nullptr)
+ 	-> std::vector<std::size_t>;
+ 
++/** Execute one analyzer-certified plan through its exact compiled or generic stream. */
++[[nodiscard]] auto findLazyCycle(const NormalizedModel &model, const LazyCyclePlan &plan,
++				 const std::vector<std::optional<Value>> &values,
++				 std::size_t eventCount,
++				 LazyCycleStatistics *statistics = nullptr)
++	-> std::vector<std::size_t>;
++
++namespace detail {
++
++/** Materialize callback order for semantic tests; verification does not use this path. */
++[[nodiscard]] auto lazySuccessorSequence(
++	const NormalizedModel &model, PredicateId root,
++	const std::vector<std::optional<Value>> &values, std::size_t eventCount,
++	std::size_t source) -> std::vector<std::size_t>;
++
++/** Materialize a compiled callback order for exact comparison with the generic path. */
++[[nodiscard]] auto lazySuccessorSequence(
++	const NormalizedModel &model, const LazyCyclePlan &plan,
++	const std::vector<std::optional<Value>> &values, std::size_t eventCount,
++	std::size_t source) -> std::vector<std::size_t>;
++
++} /* namespace detail */
++
+ } /* namespace cat */
+ 
+ #endif /* GENMC_CAT_LAZY_CYCLE_HPP */
+diff --git a/tests/unit/CatEvaluatorTest.cpp b/tests/unit/CatEvaluatorTest.cpp
+index 7dde2f9..c5f42cd 100644
+--- a/tests/unit/CatEvaluatorTest.cpp
++++ b/tests/unit/CatEvaluatorTest.cpp
+@@ -17,6 +17,7 @@
+ #include "genmc/CAT/Frontend.hpp"
+ #include "genmc/CAT/GraphSynchronizer.hpp"
+ #include "genmc/CAT/IncrementalEvaluator.hpp"
++#include "genmc/CAT/LazyCycle.hpp"
+ #include "genmc/CAT/Model.hpp"
+ #include "genmc/CAT/Normalized.hpp"
+ #include "genmc/CAT/Reasoner.hpp"
+@@ -565,8 +566,8 @@ let order = ([R] ; po) | (po ; [W]) | ((po ; rf) & loc)
+ acyclic order as cycle
+ )CAT");
+ 	RC_ASSERT(analyzed.model != nullptr);
+-	RC_ASSERT(analyzed.analysis->lazyCycleRoots().size() == 1);
+-	RC_ASSERT(analyzed.analysis->lazyCycleRoots()[0].has_value());
++	RC_ASSERT(analyzed.analysis->lazyCyclePlans().size() == 1);
++	RC_ASSERT(analyzed.analysis->lazyCyclePlans()[0].has_value());
+ 	const std::size_t size = 1 + std::min<std::size_t>(bytes.size(), 14);
+ 	cat::Relation po(size), rf(size), loc(size);
+ 	cat::EventSet reads(size), writes(size);
+@@ -594,6 +595,15 @@ acyclic order as cycle
+ 			     {"loc", loc}};
+ 	const auto materialized = cat::CaatEvaluator().evaluate(
+ 		*analyzed.model, *analyzed.analysis, size, base, false);
++	const auto &plan = *analyzed.analysis->lazyCyclePlans()[0];
++	RC_ASSERT(!plan.terms.empty());
++	for (std::size_t source = 0; source < size; ++source) {
++		const auto generic = cat::detail::lazySuccessorSequence(
++			*analyzed.model, plan.root, materialized.values, size, source);
++		const auto compiled = cat::detail::lazySuccessorSequence(
++			*analyzed.model, plan, materialized.values, size, source);
++		RC_ASSERT(generic == compiled);
++	}
+ 	const auto lazy = cat::CaatEvaluator().evaluate(*analyzed.model, *analyzed.analysis,
+ 						       size, base, true);
+ 	const auto repeated = cat::CaatEvaluator().evaluate(
+@@ -604,7 +614,7 @@ acyclic order as cycle
+ 	RC_ASSERT(materialized.consistent() == lazy.consistent());
+ 	RC_ASSERT(materialized.violations.size() == lazy.violations.size());
+ 	RC_ASSERT(lazy.violations.size() == repeated.violations.size());
+-	const auto root = *analyzed.analysis->lazyCycleRoots()[0];
++	const auto root = analyzed.analysis->lazyCyclePlans()[0]->root;
+ 	RC_ASSERT(materialized.values[root].has_value());
+ 	const auto &rootRelation = std::get<cat::Relation>(*materialized.values[root]);
+ 	for (std::size_t index = 0; index < materialized.violations.size(); ++index) {
+@@ -623,6 +633,83 @@ acyclic order as cycle
+ 	RC_ASSERT(!lazy.values[root].has_value());
+ }
+ 
++/* Analysis preserves union order while compiling atomic terms and retaining exact
++ * generic fallback for a composition. */
++TEST(CaatOptimizationTest, CompilesOrderedStreamTermsWithGenericFallback)
++{
++	auto analyzed = analyzeModel(R"CAT(CompiledStreamTerms
++let tail = rf ; co
++let order = (po & loc) | (po & [R]) | rf | tail
++acyclic order as cycle
++)CAT");
++	ASSERT_NE(analyzed.model, nullptr);
++	ASSERT_TRUE(analyzed.analysis->lazyCyclePlans()[0].has_value());
++	const auto &terms = analyzed.analysis->lazyCyclePlans()[0]->terms;
++	ASSERT_EQ(terms.size(), 4U);
++	EXPECT_EQ(terms[0].kind, cat::LazyStreamTerm::Kind::FilteredBase);
++	EXPECT_EQ(analyzed.model->predicates()[terms[0].predicate].name, "po");
++	EXPECT_EQ(analyzed.model->predicates()[terms[0].filter].name, "loc");
++	EXPECT_EQ(terms[1].kind, cat::LazyStreamTerm::Kind::FilteredBase);
++	EXPECT_EQ(analyzed.model->predicates()[terms[1].predicate].name, "po");
++	EXPECT_EQ(analyzed.model->predicates()[terms[1].filter].kind,
++		  cat::Predicate::Kind::Identity);
++	EXPECT_EQ(terms[2].kind, cat::LazyStreamTerm::Kind::Base);
++	EXPECT_EQ(analyzed.model->predicates()[terms[2].predicate].name, "rf");
++	EXPECT_EQ(terms[3].kind, cat::LazyStreamTerm::Kind::Generic);
++	EXPECT_EQ(analyzed.model->predicates()[terms[3].predicate].kind,
++		  cat::Predicate::Kind::Composition);
++}
++
++/* An admitted root without removable stream dispatch keeps the exact interpreter. */
++TEST(CaatOptimizationTest, EmptyCompiledStreamFallsBackToGenericInterpreter)
++{
++	auto analyzed = analyzeModel(R"CAT(EmptyCompiledStream
++let order = rf ; co
++acyclic order as cycle
++)CAT");
++	ASSERT_NE(analyzed.model, nullptr);
++	ASSERT_TRUE(analyzed.analysis->lazyCyclePlans()[0].has_value());
++	const auto &plan = *analyzed.analysis->lazyCyclePlans()[0];
++	EXPECT_TRUE(plan.terms.empty());
++	constexpr std::size_t size = 2;
++	const cat::BaseValues base{
++		{"rf", makeRelation(size, {{0, 1}, {1, 0}})},
++		{"co", makeRelation(size, {{0, 1}, {1, 0}})},
++	};
++	const auto materialized = cat::CaatEvaluator().evaluate(
++		*analyzed.model, *analyzed.analysis, size, base, false);
++	const auto lazy = cat::CaatEvaluator().evaluate(
++		*analyzed.model, *analyzed.analysis, size, base, true);
++	EXPECT_EQ(lazy.consistent(), materialized.consistent());
++	EXPECT_EQ(lazy.violations.size(), materialized.violations.size());
++	EXPECT_EQ(lazy.statistics.lazyCycleChecks, 1U);
++}
++
++/* The bundled model census observes analysis output only; model identity never selects
++ * compilation in production. */
++TEST(CaatOptimizationTest, BundledModelsExposeExpectedCompiledPlanCoverage)
++{
++	const auto modelRoot =
++		std::filesystem::path(__FILE__).parent_path().parent_path().parent_path() /
++		"models/cat";
++	for (const auto &[name, expectedCompiled] :
++	     {std::pair{"sc", false}, std::pair{"tso", true},
++	      std::pair{"pso", true}}) {
++		auto parsed = cat::Frontend().parseFile(
++			modelRoot / ("recursive-" + std::string(name) + ".cat"));
++		ASSERT_TRUE(parsed.ok()) << name;
++		auto normalized = cat::Normalizer().normalize(*parsed.model);
++		ASSERT_TRUE(normalized.ok()) << name;
++		auto analyzed = cat::Analyzer().analyze(*normalized.model);
++		ASSERT_TRUE(analyzed.ok()) << name;
++		const auto compiled = std::ranges::any_of(
++			analyzed.analysis->lazyCyclePlans(), [](const auto &plan) {
++				return plan && !plan->terms.empty();
++			});
++		EXPECT_EQ(compiled, expectedCompiled) << name;
++	}
++}
++
+ /* A streamed back edge stops the remaining union/composition derivations instead of
+  * first materializing and sorting every successor of the current event. */
+ TEST(CaatOptimizationTest, StreamingLazyCycleStopsAtFirstBackEdge)
+@@ -633,7 +720,7 @@ let order = po | tail
+ acyclic order as cycle
+ )CAT");
+ 	ASSERT_NE(analyzed.model, nullptr);
+-	ASSERT_TRUE(analyzed.analysis->lazyCycleRoots()[0].has_value());
++	ASSERT_TRUE(analyzed.analysis->lazyCyclePlans()[0].has_value());
+ 	constexpr std::size_t size = 65;
+ 	cat::Relation po(size), rf(size), co(size);
+ 	po.insert(0, 0);
+@@ -662,7 +749,7 @@ let order = po | tail
+ acyclic order as cycle
+ )CAT");
+ 	ASSERT_NE(analyzed.model, nullptr);
+-	ASSERT_TRUE(analyzed.analysis->lazyCycleRoots()[0].has_value());
++	ASSERT_TRUE(analyzed.analysis->lazyCyclePlans()[0].has_value());
+ 	constexpr std::size_t size = 8193;
+ 	cat::Relation po(size), rf(size), co(size);
+ 	for (std::size_t event = 1; event < size; ++event)
+@@ -685,8 +772,8 @@ TEST(CaatOptimizationTest, LazyCyclePlanFailsClosedForNearNeighbours)
+ 	auto exact = analyzeModel(
+ 		"LazyExact\nlet order = po | (rf ; co)\nacyclic order\n");
+ 	ASSERT_NE(exact.model, nullptr);
+-	ASSERT_EQ(exact.analysis->lazyCycleRoots().size(), 1U);
+-	EXPECT_TRUE(exact.analysis->lazyCycleRoots()[0].has_value());
++	ASSERT_EQ(exact.analysis->lazyCyclePlans().size(), 1U);
++	EXPECT_TRUE(exact.analysis->lazyCyclePlans()[0].has_value());
+ 
+ 	for (const auto source : {
+ 		     "LazyCheap\nlet order = po | rf\nacyclic order\n",
+@@ -695,7 +782,7 @@ TEST(CaatOptimizationTest, LazyCyclePlanFailsClosedForNearNeighbours)
+ 		     "LazyIntersection\nlet order = (po ; rf) & (rf ; po)\nacyclic order\n"}) {
+ 		auto fallback = analyzeModel(source);
+ 		ASSERT_NE(fallback.model, nullptr) << source;
+-		EXPECT_TRUE(std::ranges::none_of(fallback.analysis->lazyCycleRoots(),
++		EXPECT_TRUE(std::ranges::none_of(fallback.analysis->lazyCyclePlans(),
+ 						[](const auto &root) { return root.has_value(); }))
+ 			<< source;
+ 		EXPECT_TRUE(std::ranges::none_of(fallback.analysis->lazyCycleElided(),
+@@ -776,7 +863,7 @@ let order = po | (rf ; co)
+ acyclic order as cycle
+ )CAT");
+ 	ASSERT_NE(analyzed.model, nullptr);
+-	ASSERT_TRUE(analyzed.analysis->lazyCycleRoots()[0].has_value());
++	ASSERT_TRUE(analyzed.analysis->lazyCyclePlans()[0].has_value());
+ 	constexpr std::size_t size = 513;
+ 	cat::BaseValues root{{"po", cat::Relation(size)},
+ 			     {"rf", cat::Relation(size)},
+@@ -784,7 +871,7 @@ acyclic order as cycle
+ 	cat::IncrementalCaatEvaluator incremental(*analyzed.model, *analyzed.analysis, true,
+ 						 true);
+ 	incremental.initialize(size, root);
+-	const auto order = *analyzed.analysis->lazyCycleRoots()[0];
++	const auto order = analyzed.analysis->lazyCyclePlans()[0]->root;
+ 	ASSERT_FALSE(incremental.result().values[order].has_value());
+ 	ASSERT_TRUE(incremental.result().consistent());
+ 	const auto checkpoint = incremental.checkpoint();

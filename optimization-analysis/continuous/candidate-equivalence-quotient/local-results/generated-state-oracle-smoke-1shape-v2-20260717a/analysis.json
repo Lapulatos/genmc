@@ -1,0 +1,16 @@
+{
+  "canonical_shapes": 1,
+  "states_per_shape": 81,
+  "state_cells": 81,
+  "invocations": 324,
+  "reduced_rvf_cells": 162,
+  "violations": [
+    "shape=000000/outcome=1120/n1: verdict mismatch",
+    "shape=000000/outcome=1120/n2: verdict mismatch",
+    "shape=000000/outcome=1220/n1: verdict mismatch",
+    "shape=000000/outcome=1220/n2: verdict mismatch",
+    "shape=000000/outcome=2120/n1: verdict mismatch",
+    "shape=000000/outcome=2120/n2: status mismatch",
+    "shape=000000/outcome=2120/n2: verdict mismatch"
+  ]
+}

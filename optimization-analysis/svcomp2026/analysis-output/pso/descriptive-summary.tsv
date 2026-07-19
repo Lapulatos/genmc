@@ -1,0 +1,3 @@
+backend	runs	tasks	solved_runs	timeout_runs	oom_runs	other_failures	median_wall_seconds_solved	median_memory_bytes_solved
+caat-pso	480	96	395	60	25	0	0.063963406	26238976
+cat-pso	480	96	410	45	25	0	0.0638801925	26210304

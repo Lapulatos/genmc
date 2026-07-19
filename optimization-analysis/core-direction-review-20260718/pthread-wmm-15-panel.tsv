@@ -1,0 +1,16 @@
+class	task	baseline_status	baseline_cputime_s	rf_pairs	co_pairs	value_bits
+easy	rfi005.yml	false(unreach-call)	0.081343220	6404	515	7161
+easy	safe029_power.oepc_pso.oepc_rmo.oepc.yml	false(unreach-call)	0.106854680	2057	278	3991
+easy	mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml	false(unreach-call)	0.118610631	2016	273	4023
+easy	safe029_tso.yml	true	0.223102519	743	234	329
+easy	safe010_tso.yml	true	0.226708044	742	233	361
+medium	safe004_power.oepc_pso.oepc_rmo.oepc.yml	false(unreach-call)	13.184941463	8613	602	8285
+medium	mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml	false(unreach-call)	26.192131509	5043	690	4890
+medium	mix035.oepc.yml	false(unreach-call)	49.522448096	4561	620	4857
+medium	rfi002_tso.yml	true	10.239679035	9356	579	11307
+medium	safe017_tso.yml	true	49.833751057	1506	383	458
+hard	safe035_power.yml	TIMEOUT	60.751251898	18624	899	10954
+hard	mix023_tso.yml	TIMEOUT	60.977176526	13211	1088	12765
+hard	mix014_tso.oepc.yml	TIMEOUT	60.888440951	11404	1038	11051
+hard	mix008_tso.oepc.yml	TIMEOUT	60.980964856	10910	1039	11565
+hard	safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml	TIMEOUT	60.981758555	10811	692	8917

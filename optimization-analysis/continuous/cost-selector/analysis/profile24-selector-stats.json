@@ -1,0 +1,29 @@
+{
+  "pso": {
+    "adaptive-observed-ns": 43164067,
+    "adaptive-offline": 430,
+    "adaptive-offline-probes": 1,
+    "adaptive-online": 62,
+    "adaptive-online-probes": 8,
+    "profiled-queries": 511,
+    "records": 18
+  },
+  "sc": {
+    "adaptive-observed-ns": 1933334526,
+    "adaptive-offline": 3415,
+    "adaptive-offline-probes": 0,
+    "adaptive-online": 56,
+    "adaptive-online-probes": 56,
+    "profiled-queries": 5207,
+    "records": 20
+  },
+  "tso": {
+    "adaptive-observed-ns": 4519817904,
+    "adaptive-offline": 3415,
+    "adaptive-offline-probes": 0,
+    "adaptive-online": 56,
+    "adaptive-online-probes": 56,
+    "profiled-queries": 5207,
+    "records": 20
+  }
+}
