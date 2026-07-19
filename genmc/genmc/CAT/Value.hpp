@@ -17,6 +17,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <memory>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -115,6 +116,10 @@ public:
 	[[nodiscard]] static auto sparse(std::size_t size,
 					 std::vector<std::pair<std::size_t, std::size_t>> edges)
 		-> Relation;
+	/** Construct exact CSR directly from sorted, duplicate-free successor rows. */
+	[[nodiscard]] static auto sparseRows(std::vector<std::vector<std::uint32_t>> rows,
+					     bool indexPredecessors = false)
+		-> Relation;
 
 	/** Return the common source/target event universe size. */
 	[[nodiscard]] auto size() const -> std::size_t { return size_; }
@@ -128,6 +133,11 @@ public:
 	[[nodiscard]] auto isSubsetOf(const Relation &other) const -> bool;
 	/** Return true when no pair is present. */
 	[[nodiscard]] auto empty() const -> bool;
+	/** Return the first pair in row-major order, if one exists. */
+	[[nodiscard]] auto firstPair() const
+		-> std::optional<std::pair<std::size_t, std::size_t>>;
+	/** Return the first event related to itself, or size() when irreflexive. */
+	[[nodiscard]] auto firstReflexive() const -> std::size_t;
 	/** Test one in-range `(from,to)` pair. */
 	[[nodiscard]] auto contains(std::size_t from, std::size_t target) const -> bool;
 	/** Insert one in-range `(from,to)` pair. */
@@ -160,6 +170,9 @@ public:
 	 */
 	[[nodiscard]] auto nextSuccessor(std::size_t from, std::size_t lowerBound) const
 		-> std::size_t;
+	/** Return the first predecessor at or after @p lowerBound, or size() if absent. */
+	[[nodiscard]] auto nextPredecessor(std::size_t target, std::size_t lowerBound) const
+		-> std::size_t;
 
 	/** Compare exact memberships, using O(events) keys for matching views. */
 	auto operator==(const Relation &other) const -> bool;
@@ -177,6 +190,7 @@ private:
 	friend auto range(const Relation &) -> EventSet;
 	friend auto inverse(const Relation &) -> Relation;
 	friend auto compose(const Relation &, const Relation &) -> Relation;
+	friend auto composeFast(const Relation &, const Relation &) -> Relation;
 	friend auto optional(const Relation &) -> Relation;
 	friend auto transitiveClosure(const Relation &) -> Relation;
 	friend auto reflexiveTransitiveClosure(const Relation &) -> Relation;
@@ -221,6 +235,8 @@ private:
 [[nodiscard]] auto inverse(const Relation &relation) -> Relation;
 /** Relational composition `lhs ; rhs`. */
 [[nodiscard]] auto compose(const Relation &lhs, const Relation &rhs) -> Relation;
+/** Exact composition using successor cursors to skip absent lhs pairs. */
+[[nodiscard]] auto composeFast(const Relation &lhs, const Relation &rhs) -> Relation;
 /** Optional relation `id | relation` over the complete event universe. */
 [[nodiscard]] auto optional(const Relation &relation) -> Relation;
 /** Non-reflexive transitive closure. */

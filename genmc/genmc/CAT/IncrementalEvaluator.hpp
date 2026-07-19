@@ -101,7 +101,9 @@ public:
 	 * @param analysis Analysis produced for exactly @p model, also borrowed.
 	 */
 	IncrementalCaatEvaluator(const NormalizedModel &model, const ModelAnalysis &analysis,
-				 bool profiling = false, bool enableLazyCycles = false);
+				 bool profiling = false, bool enableLazyCycles = false,
+				 bool fastChecks = false, bool fastComposition = false,
+				 bool fastCycleChecks = false);
 
 	/**
 	 * Replace all mutable state with one exact Phase 2 fixed point.
@@ -234,6 +236,9 @@ private:
 	bool supportsReplacements_{true};
 	bool profiling_{};
 	bool enableLazyCycles_{};
+	bool fastChecks_{};
+	bool fastComposition_{};
+	bool fastCycleChecks_{};
 };
 
 } /* namespace cat */

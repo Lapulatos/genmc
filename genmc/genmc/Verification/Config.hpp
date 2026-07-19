@@ -56,6 +56,24 @@ struct Config {
 	bool explainCat{};
 	/** Print per-worker incremental synchronization counters at shutdown. */
 	bool catStats{};
+	/** Experimental: bypass the certified small-graph offline evaluator heuristic. */
+	bool catDisableAdaptiveOffline{};
+	/** Experimental: reuse primitives after an exact unchanged-graph scan. */
+	bool catPrimitiveCache{};
+	/** Experimental: build dense primitive relations without redundant edge sorting. */
+	bool catFastPrimitiveBuild{};
+	/** Experimental: build small dense co/fr directly from ordered write rows. */
+	bool catFastCoherenceBuild{};
+	/** Experimental: reuse the exact cache descriptor when materializing misses. */
+	bool catFastDescriptorBuild{};
+	/** Experimental: reuse worker-local storage for exact descriptor construction. */
+	bool catFastDescriptorReuse{};
+	/** Experimental: scan packed CAT check witnesses without per-row value copies. */
+	bool catFastChecks{};
+	/** Experimental: enumerate exact lhs successors during CAT composition. */
+	bool catFastComposition{};
+	/** Experimental: enumerate exact successors during CAT cycle checks. */
+	bool catFastCycleChecks{};
 	/** Filter exact recursive-PSO RF/CO choices by preventive reach reversal. */
 	bool catPreventivePruning{};
 	/** Recompute and compare every incremental query with the Phase 2 oracle. */

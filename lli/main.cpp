@@ -84,6 +84,42 @@ static llvm::cl::opt<bool>
 	clCatStats("cat-stats", llvm::cl::cat(clGeneral),
 		   llvm::cl::desc("Print per-worker incremental CAT transition counters"));
 
+static llvm::cl::opt<bool> clCatDisableAdaptiveOffline(
+	"cat-disable-adaptive-offline", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally force certified small CAT graphs through incremental synchronization"));
+
+static llvm::cl::opt<bool> clCatPrimitiveCache(
+	"cat-primitive-cache", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally reuse exact primitives for semantically unchanged small CAT graphs"));
+
+static llvm::cl::opt<bool> clCatFastPrimitiveBuild(
+	"cat-fast-primitive-build", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally build exact dense CAT primitives without redundant sorting"));
+
+static llvm::cl::opt<bool> clCatFastCoherenceBuild(
+	"cat-fast-coherence-build", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally build exact small dense CAT co/fr from ordered write rows"));
+
+static llvm::cl::opt<bool> clCatFastDescriptorBuild(
+	"cat-fast-descriptor-build", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally materialize CAT cache misses from their exact descriptor"));
+
+static llvm::cl::opt<bool> clCatFastDescriptorReuse(
+	"cat-fast-descriptor-reuse", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally reuse exact CAT descriptor vector storage"));
+
+static llvm::cl::opt<bool> clCatFastChecks(
+	"cat-fast-checks", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally scan exact packed CAT check witnesses directly"));
+
+static llvm::cl::opt<bool> clCatFastComposition(
+	"cat-fast-composition", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally enumerate exact left successors during CAT composition"));
+
+static llvm::cl::opt<bool> clCatFastCycleChecks(
+	"cat-fast-cycle-checks", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally enumerate exact successors during CAT cycle checks"));
+
 static llvm::cl::opt<bool> clCatPreventivePruning(
 	"cat-preventive-pruning", llvm::cl::cat(clGeneral),
 	llvm::cl::desc("Filter certified recursive-PSO choices by preventive order reversal"));
@@ -435,6 +471,15 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	conf.modelFileOccurrences = clModelFile.getNumOccurrences();
 	conf.explainCat = clExplainCat;
 	conf.catStats = clCatStats;
+	conf.catDisableAdaptiveOffline = clCatDisableAdaptiveOffline;
+	conf.catPrimitiveCache = clCatPrimitiveCache;
+	conf.catFastPrimitiveBuild = clCatFastPrimitiveBuild;
+	conf.catFastCoherenceBuild = clCatFastCoherenceBuild;
+	conf.catFastDescriptorBuild = clCatFastDescriptorBuild;
+	conf.catFastDescriptorReuse = clCatFastDescriptorReuse;
+	conf.catFastChecks = clCatFastChecks;
+	conf.catFastComposition = clCatFastComposition;
+	conf.catFastCycleChecks = clCatFastCycleChecks;
 	conf.catPreventivePruning = clCatPreventivePruning;
 	conf.catOracle = clCatOracle;
 	conf.estimate = !clDisableEstimation;

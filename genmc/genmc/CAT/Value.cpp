@@ -24,10 +24,17 @@
 namespace cat {
 
 struct Relation::StructuralData {
+	StructuralData() = default;
+	StructuralData(StructuralRelationKind kind, std::vector<std::uint64_t> keys)
+		: kind(kind), keys(std::move(keys))
+	{}
+
 	StructuralRelationKind kind;
 	std::vector<std::uint64_t> keys;
 	std::vector<std::uint32_t> offsets;
 	std::vector<std::uint32_t> targets;
+	std::vector<std::uint32_t> reverseOffsets;
+	std::vector<std::uint32_t> reverseTargets;
 };
 
 namespace {
@@ -147,6 +154,56 @@ auto Relation::sparse(std::size_t size,
 	return result;
 }
 
+auto Relation::sparseRows(std::vector<std::vector<std::uint32_t>> rows,
+			  bool indexPredecessors) -> Relation
+{
+	const auto size = rows.size();
+	VERIFY(size <= std::numeric_limits<std::uint32_t>::max(),
+	       "CAT sparse relation universe exceeds 32-bit IDs");
+	std::size_t edgeCount{};
+	std::vector<std::uint32_t> reverseOffsets(indexPredecessors ? size + 1 : 0);
+	for (const auto &row : rows) {
+		edgeCount += row.size();
+		VERIFY(edgeCount <= std::numeric_limits<std::uint32_t>::max(),
+		       "CAT sparse relation edge count exceeds 32-bit offsets");
+		for (std::size_t index = 0; index < row.size(); ++index) {
+			VERIFY(row[index] < size, "CAT sparse relation edge out of range");
+			VERIFY(index == 0 || row[index - 1] < row[index],
+			       "CAT sparse relation row is not strictly sorted");
+			if (indexPredecessors)
+				++reverseOffsets[row[index] + 1];
+		}
+	}
+
+	auto data = std::make_shared<StructuralData>();
+	data->kind = StructuralRelationKind::ExplicitEdges;
+	data->offsets.reserve(size + 1);
+	data->offsets.push_back(0);
+	data->targets.reserve(edgeCount);
+	for (auto &row : rows) {
+		data->targets.insert(data->targets.end(), row.begin(), row.end());
+		data->offsets.push_back(static_cast<std::uint32_t>(data->targets.size()));
+	}
+	if (indexPredecessors) {
+		data->reverseOffsets = std::move(reverseOffsets);
+		std::inclusive_scan(data->reverseOffsets.begin(), data->reverseOffsets.end(),
+				    data->reverseOffsets.begin());
+		auto cursor = data->reverseOffsets;
+		data->reverseTargets.resize(edgeCount);
+		for (std::size_t from = 0; from < rows.size(); ++from) {
+			for (const auto target : rows[from])
+				data->reverseTargets[cursor[target]++] =
+					static_cast<std::uint32_t>(from);
+		}
+	}
+
+	Relation result;
+	result.size_ = size;
+	result.rowWords_ = EventSet::wordCount(size);
+	result.structure_ = std::move(data);
+	return result;
+}
+
 auto Relation::rowOffset(std::size_t row) const -> std::size_t
 {
 	VERIFY(row < size_, "CAT relation row out of range");
@@ -164,7 +221,9 @@ auto Relation::storageBytes() const -> std::size_t
 	return isStructural()
 		       ? structure_->keys.size() * sizeof(std::uint64_t) +
 				 structure_->offsets.size() * sizeof(std::uint32_t) +
-				 structure_->targets.size() * sizeof(std::uint32_t)
+				 structure_->targets.size() * sizeof(std::uint32_t) +
+				 structure_->reverseOffsets.size() * sizeof(std::uint32_t) +
+				 structure_->reverseTargets.size() * sizeof(std::uint32_t)
 		       : words_.size() * sizeof(std::uint64_t);
 }
 
@@ -356,6 +415,48 @@ auto Relation::empty() const -> bool
 	return std::ranges::all_of(words_, [](auto word) { return word == 0; });
 }
 
+auto Relation::firstPair() const
+	-> std::optional<std::pair<std::size_t, std::size_t>>
+{
+	if (isStructural()) {
+		for (std::size_t from = 0; from < size_; ++from) {
+			const auto target = nextSuccessor(from, 0);
+			if (target < size_)
+				return std::pair{from, target};
+		}
+		return std::nullopt;
+	}
+	for (std::size_t from = 0; from < size_; ++from) {
+		const auto offset = rowOffset(from);
+		for (std::size_t word = 0; word < rowWords_; ++word) {
+			if (words_[offset + word] == 0)
+				continue;
+			const auto target = word * bitsPerWord +
+					    std::countr_zero(words_[offset + word]);
+			if (target < size_)
+				return std::pair{from, target};
+		}
+	}
+	return std::nullopt;
+}
+
+auto Relation::firstReflexive() const -> std::size_t
+{
+	if (isStructural()) {
+		for (std::size_t event = 0; event < size_; ++event) {
+			if (structuralContains(event, event))
+				return event;
+		}
+		return size_;
+	}
+	for (std::size_t event = 0; event < size_; ++event) {
+		const auto offset = rowOffset(event) + event / bitsPerWord;
+		if (words_[offset] & (std::uint64_t{1} << (event % bitsPerWord)))
+			return event;
+	}
+	return size_;
+}
+
 auto Relation::contains(std::size_t from, std::size_t target) const -> bool
 {
 	VERIFY(from < size_, "CAT relation row out of range");
@@ -404,9 +505,16 @@ void Relation::grow(std::size_t size)
 		if (structure_->kind == StructuralRelationKind::ExplicitEdges) {
 			auto offsets = structure_->offsets;
 			offsets.resize(size + 1, offsets.back());
-			structure_ = std::make_shared<StructuralData>(
-				StructuralData{structure_->kind, {}, std::move(offsets),
-					       structure_->targets});
+			auto reverseOffsets = structure_->reverseOffsets;
+			if (!reverseOffsets.empty())
+				reverseOffsets.resize(size + 1, reverseOffsets.back());
+			auto grown = std::make_shared<StructuralData>();
+			grown->kind = structure_->kind;
+			grown->offsets = std::move(offsets);
+			grown->targets = structure_->targets;
+			grown->reverseOffsets = std::move(reverseOffsets);
+			grown->reverseTargets = structure_->reverseTargets;
+			structure_ = std::move(grown);
 			size_ = size;
 			rowWords_ = EventSet::wordCount(size);
 			return;
@@ -532,6 +640,29 @@ auto Relation::nextSuccessor(std::size_t from, std::size_t lowerBound) const -> 
 			return size_;
 		facts = words_[offset + word];
 	}
+}
+
+auto Relation::nextPredecessor(std::size_t target, std::size_t lowerBound) const
+	-> std::size_t
+{
+	VERIFY(target < size_, "CAT relation column out of range");
+	if (lowerBound >= size_)
+		return size_;
+	if (isStructural() && structure_->kind == StructuralRelationKind::ExplicitEdges &&
+	    !structure_->reverseOffsets.empty()) {
+		const auto begin = structure_->reverseTargets.begin() +
+				   structure_->reverseOffsets[target];
+		const auto end = structure_->reverseTargets.begin() +
+				 structure_->reverseOffsets[target + 1];
+		const auto found =
+			std::lower_bound(begin, end, static_cast<std::uint32_t>(lowerBound));
+		return found == end ? size_ : *found;
+	}
+	for (auto from = lowerBound; from < size_; ++from) {
+		if (contains(from, target))
+			return from;
+	}
+	return size_;
 }
 
 void Relation::unionRow(std::size_t target, std::size_t source)
@@ -947,6 +1078,32 @@ auto compose(const Relation &lhs, const Relation &rhs) -> Relation
 						result.words_[targetOffset + word] |=
 							rhs.words_[sourceOffset + word];
 				}
+			}
+		}
+	}
+	return result;
+}
+
+auto composeFast(const Relation &lhs, const Relation &rhs) -> Relation
+{
+	requireSameSize(lhs.size_, rhs.size_);
+	Relation result(lhs.size_);
+	for (std::size_t from = 0; from < lhs.size_; ++from) {
+		for (auto middle = lhs.nextSuccessor(from, 0); middle < lhs.size_;
+		     middle = lhs.nextSuccessor(from, middle + 1)) {
+			if (rhs.isStructural() &&
+			    rhs.structure_->kind == StructuralRelationKind::ExplicitEdges) {
+				for (auto target = rhs.structure_->offsets[middle];
+				     target < rhs.structure_->offsets[middle + 1]; ++target)
+					result.insertDense(from, rhs.structure_->targets[target]);
+			} else if (rhs.isStructural()) {
+				result.insertSuccessors(from, rhs.successors(middle));
+			} else {
+				const auto targetOffset = result.rowOffset(from);
+				const auto sourceOffset = rhs.rowOffset(middle);
+				for (std::size_t word = 0; word < result.rowWords_; ++word)
+					result.words_[targetOffset + word] |=
+						rhs.words_[sourceOffset + word];
 			}
 		}
 	}

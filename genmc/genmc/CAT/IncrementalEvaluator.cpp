@@ -153,7 +153,8 @@ auto baseValue(const Predicate &predicate, std::size_t eventCount, const BaseVal
 }
 
 /** Evaluate one positive normalized equation over the current approximation. */
-auto operation(const Predicate &predicate, const std::vector<std::optional<Value>> &values) -> Value
+auto operation(const Predicate &predicate, const std::vector<std::optional<Value>> &values,
+	       bool fastComposition) -> Value
 {
 	const auto &operand = [&](std::size_t index) -> const Value & {
 		return *values[predicate.operands[index]];
@@ -178,7 +179,11 @@ auto operation(const Predicate &predicate, const std::vector<std::optional<Value
 	case Predicate::Kind::Product:
 		return product(std::get<EventSet>(operand(0)), std::get<EventSet>(operand(1)));
 	case Predicate::Kind::Composition:
-		return compose(std::get<Relation>(operand(0)), std::get<Relation>(operand(1)));
+		return fastComposition
+			       ? composeFast(std::get<Relation>(operand(0)),
+					   std::get<Relation>(operand(1)))
+			       : compose(std::get<Relation>(operand(0)),
+				 std::get<Relation>(operand(1)));
 	case Predicate::Kind::Union:
 	case Predicate::Kind::Intersection:
 	case Predicate::Kind::Difference:
@@ -201,15 +206,18 @@ auto operation(const Predicate &predicate, const std::vector<std::optional<Value
 }
 
 /** Find one deterministic directed cycle, encoded with the start repeated. */
-auto findCycle(const Relation &relation) -> std::vector<std::size_t>
+auto findCycle(const Relation &relation, bool fastCycleChecks) -> std::vector<std::size_t>
 {
 	std::vector<std::uint8_t> color(relation.size());
 	std::vector<std::size_t> parent(relation.size(), relation.size());
 	std::vector<std::size_t> cycle;
 	auto visit = [&](auto &self, std::size_t event) -> bool {
 		color[event] = 1;
-		for (std::size_t target = 0; target < relation.size(); ++target) {
-			if (!relation.contains(event, target))
+		for (auto target = fastCycleChecks ? relation.nextSuccessor(event, 0) : 0;
+		     target < relation.size();
+		     target = fastCycleChecks ? relation.nextSuccessor(event, target + 1)
+					      : target + 1) {
+			if (!fastCycleChecks && !relation.contains(event, target))
 				continue;
 			if (color[target] == 0) {
 				parent[target] = event;
@@ -237,7 +245,8 @@ auto findCycle(const Relation &relation) -> std::vector<std::size_t>
 /** Recompute small axiom witnesses from the final incrementally maintained values. */
 auto violations(const NormalizedModel &model, const ModelAnalysis &analysis,
 		const std::vector<std::optional<Value>> &values, std::size_t eventCount,
-		bool enableLazyCycles, FixedPointStatistics *statistics) -> std::vector<Violation>
+		bool enableLazyCycles, FixedPointStatistics *statistics, bool fastChecks,
+		bool fastCycleChecks) -> std::vector<Violation>
 {
 	std::vector<Violation> result;
 	for (std::size_t checkIndex = 0; checkIndex < model.checks().size(); ++checkIndex) {
@@ -262,23 +271,32 @@ auto violations(const NormalizedModel &model, const ModelAnalysis &analysis,
 					witness.push_back(set->first());
 			} else {
 				const auto &relation = std::get<Relation>(value);
-				for (std::size_t from = 0; from < eventCount && witness.empty();
-				     ++from) {
-					const auto target = relation.successors(from).first();
-					if (target != eventCount)
-						witness = {from, target};
-				}
+				if (fastChecks) {
+					if (const auto pair = relation.firstPair())
+						witness = {pair->first, pair->second};
+				} else
+					for (std::size_t from = 0;
+					     from < eventCount && witness.empty(); ++from) {
+						const auto target = relation.successors(from).first();
+						if (target != eventCount)
+							witness = {from, target};
+					}
 			}
 		} else if (check.kind == Statement::CheckKind::Irreflexive) {
 			const auto &relation = std::get<Relation>(value);
-			for (std::size_t event = 0; event < eventCount; ++event) {
-				if (relation.contains(event, event)) {
+			if (fastChecks) {
+				const auto event = relation.firstReflexive();
+				if (event != eventCount)
 					witness.push_back(event);
-					break;
+			} else
+				for (std::size_t event = 0; event < eventCount; ++event) {
+					if (relation.contains(event, event)) {
+						witness.push_back(event);
+						break;
+					}
 				}
-			}
 		} else {
-			witness = findCycle(std::get<Relation>(value));
+			witness = findCycle(std::get<Relation>(value), fastCycleChecks);
 		}
 		if (!witness.empty())
 			result.push_back({check.name, check.kind, check.span, std::move(witness)});
@@ -290,9 +308,11 @@ auto violations(const NormalizedModel &model, const ModelAnalysis &analysis,
 
 IncrementalCaatEvaluator::IncrementalCaatEvaluator(const NormalizedModel &model,
 						   const ModelAnalysis &analysis, bool profiling,
-						   bool enableLazyCycles)
+						   bool enableLazyCycles, bool fastChecks,
+						   bool fastComposition, bool fastCycleChecks)
 	: model_(model), analysis_(analysis), dependents_(model.predicates().size()),
-	  profiling_(profiling), enableLazyCycles_(enableLazyCycles)
+	  profiling_(profiling), enableLazyCycles_(enableLazyCycles), fastChecks_(fastChecks),
+	  fastComposition_(fastComposition), fastCycleChecks_(fastCycleChecks)
 {
 	VERIFY(analysis_.componentOf().size() == model_.predicates().size(),
 	       "incremental CAAT analysis/model predicate count mismatch");
@@ -327,7 +347,8 @@ auto IncrementalCaatEvaluator::initialize(std::size_t eventCount, const BaseValu
 	/* Compute into a temporary first. An evaluation error is a valid published
 	 * result, but an exception or assertion cannot leave a mixed old/new state. */
 	auto next = CaatEvaluator().evaluate(model_, analysis_, eventCount, base,
-					     enableLazyCycles_);
+					     enableLazyCycles_, fastChecks_, fastComposition_,
+					     fastCycleChecks_);
 	eventCount_ = eventCount;
 	base_ = base;
 	result_ = std::move(next);
@@ -474,7 +495,7 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 		const auto id = worklist.front();
 		worklist.pop_front();
 		queued[id] = false;
-		const auto next = operation(model_.predicates()[id], values);
+		const auto next = operation(model_.predicates()[id], values, fastComposition_);
 		++counts[id];
 		++undo.evaluationCountDeltas[id];
 		++updateStatistics.operationEvaluations;
@@ -502,7 +523,8 @@ auto IncrementalCaatEvaluator::tryInsert(std::size_t eventCount, const BaseValue
 				.count());
 
 	CaatEvaluationResult nextResult{violations(model_, analysis_, values, eventCount,
-						enableLazyCycles_, &updateStatistics),
+					enableLazyCycles_, &updateStatistics, fastChecks_,
+					fastCycleChecks_),
 					{},
 					std::move(values),
 					std::move(counts),
@@ -565,7 +587,7 @@ auto IncrementalCaatEvaluator::tryReplace(std::size_t eventCount, const BaseValu
 		const auto id = worklist.front();
 		worklist.pop_front();
 		queued[id] = false;
-		const auto next = operation(model_.predicates()[id], values);
+		const auto next = operation(model_.predicates()[id], values, fastComposition_);
 		++counts[id];
 		++updateStatistics.operationEvaluations;
 		if (*values[id] == next)
@@ -578,7 +600,8 @@ auto IncrementalCaatEvaluator::tryReplace(std::size_t eventCount, const BaseValu
 		}
 	}
 	result_ = CaatEvaluationResult{violations(model_, analysis_, values, eventCount,
-					       enableLazyCycles_, &updateStatistics),
+					       enableLazyCycles_, &updateStatistics, fastChecks_,
+					       fastCycleChecks_),
 				       {},
 				       std::move(values),
 				       std::move(counts),

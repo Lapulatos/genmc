@@ -101,10 +101,15 @@ auto transitionName(GraphTransition transition) -> const char *
 GraphSynchronizer::GraphSynchronizer(IncrementalCaatEvaluator &evaluator,
 				     std::size_t checkpointLimit, std::size_t oracleInterval,
 				     bool profiling, std::vector<std::string> requiredPrimitives,
-				     std::size_t adaptiveOfflineEventLimit)
-	: evaluator_(&evaluator), stable_(std::move(requiredPrimitives)),
+				     std::size_t adaptiveOfflineEventLimit, bool primitiveCache,
+				     bool fastPrimitiveBuild, bool fastCoherenceBuild,
+				     bool fastDescriptorBuild, bool fastDescriptorReuse)
+	: evaluator_(&evaluator),
+	  stable_(std::move(requiredPrimitives), fastPrimitiveBuild, fastCoherenceBuild,
+		  fastDescriptorBuild, fastDescriptorReuse),
 	  checkpointLimit_(checkpointLimit), oracleInterval_(oracleInterval),
-	  adaptiveOfflineEventLimit_(adaptiveOfflineEventLimit), profiling_(profiling)
+	  adaptiveOfflineEventLimit_(adaptiveOfflineEventLimit), primitiveCache_(primitiveCache),
+	  profiling_(profiling)
 {
 	VERIFY(checkpointLimit_ > 0, "CAAT graph synchronizer needs one checkpoint");
 }
@@ -166,8 +171,16 @@ void GraphSynchronizer::refreshHistoryBytes()
 
 void GraphSynchronizer::retainCurrent()
 {
+	const auto copyStarted = profiling_ ? std::chrono::steady_clock::now()
+					  : std::chrono::steady_clock::time_point{};
+	BaseValues retainedBase = evaluator_->baseValues();
+	if (profiling_)
+		statistics_.historyBaseCopyNanoseconds += static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(
+				std::chrono::steady_clock::now() - copyStarted)
+				.count());
 	history_.push_back(
-		{evaluator_->eventCount(), evaluator_->baseValues(), evaluator_->checkpoint()});
+		{evaluator_->eventCount(), std::move(retainedBase), evaluator_->checkpoint()});
 	while (history_.size() > checkpointLimit_) {
 		(void)evaluator_->forget(history_.front().checkpoint);
 		history_.erase(history_.begin());
@@ -194,7 +207,8 @@ auto GraphSynchronizer::synchronize(const ExecutionGraph &graph) -> GraphSynchro
 {
 	const auto materializeStarted = profiling_ ? std::chrono::steady_clock::now()
 						   : std::chrono::steady_clock::time_point{};
-	auto stable = stable_.materialize(graph);
+	auto stable = primitiveCache_ ? stable_.materializeCached(graph, oracleInterval_ == 1)
+				      : stable_.materialize(graph);
 	if (profiling_)
 		statistics_.materializeNanoseconds += static_cast<std::uint64_t>(
 			std::chrono::duration_cast<std::chrono::nanoseconds>(
@@ -256,21 +270,27 @@ auto GraphSynchronizer::synchronize(StableGraphSnapshot stable) -> GraphSynchron
 		verifyCurrent(GraphTransition::Insert);
 		return {GraphTransition::Insert, {}};
 	}
+	++statistics_.insertionRejections;
 	/* Search newest-first: it minimizes undo distance and maximizes reusable facts. */
 	const auto historyStarted = profiling_ ? std::chrono::steady_clock::now()
 					       : std::chrono::steady_clock::time_point{};
 	for (auto candidate = history_.rbegin(); candidate != history_.rend(); ++candidate) {
+		++statistics_.historyEntriesExamined;
 		if (!baseSubset(candidate->eventCount, candidate->base, stable.eventCount,
 				stable.base))
 			continue;
+		++statistics_.historySubsetMatches;
 		const auto position =
 			static_cast<std::size_t>(std::distance(candidate, history_.rend()) - 1);
 		const auto candidateEventCount = candidate->eventCount;
 		const auto candidateBase = candidate->base;
 		const auto candidateCheckpoint = candidate->checkpoint;
+		++statistics_.historyRollbackAttempts;
 		auto restored = evaluator_->rollback(candidateCheckpoint);
-		if (!restored.restored)
+		if (!restored.restored) {
+			++statistics_.historyRollbackFailures;
 			continue;
+		}
 		history_.erase(history_.begin() + static_cast<std::ptrdiff_t>(position + 1),
 			       history_.end());
 		if (profiling_)
@@ -281,6 +301,7 @@ auto GraphSynchronizer::synchronize(StableGraphSnapshot stable) -> GraphSynchron
 			verifyCurrent(GraphTransition::Rollback);
 			return {GraphTransition::Rollback, {}};
 		}
+		++statistics_.historyAdvanceAttempts;
 		auto advanced = evaluator_->tryInsert(stable.eventCount, stable.base);
 		if (advanced.applied()) {
 			statistics_.historySearchNanoseconds += timed(historyStarted);
@@ -289,6 +310,7 @@ auto GraphSynchronizer::synchronize(StableGraphSnapshot stable) -> GraphSynchron
 			verifyCurrent(GraphTransition::RollbackInsert);
 			return {GraphTransition::RollbackInsert, {}};
 		}
+		++statistics_.historyAdvanceFailures;
 		break;
 	}
 	statistics_.historySearchNanoseconds += timed(historyStarted);
@@ -303,6 +325,7 @@ auto GraphSynchronizer::synchronize(StableGraphSnapshot stable) -> GraphSynchron
 		verifyCurrent(GraphTransition::Replace);
 		return {GraphTransition::Replace, {}};
 	}
+	++statistics_.replacementRejections;
 
 	/* An rf/co replacement or unknown mixed mutation is never approximated as
 	 * insertion: rebuild through the offline oracle and start a fresh epoch. */

@@ -10,6 +10,7 @@ set -euo pipefail
 genmc="$1"
 model_root="$2"
 source_root="$3"
+extra_options=("${@:4}")
 
 # These programs force alternative rf/co choices, RMW, lifecycle edges, dynamic
 # allocation, graph cuts and repeated data-structure exploration branches.
@@ -39,6 +40,7 @@ for model in sc tso pso; do
 				--model-file="${model_root}/recursive-${model}.cat" \
 				--cat-stats --cat-oracle --disable-estimation \
 				--disable-mm-detector --nthreads="${workers}" \
+				"${extra_options[@]}" \
 				"${source_root}/${relative}" 2>&1)"
 			status=$?
 			set -e
@@ -72,6 +74,7 @@ for model in sc tso pso; do
 			--cat-stats --cat-oracle --disable-estimation --disable-mm-detector \
 			--mode=random --random-budget=100 --schedule-policy=wfr \
 			--schedule-seed="${seed}" --nthreads=1 \
+			"${extra_options[@]}" \
 			"${source_root}/correct/data-structures/treiber-stack-dynamic/variants/main0.c" \
 			2>&1)"
 	if grep -Fq "CAAT oracle mismatch:" <<<"${output}"; then

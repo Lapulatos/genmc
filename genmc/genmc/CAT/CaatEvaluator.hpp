@@ -70,7 +70,9 @@ public:
 	 */
 	[[nodiscard]] auto evaluate(const NormalizedModel &model, const ModelAnalysis &analysis,
 				    std::size_t eventCount, const BaseValues &base,
-				    bool enableLazyCycles = false) const
+				    bool enableLazyCycles = false, bool fastChecks = false,
+				    bool fastComposition = false,
+				    bool fastCycleChecks = false) const
 		-> CaatEvaluationResult;
 };
 

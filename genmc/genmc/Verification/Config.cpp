@@ -45,6 +45,28 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 		errors.emplace_back("--explain-cat requires --model-file.");
 	if (catStats && !modelFile)
 		errors.emplace_back("--cat-stats requires --model-file.");
+	if (catDisableAdaptiveOffline && !modelFile)
+		errors.emplace_back("--cat-disable-adaptive-offline requires --model-file.");
+	if (catPrimitiveCache && !modelFile)
+		errors.emplace_back("--cat-primitive-cache requires --model-file.");
+	if (catFastPrimitiveBuild && !modelFile)
+		errors.emplace_back("--cat-fast-primitive-build requires --model-file.");
+	if (catFastCoherenceBuild && !modelFile)
+		errors.emplace_back("--cat-fast-coherence-build requires --model-file.");
+	if (catFastDescriptorBuild && !modelFile)
+		errors.emplace_back("--cat-fast-descriptor-build requires --model-file.");
+	if (catFastDescriptorBuild && !catPrimitiveCache)
+		errors.emplace_back("--cat-fast-descriptor-build requires --cat-primitive-cache.");
+	if (catFastDescriptorReuse && !modelFile)
+		errors.emplace_back("--cat-fast-descriptor-reuse requires --model-file.");
+	if (catFastDescriptorReuse && !catPrimitiveCache)
+		errors.emplace_back("--cat-fast-descriptor-reuse requires --cat-primitive-cache.");
+	if (catFastChecks && !modelFile)
+		errors.emplace_back("--cat-fast-checks requires --model-file.");
+	if (catFastComposition && !modelFile)
+		errors.emplace_back("--cat-fast-composition requires --model-file.");
+	if (catFastCycleChecks && !modelFile)
+		errors.emplace_back("--cat-fast-cycle-checks requires --model-file.");
 	if (catPreventivePruning && !modelFile)
 		errors.emplace_back("--cat-preventive-pruning requires --model-file.");
 	if (catOracle && !modelFile)

@@ -52,10 +52,20 @@ struct GraphSynchronizationStatistics {
 	std::size_t evictedCheckpoints{};
 	std::size_t oracleChecks{};
 	std::size_t adaptiveOfflineSelections{};
+	std::size_t insertionRejections{};
+	std::size_t historyEntriesExamined{};
+	std::size_t historySubsetMatches{};
+	std::size_t historyRollbackAttempts{};
+	std::size_t historyRollbackFailures{};
+	std::size_t historyAdvanceAttempts{};
+	std::size_t historyAdvanceFailures{};
+	std::size_t replacementRejections{};
 	std::uint64_t materializeNanoseconds{};
 	std::uint64_t equalityNanoseconds{};
 	std::uint64_t insertionAttemptNanoseconds{};
 	std::uint64_t historySearchNanoseconds{};
+	/** Time spent copying evaluator primitive bases into retained history entries. */
+	std::uint64_t historyBaseCopyNanoseconds{};
 	std::uint64_t rebuildNanoseconds{};
 	std::size_t maximumActiveEvents{};
 	std::size_t maximumStableEvents{};
@@ -88,7 +98,12 @@ public:
 				   std::size_t checkpointLimit = 32, std::size_t oracleInterval = 0,
 				   bool profiling = false,
 				   std::vector<std::string> requiredPrimitives = {},
-				   std::size_t adaptiveOfflineEventLimit = 0);
+				   std::size_t adaptiveOfflineEventLimit = 0,
+				   bool primitiveCache = false,
+				   bool fastPrimitiveBuild = false,
+				   bool fastCoherenceBuild = false,
+				   bool fastDescriptorBuild = false,
+				   bool fastDescriptorReuse = false);
 
 	/** Materialize and synchronize one current graph snapshot. */
 	[[nodiscard]] auto synchronize(const GraphAdapter &snapshot) -> GraphSynchronizationResult;
@@ -126,6 +141,7 @@ private:
 	std::size_t oracleInterval_{};
 	std::size_t queryCount_{};
 	std::size_t adaptiveOfflineEventLimit_{};
+	bool primitiveCache_{};
 	GraphSynchronizationStatistics statistics_;
 	bool profiling_{};
 };

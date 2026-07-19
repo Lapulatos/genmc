@@ -19,6 +19,7 @@
 #include "genmc/Support/Cast.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <limits>
 #include <ranges>
 #include <unordered_map>
@@ -37,15 +38,25 @@ template <typename T> void addValue(BaseValues &values, std::string_view name, T
 }
 
 using RelationEdges = std::vector<std::pair<std::size_t, std::size_t>>;
+using CoherenceRows =
+	std::vector<std::pair<std::size_t, std::vector<std::size_t>>>;
 
 /** Select exact CSR only when its owned payload is at most half the dense matrix. */
-auto sizeAdaptiveRelation(std::size_t size, RelationEdges edges) -> Relation
+auto sizeAdaptiveRelation(std::size_t size, RelationEdges edges, bool fastDenseBuild) -> Relation
 {
+	/* Dense bit insertion is idempotent, so sorting and uniquing only adds
+	 * O(edges log edges) work on the certified small-graph path. */
+	if (fastDenseBuild && size <= 512) {
+		Relation result(size);
+		for (const auto [from, target] : edges)
+			result.insertDense(from, target);
+		return result;
+	}
 	std::ranges::sort(edges);
 	edges.erase(std::unique(edges.begin(), edges.end()), edges.end());
 	const auto denseBytes = size * ((size + 63) / 64) * sizeof(std::uint64_t);
 	const auto sparseBytes = (size + 1 + edges.size()) * sizeof(std::uint32_t);
-	if (size > 512 && size <= std::numeric_limits<std::uint32_t>::max() &&
+	if (size <= std::numeric_limits<std::uint32_t>::max() &&
 	    edges.size() <= std::numeric_limits<std::uint32_t>::max() &&
 	    sparseBytes <= denseBytes / 2)
 		return Relation::sparse(size, std::move(edges));
@@ -55,7 +66,7 @@ auto sizeAdaptiveRelation(std::size_t size, RelationEdges edges) -> Relation
 	return result;
 }
 
-/** Derive exact `fr = rf^-1 ; co` edges without constructing either dense operand. */
+/** Reference derivation used by the experiment baseline. */
 auto fromReadEdges(const RelationEdges &readsFrom, const RelationEdges &coherence)
 	-> RelationEdges
 {
@@ -68,6 +79,30 @@ auto fromReadEdges(const RelationEdges &readsFrom, const RelationEdges &coherenc
 			for (const auto later : found->second)
 				result.emplace_back(read, later);
 		}
+	}
+	return result;
+}
+
+/** Derive exact `fr = rf^-1 ; co` directly from each location's store order. */
+auto fromReadEdgesOrdered(const RelationEdges &readsFrom, const CoherenceRows &coherence)
+	-> RelationEdges
+{
+	std::unordered_map<std::size_t, std::vector<std::size_t>> readsBySource;
+	for (const auto [source, read] : readsFrom)
+		readsBySource[source].push_back(read);
+	RelationEdges result;
+	for (const auto &[initial, stores] : coherence) {
+		const auto append = [&](std::size_t source, std::size_t firstLater) {
+			const auto found = readsBySource.find(source);
+			if (found == readsBySource.end())
+				return;
+			for (const auto read : found->second)
+				for (std::size_t later = firstLater; later < stores.size(); ++later)
+					result.emplace_back(read, stores[later]);
+		};
+		append(initial, 0);
+		for (std::size_t current = 0; current < stores.size(); ++current)
+			append(stores[current], current + 1);
 	}
 	return result;
 }
@@ -97,9 +132,13 @@ auto remapValue(const Value &value, std::size_t size,
 
 } /* namespace */
 
-StableGraphAdapter::StableGraphAdapter(std::vector<std::string> requiredPrimitives)
+StableGraphAdapter::StableGraphAdapter(std::vector<std::string> requiredPrimitives,
+				       bool fastPrimitiveBuild, bool fastCoherenceBuild,
+				       bool fastDescriptorBuild, bool fastDescriptorReuse)
 	: requiredPrimitives_(requiredPrimitives.begin(), requiredPrimitives.end()),
-	  buildAllPrimitives_(requiredPrimitives.empty())
+	  buildAllPrimitives_(requiredPrimitives.empty()), fastPrimitiveBuild_(fastPrimitiveBuild),
+	  fastCoherenceBuild_(fastCoherenceBuild), fastDescriptorBuild_(fastDescriptorBuild),
+	  fastDescriptorReuse_(fastDescriptorReuse)
 {}
 
 auto StableGraphAdapter::required(std::string_view name) const -> bool
@@ -107,25 +146,169 @@ auto StableGraphAdapter::required(std::string_view name) const -> bool
 	return buildAllPrimitives_ || requiredPrimitives_.contains(name);
 }
 
-auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraphSnapshot
+auto StableGraphAdapter::describe(const ExecutionGraph &graph) const -> GraphDescriptor
 {
-	std::vector<std::pair<std::size_t, const EventLabel *>> active;
-	std::vector<GraphAdapter::EventId> denseToStable;
+	GraphDescriptor result;
+	describeInto(graph, result);
+	return result;
+}
+
+void StableGraphAdapter::describeInto(const ExecutionGraph &graph, GraphDescriptor &result) const
+{
+	constexpr std::uint8_t readClass = 1U << 0;
+	constexpr std::uint8_t writeClass = 1U << 1;
+	constexpr std::uint8_t fenceClass = 1U << 2;
+	constexpr std::uint8_t scClass = 1U << 3;
+	result.events.clear();
 	for (const auto &label : graph.labels()) {
 		if (!isRealEvent(label))
 			continue;
+		EventDescriptor event{&label, label.getPos(), label.getThread(), label.getIndex()};
+		if (genmc::isa<ReadLabel>(&label))
+			event.classes |= readClass;
+		if (genmc::isa<WriteLabel>(&label))
+			event.classes |= writeClass;
+		if (genmc::isa<FenceLabel>(&label))
+			event.classes |= fenceClass;
+		if (label.isSC())
+			event.classes |= scClass;
+		if (const auto *memory = genmc::dyn_cast<MemAccessLabel>(&label))
+			event.address = memory->getAddr();
+		if (const auto *read = genmc::dyn_cast<ReadLabel>(&label); read && read->getRf()) {
+			event.readsFrom = genmc::isa<InitLabel>(read->getRf())
+					      ? StableEventKey(read->getAddr())
+					      : StableEventKey(read->getRf()->getPos());
+			if (read->isRMW()) {
+				if (const auto *write = graph.po_imm_succ(read))
+					event.rmwTarget = write->getPos();
+			}
+		}
+		if (const auto *start = genmc::dyn_cast<ThreadStartLabel>(&label);
+		    start && start->getCreate())
+			event.createSource = start->getCreate()->getPos();
+		if (const auto *finish = genmc::dyn_cast<ThreadFinishLabel>(&label);
+		    finish && finish->getParentJoin())
+			event.joinTarget = finish->getParentJoin()->getPos();
+		result.events.push_back(std::move(event));
+	}
+	std::size_t locationIndex = 0;
+	for (auto location = graph.loc_begin(); location != graph.loc_end(); ++location) {
+		if (locationIndex == result.coherence.size())
+			result.coherence.emplace_back();
+		auto &[address, writes] = result.coherence[locationIndex++];
+		address = location->first;
+		writes.clear();
+		for (const auto &write : location->second)
+			writes.push_back(write.getPos());
+	}
+	result.coherence.resize(locationIndex);
+	std::ranges::sort(result.coherence, [](const auto &left, const auto &right) {
+		return left.first < right.first;
+	});
+}
+
+auto StableGraphAdapter::materializeCached(const ExecutionGraph &graph, bool verifyHit)
+	-> StableGraphSnapshot
+{
+	GraphDescriptor ownedDescriptor;
+	GraphDescriptor *descriptor;
+	if (fastDescriptorReuse_) {
+		describeInto(graph, scratchDescriptor_);
+		descriptor = &scratchDescriptor_;
+	} else {
+		ownedDescriptor = describe(graph);
+		descriptor = &ownedDescriptor;
+	}
+	if (descriptor->events.size() + descriptor->coherence.size() > 512) {
+		cachedDescriptor_.reset();
+		cachedSnapshot_.reset();
+		return materialize(graph);
+	}
+	if (cachedDescriptor_ && *cachedDescriptor_ == *descriptor) {
+		VERIFY(cachedSnapshot_.has_value(), "CAT primitive cache lacks its exact snapshot");
+		++cacheHits_;
+		if (verifyHit) {
+			++cacheOracleChecks_;
+			const auto oracle = materialize(graph);
+			VERIFY(oracle.eventCount == cachedSnapshot_->eventCount &&
+			       oracle.activeEventCount == cachedSnapshot_->activeEventCount &&
+			       oracle.base == cachedSnapshot_->base &&
+			       oracle.denseToStable == cachedSnapshot_->denseToStable,
+			       "CAT unchanged primitive cache diverged from full materialization");
+		}
+		return *cachedSnapshot_;
+	}
+	++cacheMisses_;
+	const auto commitDescriptor = [&] {
+		if (fastDescriptorReuse_) {
+			if (!cachedDescriptor_)
+				cachedDescriptor_.emplace();
+			std::swap(*cachedDescriptor_, scratchDescriptor_);
+		} else {
+			cachedDescriptor_ = std::move(ownedDescriptor);
+		}
+	};
+	if (!cachedDescriptor_ || !cachedSnapshot_) {
+		cachedSnapshot_ = fastDescriptorBuild_ ? materializeImpl(graph, descriptor)
+						       : materialize(graph);
+		commitDescriptor();
+		return *cachedSnapshot_;
+	}
+	/* The per-relation changed-query delta prototype was rejected by the
+	 * mutation oracle and by its construction-cost gate. Keep the exact
+	 * unchanged-query cache, but rebuild every changed snapshot from the graph.
+	 * This is the last independently validated cache boundary. */
+	cachedSnapshot_ = fastDescriptorBuild_ ? materializeImpl(graph, descriptor)
+					       : materialize(graph);
+	commitDescriptor();
+	return *cachedSnapshot_;
+
+}
+
+auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraphSnapshot
+{
+	return materializeImpl(graph, nullptr);
+}
+
+auto StableGraphAdapter::materializeImpl(const ExecutionGraph &graph,
+					 const GraphDescriptor *prepared) -> StableGraphSnapshot
+{
+	const auto started = std::chrono::steady_clock::now();
+	std::vector<std::pair<std::size_t, const EventLabel *>> active;
+	std::vector<GraphAdapter::EventId> denseToStable;
+	const auto appendActive = [&](const EventLabel &label) {
 		StableEventKey key = label.getPos();
 		auto [found, inserted] = ids_.try_emplace(key, keys_.size());
 		if (inserted)
 			keys_.push_back(std::move(key));
 		active.emplace_back(found->second, &label);
 		denseToStable.push_back(found->second);
+	};
+	if (prepared) {
+		for (const auto &event : prepared->events) {
+			VERIFY(event.label, "CAT prepared descriptor lacks its current label");
+			appendActive(*event.label);
+		}
+	} else {
+		for (const auto &label : graph.labels()) {
+			if (!isRealEvent(label))
+				continue;
+			appendActive(label);
+		}
 	}
 
 	std::vector<SAddr> locations;
-	for (auto location = graph.loc_begin(); location != graph.loc_end(); ++location)
-		locations.push_back(location->first);
-	std::ranges::sort(locations);
+	if (prepared) {
+		locations.reserve(prepared->coherence.size());
+		for (const auto &[address, stores] : prepared->coherence) {
+			(void)stores;
+			locations.push_back(address);
+		}
+	} else {
+		for (auto location = graph.loc_begin(); location != graph.loc_end(); ++location)
+			locations.push_back(location->first);
+		std::ranges::sort(locations);
+	}
 	std::map<SAddr, std::size_t> initialIds;
 	for (const auto location : locations) {
 		StableEventKey key = location;
@@ -135,6 +318,7 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 		initialIds.emplace(location, found->second);
 		denseToStable.push_back(found->second);
 	}
+	const auto scanned = std::chrono::steady_clock::now();
 
 	const auto size = keys_.size();
 	const bool needUnderscore = required("_");
@@ -147,6 +331,7 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 	const bool needUniverse = needUnderscore || needId;
 	const bool needReadsFrom = needRf || needFr;
 	const bool needCoherence = needCo || needFr;
+	const bool directOrderedCoherence = fastCoherenceBuild_ && size <= 512;
 	EventSet universe(needUniverse ? size : 0), reads(needR ? size : 0),
 		writes(needW ? size : 0), fences(needF ? size : 0),
 		initialWrites(needIW ? size : 0), sequentiallyConsistent(needSC ? size : 0);
@@ -211,6 +396,7 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 		if (needIW)
 			initialWrites.insert(stable);
 	}
+	const auto labelsBuilt = std::chrono::steady_clock::now();
 
 	if (needPo || needLoc || needInt || needExt) {
 		if (size > 512) {
@@ -331,37 +517,104 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 				}
 		}
 	}
+	const auto structuralBuilt = std::chrono::steady_clock::now();
 
-	if (needCoherence)
-		for (auto currentLocation = graph.loc_begin(); currentLocation != graph.loc_end();
-		     ++currentLocation) {
+	CoherenceRows coherenceRows;
+	Relation directCoherence(directOrderedCoherence && needCoherence ? size : 0);
+	if (needCoherence) {
+		coherenceRows.reserve(initialIds.size());
+		const auto appendCoherence = [&](SAddr address, const std::vector<Event> &positions) {
 			std::vector<std::size_t> stores;
-			for (const auto &write : currentLocation->second) {
-				if (const auto writeId = eventId(write.getPos()))
+			for (const auto position : positions) {
+				if (const auto writeId = eventId(position))
 					stores.push_back(*writeId);
 			}
-			const auto initial = initialIds.find(currentLocation->first);
-			for (std::size_t current = 0; current < stores.size(); ++current) {
-				if (initial != initialIds.end())
+			const auto initial = initialIds.find(address);
+			VERIFY(initial != initialIds.end(), "CAT coherence location lacks initial write");
+			coherenceRows.emplace_back(initial->second, stores);
+			if (directOrderedCoherence) {
+				EventSet later(size);
+				for (auto current = stores.rbegin(); current != stores.rend(); ++current) {
+					directCoherence.insertSuccessors(*current, later);
+					later.insert(*current);
+				}
+				directCoherence.insertSuccessors(initial->second, later);
+			} else {
+				for (std::size_t current = 0; current < stores.size(); ++current) {
 					coherenceEdges.emplace_back(initial->second, stores[current]);
-				for (std::size_t later = current + 1; later < stores.size();
-				     ++later)
-					coherenceEdges.emplace_back(stores[current], stores[later]);
+					for (std::size_t later = current + 1; later < stores.size();
+					     ++later)
+						coherenceEdges.emplace_back(stores[current], stores[later]);
+				}
+			}
+		};
+		if (prepared) {
+			for (const auto &[address, positions] : prepared->coherence)
+				appendCoherence(address, positions);
+		} else {
+			for (auto currentLocation = graph.loc_begin();
+			     currentLocation != graph.loc_end(); ++currentLocation) {
+				std::vector<Event> positions;
+				positions.reserve(currentLocation->second.size());
+				for (const auto &write : currentLocation->second)
+					positions.push_back(write.getPos());
+				appendCoherence(currentLocation->first, positions);
 			}
 		}
-	auto frEdges = needFr ? fromReadEdges(readsFromEdges, coherenceEdges) : RelationEdges{};
+	}
+	const auto coherenceEdgesBuilt = std::chrono::steady_clock::now();
+	Relation directFromRead(directOrderedCoherence && needFr ? size : 0);
+	RelationEdges frEdges;
+	if (needFr && directOrderedCoherence) {
+		std::unordered_map<std::size_t, std::vector<std::size_t>> readsBySource;
+		for (const auto [source, read] : readsFromEdges)
+			readsBySource[source].push_back(read);
+		for (const auto &[initial, stores] : coherenceRows) {
+			EventSet later(size);
+			for (auto current = stores.rbegin(); current != stores.rend(); ++current) {
+				if (const auto reads = readsBySource.find(*current);
+				    reads != readsBySource.end())
+					for (const auto read : reads->second)
+						directFromRead.insertSuccessors(read, later);
+				later.insert(*current);
+			}
+			if (const auto reads = readsBySource.find(initial);
+			    reads != readsBySource.end())
+				for (const auto read : reads->second)
+					directFromRead.insertSuccessors(read, later);
+		}
+	} else if (needFr) {
+		frEdges = fastPrimitiveBuild_ ? fromReadEdgesOrdered(readsFromEdges, coherenceRows)
+					      : fromReadEdges(readsFromEdges, coherenceEdges);
+	}
+	const auto fromReadBuilt = std::chrono::steady_clock::now();
 	Relation readsFrom = needReadsFrom
-				     ? sizeAdaptiveRelation(size, std::move(readsFromEdges))
+				     ? sizeAdaptiveRelation(size, std::move(readsFromEdges),
+							    fastPrimitiveBuild_)
 				     : Relation{};
-	Relation coherence = needCoherence
-				     ? sizeAdaptiveRelation(size, std::move(coherenceEdges))
+	Relation coherence = directOrderedCoherence && needCoherence
+				     ? std::move(directCoherence)
+				     : needCoherence
+				     ? sizeAdaptiveRelation(size, std::move(coherenceEdges),
+							    fastPrimitiveBuild_)
 				     : Relation{};
-	Relation fromRead = needFr ? sizeAdaptiveRelation(size, std::move(frEdges)) : Relation{};
-	Relation rmw = needRmw ? sizeAdaptiveRelation(size, std::move(rmwEdges)) : Relation{};
+	Relation fromRead = directOrderedCoherence && needFr
+				? std::move(directFromRead)
+				: needFr ? sizeAdaptiveRelation(size, std::move(frEdges),
+							 fastPrimitiveBuild_)
+					 : Relation{};
+	Relation rmw = needRmw ? sizeAdaptiveRelation(size, std::move(rmwEdges),
+							 fastPrimitiveBuild_)
+				     : Relation{};
 	Relation threadCreate =
-		needTc ? sizeAdaptiveRelation(size, std::move(threadCreateEdges)) : Relation{};
+		needTc ? sizeAdaptiveRelation(size, std::move(threadCreateEdges),
+					      fastPrimitiveBuild_)
+		       : Relation{};
 	Relation threadJoin =
-		needTj ? sizeAdaptiveRelation(size, std::move(threadJoinEdges)) : Relation{};
+		needTj ? sizeAdaptiveRelation(size, std::move(threadJoinEdges),
+					      fastPrimitiveBuild_)
+		       : Relation{};
+	const auto coherenceBuilt = std::chrono::steady_clock::now();
 
 	BaseValues values;
 	if (needUnderscore)
@@ -400,6 +653,19 @@ auto StableGraphAdapter::materialize(const ExecutionGraph &graph) -> StableGraph
 		addValue(values, "tc", std::move(threadCreate));
 	if (needTj)
 		addValue(values, "tj", std::move(threadJoin));
+	const auto assembled = std::chrono::steady_clock::now();
+	const auto ns = [](auto duration) {
+		return static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(duration).count());
+	};
+	scanNanoseconds_ += ns(scanned - started);
+	labelNanoseconds_ += ns(labelsBuilt - scanned);
+	structuralNanoseconds_ += ns(structuralBuilt - labelsBuilt);
+	coherenceNanoseconds_ += ns(coherenceBuilt - structuralBuilt);
+	coherenceEdgeNanoseconds_ += ns(coherenceEdgesBuilt - structuralBuilt);
+	fromReadNanoseconds_ += ns(fromReadBuilt - coherenceEdgesBuilt);
+	relationPackNanoseconds_ += ns(coherenceBuilt - fromReadBuilt);
+	assemblyNanoseconds_ += ns(assembled - coherenceBuilt);
 	return {size, active.size() + initialIds.size(), std::move(values),
 		std::move(denseToStable)};
 }

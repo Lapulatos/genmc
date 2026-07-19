@@ -29,10 +29,13 @@ namespace {
 class Evaluation {
 public:
 	Evaluation(const NormalizedModel &model, const ModelAnalysis &analysis,
-		   std::size_t eventCount, const BaseValues &base, bool enableLazyCycles)
+		   std::size_t eventCount, const BaseValues &base, bool enableLazyCycles,
+		   bool fastChecks, bool fastComposition, bool fastCycleChecks)
 		: model_(model), analysis_(analysis), eventCount_(eventCount), base_(base),
 		  values_(model.predicates().size()), counts_(model.predicates().size()),
-		  dependents_(model.predicates().size()), enableLazyCycles_(enableLazyCycles)
+		  dependents_(model.predicates().size()), enableLazyCycles_(enableLazyCycles),
+		  fastChecks_(fastChecks), fastComposition_(fastComposition),
+		  fastCycleChecks_(fastCycleChecks)
 	{
 		VERIFY(analysis.componentOf().size() == model.predicates().size(),
 		       "CAAT analysis/model predicate count mismatch");
@@ -140,8 +143,11 @@ private:
 			return product(std::get<EventSet>(operand(0)),
 				       std::get<EventSet>(operand(1)));
 		case Predicate::Kind::Composition:
-			return compose(std::get<Relation>(operand(0)),
-				       std::get<Relation>(operand(1)));
+			return fastComposition_
+				       ? composeFast(std::get<Relation>(operand(0)),
+						   std::get<Relation>(operand(1)))
+				       : compose(std::get<Relation>(operand(0)),
+					 std::get<Relation>(operand(1)));
 		case Predicate::Kind::Union:
 		case Predicate::Kind::Intersection:
 		case Predicate::Kind::Difference:
@@ -209,8 +215,11 @@ private:
 		std::vector<std::size_t> cycle;
 		auto visit = [&](auto &self, std::size_t event) -> bool {
 			color[event] = 1;
-			for (std::size_t target = 0; target < eventCount_; ++target) {
-				if (!relation.contains(event, target))
+			for (auto target = fastCycleChecks_ ? relation.nextSuccessor(event, 0) : 0;
+			     target < eventCount_;
+			     target = fastCycleChecks_ ? relation.nextSuccessor(event, target + 1)
+						     : target + 1) {
+				if (!fastCycleChecks_ && !relation.contains(event, target))
 					continue;
 				if (color[target] == 0) {
 					parent[target] = event;
@@ -260,22 +269,30 @@ private:
 						witness.push_back(set->first());
 				} else {
 					const auto &relation = std::get<Relation>(value);
-					for (std::size_t from = 0;
-					     from < eventCount_ && witness.empty(); ++from) {
-						const auto target =
-							relation.successors(from).first();
-						if (target != eventCount_)
-							witness = {from, target};
-					}
+					if (fastChecks_) {
+						if (const auto pair = relation.firstPair())
+							witness = {pair->first, pair->second};
+					} else
+						for (std::size_t from = 0;
+						     from < eventCount_ && witness.empty(); ++from) {
+							const auto target = relation.successors(from).first();
+							if (target != eventCount_)
+								witness = {from, target};
+						}
 				}
 			} else if (check.kind == Statement::CheckKind::Irreflexive) {
 				const auto &relation = std::get<Relation>(value);
-				for (std::size_t event = 0; event < eventCount_; ++event) {
-					if (relation.contains(event, event)) {
+				if (fastChecks_) {
+					const auto event = relation.firstReflexive();
+					if (event != eventCount_)
 						witness.push_back(event);
-						break;
+				} else
+					for (std::size_t event = 0; event < eventCount_; ++event) {
+						if (relation.contains(event, event)) {
+							witness.push_back(event);
+							break;
+						}
 					}
-				}
 			} else {
 				witness = findCycle(std::get<Relation>(value));
 			}
@@ -296,16 +313,22 @@ private:
 	std::vector<EvaluationError> errors_;
 	FixedPointStatistics statistics_;
 	bool enableLazyCycles_{};
+	bool fastChecks_{};
+	bool fastComposition_{};
+	bool fastCycleChecks_{};
 };
 
 } /* namespace */
 
 auto CaatEvaluator::evaluate(const NormalizedModel &model, const ModelAnalysis &analysis,
 			     std::size_t eventCount, const BaseValues &base,
-			     bool enableLazyCycles) const
+			     bool enableLazyCycles, bool fastChecks, bool fastComposition,
+			     bool fastCycleChecks) const
 	-> CaatEvaluationResult
 {
-	return Evaluation(model, analysis, eventCount, base, enableLazyCycles).run();
+	return Evaluation(model, analysis, eventCount, base, enableLazyCycles, fastChecks,
+			  fastComposition, fastCycleChecks)
+		.run();
 }
 
 } /* namespace cat */

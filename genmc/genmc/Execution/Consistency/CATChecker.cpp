@@ -68,7 +68,8 @@ BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(
 		return;
 	incrementalEvaluator_ = std::make_unique<cat::IncrementalCaatEvaluator>(
 		*conf->caatModel, *conf->caatAnalysis, conf->catStats,
-		!conf->explainCat && !conf->catOracle && !conf->catPreventivePruning);
+		!conf->explainCat && !conf->catOracle && !conf->catPreventivePruning,
+		conf->catFastChecks, conf->catFastComposition, conf->catFastCycleChecks);
 	if (incrementalEvaluator_->supportsInsertions()) {
 		/* The explicit oracle option is intentionally independent of build mode. */
 		const std::size_t oracleInterval = conf->catOracle ? 1 : 0;
@@ -80,7 +81,11 @@ BasicCATChecker<HostChecker>::BasicCATChecker(const Config *conf) : HostChecker(
 		graphSynchronizer_ = std::make_unique<cat::GraphSynchronizer>(
 			*incrementalEvaluator_, 32, oracleInterval, conf->catStats,
 			std::move(requiredPrimitives),
-			!conf->catOracle && certifiedAdaptiveOffline ? 512 : 0);
+			!conf->catOracle && !conf->catDisableAdaptiveOffline &&
+					certifiedAdaptiveOffline ? 512 : 0,
+			conf->catPrimitiveCache, conf->catFastPrimitiveBuild,
+			conf->catFastCoherenceBuild, conf->catFastDescriptorBuild,
+			conf->catFastDescriptorReuse);
 	}
 }
 

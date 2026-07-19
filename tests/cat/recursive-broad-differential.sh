@@ -68,6 +68,12 @@ if [[ "${1:-}" == "--worker" ]]; then
 		recursive_command=("${genmc}"
 			"--model-file=${models_dir}/recursive-${model}.cat"
 			--cat-stats --disable-estimation --disable-mm-detector)
+		if [[ "${RECURSIVE_EXTRA_ARGS:-}" =~ [^[:space:]] &&
+		      ( -z "${RECURSIVE_EXTRA_MODELS:-}" ||
+		        " ${RECURSIVE_EXTRA_MODELS} " == *" ${model} "* ) ]]; then
+			read -r -a parsed_recursive_extra <<<"${RECURSIVE_EXTRA_ARGS}"
+			recursive_command+=("${parsed_recursive_extra[@]}")
+		fi
 		if [[ "${genmc_args}" =~ [^[:space:]] ]]; then
 			read -r -a parsed_genmc_args <<<"${genmc_args}"
 			baseline_command+=("${parsed_genmc_args[@]}")
@@ -179,6 +185,8 @@ if [[ "${index}" -lt 200 ]]; then
 	exit 1
 fi
 
+export RECURSIVE_EXTRA_ARGS
+export RECURSIVE_EXTRA_MODELS
 export -f usage normalize_output sum_cat_stat
 script_path="$(cd "$(dirname "$0")" && pwd)/$(basename "$0")"
 while IFS=$'\t' read -r case_index kind relative_source; do
