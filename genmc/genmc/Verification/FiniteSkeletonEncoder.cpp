@@ -77,6 +77,12 @@ auto isOrderingEvent(const skeleton::EventSite &event) -> bool
 	       event.kind == threadJoin;
 }
 
+auto isSCWriteEvent(const skeleton::EventSite &event) -> bool
+{
+	using enum skeleton::EventKind;
+	return event.kind == store || event.kind == unlock || event.kind == lock;
+}
+
 void addUnique(std::vector<std::string> &blockers, std::string blocker)
 {
 	if (std::ranges::find(blockers, blocker) == blockers.end())
@@ -260,6 +266,7 @@ public:
 	std::unordered_map<Edge, Expr, EdgeHash> edges{};
 	std::vector<RfChoice> rf{};
 	std::vector<CoRank> co{};
+	std::unordered_map<skeleton::NodeID, Expr> scOrder{};
 	std::vector<Expr> boolDecisions{};
 	std::vector<Expr> graphDecisions{};
 	std::vector<BvDecision> bvDecisions{};
@@ -688,6 +695,120 @@ public:
 		}
 	}
 
+	void encodeSCOrder()
+	{
+		if (!options.encodeSCOrder)
+			return;
+		if (options.encodeCo) {
+			addUnique(reasons, "sc-order-conflicts-with-eager-co");
+			return;
+		}
+		if (options.rfAbstraction == RfAbstractionEncoding::concrete) {
+			addUnique(reasons, "sc-order-requires-rf-classes");
+			return;
+		}
+		for (const auto &event : program.events) {
+			if (event.kind == skeleton::EventKind::threadJoin)
+				addUnique(reasons, "sc-order-unsupported-thread-join");
+		}
+		if (!reasons.empty())
+			return;
+		std::vector<const skeleton::EventSite *> orderedEvents;
+		for (const auto &event : program.events)
+			if (isOrderingEvent(event))
+				orderedEvents.push_back(&event);
+		if (orderedEvents.empty())
+			return;
+		const auto width = std::max(
+			1U, static_cast<unsigned>(std::bit_width(orderedEvents.size() - 1)));
+		for (const auto *event : orderedEvents)
+			scOrder.emplace(event->id,
+					solver.bitVector("sc_order_" + std::to_string(event->id),
+							 width));
+		const auto activeEvent = [&](const skeleton::EventSite &event) {
+			return blocks[event.block];
+		};
+		/* Same-location events must be strictly ordered to define RF/CO. Cross-location
+		 * ties are harmless: every satisfying rank preorder has a total-order extension
+		 * because all required po/tc/latest-write edges below remain strict. */
+		for (std::size_t i = 0; i < orderedEvents.size(); ++i)
+			for (std::size_t j = i + 1; j < orderedEvents.size(); ++j) {
+				if (orderedEvents[i]->address.empty() ||
+				    orderedEvents[i]->address != orderedEvents[j]->address)
+					continue;
+				const Expr active[]{activeEvent(*orderedEvents[i]),
+						    activeEvent(*orderedEvents[j])};
+				solver.constrain(solver.implies(
+					solver.allOf(active),
+					solver.logicalNot(solver.equal(
+						scOrder.at(orderedEvents[i]->id),
+						scOrder.at(orderedEvents[j]->id)))));
+			}
+		/* CAT's finite po is the site-ID order within a function. Chaining every static
+		 * ordering site (including inactive branch sites) is equisatisfiable for active
+		 * events and replaces the quadratic active-pair expansion by O(events) edges. */
+		std::vector<std::vector<const skeleton::EventSite *>> functionEvents(
+			program.functions.size());
+		for (const auto *event : orderedEvents)
+			functionEvents[event->function].push_back(event);
+		for (auto &events : functionEvents) {
+			std::ranges::sort(events, {}, &skeleton::EventSite::id);
+			for (std::size_t i = 1; i < events.size(); ++i)
+				solver.constrain(solver.unsignedLess(
+					scOrder.at(events[i - 1]->id), scOrder.at(events[i]->id)));
+		}
+		for (const auto &create : program.events) {
+			if (create.kind != skeleton::EventKind::threadCreate)
+				continue;
+			const auto function = std::ranges::find_if(
+				program.functions,
+				[&](const auto &candidate) {
+					return candidate.name == create.threadEntry;
+				});
+			if (function == program.functions.end() ||
+			    functionEvents[function->id].empty())
+				continue;
+			solver.constrain(solver.implies(
+				activeEvent(create),
+				solver.unsignedLess(scOrder.at(create.id),
+							    scOrder.at(functionEvents[function->id]
+								       .front()
+								       ->id))));
+		}
+		for (const auto &choice : rf) {
+			const auto &load = program.events[choice.load];
+			std::vector<Expr> latestMembers;
+			for (const auto member : choice.members) {
+				std::vector<Expr> terms;
+				if (member != skeleton::invalidNode) {
+					terms.push_back(activeEvent(program.events[member]));
+					terms.push_back(solver.unsignedLess(
+						scOrder.at(member), scOrder.at(load.id)));
+				}
+				for (const auto &other : program.events) {
+					if (!isSCWriteEvent(other) ||
+					    other.address != load.address || other.id == member)
+						continue;
+					if (load.kind == skeleton::EventKind::lock &&
+					    other.id == load.id)
+						continue;
+					std::vector<Expr> between{activeEvent(other),
+							      solver.unsignedLess(
+								      scOrder.at(other.id),
+								      scOrder.at(load.id))};
+					if (member != skeleton::invalidNode)
+						between.push_back(solver.unsignedLess(
+							scOrder.at(member), scOrder.at(other.id)));
+					terms.push_back(
+						solver.logicalNot(solver.allOf(between)));
+				}
+				latestMembers.push_back(solver.allOf(terms));
+			}
+			solver.constrain(solver.implies(
+				choice.selected, solver.anyOf(latestMembers)));
+		}
+	}
+
 	void encode()
 	{
 		encodeValues();
@@ -697,6 +818,7 @@ public:
 		encodeErrorObjective();
 		encodeRF();
 		encodeCO();
+		encodeSCOrder();
 		std::ranges::sort(reasons);
 	}
 
@@ -730,6 +852,34 @@ public:
 			if (solver.boolValue(choice.selected).value_or(false)) {
 				if (options.rfAbstraction == RfAbstractionEncoding::concrete) {
 					assignment.readsFrom[choice.load] = choice.store;
+				} else if (options.encodeSCOrder) {
+					const auto loadRank =
+						solver.bitVectorValue(scOrder.at(choice.load));
+					std::optional<std::pair<std::uint64_t, skeleton::NodeID>> latest;
+					for (const auto &store : program.events) {
+						if (!isSCWriteEvent(store) ||
+						    store.address != program.events[choice.load].address ||
+						    (program.events[choice.load].kind ==
+							     skeleton::EventKind::lock &&
+						     store.id == choice.load) ||
+						    !solver.boolValue(blocks[store.block]).value_or(false))
+							continue;
+						const auto rank =
+							solver.bitVectorValue(scOrder.at(store.id));
+						if (!rank || !loadRank || *rank >= *loadRank)
+							continue;
+						if (!latest || latest->first < *rank)
+							latest = std::pair{*rank, store.id};
+					}
+					const auto source = latest ? latest->second
+								   : skeleton::invalidNode;
+					if (std::ranges::find(choice.members, source) ==
+					    choice.members.end()) {
+						addUnique(reasons, "sc-order-model-source-mismatch");
+						assignment.abstractReadsFrom = true;
+					} else {
+						assignment.readsFrom[choice.load] = source;
+					}
 				} else if (choice.refinedMembers.empty()) {
 					assignment.abstractReadsFrom = true;
 					assignment.readsFrom[choice.load] = choice.store;
@@ -760,11 +910,23 @@ public:
 		if (!assignment.abstractReadsFrom)
 			assignment.readsFromClassMembers.clear();
 		std::vector<std::tuple<std::string, std::uint64_t, skeleton::NodeID>> ordered;
-		for (const auto &rank : co)
-			if (solver.boolValue(blocks[program.events[rank.store].block]).value_or(false))
-				ordered.emplace_back(program.events[rank.store].address,
-						     solver.bitVectorValue(rank.rank).value_or(0),
-						     rank.store);
+		if (options.encodeSCOrder) {
+			for (const auto &store : program.events)
+				if (isSCWriteEvent(store) &&
+				    solver.boolValue(blocks[store.block]).value_or(false))
+					ordered.emplace_back(
+						store.address,
+						solver.bitVectorValue(scOrder.at(store.id)).value_or(0),
+						store.id);
+		} else {
+			for (const auto &rank : co)
+				if (solver.boolValue(blocks[program.events[rank.store].block])
+					    .value_or(false))
+					ordered.emplace_back(
+						program.events[rank.store].address,
+						solver.bitVectorValue(rank.rank).value_or(0),
+						rank.store);
+		}
 		std::ranges::sort(ordered);
 		for (const auto &[unusedAddress, unusedRank, store] : ordered)
 			assignment.coherenceOrder.push_back(store);
@@ -800,7 +962,8 @@ public:
 
 	auto refineCurrentRfClasses() -> FiniteStep
 	{
-		if (options.rfAbstraction == RfAbstractionEncoding::concrete)
+		if (options.rfAbstraction == RfAbstractionEncoding::concrete ||
+		    options.encodeSCOrder)
 			return {.status = CheckResult::unavailable};
 		for (;;) {
 			if (!lastGraphClause.valid())
@@ -862,6 +1025,9 @@ public:
 
 	void blockCurrentRfCore(std::span<const skeleton::NodeID> coreLoads)
 	{
+		if (options.encodeSCOrder)
+			throw std::logic_error(
+				"concrete RF cores do not apply to SC-order class models");
 		if (!lastGraphClause.valid())
 			throw std::logic_error("no finite graph model is available to block");
 		std::vector<Expr> different;
@@ -1060,6 +1226,10 @@ public:
 				     std::span<const FiniteDenseEvent> denseEvents) -> bool
 	{
 		lastExplanationFailure.clear();
+		if (options.encodeSCOrder) {
+			lastExplanationFailure = "sc-order-explanation-unsupported";
+			return false;
+		}
 		if (!lastGraphClause.valid()) {
 			lastExplanationFailure = "no-current-model";
 			return false;

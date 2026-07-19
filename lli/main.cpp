@@ -365,7 +365,8 @@ static llvm::cl::opt<std::string> clFiniteSkeletonFirstModel(
 	llvm::cl::desc("Time one error model: eager, abstract-pairwise, "
 		       "abstract-cardinality, abstract-cardinality-rvf-value, "
 		       "abstract-cardinality-rvf-provenance, abstract-cardinality-sc, "
-		       "or abstract-cardinality-rvf-value-sc"));
+		       "abstract-cardinality-rvf-value-sc, or "
+		       "abstract-cardinality-rvf-value-sc-order"));
 
 static llvm::cl::opt<unsigned> clFiniteSkeletonSolveMax(
 	"finite-skeleton-solve-max", llvm::cl::init(1), llvm::cl::value_desc("N"),
@@ -572,7 +573,8 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-value" &&
 	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-provenance" &&
 	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-sc" &&
-	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-value-sc")
+	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-value-sc" &&
+	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-value-sc-order")
 		ERROR("Invalid -finite-skeleton-first-model mode: {}",
 		      lliConfig.finiteSkeletonFirstModel);
 	lliConfig.finiteSkeletonSolveMax = clFiniteSkeletonSolveMax;
@@ -1456,6 +1458,9 @@ auto main(int argc, char **argv) -> int
 			genmc::symbolic::FiniteEncodingOptions options{
 				.requireActiveError = true,
 				.encodeCo = lliConfig.finiteSkeletonFirstModel == "eager",
+				.encodeSCOrder =
+					lliConfig.finiteSkeletonFirstModel ==
+					"abstract-cardinality-rvf-value-sc-order",
 				.rfCardinality =
 					lliConfig.finiteSkeletonFirstModel ==
 								"abstract-cardinality" ||
@@ -1466,6 +1471,8 @@ auto main(int argc, char **argv) -> int
 							lliConfig.finiteSkeletonFirstModel ==
 								"abstract-cardinality-rvf-value-sc" ||
 							lliConfig.finiteSkeletonFirstModel ==
+								"abstract-cardinality-rvf-value-sc-order" ||
+							lliConfig.finiteSkeletonFirstModel ==
 								"abstract-cardinality-sc"
 						? genmc::symbolic::RfCardinalityEncoding::native
 						: genmc::symbolic::RfCardinalityEncoding::pairwise,
@@ -1473,7 +1480,9 @@ auto main(int argc, char **argv) -> int
 					lliConfig.finiteSkeletonFirstModel ==
 							"abstract-cardinality-rvf-value" ||
 					lliConfig.finiteSkeletonFirstModel ==
-							"abstract-cardinality-rvf-value-sc"
+							"abstract-cardinality-rvf-value-sc" ||
+					lliConfig.finiteSkeletonFirstModel ==
+							"abstract-cardinality-rvf-value-sc-order"
 						? genmc::symbolic::RfAbstractionEncoding::value
 						: lliConfig.finiteSkeletonFirstModel ==
 								  "abstract-cardinality-rvf-provenance"
@@ -1496,6 +1505,31 @@ auto main(int argc, char **argv) -> int
 			      lliConfig.finiteSkeletonFirstModel, encoder.supported(),
 			      static_cast<unsigned>(step.status), step.assignment.has_value(),
 			      micros(buildBegin, checkBegin), micros(checkBegin, checkEnd));
+			if (!encoder.supported()) {
+				PRINT(VerbosityLevel::Error, "Finite skeleton first model blockers=");
+				for (std::size_t i = 0; i < encoder.blockers().size(); ++i)
+					PRINT(VerbosityLevel::Error, "{}{}", i == 0 ? "" : ",",
+					      encoder.blockers()[i]);
+				PRINT(VerbosityLevel::Error, "\n");
+			}
+			if (lliConfig.finiteSkeletonFirstModel ==
+				    "abstract-cardinality-rvf-value-sc-order" &&
+			    step.assignment) {
+				auto cat = conf->catModel
+					   ? genmc::symbolic::evaluateFiniteAssignment(
+						     *skeleton.program, *step.assignment,
+						     *conf->catModel)
+					   : genmc::symbolic::evaluateFiniteAssignment(
+						     *skeleton.program, *step.assignment,
+						     *conf->caatModel, *conf->caatAnalysis);
+				PRINT(VerbosityLevel::Error,
+				      "Finite skeleton SC-order witness: abstract={} "
+				      "materialization-errors={} evaluation-errors={} "
+				      "violations={}\n",
+				      step.assignment->abstractReadsFrom, cat.errors.size(),
+				      cat.evaluation.errors.size(),
+				      cat.evaluation.violations.size());
+			}
 			if (lliConfig.finiteSkeletonFirstModel == "abstract-cardinality-sc" &&
 			    step.assignment) {
 				std::uint64_t candidates{};

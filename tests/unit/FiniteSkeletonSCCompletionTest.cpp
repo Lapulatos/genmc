@@ -12,6 +12,7 @@
 #include <array>
 #include <algorithm>
 #include <map>
+#include <set>
 
 namespace {
 
@@ -177,6 +178,205 @@ TEST(FiniteSkeletonSCCompletionTest, ValueClassRefinementMatchesConcreteRfOracle
 	}
 	EXPECT_EQ(refinedOracle, concreteOracle);
 	EXPECT_EQ(concreteOracle.size(), 9U);
+
+	std::set<std::pair<std::uint64_t, std::uint64_t>> concreteObservations;
+	for (const auto &[sources, status] : concreteOracle)
+		if (status == Status::completed)
+			concreteObservations.emplace(
+				sources.first == skeleton::invalidNode ? 0 : 1,
+				sources.second == skeleton::invalidNode ? 0 : 1);
+	std::set<std::pair<std::uint64_t, std::uint64_t>> classOrderObservations;
+	symbolic::FiniteSkeletonEncoder classOrder(
+		program,
+		{.encodeCo = false,
+		 .encodeSCOrder = true,
+		 .rfCardinality = symbolic::RfCardinalityEncoding::native,
+		 .rfAbstraction = symbolic::RfAbstractionEncoding::value});
+	ASSERT_TRUE(classOrder.supported());
+	for (unsigned guard = 0; guard < 16; ++guard) {
+		auto step = classOrder.next();
+		if (!step.assignment) {
+			EXPECT_EQ(step.status, symbolic::CheckResult::unsat);
+			break;
+		}
+		EXPECT_FALSE(step.assignment->abstractReadsFrom);
+		EXPECT_TRUE(exactSCBaseAccepts(program, *step.assignment));
+		classOrderObservations.emplace(*step.assignment->values[1],
+					       *step.assignment->values[2]);
+		classOrder.blockCurrentGraph();
+	}
+	EXPECT_EQ(classOrderObservations, concreteObservations);
+}
+
+TEST(FiniteSkeletonSCCompletionTest, SCOrderEncodingFailsOpenForThreadJoin)
+{
+	using namespace genmc;
+	if (!symbolic::Solver::backendAvailable())
+		GTEST_SKIP() << "Z3 is unavailable in this build";
+	auto program = storeBufferingProgram();
+	program.events[0].kind = skeleton::EventKind::threadJoin;
+	symbolic::FiniteSkeletonEncoder encoder(
+		program,
+		{.encodeCo = false,
+		 .encodeSCOrder = true,
+		 .rfCardinality = symbolic::RfCardinalityEncoding::native,
+		 .rfAbstraction = symbolic::RfAbstractionEncoding::value});
+	EXPECT_FALSE(encoder.supported());
+	EXPECT_NE(std::ranges::find(encoder.blockers(), "sc-order-unsupported-thread-join"),
+		  encoder.blockers().end());
+}
+
+TEST(FiniteSkeletonSCCompletionTest, SCOrderEncodingMaterializesAtomicSections)
+{
+	using namespace genmc;
+	if (!symbolic::Solver::backendAvailable())
+		GTEST_SKIP() << "Z3 is unavailable in this build";
+	skeleton::Program program;
+	program.functions.push_back(
+		{.id = 0, .name = "main", .entry = 0, .isMain = true, .blocks = {0}});
+	program.blocks.push_back({.id = 0, .function = 0});
+	program.events.push_back({.id = 0, .kind = skeleton::EventKind::lock,
+				  .function = 0, .block = 0, .address = "mutex"});
+	program.events.push_back({.id = 1, .kind = skeleton::EventKind::unlock,
+				  .function = 0, .block = 0, .address = "mutex"});
+	program.events.push_back({.id = 2, .kind = skeleton::EventKind::lock,
+				  .function = 0, .block = 0, .address = "mutex"});
+
+	symbolic::FiniteSkeletonEncoder encoder(
+		program,
+		{.encodeCo = false,
+		 .encodeSCOrder = true,
+		 .rfCardinality = symbolic::RfCardinalityEncoding::native,
+		 .rfAbstraction = symbolic::RfAbstractionEncoding::value});
+	ASSERT_TRUE(encoder.supported());
+	auto step = encoder.next();
+	ASSERT_TRUE(step.assignment);
+	EXPECT_FALSE(step.assignment->abstractReadsFrom);
+	EXPECT_EQ(*step.assignment->readsFrom[0], skeleton::invalidNode);
+	EXPECT_EQ(*step.assignment->readsFrom[2], 1U);
+	EXPECT_TRUE(exactSCBaseAccepts(program, *step.assignment));
+}
+
+TEST(FiniteSkeletonSCCompletionTest, SCOrderEncodingMatchesConcreteObservationOracle)
+{
+	using namespace genmc;
+	if (!symbolic::Solver::backendAvailable())
+		GTEST_SKIP() << "Z3 is unavailable in this build";
+	for (unsigned firstLoadPosition = 0; firstLoadPosition < 3;
+	     ++firstLoadPosition)
+		for (unsigned secondLoadPosition = 0; secondLoadPosition < 3;
+		     ++secondLoadPosition)
+			for (unsigned firstMixed = 0; firstMixed < 2; ++firstMixed)
+				for (unsigned secondMixed = 0; secondMixed < 2;
+				     ++secondMixed) {
+					skeleton::Program program;
+					program.functions.push_back(
+						{.id = 0, .name = "t0", .entry = 0,
+						 .isMain = true, .blocks = {0}});
+					program.functions.push_back(
+						{.id = 1, .name = "t1", .entry = 1,
+						 .isThreadEntry = true, .blocks = {1}});
+					program.blocks.push_back({.id = 0, .function = 0});
+					program.blocks.push_back({.id = 1, .function = 1});
+					program.values.push_back(
+						{.id = 0, .block = 0,
+						 .opcode = skeleton::ValueOpcode::constant,
+						 .width = 8, .constant = 1});
+					program.values.push_back(
+						{.id = 1, .block = 0,
+						 .opcode = skeleton::ValueOpcode::constant,
+						 .width = 8, .constant = 2});
+					program.values.push_back(
+						{.id = 2, .block = 0,
+						 .opcode = skeleton::ValueOpcode::load, .width = 8});
+					program.values.push_back(
+						{.id = 3, .block = 1,
+						 .opcode = skeleton::ValueOpcode::load, .width = 8});
+					program.events.push_back(
+						{.id = 0, .kind = skeleton::EventKind::threadCreate,
+						 .function = 0, .block = 0, .threadEntry = "t1"});
+					const auto addThread = [&](skeleton::NodeID function,
+								   unsigned loadPosition,
+								   bool mixed,
+								   std::string ownAddress,
+								   std::string otherAddress,
+								   skeleton::NodeID loadValue) {
+						unsigned storeIndex{};
+						for (unsigned position = 0; position < 3; ++position) {
+							const auto id = static_cast<skeleton::NodeID>(
+								program.events.size());
+							if (position == loadPosition) {
+								program.events.push_back(
+									{.id = id,
+									 .kind = skeleton::EventKind::load,
+									 .function = function,
+									 .block = function,
+									 .value = loadValue,
+									 .address = otherAddress,
+									 .width = 8});
+							} else {
+								program.events.push_back(
+									{.id = id,
+									 .kind = skeleton::EventKind::store,
+									 .function = function,
+									 .block = function,
+									 .value = mixed && storeIndex == 1 ? 1U : 0U,
+									 .address = ownAddress,
+									 .width = 8});
+								++storeIndex;
+							}
+						}
+					};
+					addThread(0, firstLoadPosition, firstMixed, "x", "y", 2);
+					addThread(1, secondLoadPosition, secondMixed, "y", "x", 3);
+					program.initialValues.push_back(
+						{.address = "x", .width = 8, .value = 0});
+					program.initialValues.push_back(
+						{.address = "y", .width = 8, .value = 0});
+
+					using Observation = std::pair<std::uint64_t, std::uint64_t>;
+					std::set<Observation> concrete;
+					symbolic::FiniteSkeletonEncoder exact(
+						program,
+						{.encodeCo = false,
+						 .rfCardinality = symbolic::RfCardinalityEncoding::native});
+					ASSERT_TRUE(exact.supported());
+					for (unsigned guard = 0; guard < 32; ++guard) {
+						auto step = exact.next();
+						if (!step.assignment)
+							break;
+						auto completion = symbolic::completeFiniteSCWithOrdering(
+							program, *step.assignment);
+						if (completion.status ==
+						    symbolic::FiniteSCCompletionStatus::completed)
+							concrete.emplace(*step.assignment->values[2],
+									 *step.assignment->values[3]);
+						exact.blockCurrentGraph();
+					}
+
+					std::set<Observation> abstract;
+					symbolic::FiniteSkeletonEncoder scOrder(
+						program,
+						{.encodeCo = false,
+						 .encodeSCOrder = true,
+						 .rfCardinality = symbolic::RfCardinalityEncoding::native,
+						 .rfAbstraction = symbolic::RfAbstractionEncoding::value});
+					ASSERT_TRUE(scOrder.supported());
+					for (unsigned guard = 0; guard < 16; ++guard) {
+						auto step = scOrder.next();
+						if (!step.assignment)
+							break;
+						ASSERT_FALSE(step.assignment->abstractReadsFrom);
+						ASSERT_TRUE(exactSCBaseAccepts(program, *step.assignment));
+						abstract.emplace(*step.assignment->values[2],
+								 *step.assignment->values[3]);
+						scOrder.blockCurrentGraph();
+					}
+					EXPECT_EQ(abstract, concrete)
+						<< "load positions=" << firstLoadPosition << ","
+						<< secondLoadPosition << " mixed=" << firstMixed << ","
+						<< secondMixed;
+				}
 }
 
 TEST(FiniteSkeletonSCCompletionTest, CompletesEverySCFeasibleStoreBufferingRfShape)

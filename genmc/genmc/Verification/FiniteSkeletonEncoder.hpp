@@ -72,6 +72,8 @@ enum class RfAbstractionEncoding : std::uint8_t { concrete, value, valueProvenan
 struct FiniteEncodingOptions {
 	bool requireActiveError{};
 	bool encodeCo{true};
+	/** Encode an exact SC total order whose latest writes witness selected RF classes. */
+	bool encodeSCOrder{};
 	RfCardinalityEncoding rfCardinality{RfCardinalityEncoding::pairwise};
 	/** Diagnostic first-model abstraction only. Non-concrete assignments are not witnesses. */
 	RfAbstractionEncoding rfAbstraction{RfAbstractionEncoding::concrete};
