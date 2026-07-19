@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="120 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/><option name="--disable-mm-detector"/>
+  <option name="--finite-skeleton-stats-only"/>
+  <option name="--finite-skeleton-solve-max=100000"/>
+  <column title="mode">Finite skeleton first model: mode=([^ ]+)</column>
+  <column title="supported">supported=(true|false)</column>
+  <column title="first status">Finite skeleton first model:.*status=([0-9]+)</column>
+  <column title="assignment">Finite skeleton first model:.*assignment=(true|false)</column>
+  <column title="build us">build-us=([0-9]+)</column>
+  <column title="check us">check-us=([0-9]+)</column>
+  <column title="witness abstract">SC-order witness: abstract=(true|false)</column>
+  <column title="materialization errors">materialization-errors=([0-9]+)</column>
+  <column title="evaluation errors">evaluation-errors=([0-9]+)</column>
+  <column title="violations">violations=([0-9]+)</column>
+  <rundefinition name="concrete-sc">
+    <option name="--svcomp-backend=caat-sc"/>
+    <option name="--finite-skeleton-first-model=abstract-cardinality-sc"/>
+    <tasks name="panel"><includesfile>/data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/source-dev/optimization-analysis/core-direction-review-20260718/finite-rvf-first-model-panel.set</includesfile><propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile></tasks>
+  </rundefinition>
+  <rundefinition name="value-sc-order">
+    <option name="--svcomp-backend=caat-sc"/>
+    <option name="--finite-skeleton-first-model=abstract-cardinality-rvf-value-sc-order"/>
+    <tasks name="panel"><includesfile>/data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/source-dev/optimization-analysis/core-direction-review-20260718/finite-rvf-first-model-panel.set</includesfile><propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile></tasks>
+  </rundefinition>
+</benchmark>

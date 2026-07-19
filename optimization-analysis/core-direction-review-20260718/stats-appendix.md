@@ -88,3 +88,22 @@ reachable local observations, class coverage, witness replay, and fail-open acco
   0.98787/0.98817.
 - This measures time to the first abstract model, not complete verification. Class-to-source
   refinement cost and completeness remain unmeasured; no end-to-end claim is made.
+
+## Deagle value-class exact SC-order gate (2026-07-20)
+
+- Unit of analysis: one task row in a strict 283-task paired finite-skeleton run. The control
+  enumerates concrete RF assignments and applies exact SC completion; the candidate encodes a
+  same-value RF class and its existential latest write directly in the SC ordering theory.
+- All-task summed CPU, wall, and per-task peak-RSS ratios are 0.66970, 0.66991, and 0.32304.
+  The corresponding reductions are 33.0%, 33.0%, and 67.7%; time and memory improve together.
+- The control classifies 5 tasks and the candidate classifies 107. All five common terminal
+  verdicts agree. None of the five has a CPU, wall, or memory regression; summed ratios on that
+  small common cohort are 0.00733, 0.00757, and 0.53032.
+- The candidate emits 68 SAT witnesses. All are concrete and have zero materialization errors,
+  CAT evaluation errors, or CAT violations. Across 49 tasks also classified by native GenMC,
+  verdict differences are zero; all 107 terminal candidate verdicts match benchmark expectations.
+- Resource totals include timeout-censored tasks and are appropriate for the fixed-budget system
+  comparison, but they are not uncensored algorithmic runtime estimates. The five-task common
+  cohort is too small for a useful task-bootstrap interval, so no confidence interval is claimed.
+- Scope is the admitted finite SC fragment. Thread join fails open, relaxed memory is not encoded,
+  and the first-model lane is not yet an end-to-end verifier or a claim of RVF-SMC optimality.

@@ -58,3 +58,19 @@
   outcome without increasing time.
 - Caveat: the inline-only difference is deliberately not pursued because it is below the project's
   practical-effect threshold.
+
+## Figure 5: finite SC RVF exact-control broad gate
+
+- Files: `figures/figure-05-rvf-sc-order-broad-gate.pdf` and `.png`.
+- Purpose: present the simultaneous resource and terminal-coverage effect of encoding same-value
+  RF classes with an exact SC latest-write order instead of enumerating concrete RF assignments.
+- Data source: `finite-rvf-sc-order-evidence.tsv`, frozen from the strict 283-task candidate and
+  exact-control BenchExec analyses.
+- Encoding: the left panel reports aggregate candidate/control CPU, wall, and summed per-task
+  peak-RSS ratios; the right panel stacks SAT, UNSAT, and unknown rows under the fixed task budget.
+- Key observation: CPU/wall fall to about 0.67, RSS to 0.323, and terminal coverage rises from 5
+  to 107 tasks without a witnessed correctness disagreement.
+- Decision implication: retain the linear SC-order formulation on the development branch and use
+  it as the baseline for the next order-theory optimization.
+- Caveat: timeout-censored totals describe fixed-budget system behavior; this is finite SC only,
+  and the figure does not compare production native GenMC performance.

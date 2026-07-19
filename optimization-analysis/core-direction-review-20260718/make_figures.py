@@ -44,6 +44,50 @@ fig.savefig(FIGURES / "figure-01-mechanism-cpu.png", dpi=180)
 plt.close(fig)
 
 
+with (ROOT / "finite-rvf-sc-order-evidence.tsv").open() as handle:
+    sc_order = list(csv.DictReader(handle, delimiter="\t"))
+control, candidate = sc_order
+resource_names = ["CPU", "Wall", "RSS"]
+resource_fields = ["cpu_seconds", "wall_seconds", "rss_sum_bytes"]
+resource_ratios = [float(candidate[field]) / float(control[field])
+                   for field in resource_fields]
+
+fig, (resource_ax, coverage_ax) = plt.subplots(1, 2, figsize=(10.2, 4.5))
+bars = resource_ax.bar(resource_names, resource_ratios,
+                       color=["#2563eb", "#0f766e", "#7c3aed"])
+resource_ax.axhline(1.0, color="#991b1b", linestyle="--", linewidth=1.2)
+resource_ax.set_ylim(0, 1.08)
+resource_ax.set_ylabel("Candidate / exact concrete control")
+resource_ax.set_title("Resources (lower is better)")
+resource_ax.grid(axis="y", alpha=0.2)
+for bar, ratio in zip(bars, resource_ratios):
+    resource_ax.text(bar.get_x() + bar.get_width() / 2, ratio + 0.025,
+                     f"{ratio:.3f}", ha="center", va="bottom")
+
+modes = [row["mode"] for row in sc_order]
+sat = np.array([int(row["sat"]) for row in sc_order])
+unsat = np.array([int(row["unsat"]) for row in sc_order])
+unknown = np.array([int(row["unknown"]) for row in sc_order])
+x = np.arange(len(modes))
+coverage_ax.bar(x, sat, label="SAT", color="#b91c1c")
+coverage_ax.bar(x, unsat, bottom=sat, label="UNSAT", color="#15803d")
+coverage_ax.bar(x, unknown, bottom=sat + unsat, label="Unknown", color="#94a3b8")
+coverage_ax.set_xticks(x, ["Concrete RF\n+ exact SC", "Value class\n+ SC order"])
+coverage_ax.set_ylabel("Tasks (283 total)")
+coverage_ax.set_title("Terminal coverage")
+coverage_ax.legend(frameon=False, ncol=3, loc="upper center")
+coverage_ax.grid(axis="y", alpha=0.2)
+for index, row in enumerate(sc_order):
+    coverage_ax.text(index, int(row["classified"]) + 4,
+                     f"{row['classified']} classified", ha="center", va="bottom")
+
+fig.suptitle("Finite SC RVF quotient: exact-control broad gate")
+fig.tight_layout()
+fig.savefig(FIGURES / "figure-05-rvf-sc-order-broad-gate.pdf")
+fig.savefig(FIGURES / "figure-05-rvf-sc-order-broad-gate.png", dpi=180)
+plt.close(fig)
+
+
 with (ROOT / "opportunity.tsv").open() as handle:
     opportunity = list(csv.DictReader(handle, delimiter="\t"))
 models = [row["model"] for row in opportunity]

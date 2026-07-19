@@ -1,0 +1,3 @@
+mode	cpu_seconds	wall_seconds	rss_sum_bytes	sat	unsat	unknown	classified
+Concrete RF + exact SC	26891.814373865	26909.903442291	99848499200	0	5	278	5
+Value class + SC order	18009.399848288	18027.341124473	32254595072	68	39	176	107
