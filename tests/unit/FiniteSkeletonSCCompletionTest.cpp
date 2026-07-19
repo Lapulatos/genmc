@@ -11,6 +11,7 @@
 
 #include <array>
 #include <algorithm>
+#include <map>
 
 namespace {
 
@@ -113,6 +114,69 @@ TEST(FiniteSkeletonSCCompletionTest, RejectsAbstractReadsFromClasses)
 	const auto ordering = symbolic::completeFiniteSCWithOrdering(program, assignment);
 	EXPECT_EQ(ordering.status, symbolic::FiniteSCCompletionStatus::invalidInput);
 	EXPECT_NE(ordering.error.find("must be refined"), std::string::npos);
+}
+
+TEST(FiniteSkeletonSCCompletionTest, ValueClassRefinementMatchesConcreteRfOracle)
+{
+	using namespace genmc;
+	if (!symbolic::Solver::backendAvailable())
+		GTEST_SKIP() << "Z3 is unavailable in this build";
+	auto program = storeBufferingProgram();
+	program.events.push_back({.id = 4, .kind = skeleton::EventKind::store,
+				  .function = 0, .block = 0, .value = 0,
+				  .address = "x", .width = 8});
+	program.events.push_back({.id = 5, .kind = skeleton::EventKind::store,
+				  .function = 1, .block = 1, .value = 0,
+				  .address = "y", .width = 8});
+	program.events.push_back({.id = 6, .kind = skeleton::EventKind::threadCreate,
+				  .function = 0, .block = 0, .threadEntry = "t1"});
+	using Key = std::pair<skeleton::NodeID, skeleton::NodeID>;
+	using Status = symbolic::FiniteSCCompletionStatus;
+	const auto options = [](symbolic::RfAbstractionEncoding abstraction) {
+		return symbolic::FiniteEncodingOptions{
+			.encodeCo = false,
+			.rfCardinality = symbolic::RfCardinalityEncoding::native,
+			.rfAbstraction = abstraction};
+	};
+
+	std::map<Key, Status> concreteOracle;
+	symbolic::FiniteSkeletonEncoder concrete(
+		program, options(symbolic::RfAbstractionEncoding::concrete));
+	ASSERT_TRUE(concrete.supported());
+	for (unsigned guard = 0; guard < 32; ++guard) {
+		auto step = concrete.next();
+		if (!step.assignment) {
+			EXPECT_EQ(step.status, symbolic::CheckResult::unsat);
+			break;
+		}
+		auto completion = symbolic::completeFiniteSCWithOrdering(program, *step.assignment);
+		concreteOracle[{*step.assignment->readsFrom[1],
+				*step.assignment->readsFrom[3]}] = completion.status;
+		concrete.blockCurrentGraph();
+	}
+
+	std::map<Key, Status> refinedOracle;
+	symbolic::FiniteSkeletonEncoder abstract(
+		program, options(symbolic::RfAbstractionEncoding::value));
+	ASSERT_TRUE(abstract.supported());
+	for (unsigned guard = 0; guard < 32; ++guard) {
+		auto step = abstract.next();
+		if (!step.assignment) {
+			EXPECT_EQ(step.status, symbolic::CheckResult::unsat);
+			break;
+		}
+		if (step.assignment->abstractReadsFrom)
+			step = abstract.refineCurrentRfClasses();
+		ASSERT_TRUE(step.assignment);
+		ASSERT_FALSE(step.assignment->abstractReadsFrom);
+		auto completion =
+			symbolic::completeFiniteSCWithOrdering(program, *step.assignment);
+		refinedOracle[{*step.assignment->readsFrom[1],
+				*step.assignment->readsFrom[3]}] = completion.status;
+		abstract.blockCurrentGraph();
+	}
+	EXPECT_EQ(refinedOracle, concreteOracle);
+	EXPECT_EQ(concreteOracle.size(), 9U);
 }
 
 TEST(FiniteSkeletonSCCompletionTest, CompletesEverySCFeasibleStoreBufferingRfShape)

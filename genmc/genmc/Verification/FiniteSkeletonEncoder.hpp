@@ -25,6 +25,8 @@ struct FiniteAssignment {
 	std::vector<std::optional<std::uint64_t>> values{};
 	/** Per event: selected store event, invalidNode for initial write, nullopt for non-load. */
 	std::vector<std::optional<skeleton::NodeID>> readsFrom{};
+	/** Per load in an abstract assignment: active concrete sources in the selected class. */
+	std::vector<std::vector<skeleton::NodeID>> readsFromClassMembers{};
 	/** True when readsFrom contains class representatives and must not be replayed. */
 	bool abstractReadsFrom{};
 	/** Active stores in increasing per-location coherence rank. */
@@ -34,6 +36,34 @@ struct FiniteAssignment {
 struct FiniteStep {
 	CheckResult status{CheckResult::unknown};
 	std::optional<FiniteAssignment> assignment{};
+};
+
+/** Lazily concretize one abstract RF-class assignment. Enumeration is exhaustive over
+ * the Cartesian product of selected active class members. An SC RF core can skip every
+ * remaining combination that keeps all core-load choices unchanged. */
+class FiniteRfRefiner {
+public:
+	explicit FiniteRfRefiner(const FiniteAssignment &abstractAssignment);
+	[[nodiscard]] auto valid() const -> bool;
+	[[nodiscard]] auto error() const -> const std::string &;
+	[[nodiscard]] auto next() -> std::optional<FiniteAssignment>;
+	void blockCurrentRfCore(std::span<const skeleton::NodeID> coreLoads);
+	[[nodiscard]] auto candidatesGenerated() const -> std::uint64_t;
+	[[nodiscard]] auto candidatesSkipped() const -> std::uint64_t;
+
+private:
+	FiniteAssignment base_{};
+	std::vector<skeleton::NodeID> loads_{};
+	std::vector<std::size_t> indices_{};
+	std::vector<skeleton::NodeID> lastSources_{};
+	std::string error_{};
+	bool exhausted_{};
+	bool currentAvailable_{};
+	std::uint64_t generated_{};
+	std::uint64_t skipped_{};
+
+	void advance();
+	[[nodiscard]] auto matchesCore(std::span<const skeleton::NodeID> coreLoads) const -> bool;
 };
 
 enum class RfCardinalityEncoding : std::uint8_t { pairwise, native };
@@ -102,6 +132,9 @@ public:
 	[[nodiscard]] auto blockers() const -> const std::vector<std::string> &;
 	/** Return the next complete assignment and block it from subsequent calls. */
 	[[nodiscard]] auto next() -> FiniteStep;
+	/** Lazily instantiate concrete source selectors only for the RF classes selected by
+	 * the current abstract model, then re-solve that same class graph. */
+	[[nodiscard]] auto refineCurrentRfClasses() -> FiniteStep;
 	/** Block every remaining SSA/input assignment with the same active-event, RF and CO
 	 * graph as the most recently returned model. Safe after exact CAT classification. */
 	void blockCurrentGraph();

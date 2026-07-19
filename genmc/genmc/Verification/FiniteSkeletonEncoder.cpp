@@ -36,6 +36,8 @@ struct RfChoice {
 	skeleton::NodeID load{};
 	skeleton::NodeID store{skeleton::invalidNode};
 	Expr selected{};
+	std::vector<skeleton::NodeID> members{};
+	std::vector<std::pair<skeleton::NodeID, Expr>> refinedMembers{};
 };
 
 struct CoRank {
@@ -589,7 +591,12 @@ public:
 					graphDecisions.push_back(selected);
 					/* This representative is diagnostic metadata only. The class
 					 * selector remains an over-approximation until source refinement. */
-					rf.push_back({load.id, members.front().first, selected});
+					std::vector<skeleton::NodeID> memberIDs;
+					memberIDs.reserve(members.size());
+					for (const auto &[store, unusedValue] : members)
+						memberIDs.push_back(store);
+					rf.push_back(
+						{load.id, members.front().first, selected, std::move(memberIDs)});
 					solver.constrain(
 						solver.implies(selected, blocks[load.block]));
 					std::vector<Expr> available;
@@ -614,7 +621,7 @@ public:
 					selectors.push_back(selected);
 					boolDecisions.push_back(selected);
 					graphDecisions.push_back(selected);
-					rf.push_back({load.id, store, selected});
+					rf.push_back({load.id, store, selected, {store}});
 					solver.constrain(
 						solver.implies(selected, blocks[load.block]));
 					if (store != skeleton::invalidNode)
@@ -709,18 +716,49 @@ public:
 		if (status != CheckResult::sat)
 			return {.status = status};
 		FiniteAssignment assignment;
-		assignment.abstractReadsFrom =
-			options.rfAbstraction != RfAbstractionEncoding::concrete;
+		assignment.abstractReadsFrom = false;
 		assignment.values.resize(values.size());
 		assignment.readsFrom.resize(program.events.size());
+		if (options.rfAbstraction != RfAbstractionEncoding::concrete)
+			assignment.readsFromClassMembers.resize(program.events.size());
 		for (const auto &event : program.events)
 			if (solver.boolValue(blocks[event.block]).value_or(false))
 				assignment.activeEvents.push_back(event.id);
 		for (std::size_t i = 0; i < values.size(); ++i)
 			assignment.values[i] = solver.bitVectorValue(values[i]);
 		for (const auto &choice : rf)
-			if (solver.boolValue(choice.selected).value_or(false))
-				assignment.readsFrom[choice.load] = choice.store;
+			if (solver.boolValue(choice.selected).value_or(false)) {
+				if (options.rfAbstraction == RfAbstractionEncoding::concrete) {
+					assignment.readsFrom[choice.load] = choice.store;
+				} else if (choice.refinedMembers.empty()) {
+					assignment.abstractReadsFrom = true;
+					assignment.readsFrom[choice.load] = choice.store;
+					auto &activeMembers =
+						assignment.readsFromClassMembers[choice.load];
+					for (const auto store : choice.members)
+						if (store == skeleton::invalidNode ||
+						    solver.boolValue(
+							    blocks[program.events[store].block])
+							    .value_or(false))
+							activeMembers.push_back(store);
+				} else {
+					const auto selectedMember = std::ranges::find_if(
+						choice.refinedMembers, [&](const auto &member) {
+							return solver.boolValue(member.second)
+								.value_or(false);
+						});
+					if (selectedMember == choice.refinedMembers.end()) {
+						addUnique(reasons, "refined-rf-class-without-source");
+						assignment.abstractReadsFrom = true;
+						assignment.readsFrom[choice.load] = choice.store;
+					} else {
+						assignment.readsFrom[choice.load] =
+							selectedMember->first;
+					}
+				}
+			}
+		if (!assignment.abstractReadsFrom)
+			assignment.readsFromClassMembers.clear();
 		std::vector<std::tuple<std::string, std::uint64_t, skeleton::NodeID>> ordered;
 		for (const auto &rank : co)
 			if (solver.boolValue(blocks[program.events[rank.store].block]).value_or(false))
@@ -760,6 +798,59 @@ public:
 		return {.status = status, .assignment = std::move(assignment)};
 	}
 
+	auto refineCurrentRfClasses() -> FiniteStep
+	{
+		if (options.rfAbstraction == RfAbstractionEncoding::concrete)
+			return {.status = CheckResult::unavailable};
+		for (;;) {
+			if (!lastGraphClause.valid())
+				throw std::logic_error("no abstract RF model is available to refine");
+			bool added{};
+			for (auto &choice : rf) {
+			if (!solver.boolValue(choice.selected).value_or(false) ||
+			    !choice.refinedMembers.empty())
+				continue;
+			added = true;
+			std::vector<Expr> selectors;
+			selectors.reserve(choice.members.size());
+			for (const auto store : choice.members) {
+				auto selected = solver.boolean(
+					"rf_refined_" + std::to_string(choice.load) + "_" +
+					std::to_string(store));
+				selectors.push_back(selected);
+				choice.refinedMembers.emplace_back(store, selected);
+				boolDecisions.push_back(selected);
+				graphDecisions.push_back(selected);
+				solver.constrain(solver.implies(selected, choice.selected));
+				if (store != skeleton::invalidNode)
+					solver.constrain(solver.implies(
+						selected, blocks[program.events[store].block]));
+			}
+			solver.constrain(
+				solver.implies(choice.selected, solver.anyOf(selectors)));
+			if (options.rfCardinality == RfCardinalityEncoding::native) {
+				solver.constrain(solver.atMostOne(selectors));
+			} else {
+				for (std::size_t i = 0; i < selectors.size(); ++i)
+					for (std::size_t j = i + 1; j < selectors.size(); ++j) {
+						const Expr pair[]{selectors[i], selectors[j]};
+						solver.constrain(solver.logicalNot(
+							solver.allOf(pair)));
+					}
+			}
+			}
+			if (!added) {
+				addUnique(reasons, "abstract-rf-model-cannot-be-refined");
+				return {.status = CheckResult::unavailable};
+			}
+			lastGraphClause = {};
+			pendingAssignmentClause = {};
+			auto step = next();
+			if (!step.assignment || !step.assignment->abstractReadsFrom)
+				return step;
+		}
+	}
+
 	void blockCurrentGraph()
 	{
 		if (!lastGraphClause.valid())
@@ -782,7 +873,16 @@ public:
 			if (std::ranges::find(coreLoads, choice.load) == coreLoads.end() ||
 			    !solver.boolValue(choice.selected).value_or(false))
 				continue;
-			different.push_back(solver.logicalNot(choice.selected));
+			if (choice.refinedMembers.empty()) {
+				different.push_back(solver.logicalNot(choice.selected));
+				continue;
+			}
+			const auto selected = std::ranges::find_if(
+				choice.refinedMembers, [&](const auto &member) {
+					return solver.boolValue(member.second).value_or(false);
+				});
+			if (selected != choice.refinedMembers.end())
+				different.push_back(solver.logicalNot(selected->second));
 		}
 		solver.constrain(solver.anyOf(different));
 		lastGraphClause = {};
@@ -1010,6 +1110,101 @@ public:
 	}
 };
 
+FiniteRfRefiner::FiniteRfRefiner(const FiniteAssignment &abstractAssignment)
+	: base_(abstractAssignment)
+{
+	if (!base_.abstractReadsFrom) {
+		error_ = "assignment is already concrete";
+		return;
+	}
+	if (base_.readsFromClassMembers.size() != base_.readsFrom.size()) {
+		error_ = "RF class-member table size mismatch";
+		return;
+	}
+	for (std::size_t load = 0; load < base_.readsFrom.size(); ++load) {
+		if (!base_.readsFrom[load])
+			continue;
+		if (base_.readsFromClassMembers[load].empty()) {
+			error_ = "selected RF class has no active concrete source";
+			return;
+		}
+		loads_.push_back(static_cast<skeleton::NodeID>(load));
+	}
+	indices_.resize(loads_.size());
+	lastSources_.resize(loads_.size());
+}
+
+auto FiniteRfRefiner::valid() const -> bool { return error_.empty(); }
+auto FiniteRfRefiner::error() const -> const std::string & { return error_; }
+
+void FiniteRfRefiner::advance()
+{
+	currentAvailable_ = false;
+	for (std::size_t position = indices_.size(); position-- > 0;) {
+		const auto load = loads_[position];
+		auto &index = indices_[position];
+		if (++index < base_.readsFromClassMembers[load].size())
+			return;
+		index = 0;
+	}
+	exhausted_ = true;
+}
+
+auto FiniteRfRefiner::next() -> std::optional<FiniteAssignment>
+{
+	if (!valid() || exhausted_)
+		return std::nullopt;
+	if (currentAvailable_)
+		advance();
+	if (exhausted_)
+		return std::nullopt;
+	auto concrete = base_;
+	concrete.abstractReadsFrom = false;
+	concrete.readsFromClassMembers.clear();
+	for (std::size_t position = 0; position < loads_.size(); ++position) {
+		const auto load = loads_[position];
+		const auto source = base_.readsFromClassMembers[load][indices_[position]];
+		concrete.readsFrom[load] = source;
+		lastSources_[position] = source;
+	}
+	currentAvailable_ = true;
+	++generated_;
+	return concrete;
+}
+
+auto FiniteRfRefiner::matchesCore(std::span<const skeleton::NodeID> coreLoads) const -> bool
+{
+	for (const auto load : coreLoads) {
+		const auto found = std::ranges::find(loads_, load);
+		if (found == loads_.end())
+			continue;
+		const auto position = static_cast<std::size_t>(found - loads_.begin());
+		if (base_.readsFromClassMembers[load][indices_[position]] !=
+		    lastSources_[position])
+			return false;
+	}
+	return true;
+}
+
+void FiniteRfRefiner::blockCurrentRfCore(std::span<const skeleton::NodeID> coreLoads)
+{
+	if (!currentAvailable_)
+		throw std::logic_error("no refined RF assignment is available to block");
+	if (coreLoads.empty()) {
+		exhausted_ = true;
+		currentAvailable_ = false;
+		return;
+	}
+	do {
+		advance();
+		if (!exhausted_ && matchesCore(coreLoads))
+			++skipped_;
+	} while (!exhausted_ && matchesCore(coreLoads));
+}
+
+auto FiniteRfRefiner::candidatesGenerated() const -> std::uint64_t { return generated_; }
+auto FiniteRfRefiner::candidatesSkipped() const -> std::uint64_t { return skipped_; }
+
 FiniteSkeletonEncoder::FiniteSkeletonEncoder(const skeleton::Program &program,
 					     FiniteEncodingOptions options)
 	: impl_(std::make_unique<Impl>(program, options))
@@ -1024,6 +1219,10 @@ auto FiniteSkeletonEncoder::blockers() const -> const std::vector<std::string> &
 	return impl_->reasons;
 }
 auto FiniteSkeletonEncoder::next() -> FiniteStep { return impl_->next(); }
+auto FiniteSkeletonEncoder::refineCurrentRfClasses() -> FiniteStep
+{
+	return impl_->refineCurrentRfClasses();
+}
 void FiniteSkeletonEncoder::blockCurrentGraph() { impl_->blockCurrentGraph(); }
 void FiniteSkeletonEncoder::blockCurrentRfCore(
 	std::span<const skeleton::NodeID> coreLoads)

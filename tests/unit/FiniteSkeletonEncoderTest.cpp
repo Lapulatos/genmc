@@ -8,6 +8,7 @@
 
 #include <gtest/gtest.h>
 
+#include <array>
 #include <set>
 
 using namespace genmc;
@@ -222,9 +223,80 @@ TEST(FiniteSkeletonEncoderTest, ValueClassFirstModelDefersSameValueSources)
 		ASSERT_EQ(step.status, symbolic::CheckResult::sat);
 		ASSERT_TRUE(step.assignment);
 		EXPECT_TRUE(step.assignment->abstractReadsFrom);
+		ASSERT_EQ(step.assignment->readsFromClassMembers.size(),
+			  step.assignment->readsFrom.size());
+		ASSERT_FALSE(step.assignment->readsFromClassMembers[2].empty());
+		if (*step.assignment->values[1] == 7)
+			EXPECT_EQ(step.assignment->readsFromClassMembers[2],
+				  (std::vector<skeleton::NodeID>{0, 1}));
 		readValues.insert(*step.assignment->values[1]);
 	}
 	EXPECT_EQ(readValues, (std::set<std::uint64_t>{0, 7}));
+}
+
+TEST(FiniteSkeletonEncoderTest, RfRefinerExhaustivelyConcretizesSelectedClasses)
+{
+	symbolic::FiniteAssignment abstract;
+	abstract.abstractReadsFrom = true;
+	abstract.readsFrom.resize(4);
+	abstract.readsFrom[1] = 10;
+	abstract.readsFrom[3] = 20;
+	abstract.readsFromClassMembers.resize(4);
+	abstract.readsFromClassMembers[1] = {10, 11};
+	abstract.readsFromClassMembers[3] = {20, 21};
+
+	symbolic::FiniteRfRefiner refiner(abstract);
+	ASSERT_TRUE(refiner.valid()) << refiner.error();
+	std::set<std::pair<skeleton::NodeID, skeleton::NodeID>> choices;
+	while (auto concrete = refiner.next()) {
+		EXPECT_FALSE(concrete->abstractReadsFrom);
+		EXPECT_TRUE(concrete->readsFromClassMembers.empty());
+		choices.emplace(*concrete->readsFrom[1], *concrete->readsFrom[3]);
+	}
+	EXPECT_EQ(choices, (std::set<std::pair<skeleton::NodeID, skeleton::NodeID>>{
+				   {10, 20}, {10, 21}, {11, 20}, {11, 21}}));
+	EXPECT_EQ(refiner.candidatesGenerated(), 4U);
+	EXPECT_EQ(refiner.candidatesSkipped(), 0U);
+}
+
+TEST(FiniteSkeletonEncoderTest, RfRefinerSkipsOnlyCoreEquivalentCombinations)
+{
+	symbolic::FiniteAssignment abstract;
+	abstract.abstractReadsFrom = true;
+	abstract.readsFrom.resize(4);
+	abstract.readsFrom[1] = 10;
+	abstract.readsFrom[3] = 20;
+	abstract.readsFromClassMembers.resize(4);
+	abstract.readsFromClassMembers[1] = {10, 11};
+	abstract.readsFromClassMembers[3] = {20, 21};
+
+	symbolic::FiniteRfRefiner refiner(abstract);
+	auto first = refiner.next();
+	ASSERT_TRUE(first);
+	EXPECT_EQ(*first->readsFrom[1], 10U);
+	EXPECT_EQ(*first->readsFrom[3], 20U);
+	const std::array<skeleton::NodeID, 1> core{1};
+	refiner.blockCurrentRfCore(core);
+	auto next = refiner.next();
+	ASSERT_TRUE(next);
+	EXPECT_EQ(*next->readsFrom[1], 11U);
+	EXPECT_EQ(*next->readsFrom[3], 20U);
+	EXPECT_EQ(refiner.candidatesSkipped(), 1U);
+}
+
+TEST(FiniteSkeletonEncoderTest, RfRefinerRejectsMalformedAbstractAssignment)
+{
+	symbolic::FiniteAssignment concrete;
+	symbolic::FiniteRfRefiner alreadyConcrete(concrete);
+	EXPECT_FALSE(alreadyConcrete.valid());
+
+	symbolic::FiniteAssignment malformed;
+	malformed.abstractReadsFrom = true;
+	malformed.readsFrom.resize(1);
+	malformed.readsFrom[0] = 3;
+	malformed.readsFromClassMembers.resize(1);
+	symbolic::FiniteRfRefiner emptyClass(malformed);
+	EXPECT_FALSE(emptyClass.valid());
 }
 
 TEST(FiniteSkeletonEncoderTest, GraphBlockingQuotientsUnusedInputValues)

@@ -364,7 +364,8 @@ static llvm::cl::opt<std::string> clFiniteSkeletonFirstModel(
 	llvm::cl::cat(clDebugging),
 	llvm::cl::desc("Time one error model: eager, abstract-pairwise, "
 		       "abstract-cardinality, abstract-cardinality-rvf-value, "
-		       "abstract-cardinality-rvf-provenance, or abstract-cardinality-sc"));
+		       "abstract-cardinality-rvf-provenance, abstract-cardinality-sc, "
+		       "or abstract-cardinality-rvf-value-sc"));
 
 static llvm::cl::opt<unsigned> clFiniteSkeletonSolveMax(
 	"finite-skeleton-solve-max", llvm::cl::init(1), llvm::cl::value_desc("N"),
@@ -570,7 +571,8 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality" &&
 	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-value" &&
 	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-provenance" &&
-	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-sc")
+	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-sc" &&
+	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-value-sc")
 		ERROR("Invalid -finite-skeleton-first-model mode: {}",
 		      lliConfig.finiteSkeletonFirstModel);
 	lliConfig.finiteSkeletonSolveMax = clFiniteSkeletonSolveMax;
@@ -1462,12 +1464,16 @@ auto main(int argc, char **argv) -> int
 							lliConfig.finiteSkeletonFirstModel ==
 								"abstract-cardinality-rvf-provenance" ||
 							lliConfig.finiteSkeletonFirstModel ==
+								"abstract-cardinality-rvf-value-sc" ||
+							lliConfig.finiteSkeletonFirstModel ==
 								"abstract-cardinality-sc"
 						? genmc::symbolic::RfCardinalityEncoding::native
 						: genmc::symbolic::RfCardinalityEncoding::pairwise,
 				.rfAbstraction =
 					lliConfig.finiteSkeletonFirstModel ==
-							"abstract-cardinality-rvf-value"
+							"abstract-cardinality-rvf-value" ||
+					lliConfig.finiteSkeletonFirstModel ==
+							"abstract-cardinality-rvf-value-sc"
 						? genmc::symbolic::RfAbstractionEncoding::value
 						: lliConfig.finiteSkeletonFirstModel ==
 								  "abstract-cardinality-rvf-provenance"
@@ -1583,6 +1589,89 @@ auto main(int argc, char **argv) -> int
 				      totalMetrics.statesExpanded,
 				      totalMetrics.executableTransitions,
 				      totalMetrics.duplicateStates, totalMetrics.maximumWorklist);
+			}
+			if (lliConfig.finiteSkeletonFirstModel ==
+				    "abstract-cardinality-rvf-value-sc" &&
+			    step.assignment) {
+				std::uint64_t abstractCandidates{};
+				std::uint64_t concreteCandidates{};
+				std::uint64_t rfCoreBlocks{};
+				std::uint64_t completed{};
+				std::uint64_t noWitness{};
+				std::uint64_t invalid{};
+				std::uint64_t totalCheckUs = micros(checkBegin, checkEnd);
+				std::uint64_t totalCompletionUs{};
+				genmc::rvf::Metrics totalMetrics{};
+				while (step.assignment &&
+				       concreteCandidates < lliConfig.finiteSkeletonSolveMax) {
+					if (step.assignment->abstractReadsFrom) {
+						++abstractCandidates;
+						const auto refineBegin =
+							std::chrono::steady_clock::now();
+						step = encoder.refineCurrentRfClasses();
+						const auto refineEnd =
+							std::chrono::steady_clock::now();
+						totalCheckUs += micros(refineBegin, refineEnd);
+						if (!step.assignment ||
+						    step.assignment->abstractReadsFrom) {
+							++invalid;
+							break;
+						}
+					}
+					++concreteCandidates;
+					const auto completionBegin =
+						std::chrono::steady_clock::now();
+					auto completion =
+						genmc::symbolic::completeFiniteSCWithOrdering(
+							*skeleton.program, *step.assignment);
+					const auto completionEnd =
+						std::chrono::steady_clock::now();
+					totalCompletionUs += micros(completionBegin, completionEnd);
+					totalMetrics.statesDiscovered +=
+						completion.metrics.statesDiscovered;
+					totalMetrics.statesExpanded += completion.metrics.statesExpanded;
+					totalMetrics.executableTransitions +=
+						completion.metrics.executableTransitions;
+					totalMetrics.duplicateStates += completion.metrics.duplicateStates;
+					totalMetrics.maximumWorklist = std::max(
+						totalMetrics.maximumWorklist,
+						completion.metrics.maximumWorklist);
+					if (completion.status == genmc::symbolic::
+							FiniteSCCompletionStatus::completed) {
+						++completed;
+						break;
+					}
+					if (completion.status != genmc::symbolic::
+							FiniteSCCompletionStatus::noWitness) {
+						++invalid;
+						break;
+					}
+					++noWitness;
+					if (completion.refinementSafe) {
+						encoder.blockCurrentRfCore(completion.rfCoreLoads);
+						++rfCoreBlocks;
+					} else {
+						encoder.blockCurrentGraph();
+					}
+					const auto nextBegin = std::chrono::steady_clock::now();
+					step = encoder.next();
+					const auto nextEnd = std::chrono::steady_clock::now();
+					totalCheckUs += micros(nextBegin, nextEnd);
+				}
+				PRINT(VerbosityLevel::Error,
+				      "Finite skeleton RVF refinement: abstract-candidates={} "
+				      "concrete-candidates={} rf-core-blocks={} completed={} "
+				      "no-witness={} invalid={} solver-status={} check-us={} "
+				      "complete-us={} states-discovered={} states-expanded={} "
+				      "transitions={} duplicates={} max-worklist={}\n",
+				      abstractCandidates, concreteCandidates, rfCoreBlocks,
+				      completed, noWitness, invalid,
+				      static_cast<unsigned>(step.status), totalCheckUs,
+				      totalCompletionUs, totalMetrics.statesDiscovered,
+				      totalMetrics.statesExpanded,
+				      totalMetrics.executableTransitions,
+				      totalMetrics.duplicateStates,
+				      totalMetrics.maximumWorklist);
 			}
 		}
 		if (lliConfig.finiteSkeletonSolveOne && skeleton.program) {

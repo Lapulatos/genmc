@@ -10,6 +10,7 @@ task_set="${GENMC_FIRST_MODEL_TASK_SET:-$source_root/optimization-analysis/core-
 output_root="${1:?pass a new /data3/sujie/experiments/caat-optimization result directory}"
 expected="${GENMC_FIRST_MODEL_EXPECTED:-45}"
 expected_per_mode="${GENMC_FIRST_MODEL_EXPECTED_PER_MODE:-15}"
+expected_modes="${GENMC_FIRST_MODEL_EXPECTED_MODES:-3}"
 cores="0-23,28-51"
 
 case "$output_root" in
@@ -17,7 +18,9 @@ case "$output_root" in
 	*) echo "refusing unsupported output root: $output_root" >&2; exit 2 ;;
 esac
 [[ ! -e "$output_root" && -x "$binary" && -x "$wrapper" && -f "$definition" ]] || exit 2
-[[ "$expected" =~ ^[1-9][0-9]*$ && "$expected_per_mode" =~ ^[1-9][0-9]*$ ]] || exit 2
+[[ "$expected" =~ ^[1-9][0-9]*$ && "$expected_per_mode" =~ ^[1-9][0-9]*$ &&
+   "$expected_modes" =~ ^[1-9][0-9]*$ ]] || exit 2
+[[ "$expected" -eq $((expected_per_mode * expected_modes)) ]] || exit 2
 if [[ "$task_set" != none ]]; then
 	[[ -f "$task_set" && "$(grep -cve '^[[:space:]]*$' "$task_set")" -eq "$expected_per_mode" ]] || exit 2
 fi
@@ -47,7 +50,7 @@ printf 'configuration\tstatus\tfinished\nfinite-rvf-first-model\t%s\t%s\n' "$sta
 
 mapfile -t archives < <(find "$output_root/results" -maxdepth 1 -name '*.logfiles.zip')
 mapfile -t result_xmls < <(find "$output_root/results" -maxdepth 1 -name '*.xml.bz2')
-[[ ${#archives[@]} -eq 1 && ${#result_xmls[@]} -eq 3 ]] || exit 3
+[[ ${#archives[@]} -eq 1 && ${#result_xmls[@]} -eq "$expected_modes" ]] || exit 3
 total_runs=0
 for xml in "${result_xmls[@]}"; do
 	runs="$(bzcat "$xml" | grep -c '<run ')"
