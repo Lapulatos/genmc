@@ -78,3 +78,13 @@ reachable local observations, class coverage, witness replay, and fail-open acco
 - Interpretation limit: bootstrap intervals resample tasks within one run. They do not estimate
   machine or run-to-run variance. The OOM outcome/resource tradeoff is the promotion decision, so
   the favorable common-solved interval cannot be generalized to the full workload.
+
+## Deagle value-first RF first-model gate (2026-07-20)
+
+- Among 225 admitted tasks, value grouping reduces RF selectors by 25.94% and pair terms by
+  58.85%; for 156 admitted baseline-TIMEOUT tasks the reductions are 28.97% and 63.55%.
+- Across 223 common first models, value CPU geometric-mean/summed ratios are 0.64561/0.74641;
+  RSS ratios are 0.98306/0.98344. Provenance CPU ratios are 0.74143/0.81938 and RSS ratios are
+  0.98787/0.98817.
+- This measures time to the first abstract model, not complete verification. Class-to-source
+  refinement cost and completeness remain unmeasured; no end-to-end claim is made.

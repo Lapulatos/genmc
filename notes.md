@@ -3375,3 +3375,17 @@ collected. No direction may claim them based only on missing buffered log marker
 - Figures 3 and 4, strict claim limits, raw server roots, and exact hashes are in
   `p1-clean-full-725-report-20260720.md`. The next algorithmic direction is value-first/source-lazy
   RVF integration in the Deagle/Yogar finite solver, not another retained-layout micro-variant.
+
+## Deagle/RVF first-model evidence (2026-07-20)
+
+- The 283-task census admits 225 programs and finds same-value class opportunity in all 225. Value
+  grouping removes 25.94% of RF selectors and 58.85% of pair terms.
+- On 223 common first models, CPU geometric-mean/summed ratios are 0.64561/0.74641 and RSS ratios
+  are 0.98306/0.98344. This passes the simultaneous time/memory research gate, but abstract RF is
+  rejected before CAT/SC materialization. Exact member/order refinement is required before any
+  verification or stable claim. Full report: `deagle-rvf-census-first-model-report-20260720.md`.
+- Infrastructure: census r1 used a 100-GiB container for 48 tasks capped at 4 GiB, so BenchExec
+  started zero tasks; launchers now use 220 GiB plus exact row checks. Panel r1 omitted stats-only
+  and includes native continuation time, so it is pre-evidence only. A host rebuild later reused a
+  Docker-owned tree and failed before compilation; rebuilding inside the original image passed
+  18/18. Never rebuild that tree with host CMake.
