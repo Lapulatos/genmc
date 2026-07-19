@@ -90,8 +90,8 @@ def read_logs(root: Path) -> dict[tuple[str, str], dict[str, object]]:
     return result
 
 
-def verdict(mode: str, row: dict[str, object]) -> str | None:
-    if mode == "concrete-sc":
+def verdict(kind: str, row: dict[str, object]) -> str | None:
+    if kind == "concrete-sc":
         if int(row.get("completed", 0)) > 0:
             return "sat"
         if int(row.get("terminal_solver_status", -1)) == 1 and not any(
@@ -99,9 +99,17 @@ def verdict(mode: str, row: dict[str, object]) -> str | None:
         ):
             return "unsat"
         return None
-    if row.get("supported") is True and row.get("solver_status") == 0 and row.get("assignment") is True:
+    if (
+        row.get("supported") is True
+        and row.get("solver_status") == 0
+        and row.get("assignment") is True
+    ):
         return "sat"
-    if row.get("supported") is True and row.get("solver_status") == 1 and row.get("assignment") is False:
+    if (
+        row.get("supported") is True
+        and row.get("solver_status") == 1
+        and row.get("assignment") is False
+    ):
         return "unsat"
     return None
 
@@ -115,27 +123,44 @@ def main() -> None:
     parser.add_argument("result_root", type=Path)
     parser.add_argument("log_root", type=Path)
     parser.add_argument("--expected-tasks", type=int, default=15)
+    parser.add_argument("--control-mode", default="concrete-sc")
+    parser.add_argument("--candidate-mode", default="value-sc-order")
+    parser.add_argument(
+        "--control-kind", choices=("concrete-sc", "first-model"), default="concrete-sc"
+    )
     args = parser.parse_args()
     xml = read_xml(args.result_root)
     logs = read_logs(args.log_root)
-    if set(xml) != {"concrete-sc", "value-sc-order"}:
+    control_mode = args.control_mode
+    candidate_mode = args.candidate_mode
+    if set(xml) != {control_mode, candidate_mode}:
         raise SystemExit(f"unexpected modes: {sorted(xml)}")
     if any(len(rows) != args.expected_tasks for rows in xml.values()):
         raise SystemExit("incomplete XML mode")
-    tasks = sorted(xml["concrete-sc"])
-    if set(tasks) != set(xml["value-sc-order"]):
+    tasks = sorted(xml[control_mode])
+    if set(tasks) != set(xml[candidate_mode]):
         raise SystemExit("task sets differ")
     classified = {
-        mode: {task: verdict(mode, logs.get((mode, task), {})) for task in tasks}
+        mode: {
+            task: verdict(
+                args.control_kind if mode == control_mode else "first-model",
+                logs.get((mode, task), {}),
+            )
+            for task in tasks
+        }
         for mode in xml
     }
     common = [task for task in tasks if all(classified[m][task] for m in xml)]
-    differences = [task for task in common if classified["concrete-sc"][task] != classified["value-sc-order"][task]]
+    differences = [
+        task
+        for task in common
+        if classified[control_mode][task] != classified[candidate_mode][task]
+    ]
     bad_witnesses = []
     for task in tasks:
-        if classified["value-sc-order"][task] != "sat":
+        if classified[candidate_mode][task] != "sat":
             continue
-        row = logs.get(("value-sc-order", task), {})
+        row = logs.get((candidate_mode, task), {})
         if row.get("witness_abstract") is not False or any(
             int(row.get(field, -1)) != 0
             for field in ("materialization_errors", "evaluation_errors", "violations")
@@ -144,25 +169,29 @@ def main() -> None:
     ratios = {}
     for metric in ("cpu", "wall", "memory"):
         values = [
-            float(xml["value-sc-order"][task][metric]) / float(xml["concrete-sc"][task][metric])
+            float(xml[candidate_mode][task][metric])
+            / float(xml[control_mode][task][metric])
             for task in common
-            if float(xml["concrete-sc"][task][metric]) > 0
+            if float(xml[control_mode][task][metric]) > 0
         ]
         ratios[metric] = {
             "geometric_mean": geometric_mean(values),
             "median": statistics.median(values) if values else None,
             "sum_ratio": (
-                sum(float(xml["value-sc-order"][task][metric]) for task in common)
-                / sum(float(xml["concrete-sc"][task][metric]) for task in common)
-                if common else None
+                sum(float(xml[candidate_mode][task][metric]) for task in common)
+                / sum(float(xml[control_mode][task][metric]) for task in common)
+                if common
+                else None
             ),
             "regressed": sum(value > 1 for value in values),
         }
     output = {
         "tasks": len(tasks),
         "bench_status_histograms": {
-            mode: {status: sum(row["status"] == status for row in rows.values())
-                   for status in sorted({str(row["status"]) for row in rows.values()})}
+            mode: {
+                status: sum(row["status"] == status for row in rows.values())
+                for status in sorted({str(row["status"]) for row in rows.values()})
+            }
             for mode, rows in xml.items()
         },
         "classified_histograms": {
@@ -174,28 +203,31 @@ def main() -> None:
             for mode, rows in classified.items()
         },
         "common_classified": len(common),
-	"classified_tasks": {
-	    mode: {task: value for task, value in rows.items() if value is not None}
-	    for mode, rows in classified.items()
-	},
+        "classified_tasks": {
+            mode: {task: value for task, value in rows.items() if value is not None}
+            for mode, rows in classified.items()
+        },
         "verdict_differences": differences,
         "bad_concrete_witnesses": bad_witnesses,
         "ratios_common_classified": ratios,
-	"all_task_resources": {
-	    metric: {
-	        mode: sum(float(xml[mode][task][metric]) for task in tasks)
-	        for mode in xml
-	    } | {
-	        "candidate_control_ratio": (
-	            sum(float(xml["value-sc-order"][task][metric]) for task in tasks)
-	            / sum(float(xml["concrete-sc"][task][metric]) for task in tasks)
-	        )
-	    }
-	    for metric in ("cpu", "wall", "memory")
-	},
+        "all_task_resources": {
+            metric: {
+                mode: sum(float(xml[mode][task][metric]) for task in tasks)
+                for mode in xml
+            }
+            | {
+                "candidate_control_ratio": (
+                    sum(float(xml[candidate_mode][task][metric]) for task in tasks)
+                    / sum(float(xml[control_mode][task][metric]) for task in tasks)
+                )
+            }
+            for metric in ("cpu", "wall", "memory")
+        },
         "concrete_candidates": {
-            task: logs[("concrete-sc", task)].get("candidates")
-            for task in tasks if ("concrete-sc", task) in logs and "candidates" in logs[("concrete-sc", task)]
+            task: logs[(control_mode, task)].get("candidates")
+            for task in tasks
+            if (control_mode, task) in logs
+            and "candidates" in logs[(control_mode, task)]
         },
     }
     print(json.dumps(output, indent=2, sort_keys=True))
