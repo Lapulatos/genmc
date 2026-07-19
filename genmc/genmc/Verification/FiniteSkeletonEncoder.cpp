@@ -48,6 +48,25 @@ struct BvDecision {
 	std::uint32_t width{};
 };
 
+using StaticValueKey = std::tuple<bool, std::uint32_t, std::uint64_t>;
+using StaticValueProvenanceKey = std::tuple<StaticValueKey, skeleton::NodeID, bool>;
+
+auto constantKey(std::uint32_t width, std::uint64_t value) -> StaticValueKey
+{
+	return {true, width, value};
+}
+
+auto storeValueKey(const skeleton::Program &program, const skeleton::EventSite &store,
+		   std::uint32_t width) -> StaticValueKey
+{
+	if (store.kind == skeleton::EventKind::unlock)
+		return constantKey(width, 0);
+	const auto &value = program.values.at(store.value);
+	return value.opcode == skeleton::ValueOpcode::constant
+		       ? constantKey(value.width, value.constant)
+		       : StaticValueKey{false, value.width, value.id};
+}
+
 auto isOrderingEvent(const skeleton::EventSite &event) -> bool
 {
 	using enum skeleton::EventKind;
@@ -101,19 +120,57 @@ auto censusFiniteRepresentation(const skeleton::Program &program)
 			continue;
 		++result.rfReads;
 		const auto width = load.kind == skeleton::EventKind::lock ? 1U : load.width;
-		std::uint64_t sources = hasInitial(load, width) ? 1 : 0;
+		std::vector<StaticValueProvenanceKey> sourceClasses;
+		if (hasInitial(load, width)) {
+			const auto initialValue = load.kind == skeleton::EventKind::lock
+						  ? 0
+						  : std::ranges::find_if(
+							    program.initialValues,
+							    [&](const auto &initial) {
+								    return initial.address == load.address &&
+									   initial.width == width;
+							    })->value;
+			sourceClasses.emplace_back(constantKey(width, initialValue),
+						   skeleton::invalidNode, true);
+		}
 		for (const auto &store : program.events)
 			if (store.address == load.address &&
 			    ((load.kind == skeleton::EventKind::load &&
 			      store.kind == skeleton::EventKind::store && store.width == width) ||
 			     (load.kind == skeleton::EventKind::lock &&
 			      store.kind == skeleton::EventKind::unlock)))
-				++sources;
+				sourceClasses.emplace_back(storeValueKey(program, store, width),
+							   store.function, false);
+		const auto sources = static_cast<std::uint64_t>(sourceClasses.size());
+		std::map<StaticValueKey, std::uint64_t> valueClassSizes;
+		std::map<StaticValueProvenanceKey, std::uint64_t> provenanceClassSizes;
+		for (const auto &source : sourceClasses) {
+			++valueClassSizes[std::get<0>(source)];
+			++provenanceClassSizes[source];
+		}
+		const auto valueClasses = static_cast<std::uint64_t>(valueClassSizes.size());
+		const auto provenanceClasses =
+			static_cast<std::uint64_t>(provenanceClassSizes.size());
 		result.rfSelectors += sources;
 		if (sources == 0)
 			++result.rfReadsWithoutSource;
 		else
 			result.rfPairs += sources * (sources - 1) / 2;
+		result.rfValueClasses += valueClasses;
+		result.rfValueClassPairs += valueClasses * (valueClasses - 1) / 2;
+		result.rfValueProvenanceClasses += provenanceClasses;
+		result.rfValueProvenanceClassPairs +=
+			provenanceClasses * (provenanceClasses - 1) / 2;
+		result.rfValueMergeableSources += sources - valueClasses;
+		result.rfValueProvenanceMergeableSources += sources - provenanceClasses;
+		result.rfReadsWithValueMerge += valueClasses < sources;
+		result.rfReadsWithValueProvenanceMerge += provenanceClasses < sources;
+		for (const auto &[unusedKey, size] : valueClassSizes)
+			result.maximumRfValueClassSize =
+				std::max(result.maximumRfValueClassSize, size);
+		for (const auto &[unusedKey, size] : provenanceClassSizes)
+			result.maximumRfValueProvenanceClassSize =
+				std::max(result.maximumRfValueProvenanceClassSize, size);
 		result.rfLoadActivations += sources;
 		result.rfStoreActivations += sources - (hasInitial(load, width) ? 1 : 0);
 		if (load.kind == skeleton::EventKind::load)
@@ -149,6 +206,16 @@ auto format(const FiniteRepresentationCensus &c) -> std::string
 	    << " error-events=" << c.errorEvents << " rf-reads=" << c.rfReads
 	    << " rf-reads-without-source=" << c.rfReadsWithoutSource
 	    << " rf-selectors=" << c.rfSelectors << " rf-pairs=" << c.rfPairs
+	    << " rf-value-classes=" << c.rfValueClasses
+	    << " rf-value-class-pairs=" << c.rfValueClassPairs
+	    << " rf-value-provenance-classes=" << c.rfValueProvenanceClasses
+	    << " rf-value-provenance-class-pairs=" << c.rfValueProvenanceClassPairs
+	    << " rf-value-mergeable-sources=" << c.rfValueMergeableSources
+	    << " rf-value-provenance-mergeable-sources="
+	    << c.rfValueProvenanceMergeableSources
+	    << " rf-reads-with-value-merge=" << c.rfReadsWithValueMerge
+	    << " rf-reads-with-value-provenance-merge="
+	    << c.rfReadsWithValueProvenanceMerge
 	    << " rf-load-activations=" << c.rfLoadActivations
 	    << " rf-store-activations=" << c.rfStoreActivations
 	    << " rf-value=" << c.rfValueConstraints << " co-ranks=" << c.coRanks
@@ -156,6 +223,9 @@ auto format(const FiniteRepresentationCensus &c) -> std::string
 	    << " co-before-vars=" << c.coPairs << " po-pairs=" << c.poPairs
 	    << " potential-fr=" << c.potentialFrDerivations
 	    << " max-rf-sources=" << c.maximumRfSources
+	    << " max-rf-value-class-size=" << c.maximumRfValueClassSize
+	    << " max-rf-value-provenance-class-size="
+	    << c.maximumRfValueProvenanceClassSize
 	    << " max-writes-address=" << c.maximumWritesPerAddress
 	    << " yogar-removed-co-ranks=" << c.coRanks
 	    << " yogar-removed-co-rank-bits=" << c.coRankBits
@@ -486,21 +556,75 @@ public:
 				continue;
 			}
 			std::vector<Expr> selectors;
-			for (const auto &[store, sourceValue] : sources) {
-				auto selected = solver.boolean("rf_" + std::to_string(load.id) + "_" +
-							      std::to_string(store));
-				selectors.push_back(selected);
-				boolDecisions.push_back(selected);
-				graphDecisions.push_back(selected);
-				rf.push_back({load.id, store, selected});
-				solver.constrain(solver.implies(selected, blocks[load.block]));
-				if (store != skeleton::invalidNode)
+			if (options.rfAbstraction != RfAbstractionEncoding::concrete) {
+				using Source = std::pair<skeleton::NodeID, Expr>;
+				std::map<StaticValueProvenanceKey, std::vector<Source>> classes;
+				for (const auto &[store, sourceValue] : sources) {
+					const auto isInitial = store == skeleton::invalidNode;
+					const auto valueKey = isInitial
+							      ? constantKey(
+									width,
+									load.kind == skeleton::EventKind::lock
+										? 0
+										: *initial(load.address, width))
+							      : storeValueKey(program,
+									      program.events[store], width);
+					const auto provenance =
+						options.rfAbstraction ==
+								RfAbstractionEncoding::valueProvenance
+							? std::tuple{valueKey,
+								     isInitial ? skeleton::invalidNode
+									     : program.events[store].function,
+								     isInitial}
+							: std::tuple{valueKey, skeleton::invalidNode, false};
+					classes[provenance].emplace_back(store, sourceValue);
+				}
+				std::size_t classIndex{};
+				for (const auto &[unusedKey, members] : classes) {
+					auto selected = solver.boolean(
+						"rf_class_" + std::to_string(load.id) + "_" +
+						std::to_string(classIndex++));
+					selectors.push_back(selected);
+					boolDecisions.push_back(selected);
+					graphDecisions.push_back(selected);
+					/* This representative is diagnostic metadata only. The class
+					 * selector remains an over-approximation until source refinement. */
+					rf.push_back({load.id, members.front().first, selected});
+					solver.constrain(
+						solver.implies(selected, blocks[load.block]));
+					std::vector<Expr> available;
+					for (const auto &[store, unusedValue] : members)
+						available.push_back(
+							store == skeleton::invalidNode
+								? solver.allOf(std::span<const Expr>{})
+								: blocks[program.events[store].block]);
 					solver.constrain(solver.implies(
-						selected, blocks[program.events[store].block]));
-				if (load.kind == skeleton::EventKind::load)
-					solver.constrain(solver.implies(
-						selected,
-						solver.equal(values[load.value], sourceValue)));
+						selected, solver.anyOf(available)));
+					if (load.kind == skeleton::EventKind::load)
+						solver.constrain(solver.implies(
+							selected,
+							solver.equal(values[load.value],
+								     members.front().second)));
+				}
+			} else {
+				for (const auto &[store, sourceValue] : sources) {
+					auto selected = solver.boolean(
+						"rf_" + std::to_string(load.id) + "_" +
+						std::to_string(store));
+					selectors.push_back(selected);
+					boolDecisions.push_back(selected);
+					graphDecisions.push_back(selected);
+					rf.push_back({load.id, store, selected});
+					solver.constrain(
+						solver.implies(selected, blocks[load.block]));
+					if (store != skeleton::invalidNode)
+						solver.constrain(solver.implies(
+							selected, blocks[program.events[store].block]));
+					if (load.kind == skeleton::EventKind::load)
+						solver.constrain(solver.implies(
+							selected,
+							solver.equal(values[load.value], sourceValue)));
+				}
 			}
 			solver.constrain(solver.implies(blocks[load.block], solver.anyOf(selectors)));
 			if (options.rfCardinality == RfCardinalityEncoding::native) {
@@ -585,6 +709,8 @@ public:
 		if (status != CheckResult::sat)
 			return {.status = status};
 		FiniteAssignment assignment;
+		assignment.abstractReadsFrom =
+			options.rfAbstraction != RfAbstractionEncoding::concrete;
 		assignment.values.resize(values.size());
 		assignment.readsFrom.resize(program.events.size());
 		for (const auto &event : program.events)

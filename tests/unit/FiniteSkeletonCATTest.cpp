@@ -132,6 +132,24 @@ TEST(FiniteSkeletonCATTest, GenericEvaluatorAcceptsConsistentRfAssignment)
 	EXPECT_TRUE(result.evaluation.consistent());
 }
 
+TEST(FiniteSkeletonCATTest, RejectsAbstractReadsFromClasses)
+{
+	auto model = compileModel("M\nacyclic po | rf as sc\n");
+	ASSERT_TRUE(model);
+	auto program = storeBufferingProgram();
+	genmc::symbolic::FiniteAssignment assignment;
+	assignment.abstractReadsFrom = true;
+	assignment.activeEvents = {0, 1, 2, 3};
+	assignment.values.resize(4);
+	assignment.readsFrom.resize(4);
+	assignment.readsFrom[1] = 2;
+	assignment.readsFrom[3] = 0;
+
+	auto result = genmc::symbolic::evaluateFiniteAssignment(program, assignment, *model);
+	ASSERT_EQ(result.errors.size(), 1U);
+	EXPECT_NE(result.errors.front().find("must be refined"), std::string::npos);
+}
+
 TEST(FiniteSkeletonCATTest, MatchesGraphAdapterSCAndFenceClassification)
 {
 	auto model = compileModel("Predicates\nempty SC as sc-empty\nempty F as f-empty\n");

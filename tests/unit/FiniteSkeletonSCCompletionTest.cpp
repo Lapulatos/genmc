@@ -97,6 +97,24 @@ TEST(FiniteSkeletonSCCompletionTest, RejectsSCStoreBufferingZeroZero)
 	EXPECT_EQ(ordering.coreChecks, 1U);
 }
 
+TEST(FiniteSkeletonSCCompletionTest, RejectsAbstractReadsFromClasses)
+{
+	using namespace genmc;
+	const auto program = storeBufferingProgram();
+	symbolic::FiniteAssignment assignment;
+	assignment.abstractReadsFrom = true;
+	assignment.activeEvents = {0, 1, 2, 3};
+	assignment.values.resize(program.values.size());
+	assignment.readsFrom.resize(program.events.size());
+
+	const auto result = symbolic::completeFiniteSC(program, assignment);
+	EXPECT_EQ(result.status, symbolic::FiniteSCCompletionStatus::invalidInput);
+	EXPECT_NE(result.error.find("must be refined"), std::string::npos);
+	const auto ordering = symbolic::completeFiniteSCWithOrdering(program, assignment);
+	EXPECT_EQ(ordering.status, symbolic::FiniteSCCompletionStatus::invalidInput);
+	EXPECT_NE(ordering.error.find("must be refined"), std::string::npos);
+}
+
 TEST(FiniteSkeletonSCCompletionTest, CompletesEverySCFeasibleStoreBufferingRfShape)
 {
 	using namespace genmc;

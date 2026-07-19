@@ -13,6 +13,14 @@
   <column title="rf no source">rf-reads-without-source=([0-9]+)</column>
   <column title="rf selectors">rf-selectors=([0-9]+)</column>
   <column title="rf pairs">rf-pairs=([0-9]+)</column>
+  <column title="rf value classes">rf-value-classes=([0-9]+)</column>
+  <column title="rf value class pairs">rf-value-class-pairs=([0-9]+)</column>
+  <column title="rf value provenance classes">rf-value-provenance-classes=([0-9]+)</column>
+  <column title="rf value provenance class pairs">rf-value-provenance-class-pairs=([0-9]+)</column>
+  <column title="rf value mergeable sources">rf-value-mergeable-sources=([0-9]+)</column>
+  <column title="rf value provenance mergeable sources">rf-value-provenance-mergeable-sources=([0-9]+)</column>
+  <column title="rf reads with value merge">rf-reads-with-value-merge=([0-9]+)</column>
+  <column title="rf reads with value provenance merge">rf-reads-with-value-provenance-merge=([0-9]+)</column>
   <column title="rf load activation">rf-load-activations=([0-9]+)</column>
   <column title="rf store activation">rf-store-activations=([0-9]+)</column>
   <column title="rf value">rf-value=([0-9]+)</column>
@@ -23,6 +31,8 @@
   <column title="po pairs">po-pairs=([0-9]+)</column>
   <column title="potential fr">potential-fr=([0-9]+)</column>
   <column title="max rf sources">max-rf-sources=([0-9]+)</column>
+  <column title="max rf value class size">max-rf-value-class-size=([0-9]+)</column>
+  <column title="max rf value provenance class size">max-rf-value-provenance-class-size=([0-9]+)</column>
   <column title="max writes address">max-writes-address=([0-9]+)</column>
   <rundefinition name="finite-representation.pthread-wmm">
     <option name="--svcomp-backend=caat-sc"/>

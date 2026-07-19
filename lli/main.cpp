@@ -363,7 +363,8 @@ static llvm::cl::opt<std::string> clFiniteSkeletonFirstModel(
 	"finite-skeleton-first-model", llvm::cl::init(""), llvm::cl::value_desc("MODE"),
 	llvm::cl::cat(clDebugging),
 	llvm::cl::desc("Time one error model: eager, abstract-pairwise, "
-		       "abstract-cardinality, or abstract-cardinality-sc"));
+		       "abstract-cardinality, abstract-cardinality-rvf-value, "
+		       "abstract-cardinality-rvf-provenance, or abstract-cardinality-sc"));
 
 static llvm::cl::opt<unsigned> clFiniteSkeletonSolveMax(
 	"finite-skeleton-solve-max", llvm::cl::init(1), llvm::cl::value_desc("N"),
@@ -567,6 +568,8 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	    lliConfig.finiteSkeletonFirstModel != "eager" &&
 	    lliConfig.finiteSkeletonFirstModel != "abstract-pairwise" &&
 	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality" &&
+	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-value" &&
+	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-rvf-provenance" &&
 	    lliConfig.finiteSkeletonFirstModel != "abstract-cardinality-sc")
 		ERROR("Invalid -finite-skeleton-first-model mode: {}",
 		      lliConfig.finiteSkeletonFirstModel);
@@ -1455,9 +1458,21 @@ auto main(int argc, char **argv) -> int
 					lliConfig.finiteSkeletonFirstModel ==
 								"abstract-cardinality" ||
 							lliConfig.finiteSkeletonFirstModel ==
+								"abstract-cardinality-rvf-value" ||
+							lliConfig.finiteSkeletonFirstModel ==
+								"abstract-cardinality-rvf-provenance" ||
+							lliConfig.finiteSkeletonFirstModel ==
 								"abstract-cardinality-sc"
 						? genmc::symbolic::RfCardinalityEncoding::native
 						: genmc::symbolic::RfCardinalityEncoding::pairwise,
+				.rfAbstraction =
+					lliConfig.finiteSkeletonFirstModel ==
+							"abstract-cardinality-rvf-value"
+						? genmc::symbolic::RfAbstractionEncoding::value
+						: lliConfig.finiteSkeletonFirstModel ==
+								  "abstract-cardinality-rvf-provenance"
+							  ? genmc::symbolic::RfAbstractionEncoding::valueProvenance
+							  : genmc::symbolic::RfAbstractionEncoding::concrete,
 			};
 			const auto buildBegin = std::chrono::steady_clock::now();
 			genmc::symbolic::FiniteSkeletonEncoder encoder(*skeleton.program, options);

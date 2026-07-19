@@ -25,6 +25,8 @@ struct FiniteAssignment {
 	std::vector<std::optional<std::uint64_t>> values{};
 	/** Per event: selected store event, invalidNode for initial write, nullopt for non-load. */
 	std::vector<std::optional<skeleton::NodeID>> readsFrom{};
+	/** True when readsFrom contains class representatives and must not be replayed. */
+	bool abstractReadsFrom{};
 	/** Active stores in increasing per-location coherence rank. */
 	std::vector<skeleton::NodeID> coherenceOrder{};
 };
@@ -35,11 +37,14 @@ struct FiniteStep {
 };
 
 enum class RfCardinalityEncoding : std::uint8_t { pairwise, native };
+enum class RfAbstractionEncoding : std::uint8_t { concrete, value, valueProvenance };
 
 struct FiniteEncodingOptions {
 	bool requireActiveError{};
 	bool encodeCo{true};
 	RfCardinalityEncoding rfCardinality{RfCardinalityEncoding::pairwise};
+	/** Diagnostic first-model abstraction only. Non-concrete assignments are not witnesses. */
+	RfAbstractionEncoding rfAbstraction{RfAbstractionEncoding::concrete};
 };
 
 /** Solver-free size census for the current eager encoding and two literature-motivated
@@ -54,6 +59,15 @@ struct FiniteRepresentationCensus {
 	std::uint64_t rfReadsWithoutSource{};
 	std::uint64_t rfSelectors{};
 	std::uint64_t rfPairs{};
+	/** Conservative first-layer RVF classes: exact constants or identical SSA values. */
+	std::uint64_t rfValueClasses{};
+	std::uint64_t rfValueClassPairs{};
+	std::uint64_t rfValueProvenanceClasses{};
+	std::uint64_t rfValueProvenanceClassPairs{};
+	std::uint64_t rfValueMergeableSources{};
+	std::uint64_t rfValueProvenanceMergeableSources{};
+	std::uint64_t rfReadsWithValueMerge{};
+	std::uint64_t rfReadsWithValueProvenanceMerge{};
 	std::uint64_t rfLoadActivations{};
 	std::uint64_t rfStoreActivations{};
 	std::uint64_t rfValueConstraints{};
@@ -63,6 +77,8 @@ struct FiniteRepresentationCensus {
 	std::uint64_t poPairs{};
 	std::uint64_t potentialFrDerivations{};
 	std::uint64_t maximumRfSources{};
+	std::uint64_t maximumRfValueClassSize{};
+	std::uint64_t maximumRfValueProvenanceClassSize{};
 	std::uint64_t maximumWritesPerAddress{};
 };
 

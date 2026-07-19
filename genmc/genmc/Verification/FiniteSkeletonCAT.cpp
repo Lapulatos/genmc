@@ -38,6 +38,11 @@ auto materializeFiniteAssignment(const skeleton::Program &program,
 {
 	FiniteCATResult result;
 	cat::BaseValues base;
+	if (assignment.abstractReadsFrom) {
+		result.errors.emplace_back(
+			"abstract reads-from classes must be refined before CAT materialization");
+		return {std::move(result), std::move(base)};
+	}
 	std::vector<bool> active(program.events.size(), false);
 	for (const auto event : assignment.activeEvents) {
 		if (event >= active.size()) {

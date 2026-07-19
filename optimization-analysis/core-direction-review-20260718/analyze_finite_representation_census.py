@@ -72,6 +72,36 @@ def summarize(rows: dict[str, dict[str, int]], tasks: list[str]) -> dict[str, ob
     return {"tasks": len(tasks), "metrics": metrics}
 
 
+def summarize_rvf_opportunity(
+    rows: dict[str, dict[str, int]], tasks: list[str]
+) -> dict[str, object]:
+    selectors = sum(rows[task]["rf-selectors"] for task in tasks)
+    pairs = sum(rows[task]["rf-pairs"] for task in tasks)
+
+    def layer(prefix: str) -> dict[str, object]:
+        classes = sum(rows[task][f"rf-{prefix}-classes"] for task in tasks)
+        class_pairs = sum(rows[task][f"rf-{prefix}-class-pairs"] for task in tasks)
+        mergeable = sum(rows[task][f"rf-{prefix}-mergeable-sources"] for task in tasks)
+        return {
+            "tasks-with-opportunity": sum(
+                rows[task][f"rf-{prefix}-mergeable-sources"] > 0 for task in tasks
+            ),
+            "classes": classes,
+            "class-pairs": class_pairs,
+            "mergeable-sources": mergeable,
+            "selector-reduction-fraction": mergeable / selectors if selectors else 0.0,
+            "pair-reduction-fraction": 1 - class_pairs / pairs if pairs else 0.0,
+        }
+
+    return {
+        "tasks": len(tasks),
+        "concrete-selectors": selectors,
+        "concrete-pairs": pairs,
+        "value": layer("value"),
+        "value-provenance": layer("value-provenance"),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("log_root", type=Path)
@@ -110,6 +140,11 @@ def main() -> None:
         "all-built": summarize(rows, tasks),
         "baseline-timeout": summarize(rows, timeout),
         "baseline-non-timeout": summarize(rows, non_timeout),
+        "rvf-class-opportunity": {
+            "all-built": summarize_rvf_opportunity(rows, tasks),
+            "baseline-timeout": summarize_rvf_opportunity(rows, timeout),
+            "baseline-non-timeout": summarize_rvf_opportunity(rows, non_timeout),
+        },
         "panel-candidates": {
             "fastest-false": [
                 describe(task)

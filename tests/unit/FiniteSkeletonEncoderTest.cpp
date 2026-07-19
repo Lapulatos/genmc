@@ -118,6 +118,14 @@ TEST(FiniteSkeletonEncoderTest, ReportsSolverFreeRepresentationSize)
 	EXPECT_EQ(census.rfReadsWithoutSource, 0U);
 	EXPECT_EQ(census.rfSelectors, 3U);
 	EXPECT_EQ(census.rfPairs, 3U);
+	EXPECT_EQ(census.rfValueClasses, 2U);
+	EXPECT_EQ(census.rfValueClassPairs, 1U);
+	EXPECT_EQ(census.rfValueProvenanceClasses, 2U);
+	EXPECT_EQ(census.rfValueProvenanceClassPairs, 1U);
+	EXPECT_EQ(census.rfValueMergeableSources, 1U);
+	EXPECT_EQ(census.rfValueProvenanceMergeableSources, 1U);
+	EXPECT_EQ(census.rfReadsWithValueMerge, 1U);
+	EXPECT_EQ(census.rfReadsWithValueProvenanceMerge, 1U);
 	EXPECT_EQ(census.rfLoadActivations, 3U);
 	EXPECT_EQ(census.rfStoreActivations, 2U);
 	EXPECT_EQ(census.rfValueConstraints, 3U);
@@ -127,6 +135,8 @@ TEST(FiniteSkeletonEncoderTest, ReportsSolverFreeRepresentationSize)
 	EXPECT_EQ(census.poPairs, 3U);
 	EXPECT_EQ(census.potentialFrDerivations, 6U);
 	EXPECT_EQ(census.maximumRfSources, 3U);
+	EXPECT_EQ(census.maximumRfValueClassSize, 2U);
+	EXPECT_EQ(census.maximumRfValueProvenanceClassSize, 2U);
 	EXPECT_EQ(census.maximumWritesPerAddress, 2U);
 }
 
@@ -171,6 +181,50 @@ TEST(FiniteSkeletonEncoderTest, AbstractCardinalityRequiresErrorAndPreservesRfCh
 	}
 	EXPECT_EQ(sources,
 		  (std::set<skeleton::NodeID>{skeleton::invalidNode, 0}));
+}
+
+TEST(FiniteSkeletonEncoderTest, ValueClassFirstModelDefersSameValueSources)
+{
+	if (!symbolic::Solver::backendAvailable())
+		GTEST_SKIP() << "Z3 is unavailable in this build";
+	skeleton::Program program;
+	program.functions.push_back(
+		{.id = 0, .name = "main", .entry = 0, .isMain = true, .blocks = {0}});
+	program.blocks.push_back({.id = 0, .function = 0});
+	program.values.push_back({.id = 0, .block = 0,
+				  .opcode = skeleton::ValueOpcode::constant,
+				  .width = 8, .constant = 7});
+	program.values.push_back(
+		{.id = 1, .block = 0, .opcode = skeleton::ValueOpcode::load, .width = 8});
+	program.events.push_back({.id = 0, .kind = skeleton::EventKind::store,
+				  .function = 0, .block = 0, .value = 0,
+				  .address = "x", .width = 8});
+	program.events.push_back({.id = 1, .kind = skeleton::EventKind::store,
+				  .function = 0, .block = 0, .value = 0,
+				  .address = "x", .width = 8});
+	program.events.push_back({.id = 2, .kind = skeleton::EventKind::load,
+				  .function = 0, .block = 0, .value = 1,
+				  .address = "x", .width = 8});
+	program.events.push_back({.id = 3, .kind = skeleton::EventKind::error,
+				  .function = 0, .block = 0});
+	program.initialValues.push_back({.address = "x", .width = 8, .value = 0});
+
+	symbolic::FiniteSkeletonEncoder encoder(
+		program, {.requireActiveError = true,
+			  .encodeCo = false,
+			  .rfCardinality = symbolic::RfCardinalityEncoding::native,
+			  .rfAbstraction = symbolic::RfAbstractionEncoding::value});
+	std::set<std::uint64_t> readValues;
+	for (;;) {
+		auto step = encoder.next();
+		if (step.status == symbolic::CheckResult::unsat)
+			break;
+		ASSERT_EQ(step.status, symbolic::CheckResult::sat);
+		ASSERT_TRUE(step.assignment);
+		EXPECT_TRUE(step.assignment->abstractReadsFrom);
+		readValues.insert(*step.assignment->values[1]);
+	}
+	EXPECT_EQ(readValues, (std::set<std::uint64_t>{0, 7}));
 }
 
 TEST(FiniteSkeletonEncoderTest, GraphBlockingQuotientsUnusedInputValues)
