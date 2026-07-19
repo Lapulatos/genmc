@@ -18,6 +18,7 @@
 #include "genmc/Support/Error.hpp"
 
 #include <algorithm>
+#include <chrono>
 #include <cstdint>
 #include <deque>
 #include <utility>
@@ -30,34 +31,57 @@ class Evaluation {
 public:
 	Evaluation(const NormalizedModel &model, const ModelAnalysis &analysis,
 		   std::size_t eventCount, const BaseValues &base, bool enableLazyCycles,
-		   bool fastChecks, bool fastComposition, bool fastCycleChecks)
+		   std::optional<PredicateId> retainedLazyRoot, bool profiling, bool fastChecks,
+		   bool fastComposition, bool fastCycleChecks)
 		: model_(model), analysis_(analysis), eventCount_(eventCount), base_(base),
 		  values_(model.predicates().size()), counts_(model.predicates().size()),
 		  dependents_(model.predicates().size()), enableLazyCycles_(enableLazyCycles),
-		  fastChecks_(fastChecks), fastComposition_(fastComposition),
-		  fastCycleChecks_(fastCycleChecks)
+		  retainedLazyRoot_(retainedLazyRoot), profiling_(profiling), fastChecks_(fastChecks),
+		  fastComposition_(fastComposition), fastCycleChecks_(fastCycleChecks)
 	{
 		VERIFY(analysis.componentOf().size() == model.predicates().size(),
 		       "CAAT analysis/model predicate count mismatch");
+		VERIFY(!retainedLazyRoot_ ||
+			       (*retainedLazyRoot_ < analysis_.lazyCycleElided().size() &&
+				analysis_.lazyCycleElided()[*retainedLazyRoot_]),
+		       "retained CAT root is not analyzer-certified for lazy evaluation");
 		for (const auto &dependency : analysis.dependencies())
 			dependents_[dependency.source].push_back(dependency.target);
 	}
 
 	auto run() -> CaatEvaluationResult
 	{
+		const auto initializeStarted = profiling_ ? std::chrono::steady_clock::now()
+							  : std::chrono::steady_clock::time_point{};
 		initializeValues();
+		if (profiling_)
+			statistics_.initializationNanoseconds += elapsed(initializeStarted);
 		if (errors_.empty()) {
 			for (std::uint32_t stratum = 0; stratum < analysis_.strata().size();
 			     ++stratum)
 				evaluateStratum(stratum);
-			if (errors_.empty())
+			if (errors_.empty()) {
+				const auto checksStarted = profiling_ ? std::chrono::steady_clock::now()
+								     : std::chrono::steady_clock::time_point{};
 				evaluateChecks();
+				if (profiling_)
+					statistics_.checkNanoseconds += elapsed(checksStarted);
+			}
 		}
 		return {std::move(violations_), std::move(errors_), std::move(values_),
 			std::move(counts_), statistics_};
 	}
 
 private:
+	[[nodiscard]] static auto elapsed(std::chrono::steady_clock::time_point started)
+		-> std::uint64_t
+	{
+		return static_cast<std::uint64_t>(
+			std::chrono::duration_cast<std::chrono::nanoseconds>(
+				std::chrono::steady_clock::now() - started)
+				.count());
+	}
+
 	[[nodiscard]] auto universe() const -> EventSet
 	{
 		EventSet result(eventCount_);
@@ -145,9 +169,9 @@ private:
 		case Predicate::Kind::Composition:
 			return fastComposition_
 				       ? composeFast(std::get<Relation>(operand(0)),
-						   std::get<Relation>(operand(1)))
+						     std::get<Relation>(operand(1)))
 				       : compose(std::get<Relation>(operand(0)),
-					 std::get<Relation>(operand(1)));
+						 std::get<Relation>(operand(1)));
 		case Predicate::Kind::Union:
 		case Predicate::Kind::Intersection:
 		case Predicate::Kind::Difference:
@@ -194,10 +218,23 @@ private:
 			const auto id = worklist.front();
 			worklist.pop_front();
 			queued[id] = false;
-			const auto next = operation(model_.predicates()[id]);
+			const auto &predicate = model_.predicates()[id];
+			const auto operationStarted = profiling_ ? std::chrono::steady_clock::now()
+								 : std::chrono::steady_clock::time_point{};
+			const auto next = operation(predicate);
+			const auto kind = static_cast<std::size_t>(predicate.kind);
+			if (profiling_) {
+				statistics_.operationNanosecondsByKind[kind] += elapsed(operationStarted);
+				++statistics_.operationEvaluationsByKind[kind];
+			}
 			++counts_[id];
 			++statistics_.operationEvaluations;
-			if (*values_[id] == next)
+			const auto comparisonStarted = profiling_ ? std::chrono::steady_clock::now()
+								  : std::chrono::steady_clock::time_point{};
+			const bool unchanged = *values_[id] == next;
+			if (profiling_)
+				statistics_.valueComparisonNanoseconds += elapsed(comparisonStarted);
+			if (unchanged)
 				continue;
 			values_[id] = next;
 			++statistics_.valueChanges;
@@ -218,7 +255,7 @@ private:
 			for (auto target = fastCycleChecks_ ? relation.nextSuccessor(event, 0) : 0;
 			     target < eventCount_;
 			     target = fastCycleChecks_ ? relation.nextSuccessor(event, target + 1)
-						     : target + 1) {
+						       : target + 1) {
 				if (!fastCycleChecks_ && !relation.contains(event, target))
 					continue;
 				if (color[target] == 0) {
@@ -250,15 +287,21 @@ private:
 			const auto &check = model_.checks()[checkIndex];
 			if (enableLazyCycles_ && analysis_.lazyCycleRoots()[checkIndex]) {
 				LazyCycleStatistics lazyStatistics;
+				const auto root = *analysis_.lazyCycleRoots()[checkIndex];
+				Relation retained(eventCount_);
+				auto *materialized = retainedLazyRoot_ == root ? &retained : nullptr;
 				auto witness = findLazyCycle(model_,
-							 *analysis_.lazyCycleRoots()[checkIndex], values_,
-							 eventCount_, &lazyStatistics);
+							 root, values_, eventCount_, &lazyStatistics,
+							 materialized);
 				statistics_.lazyCycleChecks += lazyStatistics.checks;
 				statistics_.lazyEdgeCandidates += lazyStatistics.emittedCandidates;
+				statistics_.lazyBaseCandidates += lazyStatistics.baseCandidates;
 				statistics_.lazyDepthFallbacks += lazyStatistics.depthFallbacks;
 				if (!witness.empty())
 					violations_.push_back({check.name, check.kind, check.span,
 							   std::move(witness)});
+				else if (materialized)
+					values_[root] = std::move(retained);
 				continue;
 			}
 			const auto &value = *values_[check.predicate];
@@ -284,7 +327,7 @@ private:
 				const auto &relation = std::get<Relation>(value);
 				if (fastChecks_) {
 					const auto event = relation.firstReflexive();
-					if (event != eventCount_)
+					if (event < eventCount_)
 						witness.push_back(event);
 				} else
 					for (std::size_t event = 0; event < eventCount_; ++event) {
@@ -313,6 +356,8 @@ private:
 	std::vector<EvaluationError> errors_;
 	FixedPointStatistics statistics_;
 	bool enableLazyCycles_{};
+	std::optional<PredicateId> retainedLazyRoot_;
+	bool profiling_{};
 	bool fastChecks_{};
 	bool fastComposition_{};
 	bool fastCycleChecks_{};
@@ -322,12 +367,14 @@ private:
 
 auto CaatEvaluator::evaluate(const NormalizedModel &model, const ModelAnalysis &analysis,
 			     std::size_t eventCount, const BaseValues &base,
-			     bool enableLazyCycles, bool fastChecks, bool fastComposition,
-			     bool fastCycleChecks) const
+			     bool enableLazyCycles,
+			     std::optional<PredicateId> retainedLazyRoot, bool profiling,
+			     bool fastChecks, bool fastComposition, bool fastCycleChecks) const
 	-> CaatEvaluationResult
 {
-	return Evaluation(model, analysis, eventCount, base, enableLazyCycles, fastChecks,
-			  fastComposition, fastCycleChecks)
+	return Evaluation(model, analysis, eventCount, base, enableLazyCycles,
+			  retainedLazyRoot, profiling, fastChecks, fastComposition,
+			  fastCycleChecks)
 		.run();
 }
 

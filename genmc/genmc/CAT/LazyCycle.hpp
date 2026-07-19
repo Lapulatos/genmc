@@ -9,6 +9,7 @@
 #define GENMC_CAT_LAZY_CYCLE_HPP
 
 #include "genmc/CAT/Evaluator.hpp"
+#include "genmc/CAT/ConflictCore.hpp"
 #include "genmc/CAT/Normalized.hpp"
 
 #include <cstddef>
@@ -21,6 +22,8 @@ namespace cat {
 struct LazyCycleStatistics {
 	std::size_t checks{};
 	std::size_t emittedCandidates{};
+	/** Base-relation cursor entries visited before derived filters/deduplication. */
+	std::size_t baseCandidates{};
 	std::size_t depthFallbacks{};
 };
 
@@ -33,8 +36,23 @@ struct LazyCycleStatistics {
  */
 [[nodiscard]] auto findLazyCycle(const NormalizedModel &model, PredicateId root,
 				 const std::vector<std::optional<Value>> &values,
-				 std::size_t eventCount, LazyCycleStatistics *statistics = nullptr)
+				 std::size_t eventCount, LazyCycleStatistics *statistics = nullptr,
+				 Relation *materialized = nullptr)
 	-> std::vector<std::size_t>;
+
+/** Enumerate the exact strict root-reachable set from or to one focus event. */
+[[nodiscard]] auto findLazyReach(const NormalizedModel &model, PredicateId root,
+				 const std::vector<std::optional<Value>> &values,
+				 std::size_t eventCount, std::size_t focus, bool reverse,
+				 LazyCycleStatistics *statistics = nullptr) -> EventSet;
+
+/** Return one deterministic positive base derivation of an exact root edge. */
+[[nodiscard]] auto deriveLazyEdge(const NormalizedModel &model, PredicateId root,
+				  const std::vector<std::optional<Value>> &values,
+				  std::size_t eventCount, std::size_t from,
+				  std::size_t to)
+	-> std::optional<std::vector<ConflictLiteral>>;
+
 
 } /* namespace cat */
 

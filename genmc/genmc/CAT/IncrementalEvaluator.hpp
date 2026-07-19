@@ -17,6 +17,7 @@
 #include "genmc/CAT/CaatEvaluator.hpp"
 
 #include <cstddef>
+#include <array>
 #include <cstdint>
 #include <optional>
 #include <string>
@@ -36,11 +37,23 @@ struct IncrementalStatistics {
 	std::size_t worklistPushes{};
 	std::size_t lazyCycleChecks{};
 	std::size_t lazyEdgeCandidates{};
+	std::size_t lazyBaseCandidates{};
 	std::size_t lazyDepthFallbacks{};
 	std::size_t checkpoints{};
 	std::size_t rollbacks{};
 	std::size_t rejectedRollbacks{};
 	std::uint64_t offlineNanoseconds{};
+	/** Time spent in the authoritative offline fixed-point evaluator only. */
+	std::uint64_t offlineEvaluationNanoseconds{};
+	/** Time spent copying the accepted primitive map into evaluator ownership. */
+	std::uint64_t initializationBaseCopyNanoseconds{};
+	std::array<std::size_t, FixedPointStatistics::predicateKindCount>
+		offlineOperationEvaluationsByKind{};
+	std::array<std::uint64_t, FixedPointStatistics::predicateKindCount>
+		offlineOperationNanosecondsByKind{};
+	std::uint64_t offlineValueComparisonNanoseconds{};
+	std::uint64_t offlineInitializationNanoseconds{};
+	std::uint64_t offlineCheckNanoseconds{};
 	std::uint64_t transactionalCopyNanoseconds{};
 	std::uint64_t worklistNanoseconds{};
 	std::uint64_t checkpointNanoseconds{};
@@ -102,6 +115,7 @@ public:
 	 */
 	IncrementalCaatEvaluator(const NormalizedModel &model, const ModelAnalysis &analysis,
 				 bool profiling = false, bool enableLazyCycles = false,
+				 std::optional<PredicateId> retainedLazyRoot = std::nullopt,
 				 bool fastChecks = false, bool fastComposition = false,
 				 bool fastCycleChecks = false);
 
@@ -239,6 +253,8 @@ private:
 	bool fastChecks_{};
 	bool fastComposition_{};
 	bool fastCycleChecks_{};
+	/** Lazy checked root whose exact sparse value is retained for preventive queries. */
+	std::optional<PredicateId> retainedLazyRoot_;
 };
 
 } /* namespace cat */

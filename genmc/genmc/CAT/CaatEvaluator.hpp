@@ -18,6 +18,8 @@
 #include "genmc/CAT/Evaluator.hpp"
 
 #include <cstddef>
+#include <array>
+#include <cstdint>
 #include <optional>
 #include <vector>
 
@@ -25,12 +27,19 @@ namespace cat {
 
 /** Fixed-point population statistics for one complete graph snapshot. */
 struct FixedPointStatistics {
+	static constexpr std::size_t predicateKindCount = 14;
 	std::size_t operationEvaluations{};
 	std::size_t valueChanges{};
 	std::size_t worklistPushes{};
 	std::size_t lazyCycleChecks{};
 	std::size_t lazyEdgeCandidates{};
+	std::size_t lazyBaseCandidates{};
 	std::size_t lazyDepthFallbacks{};
+	std::array<std::size_t, predicateKindCount> operationEvaluationsByKind{};
+	std::array<std::uint64_t, predicateKindCount> operationNanosecondsByKind{};
+	std::uint64_t valueComparisonNanoseconds{};
+	std::uint64_t initializationNanoseconds{};
+	std::uint64_t checkNanoseconds{};
 };
 
 /** Complete offline CAAT evaluation result, including predicate fixed points. */
@@ -70,7 +79,9 @@ public:
 	 */
 	[[nodiscard]] auto evaluate(const NormalizedModel &model, const ModelAnalysis &analysis,
 				    std::size_t eventCount, const BaseValues &base,
-				    bool enableLazyCycles = false, bool fastChecks = false,
+				    bool enableLazyCycles = false,
+				    std::optional<PredicateId> retainedLazyRoot = std::nullopt,
+				    bool profiling = false, bool fastChecks = false,
 				    bool fastComposition = false,
 				    bool fastCycleChecks = false) const
 		-> CaatEvaluationResult;
