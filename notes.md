@@ -3346,6 +3346,17 @@ collected. No direction may claim them based only on missing buffered log marker
 - Formal launch infrastructure now rejects missing cgroup setup, wrong path namespace, wrong input
   cardinality, multiple/missing result XMLs, and mismatched `<run>` counts. BenchExec exit status 0
   is explicitly not treated as proof that work ran.
+- Closed-prefix census r1 ran zero tasks because its 300-GiB container could not admit 48 tasks at
+  12 GB each. Preserve r1 as infrastructure failure; r2 uses 36-way concurrency and 500 GiB. Add
+  explicit aggregate-memory arithmetic to future launcher preflight.
+- Closed-prefix r2 validates 51/51 rows and logs. Thirty-seven tasks expose 63,899 mergeable
+  native-only loads, but none is an ordinary `EventLabel::Read`: checks/admissions/attempts/reductions
+  are all zero. The temporary re-entry code is removed; do not broaden ordinary RVF grouping to
+  wait/spin/RMW reads without a separate semantic equivalence proof.
+- Read-kind r3 shows all 63,899 loads and 188,498 nominally removable sources are CAS/lock; every
+  other family is zero. Exact-HB refinement r4 reduces that CAS opportunity to zero. Different
+  unlocked-value sources carry different synchronization histories, so value-only lock quotienting
+  is unsound. Regional P0 is exhausted for this 51-task production cohort.
 
 ## P2 no-consistent-extension Gate A1 (2026-07-20)
 

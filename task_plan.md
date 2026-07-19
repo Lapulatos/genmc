@@ -3399,6 +3399,27 @@ adapter again rejects non-atomic memory events, and the outer NA handlers reset 
 or revoke an active transaction before native replay. Do not spend another 725-task run on this
 rejected configuration; the prior valid 51-task zero-activation paired result already measures it.
 
+**P0 closed-prefix census r1 infrastructure rejection:** the first 51-task launcher requested 48
+parallel tasks capped at 12 GB each but gave the container only 300 GiB. BenchExec correctly rejected
+the launch before running any task because 48 x 12 GB exceeds the cgroup allowance. The r1 directory
+contains no accepted result. The versioned launcher now uses 36 tasks and a 500-GiB container
+(432-GB declared task budget), and retries only in a fresh r2 directory. Future launch preflight must
+check `threads * per-task-memory <= container-memory` explicitly rather than relying on BenchExec.
+
+**P0 closed-prefix census decision:** authoritative r2 has exactly 51 XML rows and 51 logs. It
+observes 63,899 native-only mergeable loads across 37 tasks, but zero supported ordinary-read
+closed-prefix checks, zero admissions, zero RVF attempts, and zero reductions. The measured
+post-frontier opportunities are special read kinds outside the current RVF proof. Reject and remove
+the candidate without a paired resource run; retain the launcher and
+`p0-closed-prefix-reentry-report-20260720.md` as negative evidence.
+
+**P0 special-read causal audit:** r3 and r4 each validate exactly 51 XML rows and logs. Every one of
+the 63,899 nominal mergeable loads (188,498 sources, 37 tasks) is CAS/lock; ordinary, pure-special,
+and FAI buckets are zero. Refining CAS sources by exact HB view eliminates every class: zero loads,
+sources, and tasks remain. Stop regional P0 for this workload. Same-valued unlock sources are not
+RVF-equivalent because they create different synchronizes-with/HB histories. Remove all temporary
+classification counters; retain the report and remote roots.
+
 **P1 cumulative-725 launch error:** the first invocation referenced the server `/data3/...`
 launcher path in a local shell instead of through `ssh`; it exited 127 before touching the server or
 creating a result directory. The valid launch must explicitly execute the synchronized script on
