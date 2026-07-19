@@ -3134,3 +3134,109 @@ trash; they are recoverable from trash or by rebuilding.  Raw logs, ZIPs, genera
 local assistant state, and the credential-bearing local handoff remain ignored and untracked.
 
 **Status:** complete and published to `origin/genmc-caat-opt-dev`.
+
+## Core optimization campaign: P1 -> P0 -> P2 (2026-07-19)
+
+**Goal:** execute every core direction from the frozen optimization brief on
+`genmc-caat-opt-dev`, with correctness/completeness preserved by independent oracles and all broad
+tests/experiments executed in the authorized server Docker environment.  Promote only independently
+validated effective commits to `genmc-caat`.
+
+### Phase A: frozen audit and measurement contract
+
+- [x] Audit current exploration/history ownership, copying, worklist retention, and existing
+  counters against the 20 Goblint TIMEOUT-to-OOM rows and pre-CAT OOM evidence. Archived missing
+  phase markers are inconclusive because kill-time buffering can lose output; the correction and
+  phase-separated evidence requirement are recorded in `notes.md`.
+- [x] Audit existing SC-RVF region/fallback state and ConflictCore decision/provenance state. RVF
+  lacks reversible region/descendant ownership; ConflictCore represents positive base facts rather
+  than rollback-scoped RF/CO decision clauses.
+- [x] Freeze per-direction correctness, completeness, resource, and early-stop gates before coding;
+  see `notes.md` for the phase-separated P1, regional RVF, and certified-subtree contracts.
+
+### Phase B: P1 exploration/history compression
+
+- [x] Restore `genmc-caat-opt-dev` to an independently compiling interface-consistent baseline by
+  recovering the evaluator/lazy-cycle implementation omitted from the archived intermediate commit.
+- [x] Add exact attribution counters for retained labels, graph/history bytes, worklist bytes, CAT
+  snapshot bytes, peak active work, and prefix sharing without changing scheduling semantics.
+- [x] Run attribution census and identify the dominant retained allocation on the actual cohort.
+- [x] Implement the highest-ceiling exact compression mechanism (prefix sharing, graph delta,
+  revisit/class deduplication, compact worklist state, or bounded retained work as evidence directs).
+- [ ] Pass Release, ASan+UBSan, mutation oracle, recursive broad differential, fixed panel, and
+  progressively larger paired experiments.
+- [ ] Retain, revise, or reject from OOM/TIMEOUT/terminal transitions plus CPU/wall/RSS and exact
+  search/completeness counters.
+
+### Phase C: P0 regional SC-RVF / generation-time quotienting
+
+- [ ] Define and implement region ownership, entry/exit frontier, fail-open ledger, covered-class
+  revocation, descendant withdrawal, and safe ancestor-alternative restoration.
+- [ ] Extend exhaustive oracles for future writes, nested frontiers, loop iteration identity,
+  own/non-own sources, pointer provenance, and one/two-worker class-set equality.
+- [ ] Require nonzero actual-workload activation and reductions in offered/queued work, realized
+  prefixes, or quotient representatives before any timing claim.
+
+### Phase D: P2 certified subtree blocking
+
+- [ ] Specify a sufficient `no-consistent-extension` certificate and stable RF/CO decision mapping.
+- [ ] Validate earliest rollback-safe level, clause scope/lifetime, and work-item pre-enqueue block.
+- [ ] Require an independent exhaustive oracle and actual reductions in direct checks,
+  work-added/popped, or realized prefixes; cache hits alone are not evidence of success.
+
+### Phase E: synthesis and promotion
+
+- [ ] Maintain raw manifests, SHA-256 inputs, strict analysis bundles, figures, and decision reports
+  for every accepted/rejected candidate.
+- [ ] Run final broad regression and repeated paired experiments for retained candidates.
+- [ ] Commit all research on `genmc-caat-opt-dev`; merge/cherry-pick only proven effective minimal
+  commits into `genmc-caat`, then verify both remote branches and a clean worktree.
+
+**Primary order:** P1 memory attribution/compression first; P0 completeness/activation second; P2
+certificate third.  Evaluator-only micro-optimizations remain deferred unless measurements expose a
+new end-to-end ceiling.
+
+**Statistical scope:** deterministic paired task observations are the primary unit.  Single runs
+support exact status/resource accounting and descriptive timing only; population-style claims
+require at least three independent paired repetitions with clustered task analysis.
+
+**Status:** Phase A complete. Phase B localized the representative Goblint OOM to first-query
+derived-relation materialization: dense predicate values retain about 7.22 GB and a 32-GiB replay
+samples a 16.44-GB process peak. Exact CSR plus copy-on-write union overlays move the identical
+4-GiB task from OOM to TIMEOUT with a 456.4-MB sampled peak, but every tested policy is rejected:
+the clean minimal fixed-15 comparison still regresses common-terminal CPU by 34.78%, and hoisting
+COW mutation checks regresses it by 35.67%. Per the no-resource-tradeoff retention rule, the
+candidate source was removed and will not be promoted. P1 now continues on the distinct small-graph
+Weaver/libvsync exploration-history OOM cohort using enlarged-resource heap attribution before any
+new compression mechanism is selected.
+- [x] P1 empty EventDeps sharing: exact stable/candidate builds and fixed-15 resource gate pass;
+  object sizes fall by 144 B per label and Weaver 4 GiB time-to-OOM improves 17.8%, with fixed-15
+  CPU -0.11% and neutral memory. Focused dependency/clone tests pass. Still require complete-source
+  ASan, mutation/oracle, and broad large-label gates before declaring effective or promoting.
+  ASan+UBSan focused dependency tests and SC/TSO/recursive-CAAT differential tests pass 5/5. The
+  283-task paired gate preserves exact task coverage, has no terminal regression, changes all-task
+  CPU by -0.19% and common-terminal CPU by -2.66%, and moves one timeout to a correct terminal
+  result. The cumulative mutation/oracle and complete-source gates below also pass.
+- [x] P1 logical calculated-view deduplication: fixed-15 verdicts and resources remain neutral;
+  retain on dev. Reject the subsequent prefix-view alias after a decisive +2.7% Weaver time result.
+- [x] P1 same-worker history ViewBase sharing: cross-worker clones remain deep; the single fixed-15
+  decision run preserves all statuses and changes aggregate/completed CPU by -0.78%/-2.29% with
+  aggregate memory -0.05%. Retain on dev without another small-difference repetition.
+- [x] P1 immutable calculated-relation storage: audited write-once/read-only use, reduced each
+  cumulative label by another 8 B (152/240/248 B), and avoided deep relation copies in graph
+  clones. A single Weaver 4-GiB run improved survival 1.7% but remained OOM; retain on dev and move
+  on without repeating a small effect.
+- [x] P1 inline backward-revisit clocks: replace the separate `VectorClock` allocation with typed
+  inline View/DepView work items, saving about 24 B and one heap operation per backward revisit.
+  Focused server tests pass 2/2; fixed-15 preserves all statuses with aggregate/completed CPU
+  -0.36%/-1.03% and aggregate memory -0.06%. Retain without repetition.
+- [x] Repair the test-suite ODR collision between two global `Oracle` helper types. Cumulative P1
+  now passes 160/160 normal unit/property tests and 160/160 ASan+UBSan tests; SC, TSO, recursive
+  CAAT differentials and the 39-row/5,441-check online mutation oracle pass in Release.
+
+**P1 transition decision:** retain the five exact storage/allocation candidates on the development
+branch. The complete current dev tree builds and runs 223 tests (222 pass, one expected backend
+skip); the ASan integration container exits successfully. At the user's direction, stop adding
+engineering-only P1 graph/history variants and move the research mainline to the more algorithmic
+P0 regional SC-RVF direction. A final cumulative broad resource gate remains required before these
+commits can be promoted to `genmc-caat`.

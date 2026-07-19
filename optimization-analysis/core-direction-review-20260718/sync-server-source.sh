@@ -7,8 +7,22 @@ set -euo pipefail
 repo_root="$(cd "$(dirname "$0")/../.." && pwd)"
 remote_host=server@frp-arm.com
 remote_port=36722
-remote_root=/data3/sujie/svcomp2026-caat/source/genmc
+remote_root="${GENMC_SYNC_REMOTE_ROOT:-/data3/sujie/svcomp2026-caat/source/genmc}"
+case "$remote_root" in
+	/data3/sujie/svcomp2026-caat/source/genmc|/data3/sujie/experiments/caat-optimization/*/source-*) ;;
+	*) echo "refusing unsupported remote source root: $remote_root" >&2; exit 2 ;;
+esac
 files=(
+	genmc/genmc/Execution/EventLabel.hpp
+	genmc/genmc/Execution/ExecutionGraph.hpp
+	genmc/genmc/Execution/ExecutionGraph.cpp
+	genmc/genmc/Execution/DepExecutionGraph.hpp
+	genmc/genmc/Execution/DepExecutionGraph.cpp
+	genmc/genmc/Execution/Consistency/SCChecker.cpp
+	genmc/genmc/Execution/Consistency/TSOChecker.cpp
+	genmc/genmc/Execution/Consistency/RAChecker.cpp
+	genmc/genmc/Execution/Consistency/RC11Checker.cpp
+	genmc/genmc/Execution/Consistency/IMMChecker.cpp
 	genmc/genmc/CAT/StableGraphAdapter.hpp
 	genmc/genmc/CAT/StableGraphAdapter.cpp
 	genmc/genmc/CAT/CaatEvaluator.hpp
@@ -17,11 +31,17 @@ files=(
 	genmc/genmc/CAT/Value.cpp
 	genmc/genmc/CAT/IncrementalEvaluator.hpp
 	genmc/genmc/CAT/IncrementalEvaluator.cpp
+	genmc/genmc/CAT/LazyCycle.hpp
+	genmc/genmc/CAT/LazyCycle.cpp
 	genmc/genmc/CAT/GraphSynchronizer.hpp
 	genmc/genmc/CAT/GraphSynchronizer.cpp
 	genmc/genmc/Execution/Consistency/CATChecker.cpp
 	genmc/genmc/Verification/Config.hpp
 	genmc/genmc/Verification/Config.cpp
+	genmc/genmc/Verification/GenMCDriver.hpp
+	genmc/genmc/Verification/GenMCDriver.cpp
+	genmc/genmc/Verification/Revisit.hpp
+	genmc/genmc/Verification/VerificationResult.hpp
 	lli/main.cpp
 	optimization-analysis/continuous/candidate-equivalence-quotient/formal-wrapper.sh
 	optimization-analysis/core-direction-review-20260718/decisive-diagnostic-15.xml
@@ -33,6 +53,11 @@ files=(
 	tests/unit/CatGraphAdapterTest.cpp
 	tests/unit/CatEvaluatorTest.cpp
 	tests/unit/ConfigTest.cpp
+	tests/unit/CMakeLists.txt
+	tests/unit/EventLabelTest.cpp
+	tests/unit/RevisitTest.cpp
+	tests/unit/IntervalMapTest.cpp
+	tests/unit/ViewTest.cpp
 	tests/cat/online-mutation-stress.sh
 )
 

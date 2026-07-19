@@ -56,6 +56,7 @@ coverage_report*
 .DS_Store
 .claude/
 .codex-build-*/
+.codex-phase-stable/
 **/__pycache__/
 *.pyc
 *.i
@@ -66,6 +67,7 @@ coverage_report*
 *.verdict
 **/.cache/
 optimization-analysis/binaries/
+optimization-analysis/core-direction-review-20260718/server-results/*/rewrite-*/
 experiment-analysis/**/sv-benchmarks/
 
 # Generated BenchExec presentation files. Compact XML/CSV/TSV evidence remains trackable.

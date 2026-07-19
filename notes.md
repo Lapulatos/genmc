@@ -3026,3 +3026,266 @@
   `optimization-analysis/core-direction-review-20260718/server-results/primitive-fast-compose-cycle-paired-725-cd09f78b-rerun-20260719a/`.
 - Evidence commit `53c667d5` follows code commit `cd09f78b`.  GitHub push is pending authentication;
   HTTPS has no stored token and configured SSH port 9322 is unreachable.
+# Core optimization campaign evidence (2026-07-19)
+
+## P1 phase attribution audit
+
+- Exact evidence source: independent paired 725 rerun under
+  `optimization-analysis/core-direction-review-20260718/server-results/primitive-fast-compose-cycle-paired-725-cd09f78b-rerun-20260719a/`.
+- Parsed both compressed BenchExec XML files and the candidate log archive. All 20 retained
+  `TIMEOUT -> OUT OF MEMORY` transitions are Goblint `28-race_reach_*` tasks.
+- Every candidate reaches exactly `3,999,997,952 B`, uses about 39--47 CPU seconds, and its archived
+  log contains only the command banner: 20/20 lack `Compilation complete`,
+  `Transformation complete`, and every exploration/CAT statistic.
+- **Correction:** absence of those lines does not locate the OOM phase. BenchExec redirects output;
+  normal buffered output can be lost when the cgroup kills the process. These 20 failures remain
+  phase-unknown until an unbuffered, sampled, or uncapped replay establishes the last completed
+  phase. They must not yet be classified as pre-compilation failures.
+- A clean `cd09f78b` probe with explicitly flushed markers disproves the pre-compilation
+  hypothesis for representative task `28-race_reach_03-munge_racing`: configured peak is
+  50,679,808 B, compiled peak 54,403,072 B, transformed peak 56,844,288 B, and Docker then kills
+  the process at the 4-GiB cap (`exit=137`, `OOMKilled=true`). The task unquestionably reaches
+  exploration.
+- A second observation-only probe samples each 10,000 labels. At 40,000 labels the graph has
+  20,001 threads, max stamp 60,002, and process peak only 128,638,976 B. The task then jumps to the
+  cgroup limit before the next sample. This rules out linear label/worklist retention as the main
+  4-GiB source for this representative task and localizes the peak to work immediately after the
+  first approximately 40k-event graph is formed, with first CAT evaluation the leading hypothesis.
+- A 64-GiB replay exceeds 13 GiB and later falls below 9 GiB while still running, supporting a
+  large transient peak rather than monotone retained-history growth. Final/query-level evidence is
+  still required before assigning the allocation to a specific evaluator operation.
+- A separate inspected task (`28-race_reach_01-simple_racing`) does complete transformation and
+  reaches its first CAT evaluation with 40,017 stable events. Its first snapshot-equivalent CAT
+  state is about 1.807 GB while the current sparse base is about 1.681 MB; this is a distinct
+  first-query CAT/evaluator case, not retained exploration history.
+- Existing `--cat-stats` exploration instrumentation already counts work added/popped, maximum
+  retained revisits, current/stack graph-label cardinality, and scheduler cached-label clones. It
+  does not yet measure owned bytes or frontend/LLVM phase RSS, and its 100,000-activity progress
+  cadence cannot attribute pre-compilation failures.
+- `WorkList` owns only `unique_ptr<Revisit>` objects. Backward revisits additionally own one
+  `VectorClock`; work items do not own graph snapshots. Deep graph copies are retained instead in
+  `GenMCDriver::execStack` during backward revisits and in submitted worker `Execution` states.
+- `Scheduler::seenPrefixes` independently owns cloned, reset `EventLabel` sequences and grows
+  monotonically for the driver lifetime when instruction caching is enabled.
+
+### Consequence
+
+P1 must use phase-separated cohorts and claims:
+
+1. pre-compilation/LLVM frontend peak memory,
+2. transformation peak memory,
+3. first-CAT-query construction memory,
+4. exploration-retained memory after at least one query.
+
+The exact 20 Goblint transitions are not assigned to any cohort until stronger phase evidence is
+collected. No direction may claim them based only on missing buffered log markers.
+
+### Representative first-query attribution and adaptive-representation experiment
+
+- A 128-GiB/1,800-s clean `cd09f78b` replay of
+  `28-race_reach_03-munge_racing` reached the same 40,000-label/20,001-thread prefix and did not
+  OOM. A live debugger backtrace placed the running process in
+  `relationIntersection -> CaatEvaluator::evaluateStratum -> IncrementalCaatEvaluator::initialize
+  -> GraphSynchronizer -> BasicCATChecker::isConsistent`. This confirms that the representative
+  task enters its first CAAT fixed point; it is not a pre-exploration or retained-worklist OOM.
+- Predicate-boundary instrumentation on the coherent dev build shows an approximately 80,000-event
+  stable universe. The dense evaluator retains 7,211,282,876--7,271,979,372 bytes of predicate
+  values; each derived relation occupies about 800--808 MB. A 32-GiB run peaks at
+  16,444,674,048 bytes and times out after 600 s. The primitive RF/FR/CO/lifecycle operands are only
+  about 0.3--0.64 MB each. The dominant allocation is therefore exact derived-relation
+  materialization and repeated union copies, not labels or sparse primitives.
+- Sparse-derived v1 changes empty fixed-point values to exact CSR and keeps sparse Boolean/
+  composition results as CSR when their calculated upper bound is smaller than packed storage.
+  Release unit/property tests pass, but the representative still OOMs: `po | tc` is genuinely
+  large and two successive union temporaries retain about 1.607 GB before later fixed-point values.
+- Overlay v2 adds copy-on-write packed words and immutable exact union overlays. On the identical
+  4-GiB/300-s task, it changes `OOMKilled=true/exit 137` to `TIMEOUT/exit 124`, keeps current memory
+  below the cap, and reduces the observed predicate-value footprint from about 7.22 GB to
+  5.6--6.3 MB. Sampled process peak is 456,400,896 bytes, at least 8.7x below the 4-GiB failure
+  boundary and about 36x below the dense 32-GiB sampled peak. No verdict is claimed because the task
+  remains a timeout.
+- V2 is rejected as a general policy despite the memory result. Its simultaneous fixed-15 panel has
+  identical 10 terminal / 5 TIMEOUT classifications, but common-terminal CPU regresses 39.28%
+  (median task ratio 1.2449), all-task CPU regresses 10.37%, and aggregate RSS rises 0.67%.
+- V3 admits overlays only when one packed relation would occupy at least 64 MiB; smaller graphs keep
+  the original packed path. This threshold is representation-only and cannot change membership.
+  A clean minimal comparison against `cd09f78b` showed that the representation candidate itself,
+  rather than the restored dev statistics implementation, regressed common-terminal CPU by 34.78%
+  with identical 10 terminal / 5 TIMEOUT statuses and essentially unchanged aggregate RSS.
+  Moving COW uniqueness checks out of per-word loops did not repair the result (35.67% regression),
+  identifying the representation/algorithm path rather than the check as the cost. The user froze
+  a stronger no-time-for-memory/no-memory-for-time rule; all adaptive CSR/overlay candidate source
+  was therefore removed. The 456.4-MB result remains negative mechanism evidence, not a retained
+  optimization or paper performance claim. Raw evidence root:
+  `/data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/`.
+
+## Development baseline build audit
+
+- A clean archive of `genmc-caat-opt-dev` head `4701c580` does not compile independently.
+  `CATChecker.cpp` references incremental-statistics fields, lazy-cycle helpers, and evaluator
+  signatures absent from the archived `CaatEvaluator`, `IncrementalEvaluator`, and `LazyCycle`
+  interfaces. This is pre-existing branch inconsistency, not caused by the phase-memory probe.
+- The exact `cd09f78b` snapshot plus the phase probe builds successfully in the prescribed server
+  Docker image. New optimization implementation cannot safely proceed on dev until its archived
+  intermediate source is restored to a coherent build baseline.
+- Build setup errors encountered: `BUILD_TESTING=ON` is not this project’s option (the option is
+  `BUILD_TESTS=ON`); enabling it attempted a slow RapidCheck network clone, so the diagnostic binary
+  was built separately with tests off. Full tests remain mandatory after dev consistency repair.
+- The omitted implementation was recovered from repository commit `69bdedbd`, which is the complete
+  source-side counterpart of the already retained `cd09f78b` optimization. Restoring its six CAAT
+  evaluator/lazy-cycle files makes the dev interfaces coherent without removing later ConflictCore,
+  finite-symbolic, or CATChecker experiments. The repaired Release build passes 218 tests with one
+  expected Z3-availability skip; SC/TSO differentials, PSO proof, recursive CAAT differential, and
+  online mutation stress all pass. The isolated `fast-driver` failure is a fixture-path/build-tree
+  setup error (missing hard-coded `RelWithDebInfo` artifacts), not a verdict mismatch.
+
+## Frozen direction gates
+
+### P1 phase-separated memory work
+
+- Correctness: identical terminal status/verdict and identical complete/blocked/work-added/
+  work-popped counters on all terminal paired cells; zero new crash, unsupported result, or
+  resolved-case resource regression.
+- Attribution: every measured peak is labeled pre-compilation, transformation, first CAT query,
+  or post-query exploration. Missing progress records are not treated as zeros.
+- Instrumentation: observation-only builds must preserve all search counters and stay within 3%
+  CPU and 3% RSS on the fixed terminal panel before their measurements are accepted.
+- Expansion: a candidate must reduce the targeted cohort's median and maximum peak RSS by at least
+  10%, or move at least one fixed-limit OOM to TIMEOUT/terminal without losing a terminal result.
+- Retention: broad paired runs must not increase aggregate hard failures; an OOM-to-TIMEOUT move is
+  recorded as resource improvement but not as solved coverage.
+
+### P0 regional SC-RVF
+
+- No global static-gate relaxation without reversible region ownership. A region needs identity,
+  entry snapshot, exit frontier, covered-class ledger, ownership epoch/revocation token, and
+  descendant withdrawal before native fallback.
+- Generated exhaustive oracles must cover future writes, nested regions, loop-iteration identity,
+  own/non-own sources, equal values with distinct provenance, pointer provenance, assume/error
+  endpoints, mutex/RMW boundaries, and exact one/two-worker observation/class equality.
+- Expansion requires nonzero production-workload activation and a reduction in offered/queued work,
+  realized prefixes, or representatives. Oracle-only activation is not a performance result.
+
+### P2 certified CAT subtree blocking
+
+- Immediate positive-core matching is frozen as rejected evidence and will not be reimplemented.
+- A candidate must provide a sufficient no-consistent-extension certificate, translate every
+  required CAT fact to stable active RF/CO literals, select an earliest rollback-safe scope, and
+  block before enqueue. Incomplete translations fail open.
+- Learned state is worker-local and scope-guarded; it may not own a second execution graph.
+- Exhaustive baseline/candidate oracle equality is mandatory. Expansion additionally requires a
+  measured reduction in work added/popped, realized prefixes, or direct full CAT checks; hit counts
+  alone are invalid evidence.
+## 2026-07-19 P1 empty EventDeps sharing candidate
+
+- Heap attribution on `weaver/mult-dist.wvr.yml` showed millions of retained non-atomic labels.
+  The clean stable ABI sizes were `EventDeps=160`, `EventLabel=304`, `ReadLabel=392`, and
+  `WriteLabel=400` bytes. Representing empty dependencies by a null immutable shared handle reduces
+  them to 160, 248, and 256 bytes respectively: 144 bytes saved per event label without changing
+  dependency semantics.
+- The exact isolated source comparison differs only in
+  `genmc/genmc/Execution/EventLabel.hpp`. Both Release builds succeed. Under the identical Weaver
+  4 GiB hard limit, stable OOMed after 10.94 s and the candidate after 12.89 s (+17.8% survival at
+  the same memory cap). This is targeted memory-density evidence, not a completion claim.
+- Simultaneous fixed-15 A/B (`labeldeps-fixed15-20260719b`) preserved all outcomes and the 10
+  terminal / 5 TIMEOUT split. Aggregate CPU was 409.070 -> 408.600 s (-0.11%); completed-task CPU
+  was 104.257 -> 103.652 s (-0.58%); aggregate measured memory was -0.04% (small graphs, effectively
+  neutral). Thus no time-for-memory or memory-for-time regression was observed in this gate.
+- Added focused tests for canonical empty storage and immutable non-empty dependency sharing across
+  clones. Both pass. The complete dev-tree run had 233 passes, one expected solver skip, and nine
+  infrastructure failures caused by files omitted from the isolated server source tree (explicit
+  missing script/test paths); these are not counted as candidate correctness failures. ASan and a
+  complete-tree broad gate remain required before promotion.
+- The dedicated GCC 13 ASan+UBSan build succeeded. With leak detection and halt-on-error enabled,
+  both focused `EventLabelTest`s plus SC, TSO, and recursive-CAAT differential tests passed (5/5;
+  recursive differential 161.50 s) with no sanitizer report. The remaining promotion gate is the
+  broad large-label/oracle panel on a complete server source tree.
+- Raw server evidence:
+  `/data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/labeldeps-weaver-4g/`
+  and `.../labeldeps-fixed15-20260719b/`.
+
+## 2026-07-19 P1 calculated-view and history-copy compression
+
+- Event labels now retain one physical calculated `View` for equal logical checker views and a
+  four-entry logical-to-physical map. The generated SC/TSO/RA/RC11/IMM calculation order remains
+  explicit. Against the retained empty-dependency candidate, fixed-15 preserved the exact
+  6-false/4-true/5-TIMEOUT split; aggregate CPU changed by -0.16%, completed CPU by -0.49%, and
+  memory by -0.02% (all effectively neutral). A prefix-view alias follow-up was rejected after its
+  single decisive Weaver run regressed time by 2.7%; that source was removed.
+- Backward-revisit graph copies now share immutable copy-on-write `ViewBase` storage only within the
+  same worker. The cross-worker `clone()` path remains a deep copy. With `--cat-stats`, exact unique
+  bases and a conservative byte lower bound are reported; without attribution enabled, the clone's
+  already-shared bases require no hash-set insertion.
+- The one permitted simultaneous fixed-15 decision run compared the retained label/view candidate
+  with and without history sharing. Statuses were identical (10 terminal, 5 TIMEOUT). Aggregate CPU
+  was 466.174 -> 462.520 s (-0.78%); common-terminal CPU was 161.209 -> 157.519 s (-2.29%);
+  aggregate measured memory was 396,210,176 -> 396,009,472 bytes (-0.05%). This is descriptive
+  single-run evidence and is not treated as a repeated statistical claim. Per the instruction to
+  stop repeating small differences, retain on dev and move to the next P1 mechanism.
+- Raw paired evidence is under
+  `optimization-analysis/core-direction-review-20260718/server-results/history-share-fixed15-20260719b/`.
+
+### Immutable calculated-relation storage
+
+- A complete use-site audit found that `calculatedRels` is published only by `setCalculated`, read
+  only through the const `calculated()` range, and reset as a unit. It is now an optional immutable
+  shared object. Normal labels carry no allocation, and graph/history clones cannot deep-copy the
+  relation sets.
+- The cumulative object sizes are now `EventLabel=152`, `ReadLabel=240`, and `WriteLabel=248`
+  bytes, another 8 bytes per label below the retained empty-dependency/view candidate (and 152
+  bytes per label below the original 304-byte `EventLabel`). The local core library and exact
+  server Release binary both build successfully.
+- One same-cap Weaver decision run remained OOM in both lanes, as expected for an 8-byte incremental
+  change, but time to the identical 4-GiB kill moved from 14.438 to 14.686 seconds (+1.7%). This is
+  only direction/activation evidence; no completion or timing-speedup claim is made. In accordance
+  with the no-repeat-small-differences instruction, retain on dev and do not run another panel now.
+
+### Inline backward-revisit clocks
+
+- `BackwardRevisit` previously owned a separately allocated polymorphic `VectorClock`: the outer
+  object was 40 B and the clock was 32 B (`View`) or 104 B (`DepView`), with two allocator headers
+  and two allocation/free pairs. It is now an abstract base with typed `View`/`DepView` storage in
+  the same allocation. Concrete sizes are 64 B and 136 B, saving approximately 24 B and one heap
+  operation per retained backward revisit for either model family.
+- The conversion does not alter a work-item key, ordering, prefix contents, or scheduling. Focused
+  GCC 13 server tests preserve plain-view indices and dependency-view holes (2/2 pass); the local
+  core library and exact server Release executable build successfully.
+- A single simultaneous fixed-15 comparison against the cumulative calculated-relation baseline
+  preserves all 6 false, 4 true, and 5 TIMEOUT statuses. Aggregate CPU is
+  463.283 -> 461.616 s (-0.36%); common-terminal CPU is 158.279 -> 156.645 s (-1.03%);
+  aggregate measured memory is 396,242,944 -> 395,993,088 bytes (-0.06%). This is descriptive
+  evidence from one decision run. Both resources move in the intended direction, so retain on dev
+  and do not repeat the small difference.
+- Raw paired evidence is under
+  `optimization-analysis/core-direction-review-20260718/server-results/worklist-inline-fixed15-20260719a/`.
+
+### Cumulative P1 correctness-gate repair and results
+
+- The first full unit run crashed in `ViewPropertyTest` with `free(): invalid pointer`. ASan showed
+  `Oracle::~Oracle` destroying a `std::vector<int>` although the View test's oracle owns a
+  `std::map<int,int>`. Root cause was a pre-existing ODR violation: both `IntervalMapTest.cpp` and
+  `ViewTest.cpp` defined distinct global `class Oracle` types, allowing weak inline destructor
+  symbols to collide. Renaming them to `IntervalMapOracle` and `ViewOracle` changes test code only.
+- After the repair, the cumulative exact GCC 13 build passes all 160 unit/property tests. The same
+  160 tests pass under ASan+UBSan with halt-on-error enabled and leak checking disabled; there is no
+  sanitizer diagnostic.
+- Release SC differential, TSO differential, recursive CAAT differential, and the full online
+  mutation oracle all pass in one fail-fast container. The mutation gate covers 39 rows and 5,441
+  independent oracle checks. This establishes cumulative semantic coverage for empty dependencies,
+  logical view deduplication, same-worker ViewBase sharing, immutable calculated relations, and
+  inline View/DepView revisit clocks before larger resource experiments.
+- The complete synchronized development tree subsequently builds successfully in the GCC 13 server
+  Docker environment and runs 223 tests: 222 pass and the unavailable-backend case is skipped as
+  designed. The integration sanitizer container also exits 0 and writes `complete.txt`; strict
+  ASan+UBSan unit/property coverage remains 160/160. A strict integration-only UBSan warning in the
+  native SC interpreter's pre-existing null `DepTracker` reset path is recorded separately and is
+  not attributed to the P1 changes.
+- The 283-task EventDeps comparison preserves the exact 283-row task set and introduces no terminal
+  regression. Correct terminal rows change from 108 to 109 because one prior timeout completes
+  correctly at 59.69 seconds; aggregate CPU changes by -0.19%, common-terminal CPU by -2.66%, and
+  measured RSS is neutral. Raw evidence is under
+  `optimization-analysis/core-direction-review-20260718/server-results/p1-labeldeps-paired-283-r1-20260719/`.
+- P1 retention decision: keep the five exact layout/sharing/allocation improvements on
+  `genmc-caat-opt-dev`, but stop adding engineering-only graph/history variants. The main research
+  line now moves to P0 regional SC-RVF; P1 still requires a final cumulative broad resource gate
+  before promotion to the stable branch.
