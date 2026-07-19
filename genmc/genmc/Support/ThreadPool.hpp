@@ -21,7 +21,9 @@
 #include <atomic>
 #include <future>
 #include <memory>
+#include <string>
 #include <thread>
+#include <unordered_map>
 
 /* TODO: Make lli-independent */
 namespace llvm {
@@ -170,6 +172,14 @@ public:
 	void submit(TaskT task) { UNREACHABLE(); }
 #endif
 
+	/** Begin one speculative RVF region and retain its untouched native entry. */
+	[[nodiscard]] auto beginRegion(TaskT nativeEntry, VerificationResult durablePrefix)
+		-> genmc::rvf::RegionToken;
+
+	/** Mark a region for fail-open replay. Returns false for a stale/finished token. */
+	[[nodiscard]] auto requestRegionRevocation(genmc::rvf::RegionToken token,
+					   std::string reason) -> bool;
+
 	/** Notify the pool about the addition/completion of a task */
 	auto incRemainingTasks() -> unsigned { return ++remainingTasks_; }
 	auto decRemainingTasks() -> unsigned { return --remainingTasks_; }
@@ -205,6 +215,23 @@ private:
 
 	/** Pops the next task to be executed by a thread */
 	auto popTask() -> TaskT;
+	[[nodiscard]] auto shouldExecuteRegionTask(
+		const std::optional<genmc::rvf::RegionToken> &token) -> bool;
+	[[nodiscard]] auto completeTask(const std::optional<genmc::rvf::RegionToken> &token,
+					VerificationResult result) -> std::optional<VerificationResult>;
+
+	struct RegionRecord {
+		explicit RegionRecord(genmc::rvf::RegionToken token, TaskT entry,
+				      VerificationResult prefix)
+			: transaction(token), nativeEntry(std::move(entry)),
+			  durablePrefixResult(std::move(prefix))
+		{}
+
+		genmc::rvf::RegionTransaction transaction;
+		TaskT nativeEntry;
+		VerificationResult durablePrefixResult;
+		std::optional<VerificationResult> speculativeResult;
+	};
 
 	std::vector<std::unique_ptr<llvm::LLVMContext>> contexts_;
 
@@ -225,6 +252,9 @@ private:
 
 	/** Number of tasks that need to be executed across threads */
 	std::atomic<unsigned> remainingTasks_;
+	/** Pool-owned speculative regions; protected by stateMtx_. */
+	std::unordered_map<std::uint64_t, std::unique_ptr<RegionRecord>> regions_;
+	std::uint64_t nextRegionId_{1};
 
 	/** The index of a worker thread */
 	static thread_local unsigned int index_;

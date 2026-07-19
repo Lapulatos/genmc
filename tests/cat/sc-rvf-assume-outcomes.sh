@@ -24,9 +24,15 @@ check_outcome_pair()
 			}
 			grep -Fq 'SC RVF program gate: enabled' <<<"${output}"
 			stats="$(grep -F 'Exploration statistics:' <<<"${output}" | tail -1)"
-			grep -Eq 'rvf-loads-reduced=[1-9][0-9]*' <<<"${stats}"
+			if [[ ${baseline_status} -eq 0 ]]; then
+				grep -Eq 'rvf-loads-reduced=[1-9][0-9]*' <<<"${stats}"
+			else
+				# A hard error in a speculative descendant revokes the region and
+				# discards its counters. The tokenless native replay must be visible.
+				grep -Eq 'rvf-quotient-disabled-loads=[1-9][0-9]*' <<<"${stats}"
+			fi
 			grep -Fq 'rvf-fail-open=0' <<<"${stats}"
-			if [[ "${require_rejected}" == yes ]]; then
+			if [[ "${require_rejected}" == yes && ${baseline_status} -eq 0 ]]; then
 				grep -Eq 'rvf-annotated-groups-rejected=[1-9][0-9]*' <<<"${stats}"
 			fi
 			if [[ -z "${rvf_complete}" ]]; then
@@ -85,7 +91,12 @@ check_single()
 		grep -Fq 'SC RVF program gate: enabled' <<<"${output}"
 		stats="$(grep -F 'Exploration statistics:' <<<"${output}" | tail -1)"
 		grep -Fq 'rvf-fail-open=0' <<<"${stats}"
-		if [[ "${require_rejected}" == yes ]]; then
+		if [[ ${baseline_status} -eq 42 ]]; then
+			# The error may precede the first merge (no transaction yet), or may
+			# revoke a transaction and run its native replay. Both must exercise
+			# the annotated RVF load path without publishing speculative counters.
+			grep -Eq 'rvf-loads-attempted=[1-9][0-9]*' <<<"${stats}"
+		elif [[ "${require_rejected}" == yes ]]; then
 			grep -Eq 'rvf-annotated-groups-rejected=[1-9][0-9]*' <<<"${stats}"
 		fi
 	done

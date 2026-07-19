@@ -25,8 +25,31 @@ def canonical_shapes():
     return sorted(representatives)
 
 
-def source_for(shape, outcome):
+def source_for(shape, outcome, loop_iterations=0, unroll_iterations=0, native_prefix=False):
     names = tuple("xy"[choice] for choice in shape)
+    thread0_body = f"""
+    atomic_store_explicit(&{names[0]}, 1, memory_order_seq_cst);
+    int value = atomic_load_explicit(&{names[1]}, memory_order_seq_cst);
+    atomic_store_explicit(&r0, value, memory_order_seq_cst);
+    atomic_store_explicit(&{names[2]}, 2, memory_order_seq_cst);"""
+    thread1_body = f"""
+    atomic_store_explicit(&{names[3]}, 1, memory_order_seq_cst);
+    int value = atomic_load_explicit(&{names[4]}, memory_order_seq_cst);
+    atomic_store_explicit(&r1, value, memory_order_seq_cst);
+    atomic_store_explicit(&{names[5]}, 2, memory_order_seq_cst);"""
+    if loop_iterations:
+        thread0_body = f"""
+    for (int iteration = 0; iteration != {loop_iterations}; ++iteration) {{
+        {thread0_body}
+    }}"""
+        thread1_body = f"""
+    for (int iteration = 0; iteration != {loop_iterations}; ++iteration) {{
+        {thread1_body}
+    }}"""
+    elif unroll_iterations:
+        thread0_body = "\n".join(f"    {{\n{thread0_body}\n    }}" for _ in range(unroll_iterations))
+        thread1_body = "\n".join(f"    {{\n{thread1_body}\n    }}" for _ in range(unroll_iterations))
+    prefix = "    int native = native_boundary;\n    (void)native;\n" if native_prefix else ""
     return f"""#include <assert.h>
 #include <pthread.h>
 #include <stdatomic.h>
@@ -35,22 +58,19 @@ static atomic_int x;
 static atomic_int y;
 static atomic_int r0;
 static atomic_int r1;
+static volatile int native_boundary = 1;
 
 static void *thread0(void *arg)
 {{
-    atomic_store_explicit(&{names[0]}, 1, memory_order_seq_cst);
-    int value = atomic_load_explicit(&{names[1]}, memory_order_seq_cst);
-    atomic_store_explicit(&r0, value, memory_order_seq_cst);
-    atomic_store_explicit(&{names[2]}, 2, memory_order_seq_cst);
+{prefix}
+{thread0_body}
     return arg;
 }}
 
 static void *thread1(void *arg)
 {{
-    atomic_store_explicit(&{names[3]}, 1, memory_order_seq_cst);
-    int value = atomic_load_explicit(&{names[4]}, memory_order_seq_cst);
-    atomic_store_explicit(&r1, value, memory_order_seq_cst);
-    atomic_store_explicit(&{names[5]}, 2, memory_order_seq_cst);
+{prefix}
+{thread1_body}
     return arg;
 }}
 
@@ -87,7 +107,14 @@ def field(output, pattern, default="0"):
     return match.group(1) if match else default
 
 
-def run_one(binary, model, program, mode, workers, timeout_seconds):
+def decoded_output(value):
+    """Normalize TimeoutExpired output across Python subprocess implementations."""
+    if isinstance(value, bytes):
+        return value.decode(errors="replace")
+    return value or ""
+
+
+def run_one(binary, model, program, mode, workers, timeout_seconds, regional_loops=False):
     command = [
         str(binary),
         f"--model-file={model}",
@@ -97,6 +124,8 @@ def run_one(binary, model, program, mode, workers, timeout_seconds):
     ]
     if mode == "rvf":
         command.append("--sc-rvf-exploration")
+        if regional_loops:
+            command.append("--sc-rvf-regional")
     command.append(str(program))
     start = time.monotonic_ns()
     try:
@@ -111,7 +140,7 @@ def run_one(binary, model, program, mode, workers, timeout_seconds):
         output = process.stdout + process.stderr
     except subprocess.TimeoutExpired as error:
         status = 124
-        output = (error.stdout or "") + (error.stderr or "")
+        output = decoded_output(error.stdout) + decoded_output(error.stderr)
     elapsed = time.monotonic_ns() - start
     errors = normalized_lines(output, ("Error:", "No errors were detected."))
     warnings = normalized_lines(output, ("Warning:",))
@@ -135,8 +164,25 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--timeout", type=float, default=20.0)
     parser.add_argument("--limit-shapes", type=int)
+    parser.add_argument("--shape-index", type=int)
+    parser.add_argument(
+        "--outcome",
+        help="restrict the oracle to one four-digit outcome over values 0, 1, and 2",
+    )
     parser.add_argument("--worker-counts", default="1,2")
+    parser.add_argument("--loop-iterations", type=int, default=0)
+    parser.add_argument("--unroll-iterations", type=int, default=0)
+    parser.add_argument(
+        "--native-prefix",
+        action="store_true",
+        help="place one fixed non-atomic read before each generated worker suffix",
+    )
     args = parser.parse_args()
+
+    if args.loop_iterations < 0 or args.unroll_iterations < 0:
+        parser.error("iteration counts must be non-negative")
+    if args.loop_iterations and args.unroll_iterations:
+        parser.error("--loop-iterations and --unroll-iterations are mutually exclusive")
 
     if not args.genmc.is_file():
         parser.error(f"missing GenMC binary: {args.genmc}")
@@ -147,9 +193,18 @@ def main():
     logs = args.output / "failures"
     logs.mkdir(exist_ok=True)
     shapes = canonical_shapes()
+    if args.shape_index is not None:
+        if not 0 <= args.shape_index < len(shapes):
+            parser.error(f"--shape-index must be in [0, {len(shapes) - 1}]")
+        shapes = [shapes[args.shape_index]]
     if args.limit_shapes is not None:
         shapes = shapes[: args.limit_shapes]
-    outcomes = list(itertools.product(range(3), repeat=4))
+    if args.outcome is not None:
+        if len(args.outcome) != 4 or any(value not in "012" for value in args.outcome):
+            parser.error("--outcome must contain exactly four digits from 0, 1, and 2")
+        outcomes = [tuple(int(value) for value in args.outcome)]
+    else:
+        outcomes = list(itertools.product(range(3), repeat=4))
     worker_counts = tuple(int(value) for value in args.worker_counts.split(","))
     if not worker_counts or any(value not in (1, 2) for value in worker_counts):
         parser.error("--worker-counts must contain 1 and/or 2")
@@ -177,7 +232,15 @@ def main():
             shape_name = "".join(str(value) for value in shape)
             for outcome in outcomes:
                 outcome_name = "".join(str(value) for value in outcome)
-                program.write_text(source_for(shape, outcome))
+                program.write_text(
+                    source_for(
+                        shape,
+                        outcome,
+                        args.loop_iterations,
+                        args.unroll_iterations,
+                        args.native_prefix,
+                    )
+                )
                 results = {}
                 for mode, workers in itertools.product(("baseline", "rvf"), worker_counts):
                     result = run_one(
@@ -187,6 +250,7 @@ def main():
                         mode,
                         workers,
                         args.timeout,
+                        bool(args.loop_iterations),
                     )
                     results[(mode, workers)] = result
                     rows.append(
@@ -214,7 +278,10 @@ def main():
                         and rvf["warning_sha256"] != baseline["warning_sha256"]
                     ):
                         violations.append(f"{label}: safe warning mismatch")
-                    if rvf["gate"].startswith("enabled") and rvf["fail_open"] != "0":
+                    expected_gate = "regional" if args.loop_iterations else "enabled"
+                    if not rvf["gate"].startswith(expected_gate):
+                        violations.append(f"{label}: unexpected RVF gate {rvf['gate']!r}")
+                    if rvf["gate"].startswith(expected_gate) and rvf["fail_open"] != "0":
                         violations.append(f"{label}: late fail-open")
                     if int(rvf["loads_reduced"]) > 0:
                         reduced_cells += 1
@@ -248,6 +315,9 @@ def main():
         "state_cells": len(shapes) * len(outcomes),
         "invocations": len(rows),
         "worker_counts": worker_counts,
+        "loop_iterations": args.loop_iterations,
+        "unroll_iterations": args.unroll_iterations,
+        "native_prefix": args.native_prefix,
         "reduced_rvf_cells": reduced_cells,
         "violations": violations,
     }

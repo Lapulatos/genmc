@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="60 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/><option name="--disable-mm-detector"/>
+  <option name="--svcomp-backend=caat-sc"/><option name="--cat-stats"/>
+  <column title="complete">Number of complete executions explored: ([0-9]+)</column>
+  <column title="work added">work-added=([0-9]+)</column>
+  <column title="work popped">work-popped=([0-9]+)</column>
+  <column title="realized prefixes">realized-revisit-prefixes=([0-9]+)</column>
+  <column title="valid queries">validity-queries=([0-9]+)</column>
+  <column title="conflicts">backjump-conflict-queries=([0-9]+)</column>
+  <column title="cores">backjump-cores-derived=([0-9]+)</column>
+  <column title="unsupported">backjump-cores-unsupported=([0-9]+)</column>
+  <column title="mapped">backjump-mapped-choice-literals=([0-9]+)</column>
+  <column title="unresolved">backjump-unresolved-choice-facts=([0-9]+)</column>
+  <column title="newest only">backjump-newest-only=([0-9]+)</column>
+  <column title="nonlocal">backjump-nonlocal=([0-9]+)</column>
+  <column title="distance sum">backjump-distance-sum=([0-9]+)</column>
+  <column title="max distance">backjump-max-distance=([0-9]+)</column>
+  <column title="recurring">backjump-recurring-signatures=([0-9]+)</column>
+  <rundefinition name="pso-backjump-census-15">
+    <tasks name="pthread-wmm-15">
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/rfi005.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe029_power.oepc_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix054_power.oepc_power.opt_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe029_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe010_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe004_power.oepc_pso.oepc_rmo.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix024_power.oepc_pso.oepc_rmo.oepc_tso.oepc_tso.opt.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix035.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/rfi002_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe017_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe035_power.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix023_tso.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix014_tso.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/mix008_tso.oepc.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/safe023_power.oepc_power.opt_pso.oepc_pso.opt_rmo.oepc_rmo.opt.yml</include>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

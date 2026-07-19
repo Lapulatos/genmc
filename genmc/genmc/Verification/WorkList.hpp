@@ -27,6 +27,22 @@ public:
 	using ItemT = std::unique_ptr<Revisit>;
 
 	WorkList() = default;
+	WorkList(const WorkList &other)
+	{
+		wlist_.reserve(other.wlist_.size());
+		for (const auto &item : other.wlist_)
+			wlist_.push_back(item->clone());
+	}
+	WorkList(WorkList &&) = default;
+	auto operator=(const WorkList &other) -> WorkList &
+	{
+		if (this == &other)
+			return *this;
+		WorkList copy(other);
+		wlist_.swap(copy.wlist_);
+		return *this;
+	}
+	auto operator=(WorkList &&) -> WorkList & = default;
 
 	/** Returns whether this worklist is empty */
 	[[nodiscard]] auto empty() const -> bool { return wlist_.empty(); }

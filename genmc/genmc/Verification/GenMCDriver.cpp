@@ -65,11 +65,15 @@ GenMCDriver::GenMCDriver(std::shared_ptr<const Config> conf, ThreadPool *pool /*
 					  .emitNALabels = Config::emitNALabels};
 	auto execGraph = userConf->isDepTrackingModel ? std::make_unique<DepExecutionGraph>(cfg)
 						      : std::make_unique<ExecutionGraph>(cfg);
-	execStack.emplace_back(std::move(execGraph), std::move(LocalQueueT()),
-			       std::move(ChoiceMap()),
-			       userConf->scRvfExploration && userConf->scRvfProgramSupported
-				       ? std::optional<genmc::rvf::Frame>(std::in_place)
-				       : std::nullopt);
+	execStack.emplace_back(
+		std::move(execGraph), std::move(LocalQueueT()), std::move(ChoiceMap()),
+		userConf->scRvfExploration && (userConf->scRvfProgramSupported ||
+					       userConf->scRvfRegionalProgramEligible)
+			? std::optional<genmc::rvf::Frame>(std::in_place)
+			: std::nullopt,
+		std::nullopt,
+		userConf->catBackjumpCensus ? std::make_unique<genmc::catcensus::DecisionState>()
+					    : nullptr);
 
 	symmChecker = SymmetryChecker::create();
 	auto hasBounder = userConf->bound.has_value();
@@ -115,10 +119,26 @@ GenMCDriver::~GenMCDriver()
 	std::cerr << line.str() << '\n';
 }
 
+auto GenMCDriver::takeTaskResult() -> VerificationResult
+{
+	auto taskResult = std::move(result);
+	result = VerificationResult{};
+	if (userConf->collectLinSpec)
+		result.specification = std::make_unique<Specification>(userConf->maxExtSize
+#ifdef ENABLE_GENMC_DEBUG
+								       ,
+								       userConf->relincheDebug
+#endif
+		);
+	return taskResult;
+}
+
 GenMCDriver::Execution::Execution(std::unique_ptr<ExecutionGraph> g, LocalQueueT &&w, ChoiceMap &&m,
-				  std::optional<genmc::rvf::Frame> rvfState)
+				  std::optional<genmc::rvf::Frame> rvfState,
+				  std::optional<genmc::rvf::RegionToken> token,
+				  std::unique_ptr<genmc::catcensus::DecisionState> decisions)
 	: graph(std::move(g)), workqueue(std::move(w)), choices(std::move(m)),
-	  rvf(std::move(rvfState))
+	  rvf(std::move(rvfState)), regionToken(token), catDecisions(std::move(decisions))
 {}
 GenMCDriver::Execution::~Execution() = default;
 
@@ -144,6 +164,8 @@ void GenMCDriver::Execution::restrict(Stamp stamp)
 	auto &g = getGraph();
 	g.cutToStamp(stamp);
 	getChoiceMap().cut(*g.getViewFromStamp(stamp));
+	if (catDecisions)
+		catDecisions->cut(*g.getViewFromStamp(stamp));
 }
 
 void GenMCDriver::pushExecution(Execution &&e) { execStack.push_back(std::move(e)); }
@@ -185,9 +207,8 @@ void GenMCDriver::maybeReportExplorationProgress()
 		std::max<std::uint64_t>(statistics.maximumCurrentGraphLabels, currentLabels);
 	statistics.maximumStackGraphLabels =
 		std::max(statistics.maximumStackGraphLabels, stackLabels);
-	statistics.maximumSchedulerCachedLabels =
-		std::max(statistics.maximumSchedulerCachedLabels,
-			 getScheduler().getCachedLabelCount());
+	statistics.maximumSchedulerCachedLabels = std::max(statistics.maximumSchedulerCachedLabels,
+							   getScheduler().getCachedLabelCount());
 	const auto activity = statistics.rfOffered + statistics.coOffered +
 			      statistics.backwardOffered + statistics.workItemsPopped +
 			      statistics.candidateValidityQueries +
@@ -196,9 +217,12 @@ void GenMCDriver::maybeReportExplorationProgress()
 		return;
 	constexpr std::uint64_t interval = 100000;
 	nextExplorationProgress_ = activity - activity % interval + interval;
+	const auto backjump = getConsChecker().formatCATBackjumpCensus();
 	const std::lock_guard lock(explorationProgressMutex);
 	std::cerr << "\nExploration statistics: " << formatExplorationStatistics(statistics)
 		  << '\n';
+	if (!backjump.empty())
+		std::cerr << backjump << '\n';
 }
 
 bool GenMCDriver::popExecution()
@@ -211,9 +235,15 @@ bool GenMCDriver::popExecution()
 
 void GenMCDriver::initFromState(std::unique_ptr<Execution> exec)
 {
+	/* A regional hard error stops only its speculative task. The worker may then
+	 * execute the transaction's native replay, so task-local halt state must not
+	 * leak across the queue boundary. */
+	shouldHalt = false;
+	currentRegionToken_ = exec->regionToken;
 	execStack.clear();
-	execStack.emplace_back(std::move(exec->graph), LocalQueueT(), std::move(exec->choices),
-			       std::move(exec->rvf));
+	execStack.emplace_back(std::move(exec->graph), std::move(exec->workqueue),
+			       std::move(exec->choices), std::move(exec->rvf), exec->regionToken,
+			       std::move(exec->catDecisions));
 
 	getExec().getGraph().setConsChecker(&getConsChecker());
 	getExec().getGraph().setState(&getExecState());
@@ -221,9 +251,12 @@ void GenMCDriver::initFromState(std::unique_ptr<Execution> exec)
 
 std::unique_ptr<GenMCDriver::Execution> GenMCDriver::extractState()
 {
-	return std::make_unique<Execution>(
-		GenMCDriver::Execution(getExec().getGraph().clone(), LocalQueueT(),
-				       ChoiceMap(getExec().getChoiceMap()), getExec().rvf));
+	return std::make_unique<Execution>(GenMCDriver::Execution(
+		getExec().getGraph().clone(), LocalQueueT(), ChoiceMap(getExec().getChoiceMap()),
+		getExec().rvf, currentRegionToken_,
+		getExec().catDecisions
+			? std::make_unique<genmc::catcensus::DecisionState>(*getExec().catDecisions)
+			: nullptr));
 }
 
 static void reconstructState(EventLabel *eLab, View &a, ExecutionState &state)
@@ -506,8 +539,18 @@ void GenMCDriver::halt(VerificationError status)
 {
 	shouldHalt = true;
 	result.status = status;
-	if (getThreadPool())
-		getThreadPool()->halt();
+	if (!getThreadPool())
+		return;
+	/* A speculative RVF observation is not durable until its region commits.
+	 * Revoke and replay the untouched native entry; only a hard error rediscovered
+	 * by that tokenless execution may halt the complete verification. */
+	if (currentRegionToken_) {
+		const auto accepted = getThreadPool()->requestRegionRevocation(
+			*currentRegionToken_, "speculative hard error");
+		VERIFY(accepted, "active regional task lost its transaction");
+		return;
+	}
+	getThreadPool()->halt();
 }
 
 /************************************************************
@@ -578,11 +621,12 @@ bool GenMCDriver::isExecutionValid(const EventLabel *lab)
 	if (getConf()->catStats)
 		++result.explorationStatistics.candidateValidityQueries;
 	maybeReportExplorationProgress();
+	getConsChecker().setCATDecisionState(getExec().catDecisions.get());
 	auto *rLab = genmc::dyn_cast<ReadLabel>(lab);
 	const auto valid = (!getConf()->symmetryReduction || getSymmChecker().isSymmetryOK(lab)) &&
-	       (rLab && rLab->getRf() == getExec().getGraph().co_max(rLab->getAddr()) ||
-		getConsChecker().isConsistent(lab)) &&
-	       !partialExecutionExceedsBound();
+			   (rLab && rLab->getRf() == getExec().getGraph().co_max(rLab->getAddr()) ||
+			    getConsChecker().isConsistent(lab)) &&
+			   !partialExecutionExceedsBound();
 	if (profile) {
 		validityNanoseconds_ += static_cast<std::uint64_t>(
 			std::chrono::duration_cast<std::chrono::nanoseconds>(
@@ -1124,6 +1168,7 @@ bool GenMCDriver::checkHelpingCasCondition(const HelpingCasLabel *hLab)
 EventLabel *GenMCDriver::findConsistentRf(ReadLabel *rLab, std::vector<EventLabel *> &rfs)
 {
 	auto &g = getExec().getGraph();
+	const auto branching = rfs.size() > 1;
 
 	/* Otherwise, search for a consistent rf */
 	std::ranges::reverse(rfs);
@@ -1131,6 +1176,8 @@ EventLabel *GenMCDriver::findConsistentRf(ReadLabel *rLab, std::vector<EventLabe
 		auto *back = rfs.back();
 		rfs.pop_back();
 		rLab->setRf(back);
+		if (branching && getConf()->catBackjumpCensus)
+			getExec().catDecisions->recordRf(*rLab);
 		if (isExecutionValid(rLab)) {
 			updateLabelViews(rLab);
 			return back;
@@ -1140,6 +1187,8 @@ EventLabel *GenMCDriver::findConsistentRf(ReadLabel *rLab, std::vector<EventLabe
 	auto *back = rfs.back();
 	rfs.pop_back();
 	rLab->setRf(back);
+	if (branching && getConf()->catBackjumpCensus)
+		getExec().catDecisions->recordRf(*rLab);
 	updateLabelViews(rLab);
 
 	/* For the non-bounding case, maximal extensibility guarantees consistency */
@@ -1159,10 +1208,13 @@ EventLabel *GenMCDriver::findConsistentRf(ReadLabel *rLab, std::vector<EventLabe
 EventLabel *GenMCDriver::findConsistentCo(WriteLabel *wLab, std::vector<EventLabel *> &cos)
 {
 	auto &g = getExec().getGraph();
+	const auto branching = cos.size() > 1;
 
 	/* Similarly to the read case: rely on extensibility */
 	auto back = cos.back();
 	wLab->addCo(back);
+	if (branching && getConf()->catBackjumpCensus)
+		getExec().catDecisions->recordCo(*wLab);
 	if (!getConf()->bound.has_value()) {
 		cos.pop_back();
 		return back;
@@ -1176,6 +1228,8 @@ EventLabel *GenMCDriver::findConsistentCo(WriteLabel *wLab, std::vector<EventLab
 		auto back = cos.back();
 		cos.pop_back();
 		wLab->moveCo(back);
+		if (branching && getConf()->catBackjumpCensus)
+			getExec().catDecisions->recordCo(*wLab);
 		if (isExecutionValid(wLab))
 			return back;
 	}
@@ -1569,6 +1623,14 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleLoad(std::unique_ptr<ReadLabe
 				++result.explorationStatistics.rvfFailOpen;
 				++result.explorationStatistics.rvfFailOpenUnsupported;
 			}
+			if (getConf()->scRvfRegionalProgramEligible && currentRegionToken_) {
+				const auto accepted = getThreadPool()->requestRegionRevocation(
+					*currentRegionToken_, "non-atomic load frontier");
+				VERIFY(accepted,
+				       "non-atomic load frontier lost its regional transaction");
+				shouldHalt = true;
+				return {Invalid{}, 1U};
+			}
 			getExec().rvf.reset();
 		}
 	}
@@ -1601,8 +1663,9 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleLoad(std::unique_ptr<ReadLabe
 		getScheduler().setRescheduledRead(Event::getInit());
 
 	/* Get an approximation of the stores we can read from */
-	const auto rfCandidateStarted = getConf()->catStats ? std::chrono::steady_clock::now()
-							 : std::chrono::steady_clock::time_point{};
+	const auto rfCandidateStarted = getConf()->catStats
+						? std::chrono::steady_clock::now()
+						: std::chrono::steady_clock::time_point{};
 	auto stores = getRfsApproximation(lab);
 	if (getConf()->catStats)
 		rfCandidateNanoseconds_ += static_cast<std::uint64_t>(
@@ -1614,6 +1677,41 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleLoad(std::unique_ptr<ReadLabe
 	filterOptimizeRfs(lab, stores);
 	if (getConf()->catStats) {
 		auto &statistics = result.explorationStatistics;
+		/* Regional admission currently hands the entire remainder to native RF-DPOR at
+		 * its first unsupported frontier. Measure the quotient opportunity hidden behind
+		 * that handoff without changing RF generation or class ownership. */
+		if (getConf()->scRvfRegionalProgramEligible && !getExec().rvf) {
+			struct RegionalValueKey {
+				std::uint64_t value{};
+				std::uint64_t provenance{};
+				bool sameThreadSource{};
+
+				auto operator<=>(const RegionalValueKey &) const = default;
+			};
+			std::vector<RegionalValueKey> regionalValues;
+			regionalValues.reserve(stores.size());
+			for (const auto *source : stores) {
+				const auto value = source->getAccessValue(lab->getAccess());
+				regionalValues.push_back({value.get(), value.getProvenance(),
+							  source->getThread() == lab->getThread()});
+			}
+			std::ranges::sort(regionalValues);
+			++statistics.rvfNativeOnlyLoads;
+			std::uint64_t mergeableSources{};
+			for (std::size_t begin = 0; begin < regionalValues.size();) {
+				const auto end = static_cast<std::size_t>(
+					std::ranges::upper_bound(regionalValues,
+								 regionalValues[begin]) -
+					regionalValues.begin());
+				if (end - begin > 1U)
+					mergeableSources += end - begin - 1U;
+				begin = end;
+			}
+			if (mergeableSources != 0U) {
+				++statistics.rvfNativeOnlyMergeableLoads;
+				statistics.rvfNativeOnlyMergeableSources += mergeableSources;
+			}
+		}
 		if (stores.size() > 1) {
 			struct ValueKey {
 				std::uint64_t value{};
@@ -1745,7 +1843,7 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleRVFLoad(std::unique_ptr<ReadL
 		}
 		return getReadRetValue(lab);
 	};
-	if (getConf()->scRvfDisableQuotient)
+	if (getConf()->scRvfDisableQuotient || getExec().rvf->nativeReplay)
 		return continueNative(true);
 
 	struct ValueKey {
@@ -1779,6 +1877,7 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleRVFLoad(std::unique_ptr<ReadL
 		return continueNative();
 
 	auto provisionalGoodWrites = getExec().rvf->goodWrites;
+	std::vector<::Event> synthesizedNativeAncestors;
 	/* Reads handled natively because they had no quotient opportunity are not stored
 	 * in the RVF frame: a later RF revisit may change their source. Reconstruct their
 	 * singleton GoodW constraint from the current graph whenever an RVF problem is built. */
@@ -1788,6 +1887,7 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleRVFLoad(std::unique_ptr<ReadL
 			continue;
 		const auto priorKey = cat::StableEventKey{prior->getPos()};
 		if (!provisionalGoodWrites.contains(priorKey)) {
+			synthesizedNativeAncestors.push_back(prior->getPos());
 			provisionalGoodWrites[priorKey].push_back(
 				stableSource(prior->getRf(), prior->getAddr()));
 			if (getConf()->catStats)
@@ -1841,6 +1941,31 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleRVFLoad(std::unique_ptr<ReadL
 		return continueNative();
 
 	std::vector<Execution> generated;
+	/* The first actual merge opens the transaction. Capture the graph, pending
+	 * revisits, and choices from immediately before this read was added. If any
+	 * speculative descendant later leaves the proof scope, this exact tokenless
+	 * state is replayed by native RF-DPOR. */
+	if (!currentRegionToken_) {
+		auto nativeFrame = genmc::rvf::Frame{};
+		nativeFrame.nativeReplay = true;
+		auto nativeEntry = std::make_unique<Execution>(
+			parentGraph->clone(), WorkList(getExec().getWorkqueue()),
+			ChoiceMap(parentChoices), std::move(nativeFrame));
+		/* Results accumulated before this merge are outside the speculative region.
+		 * Transfer them to the transaction so revocation keeps that durable prefix. */
+		auto durablePrefix = takeTaskResult();
+		currentRegionToken_ = getThreadPool()->beginRegion(std::move(nativeEntry),
+								   std::move(durablePrefix));
+		getExec().regionToken = currentRegionToken_;
+	}
+	/* The representative children do not own the Cartesian product with a future
+	 * native backward revisit of these reads. Record that exact dynamic frontier;
+	 * calcRevisits() revokes the transaction only if such a write materializes. */
+	for (const auto ancestor : synthesizedNativeAncestors) {
+		if (std::ranges::find(getExec().rvf->nativeAncestorReads, ancestor) ==
+		    getExec().rvf->nativeAncestorReads.end())
+			getExec().rvf->nativeAncestorReads.push_back(ancestor);
+	}
 	auto parentFrame = *getExec().rvf;
 	std::vector<std::uint32_t> threadCounts(g.getNumThreads() + 1U, 0U);
 	for (std::size_t id = 0; id < provisional.problem.events.size(); ++id) {
@@ -1851,7 +1976,7 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleRVFLoad(std::unique_ptr<ReadL
 	parentFrame.causalCutoffs[readKey] = std::move(threadCounts);
 	parentFrame.processedReads.push_back(lab->getPos());
 	generated.emplace_back(std::move(parentGraph), LocalQueueT(), std::move(parentChoices),
-			       std::move(parentFrame));
+			       std::move(parentFrame), currentRegionToken_);
 
 	for (const auto &[value, sources] : groups) {
 		(void)value;
@@ -1859,20 +1984,27 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleRVFLoad(std::unique_ptr<ReadL
 		 * value/provenance group therefore has the same assume result. A failing
 		 * group is infeasible; the parent continuation remains responsible for a
 		 * future write that may create a succeeding group. */
-		if (lab->getAnnot() &&
-		    !lab->valueMakesAssumeSucceed(sources.front()->getAccessValue(lab->getAccess()))) {
+		if (lab->getAnnot() && !lab->valueMakesAssumeSucceed(
+					       sources.front()->getAccessValue(lab->getAccess()))) {
 			if (getConf()->catStats)
 				++result.explorationStatistics.rvfAnnotatedGroupsRejected;
 			continue;
 		}
 		auto childFrame = *getExec().rvf;
-		childFrame.goodWrites = provisionalGoodWrites;
+		/* provisionalGoodWrites also contains ephemeral singleton constraints for
+		 * reads that native RF-DPOR handled earlier. Persisting those constraints
+		 * would freeze their old RF across a later backward revisit. Retain only
+		 * quotient-owned classes and add the class selected for the current read;
+		 * the next problem rebuild will synthesize native reads from the then-current
+		 * graph again. */
 		auto &good = childFrame.goodWrites[readKey];
 		good.clear();
 		for (const auto *source : sources)
 			good.push_back(stableSource(source, lab->getAddr()));
 		childFrame.processedReads.clear();
-		auto problem = genmc::rvf::buildGraphProblem(g, childFrame.goodWrites);
+		auto verificationGoodWrites = provisionalGoodWrites;
+		verificationGoodWrites[readKey] = good;
+		auto problem = genmc::rvf::buildGraphProblem(g, verificationGoodWrites);
 		if (!problem.error.empty()) {
 			LOG(VerbosityLevel::Warning, "SC RVF graph adapter failed open: {}",
 			    problem.error);
@@ -1900,7 +2032,8 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleRVFLoad(std::unique_ptr<ReadL
 		auto childGraph = g.clone();
 		if (auto error = genmc::rvf::applyGraphWitness(*childGraph, problem, witness);
 		    !error.empty()) {
-			LOG(VerbosityLevel::Warning, "SC RVF witness replay failed open: {}", error);
+			LOG(VerbosityLevel::Warning, "SC RVF witness replay failed open: {}",
+			    error);
 			return fallback(&ExplorationStatistics::rvfFailOpenAdapter);
 		}
 		for (auto &event : childGraph->labels()) {
@@ -1921,7 +2054,8 @@ GenMCDriver::HandleResult<SVal> GenMCDriver::handleRVFLoad(std::unique_ptr<ReadL
 			result.explorationStatistics.rvfWitnessEventsReplayed +=
 				witness.witness.size();
 		generated.emplace_back(std::move(childGraph), LocalQueueT(),
-				       ChoiceMap(getExec().getChoiceMap()), std::move(childFrame));
+				       ChoiceMap(getExec().getChoiceMap()), std::move(childFrame),
+				       currentRegionToken_);
 	}
 
 	const auto representatives = generated.size() - 1U;
@@ -2100,6 +2234,16 @@ GenMCDriver::NALoadResult GenMCDriver::handleNALoad(const EventDbgInfo *dbg, Eve
 	++pos;
 	if (auto err = updateErrorInfoAndMaybeExit(pos, true, dbg); err)
 		return {*err};
+	if (getConf()->scRvfRegionalProgramEligible && getExec().rvf) {
+		if (currentRegionToken_) {
+			const auto accepted = getThreadPool()->requestRegionRevocation(
+				*currentRegionToken_, "non-atomic load frontier");
+			VERIFY(accepted, "non-atomic load frontier lost its regional transaction");
+			shouldHalt = true;
+			return {Invalid{}, 1U};
+		}
+		getExec().rvf.reset();
+	}
 	if (isExecutionDrivenByGraph(pos)) {
 		/* TODO: case analysis for view calculation (+updateIdx?) */
 #if EMIT_NA_LABELS
@@ -2168,7 +2312,16 @@ GenMCDriver::handleNAStore(const EventDbgInfo *dbg, Event pos, SAddr loc, ASize 
 	++pos;
 	if (auto err = updateErrorInfoAndMaybeExit(pos, true, dbg); err)
 		return {*err};
-
+	if (getConf()->scRvfRegionalProgramEligible && getExec().rvf) {
+		if (currentRegionToken_) {
+			const auto accepted = getThreadPool()->requestRegionRevocation(
+				*currentRegionToken_, "non-atomic store frontier");
+			VERIFY(accepted, "non-atomic store frontier lost its regional transaction");
+			shouldHalt = true;
+			return {Invalid{}, 1U};
+		}
+		getExec().rvf.reset();
+	}
 #if EMIT_NA_LABELS
 	const std::optional<SVal> naVal = val;
 #else
@@ -2304,8 +2457,9 @@ GenMCDriver::HandleResult<bool> GenMCDriver::handleStore(std::unique_ptr<WriteLa
 	/* Find all possible placings in coherence for this store, and
 	 * print a WW-race warning if appropriate (if this moots,
 	 * exploration will anyway be cut) */
-	const auto coCandidateStarted = getConf()->catStats ? std::chrono::steady_clock::now()
-							 : std::chrono::steady_clock::time_point{};
+	const auto coCandidateStarted = getConf()->catStats
+						? std::chrono::steady_clock::now()
+						: std::chrono::steady_clock::time_point{};
 	auto cos = getConsChecker().getCoherentPlacings(lab);
 	if (getConf()->catStats)
 		coCandidateNanoseconds_ += static_cast<std::uint64_t>(
@@ -2980,8 +3134,8 @@ bool GenMCDriver::reportWarningOnce(Event pos, VerificationError wcode,
 	auto shouldUpgradeWarning = [&](auto &wcode) {
 		if (wcode != VerificationError::VE_WWRace)
 			return std::make_pair(false, ""s);
-		const auto nativeSymmetry =
-			getConf()->symmetryReduction || getConf()->scRvfNativeSymmetryReduction;
+		const auto nativeSymmetry = getConf()->symmetryReduction ||
+					    getConf()->scRvfNativeSymmetryReduction;
 		const auto nativeIpr = getConf()->ipr || getConf()->scRvfNativeIpr;
 		if (!nativeSymmetry && !nativeIpr)
 			return std::make_pair(false, ""s);
@@ -3000,9 +3154,8 @@ bool GenMCDriver::reportWarningOnce(Event pos, VerificationError wcode,
 				 return rLab && rLab->getAnnot();
 			 }));
 		auto [cause, cli] =
-			nativeIpr
-				? std::make_pair("in-place revisiting (IPR)"s, "-disable-ipr"s)
-				: std::make_pair("symmetry reduction (SR)"s, "-disable-sr"s);
+			nativeIpr ? std::make_pair("in-place revisiting (IPR)"s, "-disable-ipr"s)
+				  : std::make_pair("symmetry reduction (SR)"s, "-disable-sr"s);
 		auto msg = "Unordered writes do not constitute a bug per se, though they often "
 			   "indicate faulty design.\n" +
 			   (upgrade ? ("This warning is treated as an error due to " + cause +
@@ -3430,6 +3583,17 @@ void GenMCDriver::calcRevisits(WriteLabel *sLab)
 	if (getConf()->catStats)
 		result.explorationStatistics.backwardOffered += loads.size();
 	maybeReportExplorationProgress();
+	if (currentRegionToken_ && getExec().rvf &&
+	    std::ranges::any_of(getExec().rvf->nativeAncestorReads, [&](const ::Event risk) {
+		    const auto *read = genmc::dyn_cast_if_present<ReadLabel>(g.getEventLabel(risk));
+		    return read && read->getAddr() == sLab->getAddr();
+	    })) {
+		const auto accepted = getThreadPool()->requestRegionRevocation(
+			*currentRegionToken_, "future write revisits a native RVF ancestor");
+		VERIFY(accepted, "native-ancestor frontier lost its regional transaction");
+		shouldHalt = true;
+		return;
+	}
 	/* An annotated read constrained by an RVF child has a single owner. Its parent
 	 * continuation, not a native backward revisit that would leave goodWrites stale,
 	 * explores future writes. */
@@ -3483,6 +3647,8 @@ bool GenMCDriver::revisitWrite(const WriteForwardRevisit &ri)
 	VERIFY(wLab);
 
 	wLab->moveCo(g.getEventLabel(ri.getPred()));
+	if (getConf()->catBackjumpCensus)
+		getExec().catDecisions->recordCo(*wLab);
 	calcRevisits(wLab);
 	return !violatesAtomicity(wLab);
 }
@@ -3509,6 +3675,8 @@ bool GenMCDriver::revisitRead(const Revisit &ri)
 	auto *revLab = g.getEventLabel(genmc::dyn_cast<ReadRevisit>(&ri)->getRev());
 
 	rLab->setRf(revLab);
+	if (getConf()->catBackjumpCensus)
+		getExec().catDecisions->recordRf(*rLab);
 	updateLabelViews(rLab);
 	auto *fri = genmc::dyn_cast<ReadForwardRevisit>(&ri);
 
@@ -3571,8 +3739,15 @@ bool GenMCDriver::backwardRevisit(const BackwardRevisit &br)
 	auto og = copyGraph(&br, &*v);
 	auto cmap = ChoiceMap(getExec().getChoiceMap());
 	cmap.cut(*v);
+	auto decisions =
+		getExec().catDecisions
+			? std::make_unique<genmc::catcensus::DecisionState>(*getExec().catDecisions)
+			: nullptr;
+	if (decisions)
+		decisions->cut(*v);
 
-	pushExecution({std::move(og), LocalQueueT(), std::move(cmap)});
+	pushExecution({std::move(og), LocalQueueT(), std::move(cmap), std::nullopt, std::nullopt,
+		       std::move(decisions)});
 
 	repairDanglingReads(getExec().getGraph());
 	auto ok = revisitRead(br);

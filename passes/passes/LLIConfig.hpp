@@ -58,6 +58,7 @@ struct LLIConfig {
 	std::string programEntryFun;
 	bool finiteSkeletonStats{};
 	bool finiteSkeletonStatsOnly{};
+	bool scRvfGateStatsOnly{};
 	bool finiteSkeletonSolveOne{};
 	std::string finiteSkeletonFirstModel{};
 	unsigned finiteSkeletonSolveMax{1};

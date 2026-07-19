@@ -25,6 +25,7 @@
 #include "genmc/Verification/Config.hpp"
 
 #include <chrono>
+#include <format>
 #include <iostream>
 #include <limits>
 #include <mutex>
@@ -253,6 +254,20 @@ template <typename HostChecker> BasicCATChecker<HostChecker>::~BasicCATChecker()
 	     << " preventive-co-pruned=" << preventiveCoPruned_
 	     << " preventive-all-pruned-fallbacks=" << preventiveAllPrunedFallbacks_
 	     << " preventive-lookup-ns=" << preventiveLookupNanoseconds_;
+	if (this->getConf()->catBackjumpCensus) {
+		line << " backjump-conflict-queries=" << backjumpConflictQueries_
+		     << " backjump-cores-derived=" << backjumpCoresDerived_
+		     << " backjump-cores-unsupported=" << backjumpCoresUnsupported_
+		     << " backjump-core-literals=" << backjumpCoreLiterals_
+		     << " backjump-mapped-choice-literals=" << backjumpMappedChoiceLiterals_
+		     << " backjump-unresolved-choice-facts=" << backjumpUnresolvedChoiceFacts_
+		     << " backjump-newest-only=" << backjumpNewestOnly_
+		     << " backjump-nonlocal=" << backjumpNonlocal_
+		     << " backjump-distance-sum=" << backjumpDistanceSum_
+		     << " backjump-max-distance=" << backjumpMaximumDistance_
+		     << " backjump-recurring-signatures=" << backjumpRecurringSignatures_
+		     << " backjump-unique-signatures=" << backjumpSignatures_.size();
+	}
 	if (conflictCores_) {
 		const auto &cores = conflictCores_->statistics();
 		line << " conflict-core-learn-attempts=" << cores.learnAttempts
@@ -283,6 +298,22 @@ auto BasicCATChecker<HostChecker>::incrementalStatistics() const
 	-> const cat::GraphSynchronizationStatistics *
 {
 	return graphSynchronizer_ ? &graphSynchronizer_->statistics() : nullptr;
+}
+
+template <typename HostChecker>
+auto BasicCATChecker<HostChecker>::formatCATBackjumpCensus() const -> std::string
+{
+	if (!this->getConf()->catBackjumpCensus)
+		return {};
+	return std::format(
+		"CAT backjump census: conflicts={} cores={} unsupported={} core-literals={} "
+		"mapped={} unresolved={} newest-only={} nonlocal={} distance-sum={} "
+		"max-distance={} recurring={} unique-signatures={}",
+		backjumpConflictQueries_, backjumpCoresDerived_, backjumpCoresUnsupported_,
+		backjumpCoreLiterals_, backjumpMappedChoiceLiterals_,
+		backjumpUnresolvedChoiceFacts_, backjumpNewestOnly_, backjumpNonlocal_,
+		backjumpDistanceSum_, backjumpMaximumDistance_, backjumpRecurringSignatures_,
+		backjumpSignatures_.size());
 }
 
 template <typename HostChecker>
@@ -326,6 +357,8 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 		}
 		const auto &result = incrementalEvaluator_->result();
 		VERIFY(result.errors.empty(), "validated incremental CAAT evaluation failed");
+		if (this->getConf()->catBackjumpCensus && !result.violations.empty())
+			observeBackjumpConflict(graph);
 		if (this->getConf()->explainCat && !result.violations.empty()) {
 			auto explained = cat::Reasoner().explain(
 				*caatModel, *caatAnalysis, incrementalEvaluator_->eventCount(),
@@ -414,6 +447,107 @@ auto BasicCATChecker<HostChecker>::isConsistent(const ExecutionGraph &graph) con
 				  << '\n';
 	}
 	return finish(violations.empty());
+}
+
+template <typename HostChecker>
+void BasicCATChecker<HostChecker>::observeBackjumpConflict(const ExecutionGraph &graph) const
+{
+	++backjumpConflictQueries_;
+	if (!decisionState_ || !preventiveAdapter_ || preventiveOrders_.empty()) {
+		++backjumpCoresUnsupported_;
+		return;
+	}
+	auto snapshot = preventiveAdapter_->materialize(graph);
+	std::vector<std::optional<cat::Value>> values(
+		this->getConf()->caatModel->predicates().size(), std::nullopt);
+	for (const auto predicate : preventiveBasePredicates_) {
+		const auto &name = this->getConf()->caatModel->predicates()[predicate].name;
+		const auto found = snapshot.base.find(name);
+		if (found == snapshot.base.end()) {
+			++backjumpCoresUnsupported_;
+			return;
+		}
+		values[predicate] = found->second;
+	}
+	const auto root = preventiveOrders_.front().order;
+	auto cycle = cat::findLazyCycle(*this->getConf()->caatModel, root, values,
+					snapshot.eventCount);
+	if (cycle.empty()) {
+		++backjumpCoresUnsupported_;
+		return;
+	}
+	std::vector<cat::ConflictLiteral> core;
+	for (std::size_t edge = 1; edge < cycle.size(); ++edge) {
+		auto derivation = cat::deriveLazyEdge(*this->getConf()->caatModel, root, values,
+						      snapshot.eventCount, cycle[edge - 1],
+						      cycle[edge]);
+		if (!derivation) {
+			++backjumpCoresUnsupported_;
+			return;
+		}
+		core.insert(core.end(), derivation->begin(), derivation->end());
+	}
+	std::ranges::sort(core);
+	core.erase(std::ranges::unique(core).begin(), core.end());
+	++backjumpCoresDerived_;
+	backjumpCoreLiterals_ += core.size();
+
+	std::vector<const genmc::catcensus::DecisionState::Entry *> mapped;
+	for (const auto &literal : core) {
+		bool choiceFact = literal.predicate == preventiveRfPredicate_ ||
+				  literal.predicate == preventiveCoPredicate_ ||
+				  literal.predicate == preventiveFrPredicate_;
+		if (literal.predicate == preventiveRfPredicate_ && !literal.set) {
+			const auto *readKey = preventiveAdapter_->key(literal.to);
+			const auto *sourceKey = preventiveAdapter_->key(literal.from);
+			const auto *read = readKey ? std::get_if<Event>(readKey) : nullptr;
+			const auto *entry = read ? decisionState_->find(*read) : nullptr;
+			if (entry && entry->kind == genmc::catcensus::DecisionState::Kind::RF &&
+			    sourceKey && entry->alternative == *sourceKey)
+				mapped.push_back(entry);
+			else
+				++backjumpUnresolvedChoiceFacts_;
+			continue;
+		}
+		if (literal.predicate == preventiveCoPredicate_ && !literal.set) {
+			const auto *writeKey = preventiveAdapter_->key(literal.to);
+			const auto *predKey = preventiveAdapter_->key(literal.from);
+			const auto *write = writeKey ? std::get_if<Event>(writeKey) : nullptr;
+			const auto *entry = write ? decisionState_->find(*write) : nullptr;
+			if (entry && entry->kind == genmc::catcensus::DecisionState::Kind::CO &&
+			    predKey && entry->alternative == *predKey)
+				mapped.push_back(entry);
+			else
+				++backjumpUnresolvedChoiceFacts_;
+			continue;
+		}
+		if (choiceFact)
+			++backjumpUnresolvedChoiceFacts_;
+	}
+	std::ranges::sort(mapped, {}, [](const auto *entry) { return entry->subject; });
+	mapped.erase(std::ranges::unique(mapped, {}, [](const auto *entry) {
+			     return std::pair{entry->subject, entry->alternative};
+		     }).begin(), mapped.end());
+	backjumpMappedChoiceLiterals_ += mapped.size();
+	if (mapped.empty())
+		return;
+	std::vector<std::uint64_t> ordinals;
+	std::vector<std::pair<Event, cat::StableEventKey>> signature;
+	for (const auto *entry : mapped) {
+		ordinals.push_back(entry->ordinal);
+		signature.emplace_back(entry->subject, entry->alternative);
+	}
+	std::ranges::sort(ordinals);
+	if (ordinals.size() == 1) {
+		++backjumpNewestOnly_;
+	} else {
+		++backjumpNonlocal_;
+		const auto distance = ordinals.back() - ordinals[ordinals.size() - 2];
+		backjumpDistanceSum_ += distance;
+		backjumpMaximumDistance_ = std::max<std::size_t>(backjumpMaximumDistance_, distance);
+	}
+	if (++backjumpSignatures_[std::move(signature)] == 2)
+		++backjumpRecurringSignatures_;
 }
 
 template <typename HostChecker>

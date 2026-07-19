@@ -15,6 +15,8 @@ case "$GENMC_EXPERIMENT_MODE" in
 	primitive-cache-fast-compose-cycle-descriptor) arguments=(--cat-primitive-cache --cat-fast-primitive-build --cat-fast-descriptor-build --cat-fast-checks --cat-fast-composition --cat-fast-cycle-checks "${arguments[@]}") ;;
 	primitive-cache-fast-compose-cycle-descriptor-reuse) arguments=(--cat-primitive-cache --cat-fast-primitive-build --cat-fast-descriptor-build --cat-fast-descriptor-reuse --cat-fast-checks --cat-fast-composition --cat-fast-cycle-checks "${arguments[@]}") ;;
 	rvf) arguments=(--sc-rvf-exploration "${arguments[@]}") ;;
+	regional-rvf) arguments=(--sc-rvf-exploration --sc-rvf-annotated-reads --sc-rvf-regional "${arguments[@]}") ;;
+	regional-rvf-gate-census) arguments=(--sc-rvf-exploration --sc-rvf-annotated-reads --sc-rvf-regional --sc-rvf-gate-stats-only "${arguments[@]}") ;;
 	annotated-rvf) arguments=(--sc-rvf-exploration --sc-rvf-annotated-reads "${arguments[@]}") ;;
 	control) arguments=(--sc-rvf-exploration --sc-rvf-disable-quotient "${arguments[@]}") ;;
 	skeleton-census) arguments=(--finite-skeleton-stats-only "${arguments[@]}") ;;
@@ -32,6 +34,14 @@ case "$GENMC_EXPERIMENT_MODE" in
 			fi
 		done
 		arguments=(--cat-preventive-pruning "${arguments[@]}")
+		;;
+	pso-backjump-census)
+		for index in "${!arguments[@]}"; do
+			if [[ "${arguments[$index]}" == --model-file=*/recursive-sc.cat ]]; then
+				arguments[$index]="${arguments[$index]%/recursive-sc.cat}/recursive-pso.cat"
+			fi
+		done
+		arguments=(--cat-preventive-pruning --cat-backjump-census "${arguments[@]}")
 		;;
 	*) echo "unknown formal experiment mode: $GENMC_EXPERIMENT_MODE" >&2; exit 2 ;;
 esac

@@ -19,6 +19,7 @@
 #include "genmc/Verification/VerificationError.hpp"
 
 #include <format>
+#include <memory>
 #include <utility>
 
 class ReadRevisit;
@@ -56,6 +57,7 @@ public:
 	static bool classofKind(Kind K) { return true; }
 	static ReadRevisit *castToReadRevisit(const Revisit *);
 	static Revisit *castFromReadRevisit(const ReadRevisit *);
+	[[nodiscard]] auto clone() const -> std::unique_ptr<Revisit>;
 
 	/** Destructor and printing facilities */
 	virtual ~Revisit() {}
@@ -242,6 +244,37 @@ inline auto BackwardRevisit::create(Event p, Event r, std::unique_ptr<VectorCloc
 			p, r, std::move(*genmc::dyn_cast<DepView>(view.get())));
 	}
 	UNREACHABLE();
+}
+
+inline auto Revisit::clone() const -> std::unique_ptr<Revisit>
+{
+	switch (getKind()) {
+	case RV_FRevRead: {
+		const auto &revisit = static_cast<const ReadForwardRevisit &>(*this);
+		return std::make_unique<ReadForwardRevisit>(revisit.getPos(), revisit.getRev(),
+						    revisit.isMaximal());
+	}
+	case RV_FRevMO: {
+		const auto &revisit = static_cast<const WriteForwardRevisit &>(*this);
+		return std::make_unique<WriteForwardRevisit>(revisit.getPos(), revisit.getPred());
+	}
+	case RV_FRevOpt:
+		return std::make_unique<OptionalForwardRevisit>(getPos());
+	case RV_FRevRerun:
+		return std::make_unique<RerunForwardRevisit>();
+	case RV_FRevReplay: {
+		const auto &revisit = static_cast<const ReplayForwardRevisit &>(*this);
+		return std::make_unique<ReplayForwardRevisit>(revisit.getPos(),
+						      revisit.getDetails());
+	}
+	case RV_BRev: {
+		const auto &revisit = static_cast<const BackwardRevisit &>(*this);
+		return BackwardRevisit::create(revisit.getPos(), revisit.getRev(),
+					       revisit.getViewNoRel()->clone());
+	}
+	default:
+		UNREACHABLE();
+	}
 }
 
 /*******************************************************************************

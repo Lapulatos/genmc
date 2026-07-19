@@ -54,9 +54,15 @@ struct VerificationResult {
 		/** Reads for which the RVF representative path was attempted/completed. */
 		std::uint64_t rvfLoadsAttempted{};
 		std::uint64_t rvfLoadsReduced{};
+		/** Plain atomic reads reached after regional RVF has delegated the path to native
+		 * RF-DPOR, and the subset that still exposes an RVF-compatible source merge. */
+		std::uint64_t rvfNativeOnlyLoads{};
+		std::uint64_t rvfNativeOnlyMergeableLoads{};
+		std::uint64_t rvfNativeOnlyMergeableSources{};
 		/** Reads delegated by the quotient-disabled instrumentation control. */
 		std::uint64_t rvfQuotientDisabledLoads{};
-		/** First-visit reads delegated to native RF-DPOR because all classes are singleton. */
+		/** First-visit reads delegated to native RF-DPOR because all classes are singleton.
+		 */
 		std::uint64_t rvfSingletonBypass{};
 		/** Native RF choices materialized as singleton GoodW constraints for VerifySC. */
 		std::uint64_t rvfNativeReadsSynthesized{};
@@ -113,12 +119,12 @@ struct VerificationResult {
 			workItemsPopped += other.workItemsPopped;
 			maximumRetainedWorkItems =
 				std::max(maximumRetainedWorkItems, other.maximumRetainedWorkItems);
-			maximumCurrentGraphLabels =
-				std::max(maximumCurrentGraphLabels, other.maximumCurrentGraphLabels);
+			maximumCurrentGraphLabels = std::max(maximumCurrentGraphLabels,
+							     other.maximumCurrentGraphLabels);
 			maximumStackGraphLabels =
 				std::max(maximumStackGraphLabels, other.maximumStackGraphLabels);
 			maximumSchedulerCachedLabels = std::max(maximumSchedulerCachedLabels,
-							 other.maximumSchedulerCachedLabels);
+								other.maximumSchedulerCachedLabels);
 			sharedHistoryGraphCopies += other.sharedHistoryGraphCopies;
 			sharedHistoryViewBases += other.sharedHistoryViewBases;
 			sharedHistoryViewLowerBoundBytes += other.sharedHistoryViewLowerBoundBytes;
@@ -131,6 +137,9 @@ struct VerificationResult {
 			inconsistentRevisitPrefixes += other.inconsistentRevisitPrefixes;
 			rvfLoadsAttempted += other.rvfLoadsAttempted;
 			rvfLoadsReduced += other.rvfLoadsReduced;
+			rvfNativeOnlyLoads += other.rvfNativeOnlyLoads;
+			rvfNativeOnlyMergeableLoads += other.rvfNativeOnlyMergeableLoads;
+			rvfNativeOnlyMergeableSources += other.rvfNativeOnlyMergeableSources;
 			rvfQuotientDisabledLoads += other.rvfQuotientDisabledLoads;
 			rvfSingletonBypass += other.rvfSingletonBypass;
 			rvfNativeReadsSynthesized += other.rvfNativeReadsSynthesized;
@@ -234,9 +243,13 @@ inline auto formatExplorationStatistics(const VerificationResult::ExplorationSta
 		"spin-starts={} spin-starts-after-loop-begin={} "
 		"spin-starts-with-side-effects={} spin-loop-blocks={} "
 		"validity-queries={} realized-revisit-prefixes={} "
-		"inconsistent-revisit-prefixes={} rvf-loads-attempted={} rvf-loads-reduced={} "
+		"inconsistent-revisit-prefixes={} "
+		"rvf-loads-attempted={} rvf-loads-reduced={} "
+		"rvf-native-only-loads={} rvf-native-only-mergeable-loads={} "
+		"rvf-native-only-mergeable-sources={} "
 		"rvf-quotient-disabled-loads={} rvf-singleton-bypass={} "
-		"rvf-native-reads-synthesized={} rvf-annotated-groups-rejected={} "
+		"rvf-native-reads-synthesized={} "
+		"rvf-annotated-groups-rejected={} "
 		"rvf-owned-read-revisits-suppressed={} "
 		"rvf-visible-sources={} rvf-value-groups={} rvf-verify-calls={} "
 		"rvf-no-witness={} rvf-verify-states-discovered={} "
@@ -257,28 +270,28 @@ inline auto formatExplorationStatistics(const VerificationResult::ExplorationSta
 		statistics.maximumRetainedWorkItems, statistics.maximumCurrentGraphLabels,
 		statistics.maximumStackGraphLabels, statistics.maximumSchedulerCachedLabels,
 		statistics.sharedHistoryGraphCopies, statistics.sharedHistoryViewBases,
-		statistics.sharedHistoryViewLowerBoundBytes,
-		statistics.spinStarts, statistics.spinStartsAfterLoopBegin,
-		statistics.spinStartsWithSideEffects, statistics.spinLoopBlocks,
-		statistics.candidateValidityQueries,
+		statistics.sharedHistoryViewLowerBoundBytes, statistics.spinStarts,
+		statistics.spinStartsAfterLoopBegin, statistics.spinStartsWithSideEffects,
+		statistics.spinLoopBlocks, statistics.candidateValidityQueries,
 		statistics.realizedRevisitPrefixes, statistics.inconsistentRevisitPrefixes,
 		statistics.rvfLoadsAttempted, statistics.rvfLoadsReduced,
-		statistics.rvfQuotientDisabledLoads, statistics.rvfSingletonBypass,
-		statistics.rvfNativeReadsSynthesized, statistics.rvfAnnotatedGroupsRejected,
-		statistics.rvfOwnedReadRevisitsSuppressed,
-		statistics.rvfVisibleSources, statistics.rvfValueGroups, statistics.rvfVerifyCalls,
-		statistics.rvfNoWitness, statistics.rvfVerifyStatesDiscovered,
-		statistics.rvfVerifyStatesExpanded, statistics.rvfVerifyTransitions,
-		statistics.rvfVerifyDuplicateStates, statistics.rvfMaximumVerifyWorklist,
-		statistics.rvfRepresentativesQueued, statistics.rvfWitnessEventsReplayed,
-		statistics.rvfParentContinuationsQueued, statistics.rvfMaximumPendingExecutions,
-		statistics.rvfFailOpen, statistics.rvfFailOpenUnsupported,
-		statistics.rvfFailOpenSources, statistics.rvfFailOpenAdapter,
-		statistics.rvfFailOpenCausalState, statistics.rvfFailOpenVerify,
-		statistics.rvfFailOpenModel, statistics.finiteAssignments,
-		statistics.finiteCatRejected, statistics.finiteCatConsistent,
-		statistics.finiteReplayAttempts, statistics.finiteReplayConfirmed,
-		statistics.finiteFailOpen);
+		statistics.rvfNativeOnlyLoads, statistics.rvfNativeOnlyMergeableLoads,
+		statistics.rvfNativeOnlyMergeableSources, statistics.rvfQuotientDisabledLoads,
+		statistics.rvfSingletonBypass, statistics.rvfNativeReadsSynthesized,
+		statistics.rvfAnnotatedGroupsRejected,
+		statistics.rvfOwnedReadRevisitsSuppressed, statistics.rvfVisibleSources,
+		statistics.rvfValueGroups, statistics.rvfVerifyCalls, statistics.rvfNoWitness,
+		statistics.rvfVerifyStatesDiscovered, statistics.rvfVerifyStatesExpanded,
+		statistics.rvfVerifyTransitions, statistics.rvfVerifyDuplicateStates,
+		statistics.rvfMaximumVerifyWorklist, statistics.rvfRepresentativesQueued,
+		statistics.rvfWitnessEventsReplayed, statistics.rvfParentContinuationsQueued,
+		statistics.rvfMaximumPendingExecutions, statistics.rvfFailOpen,
+		statistics.rvfFailOpenUnsupported, statistics.rvfFailOpenSources,
+		statistics.rvfFailOpenAdapter, statistics.rvfFailOpenCausalState,
+		statistics.rvfFailOpenVerify, statistics.rvfFailOpenModel,
+		statistics.finiteAssignments, statistics.finiteCatRejected,
+		statistics.finiteCatConsistent, statistics.finiteReplayAttempts,
+		statistics.finiteReplayConfirmed, statistics.finiteFailOpen);
 }
 
 #endif /* GENMC_VERIFICATION_RESULT_HPP */

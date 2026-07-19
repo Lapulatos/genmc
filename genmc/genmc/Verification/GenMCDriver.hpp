@@ -18,8 +18,10 @@
 #include "genmc/Execution/EventLabel.hpp"
 #include "genmc/Execution/ExecutionGraph.hpp"
 #include "genmc/Verification/ChoiceMap.hpp"
+#include "genmc/Verification/CATDecisionState.hpp"
 #include "genmc/Verification/Config.hpp"
 #include "genmc/Verification/Relinche/LinearizabilityChecker.hpp"
+#include "genmc/Verification/RegionalRvfTransaction.hpp"
 #include "genmc/Verification/SCReadsValueFromFrame.hpp"
 #include "genmc/Verification/Scheduler.hpp"
 #include "genmc/Verification/VerificationError.hpp"
@@ -66,7 +68,9 @@ public:
 	struct Execution {
 		Execution() = delete;
 		Execution(std::unique_ptr<ExecutionGraph> g, LocalQueueT &&w, ChoiceMap &&cm,
-			  std::optional<genmc::rvf::Frame> rvf = std::nullopt);
+			  std::optional<genmc::rvf::Frame> rvf = std::nullopt,
+			  std::optional<genmc::rvf::RegionToken> regionToken = std::nullopt,
+			  std::unique_ptr<genmc::catcensus::DecisionState> decisions = {});
 
 		Execution(const Execution &) = delete;
 		auto operator=(const Execution &) -> Execution & = delete;
@@ -92,6 +96,8 @@ public:
 		LocalQueueT workqueue;
 		ChoiceMap choices;
 		std::optional<genmc::rvf::Frame> rvf;
+		std::optional<genmc::rvf::RegionToken> regionToken;
+		std::unique_ptr<genmc::catcensus::DecisionState> catDecisions;
 	};
 
 	/** Scheduler result type */
@@ -170,6 +176,17 @@ public:
 	/** Returns the result of the verification procedure */
 	const VerificationResult &getResult() const { return result; }
 	VerificationResult &getResult() { return result; }
+
+	/** Move out the result produced by the current pool task and prepare an empty
+	 * result for the next task. This is the isolation boundary used by regional
+	 * exploration transactions; ordinary pool execution immediately aggregates it. */
+	[[nodiscard]] auto takeTaskResult() -> VerificationResult;
+
+	/** Seed warning identities already reported by earlier tasks on this worker. */
+	void seedTaskWarnings(const VSet<VerificationError> &warnings)
+	{
+		result.warnings = warnings;
+	}
 
 	/*** Instruction handling ***/
 
@@ -360,6 +377,11 @@ protected:
 	ThreadPool *getThreadPool() { return pool; }
 	ThreadPool *getThreadPool() const { return pool; }
 	void setThreadPool(ThreadPool *tp) { pool = tp; }
+	[[nodiscard]] auto getCurrentRegionToken() const
+		-> const std::optional<genmc::rvf::RegionToken> &
+	{
+		return currentRegionToken_;
+	}
 
 	/** Initializes the exploration from a given state */
 	void initFromState(std::unique_ptr<Execution> s);
@@ -720,6 +742,8 @@ private:
 
 	/** Execution stack */
 	std::vector<Execution> execStack;
+	/** Region capability of the current pool task, independent of local stack entries. */
+	std::optional<genmc::rvf::RegionToken> currentRegionToken_;
 
 	/** Scheduler */
 	std::unique_ptr<Scheduler> scheduler_;

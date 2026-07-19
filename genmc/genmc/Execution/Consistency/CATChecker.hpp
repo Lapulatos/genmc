@@ -18,8 +18,10 @@
 #include "genmc/CAT/ConflictCore.hpp"
 #include "genmc/Execution/Consistency/SCChecker.hpp"
 #include "genmc/Execution/Consistency/TSOChecker.hpp"
+#include "genmc/Verification/CATDecisionState.hpp"
 
 #include <cstdint>
+#include <map>
 #include <memory>
 #include <optional>
 #include <span>
@@ -56,6 +58,11 @@ public:
 	 */
 	[[nodiscard]] auto incrementalStatistics() const
 		-> const cat::GraphSynchronizationStatistics *;
+	void setCATDecisionState(const genmc::catcensus::DecisionState *state) override
+	{
+		decisionState_ = state;
+	}
+	[[nodiscard]] auto formatCATBackjumpCensus() const -> std::string override;
 
 private:
 	/**
@@ -102,6 +109,8 @@ private:
 		-> std::vector<cat::ConflictLiteral>;
 	/** Derive and admit a sufficient cycle core from current base plus @p proposed. */
 	void learnConflictCore(std::span<const cat::ConflictLiteral> proposed);
+	/** Observe one installed full-CAT conflict without changing exploration. */
+	void observeBackjumpConflict(const ExecutionGraph &graph) const;
 
 	/**
 	 * Return every currently available same-location rf source.
@@ -182,6 +191,20 @@ private:
 	mutable std::size_t preventiveCoPruned_{};
 	mutable std::size_t preventiveAllPrunedFallbacks_{};
 	mutable std::uint64_t preventiveLookupNanoseconds_{};
+	mutable const genmc::catcensus::DecisionState *decisionState_{};
+	mutable std::size_t backjumpConflictQueries_{};
+	mutable std::size_t backjumpCoresDerived_{};
+	mutable std::size_t backjumpCoresUnsupported_{};
+	mutable std::size_t backjumpCoreLiterals_{};
+	mutable std::size_t backjumpMappedChoiceLiterals_{};
+	mutable std::size_t backjumpUnresolvedChoiceFacts_{};
+	mutable std::size_t backjumpNewestOnly_{};
+	mutable std::size_t backjumpNonlocal_{};
+	mutable std::uint64_t backjumpDistanceSum_{};
+	mutable std::size_t backjumpMaximumDistance_{};
+	mutable std::size_t backjumpRecurringSignatures_{};
+	mutable std::map<std::vector<std::pair<Event, cat::StableEventKey>>, std::size_t>
+		backjumpSignatures_;
 };
 
 /** CAT evaluator hosted by SC causal views for models declaring/defaulting to SC. */

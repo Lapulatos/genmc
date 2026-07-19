@@ -41,12 +41,14 @@ set(LIB_SOURCES
   genmc/Support/SVal.cpp
   genmc/Support/ThreadPinner.cpp
   genmc/Verification/ChoiceMap.cpp
+	genmc/Verification/CATDecisionState.cpp
   genmc/Verification/Config.cpp
   genmc/Verification/FiniteSymbolicSolver.cpp
   genmc/Verification/FiniteSkeletonEncoder.cpp
   genmc/Verification/FiniteSkeletonCAT.cpp
   genmc/Verification/FiniteSkeletonSCCompletion.cpp
-  genmc/Verification/GenMCDriver.cpp
+	genmc/Verification/GenMCDriver.cpp
+	genmc/Verification/RegionalRvfTransaction.cpp
   genmc/Verification/Relinche/LinearizabilityChecker.cpp
   genmc/Verification/Relinche/Linearization.cpp
   genmc/Verification/Relinche/Observation.cpp

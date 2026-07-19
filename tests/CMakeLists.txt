@@ -161,6 +161,21 @@ add_test(
             ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
-
+add_test(
+    NAME sc-rvf-regional-na-load
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-regional-na-load.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs/rvf-regional-na-load.c
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
+    NAME sc-rvf-regional-loop
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-regional-loop.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
 # Unit tests
 add_subdirectory(unit)

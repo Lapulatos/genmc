@@ -71,6 +71,10 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 		errors.emplace_back("--cat-preventive-pruning requires --model-file.");
 	if (catConflictCores && !catPreventivePruning)
 		errors.emplace_back("--cat-conflict-cores requires --cat-preventive-pruning.");
+	if (catBackjumpCensus && (!modelFile || !catStats || !catPreventivePruning))
+		errors.emplace_back(
+			"--cat-backjump-census requires --model-file, --cat-stats, and "
+			"--cat-preventive-pruning.");
 	if (catFocusReach && !catPreventivePruning)
 		errors.emplace_back("--cat-focus-reach requires --cat-preventive-pruning.");
 	if (catOracle && !modelFile)
@@ -81,6 +85,8 @@ auto Config::validate(std::vector<std::string> &warnings) -> ValidationStatus
 		errors.emplace_back("--sc-rvf-disable-quotient requires --sc-rvf-exploration.");
 	if (scRvfAnnotatedReads && !scRvfExploration)
 		errors.emplace_back("--sc-rvf-annotated-reads requires --sc-rvf-exploration.");
+	if (scRvfRegional && !scRvfExploration)
+		errors.emplace_back("--sc-rvf-regional requires --sc-rvf-exploration.");
 
 	/* Check exploration options */
 	if (modelFile.has_value()) {

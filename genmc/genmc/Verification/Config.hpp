@@ -80,14 +80,20 @@ struct Config {
 	bool catFocusReach{};
 	/** Reuse bounded positive cycle cores before direct preventive-root checks. */
 	bool catConflictCores{};
+	/** Observe graph-matched RF/CO decisions and non-local CAT conflict potential. */
+	bool catBackjumpCensus{};
 	/** Explore structurally certified SC models by reads-value-from representatives. */
 	bool scRvfExploration{};
 	/** Keep RVF setup/instrumentation but delegate every read to native RF-DPOR. */
 	bool scRvfDisableQuotient{};
 	/** Experimental: let RVF own supported annotated plain reads instead of native IPR. */
 	bool scRvfAnnotatedReads{};
+	/** Experimental: quotient a certified prefix and revoke at a supported frontier. */
+	bool scRvfRegional{};
 	/** Whole-program gate populated after LLVM transformation, before any exploration. */
 	bool scRvfProgramSupported{true};
+	/** Every static blocker is handled by the regional transaction frontier. */
+	bool scRvfRegionalProgramEligible{};
 	/** Stable diagnostic when the whole task fails open to native RF-DPOR. */
 	std::string scRvfStaticFallbackReason{};
 	/** User-requested reductions retained solely for native warning/error semantics. */

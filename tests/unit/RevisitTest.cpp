@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include "genmc/Verification/Revisit.hpp"
+#include "genmc/Verification/WorkList.hpp"
 
 TEST(RevisitTest, StoresPlainViewInlineWithoutChangingContents)
 {
@@ -36,4 +37,26 @@ TEST(RevisitTest, StoresDependencyViewInlineWithoutChangingHoles)
 	EXPECT_FALSE(saved->contains(Event{1, 3}));
 	EXPECT_LT(sizeof(TypedBackwardRevisit<DepView>),
 		  sizeof(BackwardRevisit) + sizeof(DepView) + 2 * sizeof(void *));
+}
+
+TEST(RevisitTest, WorkListCopyOwnsIndependentExactRevisits)
+{
+	WorkList original;
+	original.add(std::make_unique<ReadForwardRevisit>(Event{1, 2}, Event{0, 3}, true));
+	original.add(std::make_unique<WriteForwardRevisit>(Event{2, 4}, Event{1, 5}));
+	WorkList snapshot(original);
+
+	ASSERT_EQ(original.size(), 2U);
+	ASSERT_EQ(snapshot.size(), 2U);
+	auto originalWrite = original.getNext();
+	auto snapshotWrite = snapshot.getNext();
+	ASSERT_TRUE(genmc::isa<WriteForwardRevisit>(originalWrite.get()));
+	ASSERT_TRUE(genmc::isa<WriteForwardRevisit>(snapshotWrite.get()));
+	EXPECT_EQ(genmc::dyn_cast<WriteForwardRevisit>(originalWrite.get())->getPred(),
+		  (Event{1, 5}));
+	EXPECT_EQ(genmc::dyn_cast<WriteForwardRevisit>(snapshotWrite.get())->getPred(),
+		  (Event{1, 5}));
+	EXPECT_NE(originalWrite.get(), snapshotWrite.get());
+	EXPECT_EQ(original.size(), 1U);
+	EXPECT_EQ(snapshot.size(), 1U);
 }

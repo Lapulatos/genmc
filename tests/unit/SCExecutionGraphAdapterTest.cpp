@@ -105,13 +105,12 @@ TEST(SCExecutionGraphAdapter, MapsFailedLockCasAsReadOnly)
 	TestExecutionGraph graph{{nullptr, nullptr, true}};
 	const SAddr lock{0x1000};
 	auto *locked = addLabel<WriteLabel>(graph, Event(0, 1), MemOrdering::Relaxed, lock,
-					   ASize(4), SVal(1));
+					    ASize(4), SVal(1));
 	locked->addCo(graph.getInitLabel());
 	auto *read = addLabel<LockCasReadLabel>(graph, Event(0, 2), lock, ASize(4));
 	read->setRf(locked);
 	genmc::rvf::StableGoodWrites goodWrites;
-	goodWrites[cat::StableEventKey{read->getPos()}] = {
-		cat::StableEventKey{locked->getPos()}};
+	goodWrites[cat::StableEventKey{read->getPos()}] = {cat::StableEventKey{locked->getPos()}};
 
 	const auto adapted = genmc::rvf::buildGraphProblem(graph, goodWrites);
 	ASSERT_TRUE(adapted.error.empty()) << adapted.error;
@@ -127,7 +126,7 @@ TEST(SCExecutionGraphAdapter, MapsUnlockAsPlainWrite)
 	TestExecutionGraph graph{{nullptr, nullptr, true}};
 	const SAddr lock{0x1000};
 	auto *unlock = addLabel<UnlockWriteLabel>(graph, Event(0, 1), MemOrdering::Release, lock,
-						 ASize(4), SVal(0));
+						  ASize(4), SVal(0));
 	unlock->addCo(graph.getInitLabel());
 
 	const auto adapted = genmc::rvf::buildGraphProblem(graph, {});
@@ -136,15 +135,26 @@ TEST(SCExecutionGraphAdapter, MapsUnlockAsPlainWrite)
 	EXPECT_EQ(adapted.problem.events[0].kind, genmc::rvf::EventKind::write);
 }
 
+TEST(SCExecutionGraphAdapter, RejectsNonAtomicMemoryEvents)
+{
+	TestExecutionGraph graph{{nullptr, nullptr, true}};
+	const SAddr x{0x1000};
+	auto *write = addLabel<WriteLabel>(graph, Event(0, 1), MemOrdering::NotAtomic, x, ASize(4),
+					   SVal(1));
+	write->addCo(graph.getInitLabel());
+	const auto adapted = genmc::rvf::buildGraphProblem(graph, {});
+	EXPECT_FALSE(adapted.error.empty());
+}
+
 TEST(SCExecutionGraphAdapter, AppliesWitnessDerivedCoherenceOrder)
 {
 	TestExecutionGraph graph{{nullptr, nullptr, true}};
 	const SAddr x{0x1000};
-	auto *first = addLabel<WriteLabel>(graph, Event(0, 1), MemOrdering::SequentiallyConsistent, x,
-					   ASize(4), SVal(1));
+	auto *first = addLabel<WriteLabel>(graph, Event(0, 1), MemOrdering::SequentiallyConsistent,
+					   x, ASize(4), SVal(1));
 	first->addCo(graph.getInitLabel());
-	auto *second = addLabel<WriteLabel>(graph, Event(0, 2), MemOrdering::SequentiallyConsistent, x,
-					    ASize(4), SVal(1));
+	auto *second = addLabel<WriteLabel>(graph, Event(0, 2), MemOrdering::SequentiallyConsistent,
+					    x, ASize(4), SVal(1));
 	second->addCo(first);
 
 	const auto adapted = genmc::rvf::buildGraphProblem(graph, {});

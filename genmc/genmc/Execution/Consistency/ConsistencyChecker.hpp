@@ -18,6 +18,7 @@
 #include "genmc/Verification/VerificationError.hpp"
 
 #include <memory>
+#include <string>
 #include <vector>
 
 class EventLabel;
@@ -27,6 +28,7 @@ class ExecutionGraph;
 class Config;
 class VectorClock;
 class View;
+namespace genmc::catcensus { class DecisionState; }
 enum class ModelType : std::uint8_t;
 
 /** An abstract class defining the API for checking graph consistency,
@@ -104,6 +106,11 @@ public:
 	}
 
 	[[nodiscard]] virtual auto isDepTracking() const -> bool = 0;
+
+	/** Supply the exact branch-local RF/CO sidecar for observation-only CAT census. */
+	virtual void setCATDecisionState(const genmc::catcensus::DecisionState * /*state*/) {}
+	/** Snapshot observation-only CAT counters for timeout-resilient progress logs. */
+	[[nodiscard]] virtual auto formatCATBackjumpCensus() const -> std::string { return {}; }
 
 private:
 	/* Keep the config around for convenience (e.g., for optimizing

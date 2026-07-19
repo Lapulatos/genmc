@@ -16,16 +16,16 @@
 #include "genmc/Support/Logger.hpp"
 #include "genmc/Support/ThreadPool.hpp"
 #include "genmc/Verification/Config.hpp"
-#include "genmc/Verification/GenMCDriver.hpp"
-#include "genmc/Verification/FiniteSkeletonEncoder.hpp"
 #include "genmc/Verification/FiniteSkeletonCAT.hpp"
+#include "genmc/Verification/FiniteSkeletonEncoder.hpp"
 #include "genmc/Verification/FiniteSkeletonSCCompletion.hpp"
+#include "genmc/Verification/GenMCDriver.hpp"
 #include "genmc/lli_config.h"
+#include "passes/FiniteEventSkeleton.hpp"
+#include "passes/FiniteSkeletonReplay.hpp"
 #include "passes/InternalFunctions.hpp"
 #include "passes/LLIConfig.hpp"
 #include "passes/LLVMModule.hpp"
-#include "passes/FiniteEventSkeleton.hpp"
-#include "passes/FiniteSkeletonReplay.hpp"
 
 #include <llvm/ADT/SmallVector.h>
 #include <llvm/Analysis/CFG.h>
@@ -57,7 +57,7 @@ static void reportPhasePeakMemory(const Config &conf, std::string_view phase)
 {
 	if (!conf.catStats)
 		return;
-	struct rusage usage {};
+	struct rusage usage{};
 	if (getrusage(RUSAGE_SELF, &usage) != 0)
 		return;
 #ifdef __APPLE__
@@ -114,17 +114,20 @@ static llvm::cl::opt<bool>
 	clCatStats("cat-stats", llvm::cl::cat(clGeneral),
 		   llvm::cl::desc("Print per-worker incremental CAT transition counters"));
 
-static llvm::cl::opt<bool> clCatDisableAdaptiveOffline(
-	"cat-disable-adaptive-offline", llvm::cl::cat(clGeneral),
-	llvm::cl::desc("Experimentally force certified small CAT graphs through incremental synchronization"));
+static llvm::cl::opt<bool>
+	clCatDisableAdaptiveOffline("cat-disable-adaptive-offline", llvm::cl::cat(clGeneral),
+				    llvm::cl::desc("Experimentally force certified small CAT "
+						   "graphs through incremental synchronization"));
 
-static llvm::cl::opt<bool> clCatPrimitiveCache(
-	"cat-primitive-cache", llvm::cl::cat(clGeneral),
-	llvm::cl::desc("Experimentally reuse exact primitives for semantically unchanged small CAT graphs"));
+static llvm::cl::opt<bool>
+	clCatPrimitiveCache("cat-primitive-cache", llvm::cl::cat(clGeneral),
+			    llvm::cl::desc("Experimentally reuse exact primitives for semantically "
+					   "unchanged small CAT graphs"));
 
 static llvm::cl::opt<bool> clCatFastPrimitiveBuild(
 	"cat-fast-primitive-build", llvm::cl::cat(clGeneral),
-	llvm::cl::desc("Experimentally build exact dense CAT primitives without redundant sorting"));
+	llvm::cl::desc(
+		"Experimentally build exact dense CAT primitives without redundant sorting"));
 
 static llvm::cl::opt<bool> clCatFastCoherenceBuild(
 	"cat-fast-coherence-build", llvm::cl::cat(clGeneral),
@@ -158,9 +161,13 @@ static llvm::cl::opt<bool> clCatConflictCores(
 	"cat-conflict-cores", llvm::cl::cat(clGeneral),
 	llvm::cl::desc("Reuse bounded positive cycle cores before preventive root checks"));
 
-static llvm::cl::opt<bool> clCatFocusReach(
-	"cat-focus-reach", llvm::cl::cat(clGeneral),
-	llvm::cl::desc("Use certified focus-directed lazy preventive reach"));
+static llvm::cl::opt<bool> clCatBackjumpCensus(
+	"cat-backjump-census", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Observe graph-matched RF/CO decisions and non-local CAT conflicts"));
+
+static llvm::cl::opt<bool>
+	clCatFocusReach("cat-focus-reach", llvm::cl::cat(clGeneral),
+			llvm::cl::desc("Use certified focus-directed lazy preventive reach"));
 
 static llvm::cl::opt<bool> clScRvfExploration(
 	"sc-rvf-exploration", llvm::cl::cat(clGeneral),
@@ -173,6 +180,14 @@ static llvm::cl::opt<bool> clScRvfDisableQuotient(
 static llvm::cl::opt<bool> clScRvfAnnotatedReads(
 	"sc-rvf-annotated-reads", llvm::cl::cat(clGeneral),
 	llvm::cl::desc("Experimentally let SC RVF own annotated plain reads"));
+
+static llvm::cl::opt<bool> clScRvfRegional(
+	"sc-rvf-regional", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Experimentally quotient certified prefixes before safe frontiers"));
+
+static llvm::cl::opt<bool> clScRvfGateStatsOnly(
+	"sc-rvf-gate-stats-only", llvm::cl::cat(clGeneral),
+	llvm::cl::desc("Stop after reporting the transformed SC RVF admission gate"));
 
 static llvm::cl::opt<bool>
 	clCatOracle("cat-oracle", llvm::cl::cat(clGeneral),
@@ -367,9 +382,10 @@ static llvm::cl::opt<std::string> clFiniteSkeletonReplayOutput(
 	"finite-skeleton-replay-output", llvm::cl::cat(clDebugging), llvm::cl::value_desc("PATH"),
 	llvm::cl::desc("Write the first CAT-consistent error candidate as constrained LLVM IR"));
 
-static llvm::cl::opt<bool> clFiniteSymbolicErrors(
-	"finite-symbolic-errors", llvm::cl::cat(clDebugging),
-	llvm::cl::desc("Search finite CAT assignments for replay-confirmed errors before native verification"));
+static llvm::cl::opt<bool>
+	clFiniteSymbolicErrors("finite-symbolic-errors", llvm::cl::cat(clDebugging),
+			       llvm::cl::desc("Search finite CAT assignments for replay-confirmed "
+					      "errors before native verification"));
 
 static llvm::cl::opt<unsigned> clFiniteSymbolicMax(
 	"finite-symbolic-max", llvm::cl::init(10000), llvm::cl::value_desc("N"),
@@ -541,8 +557,10 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	lliConfig.liveness = clCheckLiveness;
 	lliConfig.bam = !clDisableBAM && !clScRvfExploration;
 	lliConfig.finiteSkeletonStats = clFiniteSkeletonStats || clFiniteSkeletonStatsOnly ||
-					clFiniteSkeletonSolveOne || !clFiniteSkeletonFirstModel.empty();
+					clFiniteSkeletonSolveOne ||
+					!clFiniteSkeletonFirstModel.empty();
 	lliConfig.finiteSkeletonStatsOnly = clFiniteSkeletonStatsOnly;
+	lliConfig.scRvfGateStatsOnly = clScRvfGateStatsOnly;
 	lliConfig.finiteSkeletonSolveOne = clFiniteSkeletonSolveOne;
 	lliConfig.finiteSkeletonFirstModel = clFiniteSkeletonFirstModel;
 	if (!lliConfig.finiteSkeletonFirstModel.empty() &&
@@ -595,9 +613,11 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 	conf.catPreventivePruning = clCatPreventivePruning;
 	conf.catFocusReach = clCatFocusReach;
 	conf.catConflictCores = clCatConflictCores;
+	conf.catBackjumpCensus = clCatBackjumpCensus;
 	conf.scRvfExploration = clScRvfExploration;
 	conf.scRvfDisableQuotient = clScRvfDisableQuotient;
 	conf.scRvfAnnotatedReads = clScRvfAnnotatedReads;
+	conf.scRvfRegional = clScRvfRegional;
 	conf.catOracle = clCatOracle;
 	conf.estimate = !clDisableEstimation;
 	conf.estimationMax = clEstimationMax;
@@ -647,8 +667,9 @@ static void saveConfigOptions(Config &conf, LLIConfig &lliConfig)
 }
 
 /** Return the first transformed instruction outside the initial RVF proof scope. */
-static auto findUnsupportedScRvfInstruction(const llvm::Module &module,
-					    bool allowAnnotatedReads)
+static auto findUnsupportedScRvfInstruction(const llvm::Module &module, bool allowAnnotatedReads,
+					    bool allowNonAtomicAccesses = false,
+					    bool allowControlFlowLoops = false)
 	-> std::optional<std::string>
 {
 	using IF = InternalFunctions;
@@ -658,16 +679,16 @@ static auto findUnsupportedScRvfInstruction(const llvm::Module &module,
 		llvm::SmallVector<std::pair<const llvm::BasicBlock *, const llvm::BasicBlock *>, 4>
 			backedges;
 		llvm::FindFunctionBackedges(function, backedges);
-		if (!backedges.empty())
+		if (!backedges.empty() && !allowControlFlowLoops)
 			return "control-flow loop outside the current RVF performance gate";
 		for (const auto &instruction : llvm::instructions(function)) {
 			if (llvm::isa<llvm::AtomicRMWInst, llvm::AtomicCmpXchgInst>(&instruction))
 				return "atomic read-modify-write instruction";
 			if (const auto *load = llvm::dyn_cast<llvm::LoadInst>(&instruction);
-			    load && !load->isAtomic())
+			    load && !load->isAtomic() && !allowNonAtomicAccesses)
 				return "non-atomic load instruction";
 			if (const auto *store = llvm::dyn_cast<llvm::StoreInst>(&instruction);
-			    store && !store->isAtomic())
+			    store && !store->isAtomic() && !allowNonAtomicAccesses)
 				return "non-atomic store instruction";
 			const auto *call = llvm::dyn_cast<llvm::CallBase>(&instruction);
 			if (!call)
@@ -681,14 +702,14 @@ static auto findUnsupportedScRvfInstruction(const llvm::Module &module,
 			if (!isInternalFunction(name))
 				return "external call to " + name;
 			const auto code = internalFunNames.at(name);
-			const auto safeInternal = code == IF::AssertFail ||
-						  (allowAnnotatedReads && code == IF::Assume) ||
-						  code == IF::NondetInt || code == IF::ThreadSelf ||
-						  code == IF::ThreadCreate ||
-						  code == IF::ThreadCreateSymmetric ||
-						  code == IF::ThreadJoin ||
-						  code == IF::ThreadExit || code == IF::KillThread ||
-						  code == IF::MutexLock || code == IF::MutexUnlock;
+			const auto safeInternal =
+				code == IF::AssertFail ||
+				(allowAnnotatedReads && code == IF::Assume) ||
+				code == IF::NondetInt || code == IF::ThreadSelf ||
+				code == IF::ThreadCreate || code == IF::ThreadCreateSymmetric ||
+				code == IF::ThreadJoin || code == IF::ThreadExit ||
+				code == IF::KillThread || code == IF::MutexLock ||
+				code == IF::MutexUnlock;
 			if (!safeInternal)
 				return "modeled call to " + name;
 		}
@@ -717,9 +738,10 @@ static void adjustConfig(const llvm::Module &module, const ModuleInfo &modInfo, 
 		    conf.model);
 	}
 
-	/* A late per-prefix fallback cannot recover RF alternatives already merged by an
-	 * ancestor. Certify the complete transformed program before constructing the root
-	 * RVF frame; unsupported tasks retain the native RF-DPOR root unchanged. */
+	/* Whole-program RVF remains the default. Regional mode additionally admits a
+	 * statically certified combination of bounded control-flow loops and race-checked
+	 * non-atomic accesses. NA reads retain their exact source in GoodW; native-ancestor
+	 * writes remain dynamic transaction-revocation frontiers. */
 	if (conf.scRvfExploration) {
 		if (!conf.scRvfProgramSupported) {
 			LOG(VerbosityLevel::Warning,
@@ -729,8 +751,8 @@ static void adjustConfig(const llvm::Module &module, const ModuleInfo &modInfo, 
 		} else if (conf.scRvfAnnotatedReads &&
 			   !modInfo.annotInfo.allAssumesHaveOneSupportedPlainLoad()) {
 			conf.scRvfProgramSupported = false;
-			conf.scRvfStaticFallbackReason =
-				"assume is not covered by exactly one supported annotated plain load";
+			conf.scRvfStaticFallbackReason = "assume is not covered by exactly one "
+							 "supported annotated plain load";
 			LOG(VerbosityLevel::Warning,
 			    "SC RVF whole-program gate failed open: {}. Using native RF-DPOR for "
 			    "this task.",
@@ -739,33 +761,54 @@ static void adjustConfig(const llvm::Module &module, const ModuleInfo &modInfo, 
 				   module, conf.scRvfAnnotatedReads)) {
 			conf.scRvfProgramSupported = false;
 			conf.scRvfStaticFallbackReason = std::move(*unsupported);
-			LOG(VerbosityLevel::Warning,
-			    "SC RVF whole-program gate failed open: {}. Using native RF-DPOR for "
-			    "this task.",
-			    conf.scRvfStaticFallbackReason);
-		} else {
+			const auto regionalResidual = findUnsupportedScRvfInstruction(
+				module, conf.scRvfAnnotatedReads, true, true);
+			conf.scRvfRegionalProgramEligible =
+				conf.scRvfRegional &&
+				(conf.scRvfStaticFallbackReason == "non-atomic load instruction" ||
+				 conf.scRvfStaticFallbackReason == "non-atomic store instruction" ||
+				 conf.scRvfStaticFallbackReason ==
+					 "control-flow loop outside the current RVF performance "
+					 "gate") &&
+				!regionalResidual;
+			if (conf.scRvfRegionalProgramEligible)
+				LOG(VerbosityLevel::Warning,
+				    "SC RVF regional gate enabled with dynamic non-atomic and "
+				    "future-write revocation.");
+			else {
+				if (conf.scRvfRegional && regionalResidual)
+					conf.scRvfStaticFallbackReason +=
+						"; regional residual blocker: " + *regionalResidual;
+				LOG(VerbosityLevel::Warning,
+				    "SC RVF whole-program gate failed open: {}. Using native "
+				    "RF-DPOR "
+				    "for this task.",
+				    conf.scRvfStaticFallbackReason);
+			}
+		}
+		if (conf.scRvfProgramSupported || conf.scRvfRegionalProgramEligible) {
 			conf.scRvfNativeSymmetryReduction = conf.symmetryReduction;
 			conf.scRvfNativeIpr = conf.ipr;
 			if (conf.symmetryReduction) {
-				LOG(VerbosityLevel::Warning,
-				    "SC RVF exploration disables the independent symmetry reduction.");
+				LOG(VerbosityLevel::Warning, "SC RVF exploration disables the "
+							     "independent symmetry reduction.");
 			}
 			if (conf.instructionCaching) {
-				LOG(VerbosityLevel::Warning,
-				    "SC RVF exploration disables instruction caching during witness "
-				    "replay.");
+				LOG(VerbosityLevel::Warning, "SC RVF exploration disables "
+							     "instruction caching during witness "
+							     "replay.");
 			}
 			if (!conf.disableBAM) {
 				LOG(VerbosityLevel::Warning,
 				    "SC RVF exploration disables barrier-aware memory reduction.");
 			}
 			if (conf.estimate) {
-				LOG(VerbosityLevel::Warning,
-				    "SC RVF exploration disables the RF-DPOR state-space estimator.");
+				LOG(VerbosityLevel::Warning, "SC RVF exploration disables the "
+							     "RF-DPOR state-space estimator.");
 			}
 			if (conf.finalWrite) {
-				LOG(VerbosityLevel::Warning,
-				    "SC RVF exploration disables final-write transformation hints.");
+				LOG(VerbosityLevel::Warning, "SC RVF exploration disables "
+							     "final-write transformation hints.");
 			}
 			conf.symmetryReduction = false;
 			conf.instructionCaching = false;
@@ -783,12 +826,12 @@ static auto containsScRvfAssume(const llvm::Module &module) -> bool
 	return std::ranges::any_of(module, [](const llvm::Function &function) {
 		if (function.isDeclaration())
 			return false;
-		return std::ranges::any_of(llvm::instructions(function),
-					   [](const llvm::Instruction &instruction) {
-			const auto *call = llvm::dyn_cast<llvm::CallBase>(&instruction);
-			const auto *callee = call ? call->getCalledFunction() : nullptr;
-			return callee && isAssumeFunction(callee->getName().str());
-		});
+		return std::ranges::any_of(
+			llvm::instructions(function), [](const llvm::Instruction &instruction) {
+				const auto *call = llvm::dyn_cast<llvm::CallBase>(&instruction);
+				const auto *callee = call ? call->getCalledFunction() : nullptr;
+				return callee && isAssumeFunction(callee->getName().str());
+			});
 	});
 }
 
@@ -1209,7 +1252,8 @@ auto verify(const LLIConfig &lliConfig, std::shared_ptr<const Config> conf,
 	 * requested worker they need the task boundary that resets the interpreter from
 	 * the saved graph; the direct single-driver path cannot restore program counters. */
 	if (lliConfig.threads == 1 &&
-	    !(conf->scRvfExploration && conf->scRvfProgramSupported)) {
+	    !(conf->scRvfExploration &&
+	      (conf->scRvfProgramSupported || conf->scRvfRegionalProgramEligible))) {
 		auto driver = GenMCDriver::create(conf, nullptr, GenMCDriver::VerificationMode{});
 		std::string buf;
 		auto EE = llvm::Interpreter::create(std::move(mod), std::move(modInfo), &*driver,
@@ -1248,7 +1292,8 @@ auto searchFiniteError(const LLIConfig &lliConfig, const std::shared_ptr<const C
 	FiniteErrorSearch search;
 	auto built = genmc::skeleton::build(*module);
 	if (!built.program) {
-		search.terminal = built.blockers.empty() ? "ir-unavailable" : built.blockers.front();
+		search.terminal = built.blockers.empty() ? "ir-unavailable"
+							 : built.blockers.front();
 		++search.statistics.finiteFailOpen;
 		return search;
 	}
@@ -1292,8 +1337,8 @@ auto searchFiniteError(const LLIConfig &lliConfig, const std::shared_ptr<const C
 			continue;
 		}
 		++search.statistics.finiteCatConsistent;
-		const auto hasError = std::ranges::any_of(
-			step.assignment->activeEvents, [&](const auto event) {
+		const auto hasError =
+			std::ranges::any_of(step.assignment->activeEvents, [&](const auto event) {
 				return built.program->events[event].kind ==
 				       genmc::skeleton::EventKind::error;
 			});
@@ -1312,7 +1357,8 @@ auto searchFiniteError(const LLIConfig &lliConfig, const std::shared_ptr<const C
 			return search;
 		}
 		auto replayInfo = moduleInfo->clone(*replayModule);
-		auto replay = verify(lliConfig, conf, std::move(replayModule), std::move(replayInfo));
+		auto replay =
+			verify(lliConfig, conf, std::move(replayModule), std::move(replayInfo));
 		if (replay.status) {
 			++search.statistics.finiteReplayConfirmed;
 			search.terminal = "confirmed-error";
@@ -1385,7 +1431,8 @@ auto main(int argc, char **argv) -> int
 		PRINT(VerbosityLevel::Error, "Finite skeleton: {}\n",
 		      genmc::skeleton::format(report));
 		PRINT(VerbosityLevel::Error,
-		      "Finite skeleton IR: built={} functions={} blocks={} values={} events={} blockers=",
+		      "Finite skeleton IR: built={} functions={} blocks={} values={} events={} "
+		      "blockers=",
 		      skeleton.program.has_value(),
 		      skeleton.program ? skeleton.program->functions.size() : 0,
 		      skeleton.program ? skeleton.program->blocks.size() : 0,
@@ -1404,12 +1451,13 @@ auto main(int argc, char **argv) -> int
 			genmc::symbolic::FiniteEncodingOptions options{
 				.requireActiveError = true,
 				.encodeCo = lliConfig.finiteSkeletonFirstModel == "eager",
-				.rfCardinality = lliConfig.finiteSkeletonFirstModel ==
-							 "abstract-cardinality" ||
-						 lliConfig.finiteSkeletonFirstModel ==
-							 "abstract-cardinality-sc"
-						 ? genmc::symbolic::RfCardinalityEncoding::native
-						 : genmc::symbolic::RfCardinalityEncoding::pairwise,
+				.rfCardinality =
+					lliConfig.finiteSkeletonFirstModel ==
+								"abstract-cardinality" ||
+							lliConfig.finiteSkeletonFirstModel ==
+								"abstract-cardinality-sc"
+						? genmc::symbolic::RfCardinalityEncoding::native
+						: genmc::symbolic::RfCardinalityEncoding::pairwise,
 			};
 			const auto buildBegin = std::chrono::steady_clock::now();
 			genmc::symbolic::FiniteSkeletonEncoder encoder(*skeleton.program, options);
@@ -1417,11 +1465,13 @@ auto main(int argc, char **argv) -> int
 			auto step = encoder.next();
 			const auto checkEnd = std::chrono::steady_clock::now();
 			const auto micros = [](auto begin, auto end) {
-				return std::chrono::duration_cast<std::chrono::microseconds>(end - begin)
+				return std::chrono::duration_cast<std::chrono::microseconds>(end -
+											     begin)
 					.count();
 			};
 			PRINT(VerbosityLevel::Error,
-			      "Finite skeleton first model: mode={} supported={} status={} assignment={} build-us={} check-us={}\n",
+			      "Finite skeleton first model: mode={} supported={} status={} "
+			      "assignment={} build-us={} check-us={}\n",
 			      lliConfig.finiteSkeletonFirstModel, encoder.supported(),
 			      static_cast<unsigned>(step.status), step.assignment.has_value(),
 			      micros(buildBegin, checkBegin), micros(checkBegin, checkEnd));
@@ -1438,70 +1488,86 @@ auto main(int argc, char **argv) -> int
 				genmc::symbolic::FiniteSCCompletionResult completion;
 				do {
 					++candidates;
-				const auto completionBegin = std::chrono::steady_clock::now();
-				completion = genmc::symbolic::completeFiniteSCWithOrdering(
-					*skeleton.program, *step.assignment);
-				const auto completionEnd = std::chrono::steady_clock::now();
-				const auto completionUs = micros(completionBegin, completionEnd);
-				totalCompletionUs += completionUs;
-				totalMetrics.statesDiscovered += completion.metrics.statesDiscovered;
-				totalMetrics.statesExpanded += completion.metrics.statesExpanded;
-				totalMetrics.executableTransitions +=
-					completion.metrics.executableTransitions;
-				totalMetrics.duplicateStates += completion.metrics.duplicateStates;
-				totalMetrics.maximumWorklist = std::max(
-					totalMetrics.maximumWorklist,
-					completion.metrics.maximumWorklist);
-				if (candidates == 1U) {
-					PRINT(VerbosityLevel::Error,
-					      "Finite skeleton SC completion: status={} assignment={} complete-us={} states-discovered={} states-expanded={} transitions={} duplicates={} max-worklist={} core-size={} core-checks={} refinement-safe={} error={}\n",
-				      static_cast<unsigned>(completion.status),
-				      completion.assignment.has_value(),
-				      completionUs,
-				      completion.metrics.statesDiscovered,
-				      completion.metrics.statesExpanded,
-				      completion.metrics.executableTransitions,
-				      completion.metrics.duplicateStates,
-				      completion.metrics.maximumWorklist,
-				      completion.rfCoreLoads.size(), completion.coreChecks,
-				      completion.refinementSafe,
-				      completion.error.empty() ? "none" : completion.error);
-				}
-				if (completion.status ==
-				    genmc::symbolic::FiniteSCCompletionStatus::completed) {
-					++completed;
-					break;
-				}
-				if (completion.status !=
-				    genmc::symbolic::FiniteSCCompletionStatus::noWitness) {
-					if (completion.status == genmc::symbolic::
-								FiniteSCCompletionStatus::invalidInput)
-						++invalid;
+					const auto completionBegin =
+						std::chrono::steady_clock::now();
+					completion = genmc::symbolic::completeFiniteSCWithOrdering(
+						*skeleton.program, *step.assignment);
+					const auto completionEnd = std::chrono::steady_clock::now();
+					const auto completionUs =
+						micros(completionBegin, completionEnd);
+					totalCompletionUs += completionUs;
+					totalMetrics.statesDiscovered +=
+						completion.metrics.statesDiscovered;
+					totalMetrics.statesExpanded +=
+						completion.metrics.statesExpanded;
+					totalMetrics.executableTransitions +=
+						completion.metrics.executableTransitions;
+					totalMetrics.duplicateStates +=
+						completion.metrics.duplicateStates;
+					totalMetrics.maximumWorklist =
+						std::max(totalMetrics.maximumWorklist,
+							 completion.metrics.maximumWorklist);
+					if (candidates == 1U) {
+						PRINT(VerbosityLevel::Error,
+						      "Finite skeleton SC completion: status={} "
+						      "assignment={} complete-us={} "
+						      "states-discovered={} states-expanded={} "
+						      "transitions={} duplicates={} "
+						      "max-worklist={} core-size={} core-checks={} "
+						      "refinement-safe={} error={}\n",
+						      static_cast<unsigned>(completion.status),
+						      completion.assignment.has_value(),
+						      completionUs,
+						      completion.metrics.statesDiscovered,
+						      completion.metrics.statesExpanded,
+						      completion.metrics.executableTransitions,
+						      completion.metrics.duplicateStates,
+						      completion.metrics.maximumWorklist,
+						      completion.rfCoreLoads.size(),
+						      completion.coreChecks,
+						      completion.refinementSafe,
+						      completion.error.empty() ? "none"
+									       : completion.error);
+					}
+					if (completion.status ==
+					    genmc::symbolic::FiniteSCCompletionStatus::completed) {
+						++completed;
+						break;
+					}
+					if (completion.status !=
+					    genmc::symbolic::FiniteSCCompletionStatus::noWitness) {
+						if (completion.status ==
+						    genmc::symbolic::FiniteSCCompletionStatus::
+							    invalidInput)
+							++invalid;
+						else
+							++rejected;
+						break;
+					}
+					++noWitness;
+					if (candidates >= lliConfig.finiteSkeletonSolveMax)
+						break;
+					if (completion.refinementSafe)
+						encoder.blockCurrentRfCore(completion.rfCoreLoads);
 					else
-						++rejected;
-					break;
-				}
-				++noWitness;
-				if (candidates >= lliConfig.finiteSkeletonSolveMax)
-					break;
-				if (completion.refinementSafe)
-					encoder.blockCurrentRfCore(completion.rfCoreLoads);
-				else
-					encoder.blockCurrentGraph();
-				const auto nextBegin = std::chrono::steady_clock::now();
-				step = encoder.next();
-				const auto nextEnd = std::chrono::steady_clock::now();
-				totalCheckUs += micros(nextBegin, nextEnd);
+						encoder.blockCurrentGraph();
+					const auto nextBegin = std::chrono::steady_clock::now();
+					step = encoder.next();
+					const auto nextEnd = std::chrono::steady_clock::now();
+					totalCheckUs += micros(nextBegin, nextEnd);
 				} while (step.assignment);
 				PRINT(VerbosityLevel::Error,
-				      "Finite skeleton SC search: candidates={} completed={} no-witness={} invalid={} witness-rejected={} solver-status={} check-us={} complete-us={} states-discovered={} states-expanded={} transitions={} duplicates={} max-worklist={}\n",
+				      "Finite skeleton SC search: candidates={} completed={} "
+				      "no-witness={} invalid={} witness-rejected={} "
+				      "solver-status={} check-us={} complete-us={} "
+				      "states-discovered={} states-expanded={} transitions={} "
+				      "duplicates={} max-worklist={}\n",
 				      candidates, completed, noWitness, invalid, rejected,
 				      static_cast<unsigned>(step.status), totalCheckUs,
 				      totalCompletionUs, totalMetrics.statesDiscovered,
 				      totalMetrics.statesExpanded,
 				      totalMetrics.executableTransitions,
-				      totalMetrics.duplicateStates,
-				      totalMetrics.maximumWorklist);
+				      totalMetrics.duplicateStates, totalMetrics.maximumWorklist);
 			}
 		}
 		if (lliConfig.finiteSkeletonSolveOne && skeleton.program) {
@@ -1541,18 +1607,19 @@ auto main(int argc, char **argv) -> int
 					++catRejected;
 					if (!lliConfig.finiteSkeletonDisableTheoryCores &&
 					    !cat.explanations.empty() &&
-					    encoder.blockCurrentExplanation(cat.explanations.front(),
-									    cat.denseEvents)) {
+					    encoder.blockCurrentExplanation(
+						    cat.explanations.front(), cat.denseEvents)) {
 						++theoryCores;
-						theoryCoreLiterals += cat.explanations.front().size();
+						theoryCoreLiterals +=
+							cat.explanations.front().size();
 						maximumTheoryCoreLiterals = std::max<std::uint64_t>(
 							maximumTheoryCoreLiterals,
 							cat.explanations.front().size());
-					}
-					else {
+					} else {
 						if (!lliConfig.finiteSkeletonDisableTheoryCores &&
 						    firstTheoryCoreFailure.empty())
-							firstTheoryCoreFailure = encoder.explanationFailure();
+							firstTheoryCoreFailure =
+								encoder.explanationFailure();
 						if (!lliConfig.finiteSkeletonDisableGraphBlocking) {
 							encoder.blockCurrentGraph();
 							++graphFallbacks;
@@ -1567,23 +1634,28 @@ auto main(int argc, char **argv) -> int
 						++errorCandidates;
 						break;
 					}
-				if (errorCandidates != 0)
-				{
+				if (errorCandidates != 0) {
 					if (!lliConfig.finiteSkeletonReplayOutput.empty()) {
 						auto replayModule = llvm::CloneModule(*moduleUP);
-						auto errors = genmc::skeleton::constrainReplayModule(
-							*replayModule, *skeleton.program, *step.assignment);
+						auto errors =
+							genmc::skeleton::constrainReplayModule(
+								*replayModule, *skeleton.program,
+								*step.assignment);
 						if (!errors.empty()) {
 							replayArtifactStatus = errors.front();
 						} else {
 							std::error_code error;
 							llvm::raw_fd_ostream output(
-								lliConfig.finiteSkeletonReplayOutput, error);
+								lliConfig
+									.finiteSkeletonReplayOutput,
+								error);
 							if (error)
-								replayArtifactStatus = "open-failed:" +
-										       error.message();
+								replayArtifactStatus =
+									"open-failed:" +
+									error.message();
 							else {
-								replayModule->print(output, nullptr);
+								replayModule->print(output,
+										    nullptr);
 								replayArtifactStatus = "written";
 							}
 						}
@@ -1594,7 +1666,10 @@ auto main(int argc, char **argv) -> int
 					encoder.blockCurrentGraph();
 			}
 			PRINT(VerbosityLevel::Error,
-			      "Finite skeleton solve: supported={} status={} assignments={} cat-consistent={} cat-rejected={} cat-errors={} theory-cores={} theory-core-literals={} max-theory-core-literals={} graph-fallbacks={} error-candidates={} blockers=",
+			      "Finite skeleton solve: supported={} status={} assignments={} "
+			      "cat-consistent={} cat-rejected={} cat-errors={} theory-cores={} "
+			      "theory-core-literals={} max-theory-core-literals={} "
+			      "graph-fallbacks={} error-candidates={} blockers=",
 			      encoder.supported(), static_cast<unsigned>(terminal), assignments,
 			      catConsistent, catRejected, catErrors, theoryCores,
 			      theoryCoreLiterals, maximumTheoryCoreLiterals, graphFallbacks,
@@ -1612,7 +1687,8 @@ auto main(int argc, char **argv) -> int
 	if (lliConfig.finiteSymbolicErrors && conf->mode == ExplorationMode::verify) {
 		finiteErrorSearch = searchFiniteError(lliConfig, conf, moduleUP, modInfo);
 		PRINT(VerbosityLevel::Error,
-		      "Finite symbolic error search: terminal={} assignments={} cat-rejected={} cat-consistent={} replay-attempts={} replay-confirmed={} fail-open={}\n",
+		      "Finite symbolic error search: terminal={} assignments={} cat-rejected={} "
+		      "cat-consistent={} replay-attempts={} replay-confirmed={} fail-open={}\n",
 		      finiteErrorSearch.terminal, finiteErrorSearch.statistics.finiteAssignments,
 		      finiteErrorSearch.statistics.finiteCatRejected,
 		      finiteErrorSearch.statistics.finiteCatConsistent,
@@ -1622,15 +1698,17 @@ auto main(int argc, char **argv) -> int
 	}
 	if (conf->scRvfExploration) {
 		PRINT(VerbosityLevel::Error, "SC RVF program gate: {}{}\n",
-		      conf->scRvfProgramSupported ? "enabled" : "native-fallback",
-		      conf->scRvfProgramSupported
+		      conf->scRvfProgramSupported	   ? "enabled"
+		      : conf->scRvfRegionalProgramEligible ? "regional"
+							   : "native-fallback",
+		      conf->scRvfProgramSupported || conf->scRvfRegionalProgramEligible
 			      ? std::string{}
 			      : std::string{" reason="} + conf->scRvfStaticFallbackReason);
 	}
 	PRINT(VerbosityLevel::Error, "*** Transformation complete.\n");
 	std::cout << std::flush;
 	reportPhasePeakMemory(*conf, "transformed");
-	if (lliConfig.finiteSkeletonStatsOnly)
+	if (lliConfig.finiteSkeletonStatsOnly || lliConfig.scRvfGateStatsOnly)
 		return 0;
 	VerificationResult res;
 	switch (conf->mode) {

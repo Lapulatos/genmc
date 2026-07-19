@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="60 s" memlimit="12 GB" cpuCores="1">
+  <option name="--disable-estimation"/><option name="--disable-mm-detector"/><option name="--nthreads=1"/><option name="--v1"/><option name="--cat-stats"/>
+  <column title="gate">SC RVF program gate: ([^\n]+)</column>
+  <column title="complete">Number of complete executions explored: ([0-9]+)</column>
+  <column title="work popped">work-popped=([0-9]+)</column>
+  <column title="realized prefixes">realized-revisit-prefixes=([0-9]+)</column>
+  <column title="rf offered">rf-offered=([0-9]+)</column>
+  <column title="rf queued">rf-queued=([0-9]+)</column>
+  <column title="rvf attempted">rvf-loads-attempted=([0-9]+)</column>
+  <column title="rvf reduced">rvf-loads-reduced=([0-9]+)</column>
+  <column title="native replay loads">rvf-quotient-disabled-loads=([0-9]+)</column>
+  <column title="rvf fail open">rvf-fail-open=([0-9]+)</column>
+  <rundefinition name="regional-rvf-activation-16">
+    <option name="--svcomp-backend=caat-sc"/>
+    <tasks name="unreach-call">
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/arraylock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/cnalock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/hclhlock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/hmcslock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/mcslock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/ldv-races/race-3_1-container_of-global.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/rec_mcslock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/rec_ticketlock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/rwlock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/semaphore.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread/stack-1.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread/stack-2.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-race-challenges/thread-local-value.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/ticketlock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/libvsync/ttaslock.yml</include>
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread/twostage_3.yml</include>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

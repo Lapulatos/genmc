@@ -222,6 +222,15 @@ TEST(ConfigModelFileTest, AnnotatedReadExperimentRequiresRVFExploration)
 			     "--sc-rvf-annotated-reads requires --sc-rvf-exploration"));
 }
 
+TEST(ConfigModelFileTest, RegionalExperimentRequiresRVFExploration)
+{
+	Config config;
+	config.scRvfRegional = true;
+	std::vector<std::string> warnings;
+	auto status = config.validate(warnings);
+	EXPECT_TRUE(hasError(status, "--sc-rvf-regional requires --sc-rvf-exploration"));
+}
+
 TEST(ConfigModelFileTest, ConflictCoresRequirePreventiveCertificatePath)
 {
 	Config config;
@@ -229,6 +238,15 @@ TEST(ConfigModelFileTest, ConflictCoresRequirePreventiveCertificatePath)
 	std::vector<std::string> warnings;
 	auto status = config.validate(warnings);
 	EXPECT_TRUE(hasError(status, "--cat-conflict-cores requires --cat-preventive-pruning"));
+}
+
+TEST(ConfigModelFileTest, BackjumpCensusRequiresModelStatsAndPreventiveCertificate)
+{
+	Config config;
+	config.catBackjumpCensus = true;
+	std::vector<std::string> warnings;
+	auto status = config.validate(warnings);
+	EXPECT_TRUE(hasError(status, "--cat-backjump-census requires"));
 }
 
 TEST(ConfigModelFileTest, FocusReachRequiresPreventiveCertificatePath)

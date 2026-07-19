@@ -21,11 +21,17 @@ namespace genmc::rvf {
 
 /** State owned by one RVF-SMC recursion node and copied into its children. */
 struct Frame {
+	/* Native fallback still needs RVF scheduling to replay an already materialized
+	 * graph prefix. It must not merge any new RF classes. */
+	bool nativeReplay{};
 	StableGoodWrites goodWrites{};
 	/* Dense adapter IDs are prefix-local and may change when a parent continuation
 	 * schedules another thread. Persist causal cutoffs by stable GenMC identity. */
 	std::map<cat::StableEventKey, std::vector<std::uint32_t>> causalCutoffs{};
 	std::vector<::Event> processedReads{};
+	/** Native ancestor reads whose future backward revisits are not represented by
+	 * the current quotient descendants. A matching future write revokes the region. */
+	std::vector<::Event> nativeAncestorReads{};
 
 	[[nodiscard]] auto processed(::Event read) const -> bool
 	{

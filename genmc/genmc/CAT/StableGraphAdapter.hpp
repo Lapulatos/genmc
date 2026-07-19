@@ -82,6 +82,11 @@ public:
 	[[nodiscard]] auto universeSize() const -> std::size_t { return keys_.size(); }
 	/** Return the stable ID already assigned to @p key, if any. */
 	[[nodiscard]] auto id(const StableEventKey &key) const -> std::optional<std::size_t>;
+	/** Return the persistent key assigned to @p id, if it exists. */
+	[[nodiscard]] auto key(std::size_t id) const -> const StableEventKey *
+	{
+		return id < keys_.size() ? &keys_[id] : nullptr;
+	}
 	[[nodiscard]] auto cacheHits() const -> std::size_t { return cacheHits_; }
 	[[nodiscard]] auto cacheMisses() const -> std::size_t { return cacheMisses_; }
 	[[nodiscard]] auto cacheOracleChecks() const -> std::size_t { return cacheOracleChecks_; }
