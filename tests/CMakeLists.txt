@@ -72,5 +72,14 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
 
+add_test(
+    NAME spin-phi-seed
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/spin-phi-seed.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+
 # Unit tests
 add_subdirectory(unit)

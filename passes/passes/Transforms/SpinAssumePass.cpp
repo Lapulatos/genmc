@@ -199,7 +199,7 @@ static auto isPHIRelatedToCASRes(const PHINode *phi,
 	return isPHIRelatedToCASRes(phi, cass, phiChain, related);
 }
 
-static auto isPHIRelatedToLoad(const PHINode *curr, Value *&loadPtr,
+static auto isPHIRelatedToLoad(const PHINode *curr, const Loop *loop, Value *&loadPtr,
 			       std::optional<AtomicOrdering> &loadOrd,
 			       SmallVector<const PHINode *, 4> &phiChain,
 			       VSet<const PHINode *> &related) -> bool
@@ -209,8 +209,17 @@ static auto isPHIRelatedToLoad(const PHINode *curr, Value *&loadPtr,
 	    std::find(phiChain.begin(), phiChain.end(), curr) != phiChain.end())
 		return true;
 
-	for (Value *val : curr->incoming_values()) {
+	for (auto i = 0U; i < curr->getNumIncomingValues(); ++i) {
+		Value *val = curr->getIncomingValue(i);
 		val = stripCasts(val);
+		if (isa<Constant>(val)) {
+			/* A preheader seed only affects entry into the loop. Once a backedge is
+			 * taken, every loop-carried value must still come from the admitted
+			 * polling load/PHI chain. */
+			if (loop->contains(curr->getIncomingBlock(i)))
+				return false;
+			continue;
+		}
 		if (auto *li = dyn_cast_or_null<LoadInst>(val)) {
 			if (loadPtr && !accessSameVariable(li->getPointerOperand(), loadPtr))
 				return false;
@@ -225,7 +234,7 @@ static auto isPHIRelatedToLoad(const PHINode *curr, Value *&loadPtr,
 				return false;
 
 			phiChain.push_back(curr);
-			if (!isPHIRelatedToLoad(phi, loadPtr, loadOrd, phiChain, related))
+			if (!isPHIRelatedToLoad(phi, loop, loadPtr, loadOrd, phiChain, related))
 				return false;
 			phiChain.pop_back();
 		}
@@ -233,21 +242,21 @@ static auto isPHIRelatedToLoad(const PHINode *curr, Value *&loadPtr,
 	return true;
 }
 
-static auto isPHIRelatedToLoad(const PHINode *phi) -> bool
+static auto isPHIRelatedToLoad(const PHINode *phi, const Loop *loop) -> bool
 {
 	Value *loadPtr = nullptr;
 	std::optional<AtomicOrdering> loadOrd;
 	VSet<const PHINode *> related;
 	SmallVector<const PHINode *, 4> phiChain;
 
-	return isPHIRelatedToLoad(phi, loadPtr, loadOrd, phiChain, related);
+	return isPHIRelatedToLoad(phi, loop, loadPtr, loadOrd, phiChain, related);
 }
 
 /*
  * This function checks whether a PHI node is tied to some load or CAS ('good' PHI).
  * A 'good' PHI node has incoming values that are either 1) PHI nodes that have been
- * deemed 'good', 2) constants and results of loads/CASes, or 3) loads at the same
- * location as some CAS and the compare operands of some CAS.
+ * deemed 'good', 2) constants entering from outside the loop and results of loads/CASes,
+ * or 3) loads at the same location as some CAS and the compare operands of some CAS.
  * To avoid circles between PHIs, whenever we try to see whether a PHI is good,
  * we keep the current path in <phiChain>; if a node is deemed good and the chain
  * is empty (i.e., it does not depend on another node being deemed good), it is
@@ -260,12 +269,12 @@ static auto areBlockPHIsRelatedToLoopCASs(const BasicBlock *bb, Loop *l) -> bool
 	getLoopCASs(l, cass);
 	if (cass.empty()) {
 		return std::all_of(bb->phis().begin(), bb->phis().end(),
-				   [&](auto &phi) { return isPHIRelatedToLoad(&phi); });
+				   [&](auto &phi) { return isPHIRelatedToLoad(&phi, l); });
 	}
 
 	return std::all_of(bb->phis().begin(), bb->phis().end(), [&](auto &phi) {
 		return isPHIRelatedToCASCmp(&phi, cass) || isPHIRelatedToCASRes(&phi, cass) ||
-		       isPHIRelatedToLoad(&phi);
+		       isPHIRelatedToLoad(&phi, l);
 	});
 }
 
