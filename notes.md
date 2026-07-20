@@ -3497,3 +3497,32 @@ collected. No direction may claim them based only on missing buffered log marker
   (1.30838x), and no task becomes terminal.  Reject and remove the implementation: it only delays
   OOM and violates the joint time/memory/terminal gate.  Immutable root:
   `/data3/sujie/experiments/caat-optimization/p1-empty-relation-oom31-20260720-r1`.
+
+## 2026-07-20 P1 cross-family race-causality attribution
+
+- Valid 15-second direct heaptrack traces cover Weaver `mult-dist`, LibVSync `rec_ticketlock`,
+  and Goblint `28-race_reach_81-list_racing`.  GenMC itself was terminated and heaptrack was
+  allowed to finalize; trace sizes are nonzero and all three parse successfully.
+- Weaver retains 675.58 MB under 2,814,904 NA-load calls and 232.70 MB under 938,304 NA stores;
+  `configureProbe` and `SCChecker::updateMMViews` expose repeated View construction.
+- LibVSync retains 649.74 MB under 2,707,239 reads and 173.26 MB under
+  `EventLabel::addView`/`SCChecker::calculateViews`.  Goblint's sampled peak is led by 48.11 MB
+  of `View` backing storage.  This establishes cross-family View/race-frontier retention rather
+  than a universal CAT-matrix owner.
+- Candidate hypothesis: with `--disable-race-detection`, retain access intervals and maximal
+  positions in `AdaptiveView`, but omit the full causal View used only to eliminate race-witness
+  predecessors.  Full causal behavior is unchanged whenever race diagnostics are enabled.
+- The first new unit test did not compile because `SAddr::createHeap` was called with one argument
+  instead of thread/index/durable/internal.  The corrected test build passes.
+- The next test failure was an incorrect test oracle: an `AdaptiveView::Update` iterates its access
+  position, while its causal View is consulted only during aggregation.  The corrected dominance
+  oracle passes; this was not a production failure.
+- Three-task 30-second paired smoke: LibVSync CPU 31.355 -> 31.338 s and RSS 6.870 -> 6.717 GB;
+  Weaver CPU 31.470 -> 31.395 s and RSS 9.468 -> 8.522 GB. Goblint changes OOM at 16 GB/18.309 s
+  to TIMEOUT at 9.002 GB/31.429 s.  Continue to OOM31, but do not treat longer survival as a final
+  speedup. Root: `/data3/sujie/experiments/caat-optimization/p1-race-causality-smoke-20260720-r1`.
+- Formal OOM31 passes both 31-row/31-log cardinality gates. Both lanes remain 31/31 OOM at 12 GB;
+  candidate CPU is 1,926.664 versus 1,456.431 seconds (1.32286x), wall is 1.32265x, and recorded
+  memory is identical at the cap. Reject and remove: compact race causality delays allocation
+  pressure but does not reduce the eventual live set or reach a terminal result. Root:
+  `/data3/sujie/experiments/caat-optimization/p1-race-causality-oom31-20260720-r1`.

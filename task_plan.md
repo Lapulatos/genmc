@@ -3501,3 +3501,12 @@ semantic test evidence remains the already completed cumulative GCC/ASan/differe
 - [x] Pass focused relation tests, CAAT property tests, and the GCC 13 production build.
 - [x] Complete the 31-task paired OOM cohort and evaluate terminal/time/RSS gates.
 - [x] Reject and remove implicit-empty relations: 31/31 OOM remains and CPU rises 30.9%.
+
+### 2026-07-20 P1 cross-family allocation attribution
+
+- [x] Profile real allocation stacks for one Weaver, one LibVSync, and another Goblint OOM task.
+- [x] Compare dominant owners and peak live bytes across the three families.
+- [x] Prototype compact race-causality retention under `--disable-race-detection`.
+- [x] Pass focused unit/property gates; skip sanitizer after the resource gate rejects the candidate.
+- [x] Run representative and formal OOM31 paired resource experiments.
+- [x] Reject and remove: 31/31 OOM remains and CPU rises 32.3% at the same 12-GB cap.
