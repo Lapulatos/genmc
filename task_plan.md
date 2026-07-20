@@ -3489,3 +3489,15 @@ semantic test evidence remains the already completed cumulative GCC/ASan/differe
 - [x] Pass generated finite and lifecycle verdict oracles without native safe shortcuts.
 - [x] Run a server panel; reject before expansion because both resources regress.
 - [x] Remove diagnostic code/CTest and retain only negative evidence on dev.
+
+### 2026-07-20 P1 retained-state attribution
+
+- [x] Audit graph/history/worklist ownership and existing counters.
+- [x] Reject per-object byte estimates as incomplete for shared/dynamic storage.
+- [x] Profile actual allocation stacks on a representative OOM task.
+- [x] Identify eager quadratic CAT fixed-point bottoms as the dominant owner; no approximate
+  component counters are needed for this allocation stack.
+- [x] Implement exact implicit-empty relations and empty-operand algebra short circuits.
+- [x] Pass focused relation tests, CAAT property tests, and the GCC 13 production build.
+- [x] Complete the 31-task paired OOM cohort and evaluate terminal/time/RSS gates.
+- [x] Reject and remove implicit-empty relations: 31/31 OOM remains and CPU rises 30.9%.

@@ -3462,3 +3462,38 @@ collected. No direction may claim them based only on missing buffered log marker
   zero common verdict differences and four replay-confirmed errors. Direct/native all-task
   CPU=1.56873, wall=1.56854, RSS=7.14537; common-terminal CPU=3.05301 and RSS=3.57847.
   Reject without a 283 run and remove the diagnostic implementation.
+
+## 2026-07-20 P1 retained-state heap attribution
+
+- Heaptrack r1 targeted the formal Bash wrapper and captured only the shell (1,384
+  allocations, 13 KB trace); it did not follow the wrapper's `exec` into GenMC.  This is
+  invalid attribution evidence.  A direct two-second real-binary probe reaches compilation
+  and exploration on `28-race_reach_03-munge_racing`; use the real binary as the r2
+  debuggee and preserve r1 as an infrastructure failure.
+- Heaptrack r2 is valid: 1,194,619 allocations and 8.08 GB peak heap in 20 seconds.
+  Nine eager `Relation(eventCount)` fixed-point bottoms allocated 7.21 GB from
+  `Evaluation::initializeValues`; `relationUnion` accounted for another 800.88 MB.
+  Graph, interpreter, and history owners visible in the same peak report were only MB-scale.
+  Therefore the representative OOM is dominated by eager quadratic CAT relation storage, not
+  retained exploration history.
+- The first local unit rebuild reused a CMake tree whose Clang now picked libstdc++ 14 and failed
+  throughout standard-library `<format>`/ranges headers.  The unchanged GCC 13 build compiled;
+  do not use that mixed-toolchain tree as candidate evidence.
+- The first host-side server rebuild failed because the build tree is Docker-root-owned.  Rebuild
+  it inside `genmc15noble:sujie`, as in the established workflow.
+- The first 32-GiB timed comparison did not execute GenMC: the image lacked `/usr/bin/time`, and
+  the SSH cleanup used zsh's read-only variable `status`.  Install `time` in an isolated derived
+  image and use `run_rc`; preserve the empty result as infrastructure failure.
+- Corrected 120-second comparison on `28-race_reach_03-munge_racing`: both versions time out and
+  neither is OOM-killed.  Peak RSS falls from 15,062,316 to 11,900,808 KiB (0.7901x); total CPU is
+  essentially neutral (120.66 to 120.48 seconds).  This is promising memory evidence, not yet a
+  terminal/time improvement.
+- Heaptrack r3 is invalid because `timeout` terminated heaptrack before it finalized the trace;
+  the resulting gzip is zero bytes.  Its first print command also confused `-p` (a boolean option)
+  with the input-file argument and assumed unavailable remote `rg`.  Do not cite r3.
+- Formal OOM31 r1 passed both cardinality gates (31 XML rows and 31 logs per lane) with 48 total
+  concurrent tasks.  Baseline and implicit-empty candidate are both 31/31 OOM at the 12-GB task
+  cap.  Candidate CPU rises from 1,455.835 to 1,905.980 seconds (1.30920x), wall rises similarly
+  (1.30838x), and no task becomes terminal.  Reject and remove the implementation: it only delays
+  OOM and violates the joint time/memory/terminal gate.  Immutable root:
+  `/data3/sujie/experiments/caat-optimization/p1-empty-relation-oom31-20260720-r1`.
