@@ -3564,3 +3564,17 @@ collected. No direction may claim them based only on missing buffered log marker
 - The retained dynamic-control oracle keeps an `atomicrmw` seed in SSA and proves the current patch
   rejects it while the body load can still drive the next header to the assertion.  Any future
   dynamic-seed admission must preserve this behavior.
+- The separate arbitrary-outside-incoming candidate compiled with server GCC 13 and activated on
+  its dynamic positive fixture, but failed that retained control oracle: expected safety status 42
+  became `0 complete / 1 blocked`. The outside seed can control whether the first body iteration
+  occurs, so ignoring it is not semantics-preserving for the latch assumption. Reject, remove, and
+  do not attempt a third admission variant. Full record:
+  `optimization-analysis/core-direction-review-20260718/p1-spin-dynamic-seed-rejection-report-20260720.md`.
+- Stable promotion completed as `68e8f56a` and was pushed to `origin/genmc-caat`; local and
+  remote-tracking SHAs matched exactly after the push.
+- Post-promotion local verification exposed two existing toolchain failures: Clang 14 mixed with
+  libstdc++ 14 fails in C++23 `<format>/<ranges>`, while GCC 14 with LLVM 14 has ambiguous
+  `bit_cast` calls in `IntervalMap`. The authoritative GCC 13 server Release build remains green.
+- The first dynamic candidate server oracle run exited 17 because the clean source lacked the
+  three previously committed fixtures. Syncing them with `rsync -R` and verifying all four paths
+  exposed the actual completeness failure; the zero-diagnostic first run is infrastructure-only.

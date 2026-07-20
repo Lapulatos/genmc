@@ -3163,37 +3163,51 @@ validated effective commits to `genmc-caat`.
 - [x] Run attribution census and identify the dominant retained allocation on the actual cohort.
 - [x] Implement the highest-ceiling exact compression mechanism (prefix sharing, graph delta,
   revisit/class deduplication, compact worklist state, or bounded retained work as evidence directs).
-- [ ] Pass Release, ASan+UBSan, mutation oracle, recursive broad differential, fixed panel, and
-  progressively larger paired experiments.
-- [ ] Retain, revise, or reject from OOM/TIMEOUT/terminal transitions plus CPU/wall/RSS and exact
-  search/completeness counters.
+- [x] Pass candidate-proportional Release, ASan+UBSan, mutation/differential/oracle gates, fixed
+  panels, and progressively larger paired experiments. Rejected candidates stop at their frozen
+  early gate; the retained spin-PHI candidate reached 4/OOM31/725.
+- [x] Retain, revise, or reject from OOM/TIMEOUT/terminal transitions plus CPU/wall/RSS and exact
+  search/completeness counters. The five-item layout, implicit-empty, race-causality, and scheduler
+  cache directions were rejected; constant-seed spin PHI was retained and promoted.
 
 ### Phase C: P0 regional SC-RVF / generation-time quotienting
 
 - [x] Freeze the transactional region state machine, result-isolation boundary, native entry
   snapshot, token/epoch ownership, nested revocation invariant, and implementation sequence in
   `optimization-analysis/core-direction-review-20260718/p0-regional-rvf-transaction-design.md`.
-- [ ] Define and implement region ownership, entry/exit frontier, fail-open ledger, covered-class
-  revocation, descendant withdrawal, and safe ancestor-alternative restoration.
-- [ ] Extend exhaustive oracles for future writes, nested frontiers, loop iteration identity,
-  own/non-own sources, pointer provenance, and one/two-worker class-set equality.
-- [ ] Require nonzero actual-workload activation and reductions in offered/queued work, realized
-  prefixes, or quotient representatives before any timing claim.
+- [x] Exercise region ownership/frontier/revocation/ancestor-restoration candidates far enough to
+  test the production opportunity. Unsafe loop/native-ancestor variants were removed; exact-NA and
+  closed-prefix variants were rejected, so the full transactional design was deliberately not
+  completed after the predeclared activation gate failed.
+- [x] Extend exhaustive oracles for future writes, nested/frontier and loop identity hazards,
+  own/non-own sources, pointer provenance, and one/two-worker behavior. Decisive lost-outcome and
+  dynamic-ancestor counterexamples remain regression oracles.
+- [x] Apply the nonzero actual-workload activation gate. The exact 725 run has zero committed RVF
+  reductions; the 51-task r2/r3/r4 census proves zero causally valid post-frontier classes, so P0
+  stops without a timing claim or unsound CAS/lock quotient.
 
 ### Phase D: P2 certified subtree blocking
 
-- [ ] Specify a sufficient `no-consistent-extension` certificate and stable RF/CO decision mapping.
-- [ ] Validate earliest rollback-safe level, clause scope/lifetime, and work-item pre-enqueue block.
-- [ ] Require an independent exhaustive oracle and actual reductions in direct checks,
-  work-added/popped, or realized prefixes; cache hits alone are not evidence of success.
+- [x] Specify the sufficient `no-consistent-extension`/stable RF/CO mapping contract and implement
+  observation-only `CATDecisionState` Gate A1 before a clause engine.
+- [x] Validate whether an earliest rollback-safe non-local level and reusable clause scope exist.
+  Gate A1 observes zero installed conflicts, mapped choices, non-local conflicts, or backjump
+  distance; therefore active clause lifetime and pre-enqueue blocking are correctly not built.
+- [x] Apply the independent-oracle/work-reduction gate. Search is exactly unchanged in the paired
+  census; full-725 V10 has 14,193,035 hits but zero extra direct checks avoided and +4.99% CPU, so
+  P2 stops before Gate B/C.
 
 ### Phase E: synthesis and promotion
 
-- [ ] Maintain raw manifests, SHA-256 inputs, strict analysis bundles, figures, and decision reports
+- [x] Maintain raw manifests, SHA-256 inputs, strict analysis bundles, figures, and decision reports
   for every accepted/rejected candidate.
-- [ ] Run final broad regression and repeated paired experiments for retained candidates.
-- [ ] Commit all research on `genmc-caat-opt-dev`; merge/cherry-pick only proven effective minimal
-  commits into `genmc-caat`, then verify both remote branches and a clean worktree.
+- [x] Run final broad regression and paired experiments for retained candidates. The promoted
+  spin-PHI change has exact 4/31/725 paired cardinalities and semantic log audit; deterministic
+  single-run aggregate timing remains descriptive rather than a population claim.
+- [x] Commit all research on `genmc-caat-opt-dev`; merge/cherry-pick only proven effective minimal
+  commits into `genmc-caat`, then verify both remote branches and a clean worktree. The retained
+  spin-PHI patch is on stable; this closing documentation commit records the rejected dynamic
+  candidate and completion audit on dev.
 
 **Primary order:** P1 memory attribution/compression first; P0 completeness/activation second; P2
 certificate third.  Evaluator-only micro-optimizations remain deferred unless measurements expose a
@@ -3556,7 +3570,29 @@ audits.
 - [x] Identify the shared boundary: dynamic outside-loop PHI seed from ticket `atomicrmw`, with a
   polling-load backedge.
 - [x] Add a non-foldable dynamic-seed control-flow oracle that must continue reaching its assertion.
-- [ ] After committing the constant-seed optimization, prototype arbitrary outside-incoming
+- [x] After committing the constant-seed optimization, prototype arbitrary outside-incoming
   admission as a separate dev change.
-- [ ] Add dynamic-seed positive and finite/backedge negative oracles before any resource run.
-- [ ] Require simultaneous terminal/time/RSS improvement on the same 4/OOM31/725 funnel.
+- [x] Add dynamic-seed positive and finite/backedge negative oracles before any resource run.
+- [x] Apply the joint terminal/time/RSS funnel: correctness failed before the 4-task resource
+  stage, so OOM31/725 were correctly not launched.
+
+### Dynamic preheader-seed admission decision
+
+- [x] Promote the retained constant-only patch to stable as `68e8f56a` and push it.
+- [x] Prototype arbitrary outside-incoming admission separately on dev.
+- [x] Build the production candidate with server GCC 13 Release.
+- [x] Pass the dynamic infinite-polling positive case.
+- [x] Reject before resource measurement: the retained finite dynamic-control oracle changes from
+  safety status 42 to `0 complete / 1 blocked`, proving a completeness regression.
+- [x] Remove all candidate production/test changes and retain only the negative report.
+- [x] Stop this admission line without a third variant; leave `rec_ticketlock`/`ticketlock`
+  unresolved.
+
+**Post-promotion local toolchain errors:** the old Clang 14 Debug build now mixes libstdc++ 14 and
+fails in C++23 `<format>/<ranges>`. The GCC 14 Release tree reaches LLI and then fails because LLVM
+14's `bit_cast` conflicts with `std::bit_cast`. These are existing local toolchain incompatibilities,
+not product failures; server GCC 13 Release is authoritative and succeeds.
+
+**Dynamic-oracle asset error:** the first server run inherited a clean production source without
+the three prior oracle fixtures and exited 17. Sync all fixtures with `rsync -R`, verify explicit
+paths, and only then run the script. The corrected run exposed the semantic rejection above.
