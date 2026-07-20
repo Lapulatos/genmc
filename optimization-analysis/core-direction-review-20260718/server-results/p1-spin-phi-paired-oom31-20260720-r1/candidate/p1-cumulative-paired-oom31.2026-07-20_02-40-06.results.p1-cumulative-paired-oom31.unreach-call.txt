@@ -1,0 +1,80 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/source-dev/optimization-analysis/core-direction-review-20260718/p1-cumulative-paired-oom31.xml
+name:                    p1-cumulative-paired-oom31
+run sets:                p1-cumulative-paired-oom31.unreach-call
+date:                    Mon, 2026-07-20 02:40:06 UTC
+tool:                    GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/source-dev/optimization-analysis/continuous/candidate-equivalence-quotient/formal-wrapper.sh
+options:                 --disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats
+parallel runs:           24
+resource limits:
+- memory:                12000.0 MB
+- time:                  120 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                12000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    476532dab04b
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.736896 MB
+------------------------------------------------------------
+
+
+
+p1-cumulative-paired-oom31.unreach-call
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --nthreads=1 --v1 --cat-stats --svcomp-backend=caat-sc' and propertyfile 'None'
+
+inputfile                                                      status                       cpu time   wall time        host
+----------------------------------------------------------------------------------------------------------------------------
+weaver/mult-dist.wvr.yml                                       OUT OF MEMORY                   31.63       31.68        None
+weaver/popl20-more-queue-add-2-nl.wvr.yml                      OUT OF MEMORY                   44.77       44.79        None
+weaver/popl20-horseshoe.wvr.yml                                OUT OF MEMORY                   47.01       47.02        None
+weaver/popl20-more-queue-add-3-nl.wvr.yml                      OUT OF MEMORY                   46.06       46.09        None
+weaver/popl20-more-buffer-mult2.wvr.yml                        OUT OF MEMORY                   46.25       46.27        None
+weaver/popl20-more-buffer-mult.wvr.yml                         OUT OF MEMORY                   46.66       46.69        None
+weaver/popl20-bad-buffer-mult-alt.wvr.yml                      OUT OF MEMORY                   45.09       45.13        None
+goblint-regression/28-race_reach_03-munge_racing.yml           OUT OF MEMORY                   29.91       29.94        None
+goblint-regression/28-race_reach_09-ptrmunge_racing.yml        OUT OF MEMORY                   29.56       29.58        None
+goblint-regression/28-race_reach_81-list_racing.yml            OUT OF MEMORY                   18.22       18.23        None
+goblint-regression/28-race_reach_83-list2_racing1.yml          OUT OF MEMORY                   26.88       26.90        None
+goblint-regression/28-race_reach_84-list2_racing2.yml          OUT OF MEMORY                   27.00       27.01        None
+libvsync/ttaslock.yml                                          true                             0.12        0.15        None
+libvsync/rec_ticketlock.yml                                    OUT OF MEMORY                   40.79       40.81        None
+weaver/mult-comm.wvr.yml                                       OUT OF MEMORY                   33.24       33.26        None
+weaver/mult-flipped-dist.wvr.yml                               OUT OF MEMORY                   32.39       32.42        None
+weaver/parallel-min-max-1.wvr.yml                              OUT OF MEMORY                   47.99       48.02        None
+weaver/chl-word-symm.wvr.yml                                   OUT OF MEMORY                   45.41       45.44        None
+weaver/popl20-more-multiply-verify.wvr.yml                     OUT OF MEMORY                   45.96       46.04        None
+weaver/chl-word-trans.wvr.yml                                  OUT OF MEMORY                   46.57       46.59        None
+weaver/chl-word-subst.wvr.yml                                  OUT OF MEMORY                   45.79       45.96        None
+weaver/popl20-bad-buffer-mult-alt2.wvr.yml                     OUT OF MEMORY                   45.44       45.46        None
+weaver/popl20-more-buffer-mult3.wvr.yml                        OUT OF MEMORY                   47.11       47.12        None
+weaver/popl20-bad-buffer-mult-alt3.wvr.yml                     OUT OF MEMORY                   45.33       45.35        None
+goblint-regression/28-race_reach_04-munge_racefree.yml         OUT OF MEMORY                   29.64       29.65        None
+goblint-regression/28-race_reach_10-ptrmunge_racefree.yml      OUT OF MEMORY                   29.06       29.06        None
+goblint-regression/28-race_reach_82-list_racefree.yml          OUT OF MEMORY                   16.94       16.95        None
+goblint-regression/28-race_reach_85-list2_racefree.yml         OUT OF MEMORY                   26.05       26.05        None
+goblint-regression/28-race_reach_94-alloc_region_racing.yml    OUT OF MEMORY                   23.62       23.68        None
+libvsync/ticketlock.yml                                        OUT OF MEMORY                   38.70       38.72        None
+libvsync/rwlock.yml                                            true                            14.68       14.69        None
+----------------------------------------------------------------------------------------------------------------------------
+Run set 1                                                      done                          1093.95       69.06           -
+
+Statistics:             31 Files
+  correct:               2
+    correct true:        2
+    correct false:       0
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:              29
+  Score:                 4 (max: 53)

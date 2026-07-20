@@ -14,6 +14,7 @@ threads_per_lane="${GENMC_THREADS_PER_LANE:-24}"
 baseline_cores="${GENMC_BASELINE_CORES:-0-23}"
 candidate_cores="${GENMC_CANDIDATE_CORES:-28-51}"
 container_memory="${GENMC_LANE_MEMORY:-300g}"
+experiment_mode="${GENMC_P1_EXPERIMENT_MODE:-baseline}"
 
 case "$output_root" in
 	/data3/sujie/experiments/caat-optimization/"$output_prefix"*) ;;
@@ -71,7 +72,7 @@ run_lane()
 		export GENMC_MODEL_ROOT='$source_root/models/cat'
 		export GENMC_BINARY='$wrapper'
 		export GENMC_REAL_BINARY='$binary'
-		export GENMC_EXPERIMENT_MODE=baseline
+		export GENMC_EXPERIMENT_MODE='$experiment_mode'
 		export GENMC_REWRITE_ROOT=/workspace/experiments/caat-optimization/$(basename "$output_root")-$lane-rewrite
 		benchexec --no-container --numOfThreads '$threads_per_lane' --allowedCores '$cores' --outputpath '$output_root/$lane/' '$definition'" \
 		>"$output_root/$lane/console.log" 2>&1

@@ -3510,3 +3510,53 @@ semantic test evidence remains the already completed cumulative GCC/ASan/differe
 - [x] Pass focused unit/property gates; skip sanitizer after the resource gate rejects the candidate.
 - [x] Run representative and formal OOM31 paired resource experiments.
 - [x] Reject and remove: 31/31 OOM remains and CPU rises 32.3% at the same 12-GB cap.
+
+### 2026-07-20 P1 spin-loop PHI admission
+
+- [x] Attribute four LibVSync OOMs to monotonically growing active polling loops rather than
+  scheduler-retained work.
+- [x] Implement the fail-closed candidate: permit PHI constants only from outside the loop;
+  continue rejecting every loop-carried constant.
+- [x] Pass positive preheader-seed and negative backedge-constant oracles.
+- [x] Pass existing spin/saver/liveness coverage and one focused ASan+UBSan run.
+- [x] Run a clean four-task stable/candidate paired resource gate.
+- [x] Pass the joint terminal/time/RSS gate on OOM31 and the full 725 paired run.
+- [x] Record the retain decision and remove all non-retained diagnostics.
+
+**Spin-PHI sync infrastructure error:** the first multi-file `rsync` omitted `--relative`, so files
+were flattened into the remote source root. Cleanup also removed the root `CMakeLists.txt`, causing
+CMake regeneration to stop before compilation. Restore that file from the local authoritative
+tree, resync with `rsync -R`, verify paths/hashes, and never accept the failed build as evidence.
+
+**Spin-PHI first oracle-design failure:** the initial positive fixture returned the final polling
+load, which the optimizer proves is zero on loop exit; its PHI disappeared and the run correctly
+reported zero spin blocks. Preserve the failed run as a test-design diagnostic, change the fixture
+to return the last nonzero body value through an observable atomic store, and rerun before judging
+the candidate.
+
+**Spin-PHI oracle-output corrections:** the pass lowers the generated spin end to an internal
+assumption, so the positive runtime oracle is `0 complete / nonzero blocked`, not the diagnostic
+`spin-loop-blocks` counter.  The negative assertion is printed as `Error: Safety violation!`, not
+`Assertion violation`.  Both initial expectations failed before being corrected; neither indicates
+a candidate semantic failure.
+
+**Spin-PHI sanitizer invocation error:** the first ASan+UBSan command tried to execute the new test
+script without an executable bit and stopped with permission denied before GenMC ran.  Invoke it
+through `bash`; the single meaningful sanitizer run then passes both oracles.
+
+**Spin-PHI ad-hoc log extraction error:** an initial post-four-task remote command allowed the local
+zsh to expand remote archive globs, so it found no logs.  The XML/cardinality result was unaffected;
+replace the probe with Python `zipfile` over explicit remote paths and use that for all accepted log
+audits.
+
+### Next P1 candidate after spin-PHI promotion
+
+- [x] Inspect transformed IR for the two remaining LibVSync OOMs without modifying the validated
+  candidate.
+- [x] Identify the shared boundary: dynamic outside-loop PHI seed from ticket `atomicrmw`, with a
+  polling-load backedge.
+- [x] Add a non-foldable dynamic-seed control-flow oracle that must continue reaching its assertion.
+- [ ] After committing the constant-seed optimization, prototype arbitrary outside-incoming
+  admission as a separate dev change.
+- [ ] Add dynamic-seed positive and finite/backedge negative oracles before any resource run.
+- [ ] Require simultaneous terminal/time/RSS improvement on the same 4/OOM31/725 funnel.

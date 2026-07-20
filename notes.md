@@ -3526,3 +3526,41 @@ collected. No direction may claim them based only on missing buffered log marker
   memory is identical at the cap. Reject and remove: compact race causality delays allocation
   pressure but does not reduce the eventual live set or reach a terminal result. Root:
   `/data3/sujie/experiments/caat-optimization/p1-race-causality-oom31-20260720-r1`.
+
+## 2026-07-20 P1 scheduler-cache attribution
+
+- Reject `Scheduler::seenPrefixes` compaction before implementation. In all four OOM31 logs that
+  survived long enough to publish progress, `max-scheduler-cached-labels=0`; retained work is only
+  2--6 items, while the current graph reaches 25.7--29.9 million labels and the stack exceeds it
+  by only 33--44 labels.
+- The same four LibVSync tasks offer 25.7--29.9 million RF choices, record only one to three spin
+  starts, zero side-effecting spins, and zero spin-loop blocks. The active execution grows
+  monotonically before meaningful exploration/CAT work; this is not retained search history.
+- Independent LibVSync, Weaver, and Goblint heaptrack reports contain no allocation hot path for
+  scheduler caching, trie storage, or cached-label cloning. Do not add shared pointers,
+  hash-consing, or replay descriptors until a workload demonstrates material nonzero cache use.
+- Full decision and claim boundary:
+  `optimization-analysis/core-direction-review-20260718/p1-scheduler-cache-attribution-report-20260720.md`.
+
+## 2026-07-20 P1 spin-loop PHI admission
+
+- Root cause: LibVSync active graphs grow to tens of millions of labels because polling loops with
+  a PHI entry seed are not admitted by `SpinAssumePass`; scheduler-retained state is negligible.
+- Exact guard: permit a PHI constant only on an incoming edge outside the loop.  Constants on
+  backedges remain rejected, and loop-carried values must remain same-location/same-order loads or
+  admitted PHI chains.
+- New positive/negative oracles pass; 56 saver configurations and 5 liveness configurations pass;
+  one focused ASan+UBSan run passes.
+- Formal OOM31: 31 OOM -> 29 OOM + 2 correct terminals; CPU -6.03%, wall -6.02%, aggregate RSS
+  -6.44%, unchanged maximum task RSS.
+- Formal 725: correct 413 -> 415, OOM 31 -> 29, all CPU -0.33%, suite wall -0.43%, aggregate RSS
+  -4.61%; zero terminal verdict or common-terminal execution-count mismatch.
+- Full report:
+  `optimization-analysis/core-direction-review-20260718/p1-spin-phi-admission-report-20260720.md`.
+- Remaining `rec_ticketlock`/`ticketlock` IR uses a dynamic outside-loop PHI seed from the preceding
+  ticket `atomicrmw`, while the backedge is still the polling load.  Generalizing from outside
+  constants to arbitrary outside incoming values is the next distinct candidate; do not mix it
+  into the already validated constant-seed patch.
+- The retained dynamic-control oracle keeps an `atomicrmw` seed in SSA and proves the current patch
+  rejects it while the body load can still drive the next header to the assertion.  Any future
+  dynamic-seed admission must preserve this behavior.

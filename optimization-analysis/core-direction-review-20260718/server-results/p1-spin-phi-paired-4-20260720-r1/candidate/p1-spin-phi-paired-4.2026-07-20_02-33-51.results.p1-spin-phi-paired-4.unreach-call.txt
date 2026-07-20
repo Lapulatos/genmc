@@ -1,0 +1,53 @@
+   BENCHMARK INFORMATION
+benchmark definition:    /data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/source-dev/optimization-analysis/core-direction-review-20260718/p1-spin-phi-paired-4.xml
+name:                    p1-spin-phi-paired-4
+run sets:                p1-spin-phi-paired-4.unreach-call
+date:                    Mon, 2026-07-20 02:33:51 UTC
+tool:                    GenMC SV-COMP fair-coverage adapter GenMC (https://plv.mpi-sws.org/genmc):
+  GenMC v0.17.0 (commit #unknown)
+  Built with LLVM 15.0.7 (Release)
+tool executable:         /data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/source-dev/optimization-analysis/continuous/candidate-equivalence-quotient/formal-wrapper.sh
+options:                 --disable-estimation --disable-mm-detector --disable-ipr --disable-sr --nthreads=1 --v1 --cat-stats --disable-race-detection
+parallel runs:           4
+resource limits:
+- memory:                12000.0 MB
+- time:                  60 s
+- cpu cores:             1
+hardware requirements:
+- cpu cores:             1
+- memory:                12000.0 MB
+------------------------------------------------------------
+
+   SYSTEM INFORMATION
+host:                    c4345827bc7a
+os:                      Linux-5.15.0-185-generic-x86_64-with-glibc2.39
+cpu:                     Intel Xeon Platinum 8280M CPU @ 2.60GHz
+- cores:                 56
+- max frequency:         3900.0 MHz
+- turbo boost enabled:   True
+ram:                     810198.736896 MB
+------------------------------------------------------------
+
+
+
+p1-spin-phi-paired-4.unreach-call
+Run set 1 of 1 with options '--disable-estimation --disable-mm-detector --disable-ipr --disable-sr --nthreads=1 --v1 --cat-stats --disable-race-detection --svcomp-backend=caat-sc' and propertyfile 'None'
+
+inputfile               status                       cpu time   wall time        host
+-------------------------------------------------------------------------------------
+rec_ticketlock.yml      OUT OF MEMORY                   39.74       39.78        None
+ttaslock.yml            true                             0.10        0.11        None
+rwlock.yml              true                            13.86       13.87        None
+ticketlock.yml          OUT OF MEMORY                   36.53       36.53        None
+-------------------------------------------------------------------------------------
+Run set 1               done                            90.23       40.02           -
+
+Statistics:              4 Files
+  correct:               2
+    correct true:        2
+    correct false:       0
+  incorrect:             0
+    incorrect true:      0
+    incorrect false:     0
+  unknown:               2
+  Score:                 4 (max: 8)
