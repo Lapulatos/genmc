@@ -97,6 +97,14 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
 )
 add_test(
+    NAME finite-skeleton-thread-join-oracle
+    COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/finite-skeleton-thread-join-oracle.sh
+            $<TARGET_FILE:genmc>
+            ${CMAKE_SOURCE_DIR}/models/cat/recursive-sc.cat
+            ${CMAKE_CURRENT_SOURCE_DIR}/cat/programs
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+add_test(
     NAME sc-rvf-integration
     COMMAND bash ${CMAKE_CURRENT_SOURCE_DIR}/cat/sc-rvf-integration.sh
             $<TARGET_FILE:genmc>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="120 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/>
+  <option name="--disable-mm-detector"/>
+  <option name="--finite-skeleton-stats-only"/>
+  <column title="mode">Finite skeleton first model: mode=([^ ]+)</column>
+  <column title="supported">supported=(true|false)</column>
+  <column title="solver status">status=([0-9]+)</column>
+  <column title="assignment">assignment=(true|false)</column>
+  <column title="build us">build-us=([0-9]+)</column>
+  <column title="check us">check-us=([0-9]+)</column>
+  <rundefinition name="value-sc-order">
+    <option name="--svcomp-backend=caat-sc"/>
+    <option name="--finite-skeleton-first-model=abstract-cardinality-rvf-value-sc-order"/>
+    <tasks name="pthread-wmm">
+      <include>/workspace/svcomp2026-caat/sv-benchmarks/c/pthread-wmm/*.yml</include>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

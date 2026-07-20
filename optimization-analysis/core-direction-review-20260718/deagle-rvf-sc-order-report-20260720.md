@@ -47,11 +47,13 @@ The encoding is exact for the admitted finite SC skeleton fragment:
 - SC-order models cannot enter abstract-member refinement, concrete RF-core blocking, or
   CAT-explanation blocking.
 
-Thread join is deliberately unsupported because the finite IR does not yet carry a
-reliable join-target mapping.  Such programs return the blocker
-`sc-order-unsupported-thread-join`; they are not classified.  Combining the SC-order
-encoding with eager coherence ranks is also rejected.  These are fail-open boundaries,
-not approximations.
+Thread join is supported when its handle resolves through SSA phi/cast nodes to exactly
+one `threadCreate` event.  The encoding requires the corresponding create to be active,
+orders the create before the child entry, orders every active child return before the
+join, and materializes the matching CAT `tj` edge.  Dynamic, missing, or ambiguous join
+targets return `unresolved-thread-join-target` and remain fail-open.  Combining the
+SC-order encoding with eager coherence ranks is also rejected.  These are fail-open
+boundaries, not approximations.
 
 The result is not full RVF-SMC, does not establish optimal exploration, and does not yet
 encode TSO/PSO/POWER visibility and propagation constraints.  Native GenMC is used only
@@ -59,8 +61,9 @@ as an external correctness reference in the broad experiment.
 
 ## Correctness evidence
 
-The release C++ unit binary built in the GCC 13/Z3 Docker environment runs 246 tests:
-245 pass and the no-backend test is expectedly skipped because Z3 is present.  The new
+The post-lifecycle release C++ unit binary built in the GCC 13/Z3 Docker environment
+runs 249 tests: 248 pass and the no-backend test is expectedly skipped because Z3 is
+present.  The new
 gates include:
 
 - a nine-combination concrete-RF/refinement oracle whose reachable observations equal
@@ -70,7 +73,13 @@ gates include:
   SC completion, and every extracted assignment is accepted by the independent exact SC
   base;
 - atomic lock/unlock materialization;
-- explicit fail-open behavior for thread join.
+- exact create/return/join ordering and explicit fail-open behavior for unresolved
+  thread joins.
+
+An end-to-end four-outcome store-buffering oracle exercises two creates and two joins.
+Both lanes classify `00` as safe and `01`, `10`, and `11` as reachable errors.  Every
+finite SAT witness is concrete and has zero CAT materialization, evaluation, or
+violation errors.
 
 The meaningful SC-order subset also passed ASan+UBSan before the linear-chain rewrite;
 the rewrite changes only the transitive representation of program order.  The final
@@ -148,6 +157,21 @@ different representation and is currently much faster on the commonly completed 
 It is used here to detect unsound SAT/UNSAT answers, not to claim that the prototype is
 already faster than production GenMC.
 
+## Post-lifecycle 283-task regression
+
+The join/return lifecycle implementation was rerun at
+`/data3/sujie/experiments/caat-optimization/finite-rvf-first-model-sc-order-full-20260720-r5`
+with the same 283 tasks, 120-second per-task time, and 4 GB per-task memory limit.  Exact
+cardinality checks found 283 XML rows and 283 archived logs.  It produced 69 SAT, 39
+UNSAT, and 175 timeout/unknown results, with zero bad concrete witnesses.  The original
+run produced 68 SAT, 39 UNSAT, and 176 unknown results.  Twenty-three tasks changed only
+whether they crossed the 120-second boundary; the net terminal gain is one.
+
+Aggregate CPU and wall time ratios relative to the original candidate are 0.99090 and
+0.99045; aggregate peak-memory ratio is 1.00109.  These sub-percent movements are
+parallel-run noise, not an optimization claim.  The lifecycle patch is retained for
+semantic completeness, not promoted as an additional performance improvement.
+
 ## Infrastructure failures and prevention
 
 - A local CMake cache fixed to Clang 14 later picked up GCC 14 standard-library headers
@@ -163,6 +187,11 @@ already faster than production GenMC.
   Only BenchExec XML memory is accepted for resource claims.
 - Every broad lane is accepted only after exact XML/log cardinality and manifest checks;
   a zero-task BenchExec exit code is not success.
+- Three post-lifecycle launch attempts were rejected before running any task: r2 lacked
+  the namespace capability, r3 used an unsupported nested overlay mode, and r4 made the
+  workspace read-only.  r5 reuses the repository's established privileged outer Docker
+  plus BenchExec `--no-container` configuration.  The validated configuration is now
+  captured by `launch-server-finite-rvf-sc-order-full.sh`.
 
 ## Next optimization
 

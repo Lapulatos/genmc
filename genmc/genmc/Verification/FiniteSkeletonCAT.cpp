@@ -27,7 +27,7 @@ auto isCATSite(const skeleton::EventSite &event) -> bool
 	using enum skeleton::EventKind;
 	return event.kind == load || event.kind == store || event.kind == lock ||
 	       event.kind == unlock || event.kind == fence || event.kind == threadCreate ||
-	       event.kind == threadJoin;
+	       event.kind == threadJoin || event.kind == returnValue;
 }
 
 } /* namespace */
@@ -163,6 +163,21 @@ auto materializeFiniteAssignment(const skeleton::Program &program,
 					first = id;
 			if (first)
 				tc.insertDense(create->second, *first);
+		}
+	}
+	for (const auto &join : program.events) {
+		if (!active[join.id] || join.kind != skeleton::EventKind::threadJoin)
+			continue;
+		const auto joinDense = ordinary.find(join.id);
+		if (joinDense == ordinary.end())
+			continue;
+		for (const auto &finish : program.events) {
+			if (!active[finish.id] || finish.kind != skeleton::EventKind::returnValue ||
+			    program.functions[finish.function].name != join.joinedThreadEntry)
+				continue;
+			if (const auto finishDense = ordinary.find(finish.id);
+			    finishDense != ordinary.end())
+				tj.insertDense(finishDense->second, joinDense->second);
 		}
 	}
 

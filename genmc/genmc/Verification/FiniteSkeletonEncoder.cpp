@@ -74,7 +74,7 @@ auto isOrderingEvent(const skeleton::EventSite &event) -> bool
 	using enum skeleton::EventKind;
 	return event.kind == load || event.kind == store || event.kind == lock ||
 	       event.kind == unlock || event.kind == fence || event.kind == threadCreate ||
-	       event.kind == threadJoin;
+	       event.kind == threadJoin || event.kind == returnValue;
 }
 
 auto isSCWriteEvent(const skeleton::EventSite &event) -> bool
@@ -707,10 +707,14 @@ public:
 			addUnique(reasons, "sc-order-requires-rf-classes");
 			return;
 		}
-		for (const auto &event : program.events) {
-			if (event.kind == skeleton::EventKind::threadJoin)
-				addUnique(reasons, "sc-order-unsupported-thread-join");
-		}
+		for (const auto &event : program.events)
+			if (event.kind == skeleton::EventKind::threadJoin &&
+			    (event.joinedThreadEntry.empty() ||
+			     event.joinedThreadCreate == skeleton::invalidNode ||
+			     event.joinedThreadCreate >= program.events.size() ||
+			     program.events[event.joinedThreadCreate].kind !=
+				     skeleton::EventKind::threadCreate))
+				addUnique(reasons, "sc-order-unresolved-thread-join-target");
 		if (!reasons.empty())
 			return;
 		std::vector<const skeleton::EventSite *> orderedEvents;
@@ -772,8 +776,33 @@ public:
 				activeEvent(create),
 				solver.unsignedLess(scOrder.at(create.id),
 							    scOrder.at(functionEvents[function->id]
-								       .front()
-								       ->id))));
+							       .front()
+							       ->id))));
+		}
+		for (const auto &join : program.events) {
+			if (join.kind != skeleton::EventKind::threadJoin)
+				continue;
+			const auto function = std::ranges::find_if(
+				program.functions, [&](const auto &candidate) {
+					return candidate.name == join.joinedThreadEntry;
+				});
+			if (function == program.functions.end()) {
+				addUnique(reasons, "sc-order-thread-join-target-missing");
+				continue;
+			}
+			solver.constrain(solver.implies(
+				activeEvent(join),
+				activeEvent(program.events[join.joinedThreadCreate])));
+			for (const auto &finish : program.events) {
+				if (finish.function != function->id ||
+				    finish.kind != skeleton::EventKind::returnValue)
+					continue;
+				const Expr active[]{activeEvent(join), activeEvent(finish)};
+				solver.constrain(solver.implies(
+					solver.allOf(active),
+					solver.unsignedLess(scOrder.at(finish.id),
+							    scOrder.at(join.id))));
+			}
 		}
 		for (const auto &choice : rf) {
 			const auto &load = program.events[choice.load];

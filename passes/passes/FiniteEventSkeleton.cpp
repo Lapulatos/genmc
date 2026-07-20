@@ -480,12 +480,14 @@ auto build(const llvm::Module &module) -> BuildResult
 					addEvent(std::move(event));
 				} else if (const auto *ret =
 						   llvm::dyn_cast<llvm::ReturnInst>(&instruction)) {
-					if (ret->getReturnValue() && ret->getReturnValue()->getType()->isIntegerTy())
-						addEvent({.kind = EventKind::returnValue,
-							  .function = functionID,
-							  .block = blockNode.id,
-							  .instruction = instructionOrdinal,
-							  .value = valueRef(ret->getReturnValue())});
+					addEvent({.kind = EventKind::returnValue,
+						  .function = functionID,
+						  .block = blockNode.id,
+						  .instruction = instructionOrdinal,
+						  .value = ret->getReturnValue() &&
+								   ret->getReturnValue()->getType()->isIntegerTy()
+							   ? valueRef(ret->getReturnValue())
+							   : invalidNode});
 				} else if (own != invalidNode) {
 					addBuildBlocker(result, std::string{"unsupported-instruction:"} +
 								 instruction.getOpcodeName());
@@ -496,6 +498,56 @@ auto build(const llvm::Module &module) -> BuildResult
 
 	std::ranges::sort(result.blockers);
 	std::unordered_map<std::string, std::uint32_t> threadInstances;
+	std::unordered_map<NodeID, std::pair<NodeID, std::string>> threadCreateValues;
+	for (const auto &event : program.events)
+		if (event.kind == EventKind::threadCreate && event.value != invalidNode &&
+		    !event.threadEntry.empty())
+			threadCreateValues.emplace(event.value,
+					   std::pair{event.id, event.threadEntry});
+	const auto resolveJoinedCreate = [&](NodeID root)
+		-> std::optional<std::pair<NodeID, std::string>> {
+		std::unordered_set<NodeID> visiting;
+		std::unordered_set<NodeID> creates;
+		std::function<void(NodeID)> visit = [&](NodeID value) {
+			if (value == invalidNode || value >= program.values.size() ||
+			    !visiting.insert(value).second)
+				return;
+			if (const auto found = threadCreateValues.find(value);
+			    found != threadCreateValues.end()) {
+				creates.insert(found->second.first);
+				return;
+			}
+			const auto &node = program.values[value];
+			switch (node.opcode) {
+			case ValueOpcode::phi:
+			case ValueOpcode::trunc:
+			case ValueOpcode::zext:
+			case ValueOpcode::sext:
+			case ValueOpcode::freeze:
+				for (const auto operand : node.operands)
+					visit(operand);
+				break;
+			default:
+				break;
+			}
+		};
+		visit(root);
+		if (creates.size() != 1)
+			return std::nullopt;
+		const auto create = *creates.begin();
+		for (const auto &[_, candidate] : threadCreateValues)
+			if (candidate.first == create)
+				return candidate;
+		return std::nullopt;
+	};
+	for (auto &event : program.events) {
+		if (event.kind != EventKind::threadJoin || event.arguments.empty())
+			continue;
+		if (const auto target = resolveJoinedCreate(event.arguments.front())) {
+			event.joinedThreadCreate = target->first;
+			event.joinedThreadEntry = target->second;
+		}
+	}
 	for (const auto &function : program.functions)
 		/* Call/argument binding is not encoded yet. Treating integer arguments as
 		 * independent symbolic inputs would over-approximate TRUE and is therefore
@@ -508,8 +560,8 @@ auto build(const llvm::Module &module) -> BuildResult
 			addBuildBlocker(result, "reused-thread-entry:" + event.threadEntry);
 		if (event.kind == EventKind::threadCreate && event.threadEntry.empty())
 			addBuildBlocker(result, "unresolved-thread-entry");
-		if (event.kind == EventKind::threadJoin)
-			addBuildBlocker(result, "unmodeled-thread-join");
+		if (event.kind == EventKind::threadJoin && event.joinedThreadEntry.empty())
+			addBuildBlocker(result, "unresolved-thread-join-target");
 		if (event.kind == EventKind::directCall)
 			addBuildBlocker(result, "unmodeled-direct-call:" + event.callee);
 		if ((event.kind == EventKind::lock || event.kind == EventKind::unlock) &&

@@ -208,7 +208,33 @@ TEST(FiniteSkeletonSCCompletionTest, ValueClassRefinementMatchesConcreteRfOracle
 	EXPECT_EQ(classOrderObservations, concreteObservations);
 }
 
-TEST(FiniteSkeletonSCCompletionTest, SCOrderEncodingFailsOpenForThreadJoin)
+TEST(FiniteSkeletonSCCompletionTest, SCOrderEncodingOrdersResolvedThreadJoin)
+{
+	using namespace genmc;
+	if (!symbolic::Solver::backendAvailable())
+		GTEST_SKIP() << "Z3 is unavailable in this build";
+	auto program = storeBufferingProgram();
+	program.events.push_back({.id = 4, .kind = skeleton::EventKind::threadCreate,
+				  .function = 0, .block = 0, .threadEntry = "t1"});
+	program.events.push_back({.id = 5, .kind = skeleton::EventKind::returnValue,
+				  .function = 1, .block = 1});
+	program.events.push_back({.id = 6, .kind = skeleton::EventKind::threadJoin,
+				  .function = 0, .block = 0, .joinedThreadEntry = "t1",
+				  .joinedThreadCreate = 4});
+	symbolic::FiniteSkeletonEncoder encoder(
+		program,
+		{.encodeCo = false,
+		 .encodeSCOrder = true,
+		 .rfCardinality = symbolic::RfCardinalityEncoding::native,
+		 .rfAbstraction = symbolic::RfAbstractionEncoding::value});
+	ASSERT_TRUE(encoder.supported());
+	auto step = encoder.next();
+	ASSERT_EQ(step.status, symbolic::CheckResult::sat);
+	ASSERT_TRUE(step.assignment);
+	EXPECT_TRUE(exactSCBaseAccepts(program, *step.assignment));
+}
+
+TEST(FiniteSkeletonSCCompletionTest, SCOrderEncodingFailsOpenForUnresolvedThreadJoin)
 {
 	using namespace genmc;
 	if (!symbolic::Solver::backendAvailable())
@@ -222,7 +248,8 @@ TEST(FiniteSkeletonSCCompletionTest, SCOrderEncodingFailsOpenForThreadJoin)
 		 .rfCardinality = symbolic::RfCardinalityEncoding::native,
 		 .rfAbstraction = symbolic::RfAbstractionEncoding::value});
 	EXPECT_FALSE(encoder.supported());
-	EXPECT_NE(std::ranges::find(encoder.blockers(), "sc-order-unsupported-thread-join"),
+	EXPECT_NE(std::ranges::find(encoder.blockers(),
+				   "sc-order-unresolved-thread-join-target"),
 		  encoder.blockers().end());
 }
 

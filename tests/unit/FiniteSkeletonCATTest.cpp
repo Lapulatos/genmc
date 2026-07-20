@@ -150,6 +150,39 @@ TEST(FiniteSkeletonCATTest, RejectsAbstractReadsFromClasses)
 	EXPECT_NE(result.errors.front().find("must be refined"), std::string::npos);
 }
 
+TEST(FiniteSkeletonCATTest, MaterializesResolvedThreadJoinRelation)
+{
+	auto program = storeBufferingProgram();
+	program.functions[0].isMain = true;
+	program.functions[0].isThreadEntry = false;
+	program.events.push_back({.id = 4, .kind = genmc::skeleton::EventKind::threadCreate,
+				  .function = 0, .block = 0, .threadEntry = "p1"});
+	program.events.push_back({.id = 5, .kind = genmc::skeleton::EventKind::returnValue,
+				  .function = 1, .block = 1});
+	program.events.push_back({.id = 6, .kind = genmc::skeleton::EventKind::threadJoin,
+				  .function = 0, .block = 0, .joinedThreadEntry = "p1",
+				  .joinedThreadCreate = 4});
+	genmc::symbolic::FiniteAssignment assignment;
+	assignment.activeEvents = {0, 1, 2, 3, 4, 5, 6};
+	assignment.values.resize(4);
+	assignment.readsFrom.resize(7);
+	assignment.readsFrom[1] = 2;
+	assignment.readsFrom[3] = 0;
+	assignment.coherenceOrder = {0, 2};
+	auto [result, base] =
+		genmc::symbolic::materializeFiniteAssignment(program, assignment);
+	ASSERT_TRUE(result.errors.empty());
+	const auto finish = std::ranges::find(result.denseEvents, 5,
+						 &genmc::symbolic::FiniteDenseEvent::site);
+	const auto join = std::ranges::find(result.denseEvents, 6,
+					      &genmc::symbolic::FiniteDenseEvent::site);
+	ASSERT_NE(finish, result.denseEvents.end());
+	ASSERT_NE(join, result.denseEvents.end());
+	const auto &tj = std::get<cat::Relation>(base.at("tj"));
+	EXPECT_TRUE(tj.contains(static_cast<std::size_t>(finish - result.denseEvents.begin()),
+				static_cast<std::size_t>(join - result.denseEvents.begin())));
+}
+
 TEST(FiniteSkeletonCATTest, MatchesGraphAdapterSCAndFenceClassification)
 {
 	auto model = compileModel("Predicates\nempty SC as sc-empty\nempty F as f-empty\n");

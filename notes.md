@@ -3412,3 +3412,27 @@ collected. No direction may claim them based only on missing buffered log marker
 - Next: encode “some member of the selected value class is the latest same-location write before
   the load” directly in Deagle's SC ordering theory. Merely delaying source selectors does not
   remove repeated SC completion. Full report: `deagle-rvf-refinement-r1-report-20260720.md`.
+
+## 2026-07-20 Deagle RVF join rerun infrastructure note
+
+- `finite-rvf-first-model-sc-order-full-20260720-r2` produced zero tasks.  The
+  outer Docker container mounted `/sys/fs/cgroup`, but lacked the namespace
+  capability required by BenchExec and stopped with `Creating namespace for
+  container mode failed: Operation not permitted`.
+- Preserve r2 as an invalid infrastructure run.  Subsequent formal BenchExec
+  containers must use the already established privileged/cgroup-host setup and
+  must still pass the exact 283-row XML/log cardinality gate.
+- r3 added the required namespace capability but also produced zero tasks:
+  BenchExec could not create its overlay mount on this host (`EINVAL`).  Use
+  BenchExec's explicit `--read-only-dir /` directory mode for r4 and later runs.
+- r4 proved that `--read-only-dir /` is also unsuitable because it denies the
+  mounted `/workspace`.  The repository's successful launchers establish the
+  correct configuration: outer privileged Docker plus BenchExec
+  `--no-container`.  Reuse that exact pattern; do not retry nested container
+  directory modes.
+- r5 used the established `--no-container` configuration and completed exactly
+  283 XML rows and 283 archived logs.  It classified 69 SAT / 39 UNSAT / 175
+  unknown with zero bad witnesses.  Against r1, CPU=0.99090x, wall=0.99045x,
+  memory=1.00109x; treat all three as noise and make no new performance claim.
+- The real two-create/two-join SB oracle agrees with native GenMC on all four
+  outcomes: 00 safe, 01/10/11 unsafe.

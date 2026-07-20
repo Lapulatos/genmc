@@ -3470,3 +3470,13 @@ procedure creates the exact directory first. Its first test-enabled CMake config
 while FetchContent downloaded googletest from GitHub (HTTP/2 receive error). No candidate result
 used that build. A fresh `build-release` with `BUILD_TESTS=OFF` compiled the production binary;
 semantic test evidence remains the already completed cumulative GCC/ASan/differential gates.
+
+### 2026-07-20 Deagle exact RVF lifecycle completion
+
+- [x] Encode exactly resolved `pthread_join` create/finish/join lifecycle edges.
+- [x] Pass the complete server C++ unit suite and a real two-join C oracle.
+- [x] Reject and preserve zero-task r2 (missing Docker namespace capability).
+- [x] Reject and preserve zero-task r3 (unsupported overlay directory mode).
+- [x] Reject and preserve zero-task r4 (read-only workspace directory mode).
+- [x] Run the 283-task exact SC-RVF regression with validated BenchExec setup.
+- [x] Compare terminal classifications, witnesses, time, and memory with r1/control.

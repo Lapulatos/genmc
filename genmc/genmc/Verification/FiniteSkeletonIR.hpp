@@ -106,6 +106,10 @@ struct EventSite {
 	std::string address{};
 	std::string callee{};
 	std::string threadEntry{};
+	/** Statically resolved target entry for a threadJoin event. */
+	std::string joinedThreadEntry{};
+	/** Exact threadCreate event whose handle is consumed by threadJoin. */
+	NodeID joinedThreadCreate{invalidNode};
 	std::uint32_t width{};
 	bool sequentiallyConsistent{};
 	std::vector<NodeID> arguments{};
