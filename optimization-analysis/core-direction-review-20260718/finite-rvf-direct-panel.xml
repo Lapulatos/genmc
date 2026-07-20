@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE benchmark PUBLIC "+//IDN sosy-lab.org//DTD BenchExec benchmark 3.0//EN" "https://www.sosy-lab.org/benchexec/benchmark-3.0.dtd">
+<benchmark tool="tools.genmc_svcomp_fair" timelimit="120 s" memlimit="4 GB" cpuCores="1">
+  <option name="--disable-estimation"/>
+  <option name="--disable-mm-detector"/>
+  <option name="--nthreads=1"/>
+  <column title="direct terminal">Finite symbolic error search: terminal=([^ ]+)</column>
+  <column title="finite assignments">Finite symbolic error search:.*assignments=([0-9]+)</column>
+  <column title="cat rejected">Finite symbolic error search:.*cat-rejected=([0-9]+)</column>
+  <column title="cat consistent">Finite symbolic error search:.*cat-consistent=([0-9]+)</column>
+  <column title="replay attempts">Finite symbolic error search:.*replay-attempts=([0-9]+)</column>
+  <column title="replay confirmed">Finite symbolic error search:.*replay-confirmed=([0-9]+)</column>
+  <column title="fail open">Finite symbolic error search:.*fail-open=([0-9]+)</column>
+  <rundefinition name="native">
+    <option name="--svcomp-backend=caat-sc"/>
+    <tasks name="panel">
+      <includesfile>/data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/source-dev/optimization-analysis/core-direction-review-20260718/finite-rvf-first-model-panel.set</includesfile>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+  <rundefinition name="rvf-direct">
+    <option name="--svcomp-backend=caat-sc"/>
+    <option name="--finite-skeleton-stats-only"/>
+    <option name="--finite-symbolic-rvf-sc-order-diagnostic"/>
+    <option name="--finite-symbolic-max=10000"/>
+    <tasks name="panel">
+      <includesfile>/data3/sujie/experiments/caat-optimization/core-p1-phase-census-20260719a/source-dev/optimization-analysis/core-direction-review-20260718/finite-rvf-first-model-panel.set</includesfile>
+      <propertyfile>/workspace/svcomp2026-caat/sv-benchmarks/c/properties/unreach-call.prp</propertyfile>
+    </tasks>
+  </rundefinition>
+</benchmark>

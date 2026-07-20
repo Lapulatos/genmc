@@ -3480,3 +3480,12 @@ semantic test evidence remains the already completed cumulative GCC/ASan/differe
 - [x] Reject and preserve zero-task r4 (read-only workspace directory mode).
 - [x] Run the 283-task exact SC-RVF regression with validated BenchExec setup.
 - [x] Compare terminal classifications, witnesses, time, and memory with r1/control.
+
+### 2026-07-20 Deagle SC-RVF direct-backend gate
+
+- [x] Audit P0/P1/P2 and reject repetition of already exhausted candidates.
+- [x] Define direct-backend hypothesis, support criteria, and falsification gate.
+- [x] Implement diagnostic exhaustive error-constrained SC-RVF enumeration.
+- [x] Pass generated finite and lifecycle verdict oracles without native safe shortcuts.
+- [x] Run a server panel; reject before expansion because both resources regress.
+- [x] Remove diagnostic code/CTest and retain only negative evidence on dev.

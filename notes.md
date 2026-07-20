@@ -3436,3 +3436,29 @@ collected. No direction may claim them based only on missing buffered log marker
   memory=1.00109x; treat all three as noise and make no new performance claim.
 - The real two-create/two-join SB oracle agrees with native GenMC on all four
   outcomes: 00 safe, 01/10/11 unsafe.
+
+## 2026-07-20 Deagle direct-backend direction
+
+- P0 regional activation is exhausted on the measured workload: the remaining same-value
+  CAS/unlock sources have distinct exact HB histories.  P1's stable-based layout bundle
+  and P2 Gate-A1 were already rejected.  Do not repeat those experiments.
+- The next distinct algorithmic question is direct finite SC-RVF exploration, not another
+  sequential prepass.  First implement a diagnostic exhaustive terminal that can prove
+  only replay-confirmed error or exact error-constrained UNSAT; every other state falls
+  back.  Production short-circuit remains forbidden until independent oracles pass.
+- The first server verification invocation embedded a parenthesized CTest regex inside a
+  locally double-quoted SSH command.  zsh treated it as a glob and stopped before Docker
+  started.  Use separate literal `ctest -R` filters in the retry; no test result exists
+  for the failed invocation.
+- The first registered diagnostic CTest then failed because the server's reduced source
+  copy omitted the existing `finite-replay-smoke.ll` and `finite-safe-smoke.ll` fixtures;
+  direct replay reported that the input was not a regular file.  Synchronize those exact
+  fixtures and rerun; this is not algorithm evidence.
+- The first direct-panel ad-hoc analyzer read both 15-row XMLs and all 30 logs, then
+  raised `TypeError` while summing a predicate that could return `None`.  Its partial
+  classification is not the final analysis; cast the predicate to `bool` and rerun from
+  the immutable archives before making the resource decision.
+- Corrected direct-panel result: native 6 error / 4 safe / 5 unknown; direct 4 / 3 / 8,
+  zero common verdict differences and four replay-confirmed errors. Direct/native all-task
+  CPU=1.56873, wall=1.56854, RSS=7.14537; common-terminal CPU=3.05301 and RSS=3.57847.
+  Reject without a 283 run and remove the diagnostic implementation.

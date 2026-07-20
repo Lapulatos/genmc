@@ -202,3 +202,11 @@ witness extraction and all correctness gates, and it may replace this implementa
 only if CPU, wall time, and memory improve together.  A later production integration can
 use a validated SAT result as an error-witness prepass and fall back to native exploration
 for unsupported or unknown cases.
+
+That production-integration hypothesis was subsequently tested in two forms and rejected.
+The five-second sequential prepass increased summed RSS about sevenfold without confirming
+an error. A later direct-backend panel stopped after SC-RVF classification/replay and still
+used 1.569x CPU, 1.569x wall time, and 7.145x summed task peak RSS while completing only
+7 tasks versus native's 10. See `deagle-rvf-direct-backend-report-20260720.md`. Therefore
+the SC-order encoder remains a diagnostic research result; no production integration is
+currently justified.
